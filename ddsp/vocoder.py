@@ -16,6 +16,12 @@ from .unit2control import Unit2Control
 from .core import frequency_filter, upsample, remove_above_fmax, MaskedAvgPool1d, MedianPool1d
 import time
 
+try:
+    from fairseq.data.dictionary import Dictionary
+    torch.serialization.add_safe_globals([Dictionary])
+except ImportError:
+    print("Warning: fairseq.data.dictionary.Dictionary not found. ContentVec loading might fail on PyTorch 2.6+.")
+
 CREPE_RESAMPLE_KERNEL = {}
 F0_KERNEL = {}
 
