@@ -6,3 +6,5 @@ cache/
 .venv/
 
 data/
+pretrain/
+temp_input_audio/
