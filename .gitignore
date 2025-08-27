@@ -8,3 +8,5 @@ cache/
 data/
 pretrain/
 temp_input_audio/
+
+generated_samples/

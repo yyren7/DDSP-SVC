@@ -23,7 +23,7 @@ model:
   n_aux_chans: 512
   n_layers: 6
   n_chans: 1024
-  t_start: 0.0
+  t_start: 0.1
   use_norm: true
   use_attention: false
   use_pitch_aug: true 
@@ -41,7 +41,7 @@ env:
 train:
   num_workers: 2 # If your cpu and gpu are both very strong, set to 0 may be faster!
   amp_dtype: fp16 # fp32, fp16 or bf16 (fp16 or bf16 may be faster if it is supported by your gpu)
-  batch_size: 48
+  batch_size: 64
   cache_all_data: true # Save Internal-Memory or Graphics-Memory if it is false, but may be slow
   cache_device: 'cpu' # Set to 'cuda' to cache the data into the Graphics-Memory, fastest speed for strong gpu
   cache_fp16: true
@@ -51,7 +51,7 @@ train:
   interval_force_save: 10000
   lr: 0.0005
   decay_step: 4000
-  gamma: 0.9
+  gamma: 0.95
   weight_decay: 0.1
   lambda_ddsp: 1
   save_opt: false  
