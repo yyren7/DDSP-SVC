@@ -1,0 +1,8 @@
+# Dependencies for tools/prepare_dataset.py. Install them in a separate environment from training,
+# because audio-separator pins its own torch build.
+#   GPU (AutoDL etc.):  pip install "audio-separator[gpu]"
+#   CPU only:           pip install "audio-separator[cpu]"
+audio-separator[gpu]>=0.47.0
+librosa
+soundfile
+numpy
