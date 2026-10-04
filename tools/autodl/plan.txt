@@ -1,0 +1,10 @@
+# Which job runner.sh should run. Changing JOB or bumping RUN_ID (re)starts it.
+# Jobs: setup | uvr | features | train | infer | idle
+JOB=setup
+RUN_ID=1
+
+# Optional settings passed to the jobs
+UVR_ARGS=
+WORKERS=4
+KEY=0
+SPK_ID=1

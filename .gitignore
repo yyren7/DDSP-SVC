@@ -5,3 +5,8 @@ results/
 cache/
 .venv/
 preprocess_work/
+raw_songs/
+test_songs/
+preprocess_work_test/
+infer_out/
+.autodl/
