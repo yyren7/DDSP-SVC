@@ -42,7 +42,19 @@ start_job() {
     WORKERS="$(plan_value WORKERS)" \
         setsid bash -c "bash tools/autodl/jobs.sh $job >> '$log' 2>&1; rc=\$?; echo \"=== \$(date '+%F %T') exit \$rc\" >> '$log'" &
     JOB_PID=$!; JOB_NAME="$job"
-    echo "$job" > "$STATE_DIR/current_job"
+    save_job_state
+}
+
+# Remember the running job so a restarted runner adopts it instead of starting a second copy.
+save_job_state() { echo "$JOB_PID|$JOB_KEY|$JOB_NAME" > "$STATE_DIR/job.state"; }
+load_job_state() {
+    [ -f "$STATE_DIR/job.state" ] || return 0
+    local pid key name
+    IFS='|' read -r pid key name < "$STATE_DIR/job.state"
+    JOB_NAME="$name"; JOB_KEY="$key"
+    if [ -n "$pid" ] && kill -0 "$pid" 2>/dev/null; then
+        JOB_PID="$pid"; echo "adopted running job $name (pid $pid)"
+    fi
 }
 
 start_review() {
@@ -86,25 +98,35 @@ publish() {
     git -C "$PUB" add -A
     git -C "$PUB" -c user.name=autodl-runner -c user.email=runner@autodl commit -q --amend -m "status $(date '+%F %T')" 2>/dev/null \
         || git -C "$PUB" -c user.name=autodl-runner -c user.email=runner@autodl commit -q -m "status $(date '+%F %T')"
-    git -C "$PUB" push -q -f "$PUSH_URL" "HEAD:refs/heads/$LOG_BRANCH" 2>&1 | sed "s#$PUSH_URL#<repo>#" | tail -2
+    # Network calls get a timeout so a stalled connection can never freeze the loop.
+    timeout 120 git -C "$PUB" push -q -f "$PUSH_URL" "HEAD:refs/heads/$LOG_BRANCH" 2>&1 | sed "s#$PUSH_URL#<repo>#" | tail -2
 }
 
-cleanup() { stop_group "$JOB_PID"; stop_group "$REVIEW_PID"; exit 0; }
-trap cleanup INT TERM
+# Ctrl+C stops the runner and its jobs.
+cleanup() { stop_group "$JOB_PID"; stop_group "$REVIEW_PID"; rm -f "$STATE_DIR/job.state"; exit 0; }
+trap cleanup INT
 
 echo "runner started; review key: $(cat "$REVIEW_KEY_FILE")"
+load_job_state
+pkill -f "^python3 tools/autodl/review_server.py --port $REVIEW_PORT" 2>/dev/null
 start_review
 while true; do
     [ -f /etc/network_turbo ] && source /etc/network_turbo >/dev/null 2>&1
-    if git fetch -q origin "$BRANCH" 2>/dev/null && [ "$(git rev-parse HEAD)" != "$(git rev-parse FETCH_HEAD)" ]; then
+    if timeout 60 git fetch -q origin "$BRANCH" 2>/dev/null && [ "$(git rev-parse HEAD)" != "$(git rev-parse FETCH_HEAD)" ]; then
+        old_runner="$(git rev-parse HEAD:tools/autodl/runner.sh)"
         git reset -q --hard FETCH_HEAD
         echo "$(date '+%F %T') updated to $(git rev-parse --short HEAD)"
+        if [ "$old_runner" != "$(git rev-parse HEAD:tools/autodl/runner.sh)" ]; then
+            echo "$(date '+%F %T') runner.sh changed, restarting runner (jobs keep running)"
+            stop_group "$REVIEW_PID"
+            exec bash tools/autodl/runner.sh
+        fi
         start_review
     fi
     want_job="$(plan_value JOB)"; want_key="$want_job:$(plan_value RUN_ID)"
     if [ "$want_key" != "$JOB_KEY" ]; then
         stop_group "$JOB_PID"; JOB_PID=""
-        JOB_KEY="$want_key"
+        JOB_KEY="$want_key"; JOB_NAME=""; save_job_state
         if [ -n "$want_job" ] && [ "$want_job" != "idle" ]; then
             echo "$(date '+%F %T') starting job $want_job"
             start_job "$want_job"
