@@ -68,7 +68,7 @@ publish() {
         else
             echo "job:      ${JOB_NAME:-none} not running; $(grep '=== .* exit' "$STATE_DIR/job_${JOB_NAME:-none}.log" 2>/dev/null | tail -1)"
         fi
-        echo "review:   port $REVIEW_PORT, key $(cat "$REVIEW_KEY_FILE")"
+        echo "review:   port $REVIEW_PORT (key is in .autodl/review_key, not published)"
         echo; nvidia-smi --query-gpu=name,utilization.gpu,memory.used,memory.total,temperature.gpu --format=csv 2>/dev/null
         echo; df -h "$REPO_DIR" 2>/dev/null | tail -1
         echo; for d in "$RAW_DIR" "$WORK_DIR"/* data/train/audio data/val/audio "$TEST_DIR" "$INFER_DIR"/*; do
