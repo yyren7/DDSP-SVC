@@ -1,0 +1,14 @@
+=== 2026-10-18 16:52:46 start migrate at fcd3b59
+speaker: sakura_shunka (/root/autodl-tmp/speakers/sakura_shunka)
+moved /root/autodl-tmp/hanamaru_hareru_raw_songs -> /root/autodl-tmp/speakers/hanamaru_hareru/downloads
+moved /root/autodl-tmp/sakura_shunka_raw_songs -> /root/autodl-tmp/speakers/sakura_shunka/downloads
+moved /root/autodl-tmp/sakura_shunka_songs -> /root/autodl-tmp/speakers/sakura_shunka/songs
+moved raw_songs -> /root/autodl-tmp/speakers/sakura_shunka/raw_songs
+moved test_songs -> /root/autodl-tmp/speakers/sakura_shunka/test_songs
+moved preprocess_work -> /root/autodl-tmp/speakers/sakura_shunka/work
+moved the contents of data/train/audio -> /root/autodl-tmp/speakers/sakura_shunka/data/train/audio
+moved the contents of data/val/audio -> /root/autodl-tmp/speakers/sakura_shunka/data/val/audio
+== speakers
+hanamaru_hareru: downloads(949) 
+sakura_shunka: data(211) downloads(83) raw_songs(10) songs(273) test_songs(0) work(261) 
+=== 2026-10-18 16:52:48 exit 0

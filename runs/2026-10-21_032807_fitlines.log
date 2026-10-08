@@ -1,0 +1,23 @@
+=== 2026-10-21 03:28:07 start fitlines at 6395fc7
+speaker: pheebie (/root/autodl-tmp/speakers/pheebie)
+pheebie: 47 marked lines, 29 keep
+sakura_shunka: 35 marked lines, 22 keep
+how each score alone agrees with the marks (weighted AUC; 0.5 = chance, 1 = perfect):
+  aes_pq        0.798  (higher = keep)
+  aes_cu        0.785  (higher = keep)
+  aes_ce        0.777  (higher = keep)
+  pitch_steady  0.697  (higher = keep)
+  p_music       0.676  (higher = keep)
+  p_speech      0.622  (lower = keep)
+  dns_sig       0.603  (higher = keep)
+  level         0.548  (higher = keep)
+  tail_src      0.532  (higher = keep)
+  bgm_db        0.525  (higher = keep)
+Traceback (most recent call last):
+  File "/root/autodl-tmp/DDSP-SVC/tools/autodl/fit_lines.py", line 177, in <module>
+    main()
+  File "/root/autodl-tmp/DDSP-SVC/tools/autodl/fit_lines.py", line 156, in main
+    sig_auc = roc_auc_score(y, X[:, feats.index('score')], sample_weight=w)
+                                    ^^^^^^^^^^^^^^^^^^^^
+ValueError: 'score' is not in list
+=== 2026-10-21 03:28:09 exit 1

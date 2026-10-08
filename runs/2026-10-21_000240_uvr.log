@@ -1,0 +1,74 @@
+=== 2026-10-21 00:02:40 start uvr at a8cab8f
+speaker: pheebie (/root/autodl-tmp/speakers/pheebie)
+Failed to load libcublasLt.so.13: libcublasLt.so.13: cannot open shared object file: No such file or directory
+Failed to load libcublas.so.13: libcublas.so.13: cannot open shared object file: No such file or directory
+Failed to load libnvrtc.so.13: libnvrtc.so.13: cannot open shared object file: No such file or directory
+Failed to load libcufft.so.12: libcufft.so.12: cannot open shared object file: No such file or directory
+Failed to load libcudart.so.13: libcudart.so.13: cannot open shared object file: No such file or directory
+Please follow https://onnxruntime.ai/docs/install/#cuda-and-cudnn to install CUDA.
+== bs_leap_xe_voc.ckpt
+== karaoke_bs_roformer_anvuew.ckpt
+== bs_roformer_karaoke_frazer_becruily.ckpt
+== bs_karaoke_gabox_IS.ckpt
+== dereverb_bs_roformer_anvuew_sdr_22.5050.ckpt
+all UVR models ready
+185 input files
+[vocals] bs_leap_xe_voc.ckpt: 185 done, 0 to process
+[karaoke] karaoke_bs_roformer_anvuew.ckpt+bs_roformer_karaoke_frazer_becruily.ckpt+bs_karaoke_gabox_IS.ckpt: 12 done, 173 to process
+Failed to load libcublasLt.so.13: libcublasLt.so.13: cannot open shared object file: No such file or directory
+Failed to load libcublas.so.13: libcublas.so.13: cannot open shared object file: No such file or directory
+Failed to load libnvrtc.so.13: libnvrtc.so.13: cannot open shared object file: No such file or directory
+Failed to load libcufft.so.12: libcufft.so.12: cannot open shared object file: No such file or directory
+Failed to load libcudart.so.13: libcudart.so.13: cannot open shared object file: No such file or directory
+Please follow https://onnxruntime.ai/docs/install/#cuda-and-cudnn to install CUDA.
+Failed to load libcublasLt.so.13: libcublasLt.so.13: cannot open shared object file: No such file or directory
+Failed to load libcublas.so.13: libcublas.so.13: cannot open shared object file: No such file or directory
+Failed to load libnvrtc.so.13: libnvrtc.so.13: cannot open shared object file: No such file or directory
+Failed to load libcufft.so.12: libcufft.so.12: cannot open shared object file: No such file or directory
+Failed to load libcudart.so.13: libcudart.so.13: cannot open shared object file: No such file or directory
+Please follow https://onnxruntime.ai/docs/install/#cuda-and-cudnn to install CUDA.
+Failed to load libcublasLt.so.13: libcublasLt.so.13: cannot open shared object file: No such file or directory
+Failed to load libcublas.so.13: libcublas.so.13: cannot open shared object file: No such file or directory
+Failed to load libnvrtc.so.13: libnvrtc.so.13: cannot open shared object file: No such file or directory
+Failed to load libcufft.so.12: libcufft.so.12: cannot open shared object file: No such file or directory
+Failed to load libcudart.so.13: libcudart.so.13: cannot open shared object file: No such file or directory
+Please follow https://onnxruntime.ai/docs/install/#cuda-and-cudnn to install CUDA.
+100%|██████████| 74/74 [00:34<00:00,  2.12it/s]
+100%|██████████| 45/45 [00:38<00:00,  1.16it/s]
+100%|██████████| 38/38 [00:17<00:00,  2.13it/s]
+[karaoke] 1/173 2026-06-28_01_罗密欧与辛德瑞拉_ロミオとシンデレラ（弟之姉ver.）COVER.wav (100.4s)
+100%|██████████| 43/43 [00:20<00:00,  2.14it/s]
+100%|██████████| 26/26 [00:22<00:00,  1.16it/s]
+100%|██████████| 22/22 [00:11<00:00,  1.88it/s]
+[karaoke] 2/173 2026-09-01_01_⚠️绝对震撼头声尖叫！💥请在一天阳气最足的时候打开这个视频👻.wav (59.5s)
+100%|██████████| 51/51 [00:42<00:00,  1.19it/s]
+100%|██████████| 31/31 [00:31<00:00,  1.02s/it]
+100%|██████████| 26/26 [00:12<00:00,  2.14it/s]
+[karaoke] 3/173 2026-09-10_01_🩷泡泡🫧顶级阳角少女音翻唱撒娇神曲☀️吉他.ver.wav (92.8s)
+100%|██████████| 44/44 [00:20<00:00,  2.14it/s]
+100%|██████████| 27/27 [00:23<00:00,  1.16it/s]
+100%|██████████| 23/23 [00:10<00:00,  2.13it/s]
+[karaoke] 4/173 2026-09-30_01_未知.wav (60.0s)
+100%|██████████| 59/59 [00:27<00:00,  2.14it/s]
+100%|██████████| 36/36 [00:30<00:00,  1.16it/s]
+100%|██████████| 30/30 [00:14<00:00,  2.14it/s]
+[karaoke] 5/173 2026-09-30_01_水洼上的轮舞.wav (79.3s)
+100%|██████████| 32/32 [00:14<00:00,  2.14it/s]
+100%|██████████| 19/19 [00:16<00:00,  1.16it/s]
+100%|██████████| 17/17 [00:07<00:00,  2.14it/s]
+[karaoke] 6/173 2026-09-30_02_未知.wav (43.6s)
+100%|██████████| 57/57 [00:26<00:00,  2.14it/s]
+100%|██████████| 35/35 [00:30<00:00,  1.16it/s]
+100%|██████████| 29/29 [00:13<00:00,  2.13it/s]
+[karaoke] 7/173 2026-10-02_01_唱唱歌~~-2026年10月02日20时_p06_P6-_唱唱歌~~-10月03日01点01分.wav (76.9s)
+100%|██████████| 44/44 [00:20<00:00,  2.13it/s]
+100%|██████████| 27/27 [00:23<00:00,  1.16it/s]
+100%|██████████| 23/23 [00:10<00:00,  2.14it/s]
+[karaoke] 8/173 2026-10-02_01_未知.wav (60.0s)
+100%|██████████| 53/53 [00:24<00:00,  2.14it/s]
+100%|██████████| 32/32 [00:44<00:00,  1.39s/it]
+100%|██████████| 27/27 [00:17<00:00,  1.58it/s]
+[karaoke] 9/173 2026-10-02_01_未知_[BV1RmaU6jEXF_p2].wav (92.7s)
+100%|██████████| 36/36 [00:19<00:00,  1.86it/s]
+100%|██████████| 22/22 [00:18<00:00,  1.16it/s]
+ 26%|██▋       | 5/19 [00:02<00:06,  2.14it/s]

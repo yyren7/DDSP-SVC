@@ -1,0 +1,133 @@
+=== 2026-10-22 11:18:59 start download at 1fcfbb4
+speaker: umi (/root/autodl-tmp/speakers/umi)
+WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.
+== 76 videos listed in tools/autodl/lists/umi_compilations.txt
+== downloading audio
+[BiliBili] Extracting URL: https://www.bilibili.com/video/BV1VQp362E3e
+[BiliBili] 1VQp362E3e: Downloading webpage
+[BiliBili] Sleeping 1.0 seconds ...
+[BiliBili] BV1VQp362E3e: Extracting videos in anthology
+[BiliBili] Downloading playlist BV1VQp362E3e - add --no-playlist to download just the video BV1VQp362E3e
+[download] Downloading playlist: 【呜米】26.10.10翻唱合集
+[info] Writing playlist metadata as JSON to: /root/autodl-tmp/speakers/umi/downloads/NA 【呜米】26.10.10翻唱合集 [BV1VQp362E3e].info.json
+[BiliBili] Playlist 【呜米】26.10.10翻唱合集: Downloading 26 items of 26
+[download] Downloading item 1 of 26
+[BiliBili] Extracting URL: https://www.bilibili.com/video/BV1VQp362E3e?p=1
+[BiliBili] Sleeping 1.0 seconds ...
+[BiliBili] 1VQp362E3e: Downloading webpage
+[BiliBili] Sleeping 1.0 seconds ...
+[BiliBili] BV1VQp362E3e: Extracting videos in anthology
+[BiliBili] Sleeping 1.0 seconds ...
+[BiliBili] 117417661438624: Extracting chapters
+[BiliBili] Sleeping 1.0 seconds ...
+[BiliBili] 117417661438624: Extracting comments from page 1
+[BiliBili] Sleeping 1.0 seconds ...
+[BiliBili] 117417661438624: Extracting comments from page 2
+[BiliBili] Extracted 6 comments
+[info] BV1VQp362E3e_p1: Downloading 1 format(s): 30280
+[info] Writing video metadata as JSON to: /root/autodl-tmp/speakers/umi/downloads/20261010 【呜米】26.10.10翻唱合集 p01 求神呐26.10.10 [BV1VQp362E3e_p1].info.json
+[download] Sleeping 2.44 seconds ...
+[download] Destination: /root/autodl-tmp/speakers/umi/downloads/20261010 【呜米】26.10.10翻唱合集 p01 求神呐26.10.10 [BV1VQp362E3e_p1].m4a
+[download] 100% of    3.04MiB in 00:00:04 at 662.70KiB/s 
+[ExtractAudio] Not converting audio /root/autodl-tmp/speakers/umi/downloads/20261010 【呜米】26.10.10翻唱合集 p01 求神呐26.10.10 [BV1VQp362E3e_p1].m4a; the file is already in a common audio format
+[download] Downloading item 2 of 26
+[BiliBili] Extracting URL: https://www.bilibili.com/video/BV1VQp362E3e?p=2
+[BiliBili] Sleeping 1.0 seconds ...
+[BiliBili] 1VQp362E3e: Downloading webpage
+[BiliBili] Sleeping 1.0 seconds ...
+[BiliBili] BV1VQp362E3e: Extracting videos in anthology
+[BiliBili] Sleeping 1.0 seconds ...
+[BiliBili] 117417661438624: Extracting chapters
+[BiliBili] Sleeping 1.0 seconds ...
+[BiliBili] 117417661438624: Extracting comments from page 1
+[BiliBili] Sleeping 1.0 seconds ...
+[BiliBili] 117417661438624: Extracting comments from page 2
+[BiliBili] Extracted 6 comments
+[info] BV1VQp362E3e_p2: Downloading 1 format(s): 30280
+[info] Writing video metadata as JSON to: /root/autodl-tmp/speakers/umi/downloads/20261010 【呜米】26.10.10翻唱合集 p02 直来直往26.10.10 [BV1VQp362E3e_p2].info.json
+[download] Sleeping 3.33 seconds ...
+[download] Destination: /root/autodl-tmp/speakers/umi/downloads/20261010 【呜米】26.10.10翻唱合集 p02 直来直往26.10.10 [BV1VQp362E3e_p2].m4a
+[download] 100% of    4.00MiB in 00:00:00 at 9.63MiB/s   
+[ExtractAudio] Not converting audio /root/autodl-tmp/speakers/umi/downloads/20261010 【呜米】26.10.10翻唱合集 p02 直来直往26.10.10 [BV1VQp362E3e_p2].m4a; the file is already in a common audio format
+[download] Downloading item 3 of 26
+[BiliBili] Extracting URL: https://www.bilibili.com/video/BV1VQp362E3e?p=3
+[BiliBili] Sleeping 1.0 seconds ...
+[BiliBili] 1VQp362E3e: Downloading webpage
+[BiliBili] Sleeping 1.0 seconds ...
+[BiliBili] BV1VQp362E3e: Extracting videos in anthology
+[BiliBili] Sleeping 1.0 seconds ...
+[BiliBili] 117417661438624: Extracting chapters
+[BiliBili] Sleeping 1.0 seconds ...
+[BiliBili] 117417661438624: Extracting comments from page 1
+[BiliBili] Sleeping 1.0 seconds ...
+[BiliBili] 117417661438624: Extracting comments from page 2
+[BiliBili] Extracted 6 comments
+[info] BV1VQp362E3e_p3: Downloading 1 format(s): 30280
+[info] Writing video metadata as JSON to: /root/autodl-tmp/speakers/umi/downloads/20261010 【呜米】26.10.10翻唱合集 p03 不让风知道26.10.10 [BV1VQp362E3e_p3].info.json
+[download] Sleeping 3.34 seconds ...
+[download] Destination: /root/autodl-tmp/speakers/umi/downloads/20261010 【呜米】26.10.10翻唱合集 p03 不让风知道26.10.10 [BV1VQp362E3e_p3].m4a
+[download] 100% of    3.51MiB in 00:00:00 at 20.42MiB/s  
+[ExtractAudio] Not converting audio /root/autodl-tmp/speakers/umi/downloads/20261010 【呜米】26.10.10翻唱合集 p03 不让风知道26.10.10 [BV1VQp362E3e_p3].m4a; the file is already in a common audio format
+[download] Downloading item 4 of 26
+[BiliBili] Extracting URL: https://www.bilibili.com/video/BV1VQp362E3e?p=4
+[BiliBili] Sleeping 1.0 seconds ...
+[BiliBili] 1VQp362E3e: Downloading webpage
+[BiliBili] Sleeping 1.0 seconds ...
+[BiliBili] BV1VQp362E3e: Extracting videos in anthology
+[BiliBili] Sleeping 1.0 seconds ...
+[BiliBili] 117417661438624: Extracting chapters
+[BiliBili] Sleeping 1.0 seconds ...
+[BiliBili] 117417661438624: Extracting comments from page 1
+[BiliBili] Sleeping 1.0 seconds ...
+[BiliBili] 117417661438624: Extracting comments from page 2
+[BiliBili] Extracted 6 comments
+[info] BV1VQp362E3e_p4: Downloading 1 format(s): 30280
+[info] Writing video metadata as JSON to: /root/autodl-tmp/speakers/umi/downloads/20261010 【呜米】26.10.10翻唱合集 p04 天外来物26.10.10 [BV1VQp362E3e_p4].info.json
+[download] Sleeping 4.43 seconds ...
+[download] Destination: /root/autodl-tmp/speakers/umi/downloads/20261010 【呜米】26.10.10翻唱合集 p04 天外来物26.10.10 [BV1VQp362E3e_p4].m4a
+[download] 100% of    5.10MiB in 00:00:00 at 8.78MiB/s   
+[ExtractAudio] Not converting audio /root/autodl-tmp/speakers/umi/downloads/20261010 【呜米】26.10.10翻唱合集 p04 天外来物26.10.10 [BV1VQp362E3e_p4].m4a; the file is already in a common audio format
+[download] Downloading item 5 of 26
+[BiliBili] Extracting URL: https://www.bilibili.com/video/BV1VQp362E3e?p=5
+[BiliBili] Sleeping 1.0 seconds ...
+[BiliBili] 1VQp362E3e: Downloading webpage
+[BiliBili] Sleeping 1.0 seconds ...
+[BiliBili] BV1VQp362E3e: Extracting videos in anthology
+[BiliBili] Sleeping 1.0 seconds ...
+[BiliBili] 117417661438624: Extracting chapters
+[BiliBili] Sleeping 1.0 seconds ...
+[BiliBili] 117417661438624: Extracting comments from page 1
+[BiliBili] Sleeping 1.0 seconds ...
+[BiliBili] 117417661438624: Extracting comments from page 2
+[BiliBili] Extracted 6 comments
+[info] BV1VQp362E3e_p5: Downloading 1 format(s): 30280
+[info] Writing video metadata as JSON to: /root/autodl-tmp/speakers/umi/downloads/20261010 【呜米】26.10.10翻唱合集 p05 快乐崇拜26.10.10 [BV1VQp362E3e_p5].info.json
+[download] Sleeping 4.50 seconds ...
+[download] Destination: /root/autodl-tmp/speakers/umi/downloads/20261010 【呜米】26.10.10翻唱合集 p05 快乐崇拜26.10.10 [BV1VQp362E3e_p5].m4a
+[download] 100% of    4.33MiB in 00:00:00 at 9.06MiB/s   
+[ExtractAudio] Not converting audio /root/autodl-tmp/speakers/umi/downloads/20261010 【呜米】26.10.10翻唱合集 p05 快乐崇拜26.10.10 [BV1VQp362E3e_p5].m4a; the file is already in a common audio format
+[download] Downloading item 6 of 26
+[BiliBili] Extracting URL: https://www.bilibili.com/video/BV1VQp362E3e?p=6
+[BiliBili] Sleeping 1.0 seconds ...
+[BiliBili] 1VQp362E3e: Downloading webpage
+[BiliBili] Sleeping 1.0 seconds ...
+[BiliBili] BV1VQp362E3e: Extracting videos in anthology
+[BiliBili] Sleeping 1.0 seconds ...
+[BiliBili] 117417661438624: Extracting chapters
+[BiliBili] Sleeping 1.0 seconds ...
+[BiliBili] 117417661438624: Extracting comments from page 1
+[BiliBili] Sleeping 1.0 seconds ...
+[BiliBili] 117417661438624: Extracting comments from page 2
+[BiliBili] Extracted 6 comments
+[info] BV1VQp362E3e_p6: Downloading 1 format(s): 30280
+[info] Writing video metadata as JSON to: /root/autodl-tmp/speakers/umi/downloads/20261010 【呜米】26.10.10翻唱合集 p06 着魔26.10.10 [BV1VQp362E3e_p6].info.json
+[download] Sleeping 2.88 seconds ...
+[download] Destination: /root/autodl-tmp/speakers/umi/downloads/20261010 【呜米】26.10.10翻唱合集 p06 着魔26.10.10 [BV1VQp362E3e_p6].m4a
+[download] 100% of    4.49MiB in 00:00:00 at 10.25MiB/s  
+[ExtractAudio] Not converting audio /root/autodl-tmp/speakers/umi/downloads/20261010 【呜米】26.10.10翻唱合集 p06 着魔26.10.10 [BV1VQp362E3e_p6].m4a; the file is already in a common audio format
+[download] Downloading item 7 of 26
+[BiliBili] Extracting URL: https://www.bilibili.com/video/BV1VQp362E3e?p=7
+[BiliBili] Sleeping 1.0 seconds ...
+[BiliBili] 1VQp362E3e: Downloading webpage
+[BiliBili] Sleeping 1.0 seconds ...
+[BiliBili] BV1VQp362E3e: Extracting videos in anthology

@@ -1,0 +1,6 @@
+=== 2026-10-21 11:06:57 start clips at e0d62e3
+speaker: sakura_shunka (/root/autodl-tmp/speakers/sakura_shunka)
+sakura_shunka: 0 of 125 songs left out whole (under 50% kept): 
+sakura_shunka clean: validation clips copied from data_all
+sakura_shunka clean: 2257 training clips, 6.17 h from 2600 of 3138 lines; 12 validation clips from the held-out songs ['2020-09-11_08_君の知らない物語_-_化物语', '2020-12-19_04_未知']
+=== 2026-10-21 11:08:41 exit 0

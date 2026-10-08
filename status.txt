@@ -1,0 +1,20 @@
+time:     2026-11-01 04:15:28 CST
+code:     85d5d23 tools/arrange/ and the arrange skill move to their own private repository, yyren7/claude-arrange (history kept there); tools/README.md points to it.
+plan:     JOB=abtest@umi_pheebie:steps80_pheebie=all@40000+all@80000 RUN_ID=48 SPEAKER=umi
+speakers: hanamaru_hareru pheebie sakura_shunka umi umi_pheebie
+job:      abtest not running; === 2026-10-23 09:43:05 exit 0
+review:   port 6008 (key is in .autodl/review_key, not published)
+logs:     job_<job>.log latest run of each job, runs/ last 60 runs, runner.log runner console
+mode:     GPU, idle shutdown after 0 min
+github:   via proxy; last ok: 2026-11-01 04:15:28 git fetch via proxy; failed attempts in the last 24 h: 33 (see net.log)
+
+name, utilization.gpu [%], memory.used [MiB], memory.total [MiB], temperature.gpu
+NVIDIA GeForce RTX 4090 D, 0 %, 1 MiB, 24564 MiB, 27
+
+/dev/md0        250G  215G   36G  86% /root/autodl-tmp
+
+2590 files  umi/downloads
+143 files  umi/raw_songs
+143 files  umi/work/0_input
+144 files  umi/work/3_dereverb
+0 files  umi/test_songs
