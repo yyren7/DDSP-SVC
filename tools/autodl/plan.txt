@@ -1,5 +1,6 @@
 # Which job runner.sh should run. Changing JOB or bumping RUN_ID (re)starts it.
 # Jobs: setup | uvr | features | train | infer | idle
+# A comma separated chain runs in order and stops at the first failure, e.g. JOB=uvr,features,train
 JOB=setup
 RUN_ID=1
 
@@ -8,3 +9,6 @@ UVR_ARGS=
 WORKERS=4
 KEY=0
 SPK_ID=1
+
+# Power the instance off after this many minutes with nothing running (0 = never)
+IDLE_SHUTDOWN_MIN=30

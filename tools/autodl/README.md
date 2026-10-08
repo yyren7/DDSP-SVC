@@ -67,8 +67,24 @@ AutoDL 控制台 → 实例的「自定义服务」→ 打开 6008 端口对应�
 
 改 `JOB`，或者把 `RUN_ID` 加 1，都会让 runner 停掉当前任务并按新计划启动。
 
+`JOB` 可以写成用逗号连接的任务链，比如 `JOB=uvr,features,train`。runner 会按顺序执行，前一个成功才启动下一个，遇到失败就停下。
+
+## 自动关机
+
+没有任务在跑的状态持续 `IDLE_SHUTDOWN_MIN` 分钟（默认 30）后，runner 会在日志分支记一笔，然后执行 `shutdown` 关机，停止计费。设为 `0` 表示不自动关机。
+
+重新开机后，在 JupyterLab 终端执行：
+
+```bash
+cd /root/autodl-tmp/DDSP-SVC && tmux new -s runner
+bash tools/autodl/runner.sh
+```
+
+只是上传文件的话，可以用 AutoDL 的「无卡模式」开机，更便宜。
+
 ## 注意
 
 - runner 每次拉代码都会用 GitHub 上的版本覆盖仓库里被 git 跟踪的文件。想改配置（比如 `configs/reflow.yaml`）请告诉 Claude，不要直接在 AutoDL 上改。音频、数据、模型和实验目录不受影响。
 - TensorBoard 可以照常用 6006 端口：`tensorboard --logdir exp --port 6006`。
 - 想自己看日志：`tail -f .autodl/job_<任务名>.log`。
+- runner 访问 GitHub 时先直连，失败再走学术加速，因为学术加速访问 GitHub 有时会返回 503。

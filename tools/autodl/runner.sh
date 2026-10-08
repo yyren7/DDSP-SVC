@@ -1,7 +1,9 @@
 #!/bin/bash
 # Keeps AutoDL in sync with GitHub so jobs can be fixed while they run.
 #   - pulls $BRANCH every $INTERVAL seconds
-#   - starts / restarts the job named in tools/autodl/plan.txt when JOB or RUN_ID changes
+#   - starts / restarts the jobs named in tools/autodl/plan.txt when JOB or RUN_ID changes;
+#     JOB may be a comma separated chain (e.g. uvr,features,train), run in order until one fails
+#   - shuts the instance down after IDLE_SHUTDOWN_MIN minutes with nothing running (stops billing)
 #   - keeps the review web page running (restarted after every code update)
 #   - publishes status, log tails and review feedback to the $LOG_BRANCH branch
 # Usage (inside tmux):  bash tools/autodl/runner.sh
@@ -22,7 +24,8 @@ REVIEW_KEY_FILE="$STATE_DIR/review_key"
 [ -s "$REVIEW_KEY_FILE" ] || (umask 077; head -c 12 /dev/urandom | od -An -tx1 | tr -d ' \n' > "$REVIEW_KEY_FILE")
 
 PUB="$STATE_DIR/publish"
-JOB_PID=""; JOB_KEY=""; JOB_NAME=""; REVIEW_PID=""
+JOB_PID=""; JOB_KEY=""; JOB_NAME=""; JOB_IDX=0; REVIEW_PID=""
+IDLE_SINCE=$(date +%s)
 
 plan_value() {  # key -> value from plan.txt (plain KEY=VALUE lines, never executed)
     grep -E "^$1=" tools/autodl/plan.txt 2>/dev/null | tail -1 | cut -d= -f2- | sed 's/[[:space:]]*#.*$//; s/^"//; s/"$//'
@@ -33,6 +36,19 @@ stop_group() {  # pid
     kill -TERM -- "-$1" 2>/dev/null
     for _ in $(seq 30); do kill -0 "$1" 2>/dev/null || return 0; sleep 1; done
     kill -KILL -- "-$1" 2>/dev/null
+}
+
+# GitHub through AutoDL's academic proxy sometimes answers 503, so try a direct
+# connection first and fall back to the proxy. Every call has a timeout.
+net() {
+    env -u http_proxy -u https_proxy -u HTTP_PROXY -u HTTPS_PROXY -u all_proxy -u ALL_PROXY \
+        timeout 90 "$@" && return 0
+    [ -f /etc/network_turbo ] || return 1
+    (source /etc/network_turbo >/dev/null 2>&1; timeout 90 "$@")
+}
+
+job_exit_code() {  # job -> exit code of its last finished run, empty while it has not finished
+    tail -n 1 "$STATE_DIR/job_$1.log" 2>/dev/null | sed -n 's/^=== .* exit \([0-9]*\)$/\1/p'
 }
 
 start_job() {
@@ -46,12 +62,12 @@ start_job() {
 }
 
 # Remember the running job so a restarted runner adopts it instead of starting a second copy.
-save_job_state() { echo "$JOB_PID|$JOB_KEY|$JOB_NAME" > "$STATE_DIR/job.state"; }
+save_job_state() { echo "$JOB_PID|$JOB_KEY|$JOB_NAME|$JOB_IDX" > "$STATE_DIR/job.state"; }
 load_job_state() {
     [ -f "$STATE_DIR/job.state" ] || return 0
-    local pid key name
-    IFS='|' read -r pid key name < "$STATE_DIR/job.state"
-    JOB_NAME="$name"; JOB_KEY="$key"
+    local pid key name idx
+    IFS='|' read -r pid key name idx < "$STATE_DIR/job.state"
+    JOB_NAME="$name"; JOB_KEY="$key"; JOB_IDX="${idx:-0}"
     if [ -n "$pid" ] && kill -0 "$pid" 2>/dev/null; then
         JOB_PID="$pid"; echo "adopted running job $name (pid $pid)"
     fi
@@ -98,8 +114,7 @@ publish() {
     git -C "$PUB" add -A
     git -C "$PUB" -c user.name=autodl-runner -c user.email=runner@autodl commit -q --amend -m "status $(date '+%F %T')" 2>/dev/null \
         || git -C "$PUB" -c user.name=autodl-runner -c user.email=runner@autodl commit -q -m "status $(date '+%F %T')"
-    # Network calls get a timeout so a stalled connection can never freeze the loop.
-    timeout 120 git -C "$PUB" push -q -f "$PUSH_URL" "HEAD:refs/heads/$LOG_BRANCH" 2>&1 | sed "s#$PUSH_URL#<repo>#" | tail -2
+    net git -C "$PUB" push -q -f "$PUSH_URL" "HEAD:refs/heads/$LOG_BRANCH" 2>&1 | sed "s#$PUSH_URL#<repo>#" | tail -2
 }
 
 # Ctrl+C stops the runner and its jobs.
@@ -111,8 +126,7 @@ load_job_state
 pkill -f "^python3 tools/autodl/review_server.py --port $REVIEW_PORT" 2>/dev/null
 start_review
 while true; do
-    [ -f /etc/network_turbo ] && source /etc/network_turbo >/dev/null 2>&1
-    if timeout 60 git fetch -q origin "$BRANCH" 2>/dev/null && [ "$(git rev-parse HEAD)" != "$(git rev-parse FETCH_HEAD)" ]; then
+    if net git fetch -q origin "$BRANCH" 2>/dev/null && [ "$(git rev-parse HEAD)" != "$(git rev-parse FETCH_HEAD)" ]; then
         old_runner="$(git rev-parse HEAD:tools/autodl/runner.sh)"
         git reset -q --hard FETCH_HEAD
         echo "$(date '+%F %T') updated to $(git rev-parse --short HEAD)"
@@ -123,16 +137,44 @@ while true; do
         fi
         start_review
     fi
-    want_job="$(plan_value JOB)"; want_key="$want_job:$(plan_value RUN_ID)"
+
+    want_chain="$(plan_value JOB)"; want_key="$want_chain:$(plan_value RUN_ID)"
+    IFS=',' read -r -a chain <<< "${want_chain// /}"
     if [ "$want_key" != "$JOB_KEY" ]; then
+        # New plan: stop whatever runs and start the chain from the beginning.
         stop_group "$JOB_PID"; JOB_PID=""
-        JOB_KEY="$want_key"; JOB_NAME=""; save_job_state
-        if [ -n "$want_job" ] && [ "$want_job" != "idle" ]; then
-            echo "$(date '+%F %T') starting job $want_job"
-            start_job "$want_job"
+        JOB_KEY="$want_key"; JOB_NAME=""; JOB_IDX=0; save_job_state
+        if [ "${#chain[@]}" -gt 0 ] && [ "${chain[0]}" != "idle" ]; then
+            echo "$(date '+%F %T') starting job ${chain[0]}"
+            start_job "${chain[0]}"
+        fi
+    elif [ -n "$JOB_NAME" ] && ! kill -0 "${JOB_PID:-0}" 2>/dev/null; then
+        # Current job finished: move on to the next one in the chain if it succeeded.
+        rc="$(job_exit_code "$JOB_NAME")"
+        if [ "$rc" = "0" ] && [ $((JOB_IDX + 1)) -lt "${#chain[@]}" ]; then
+            JOB_IDX=$((JOB_IDX + 1))
+            echo "$(date '+%F %T') $JOB_NAME done, starting job ${chain[$JOB_IDX]}"
+            start_job "${chain[$JOB_IDX]}"
         fi
     fi
+
     kill -0 "$REVIEW_PID" 2>/dev/null || start_review
     publish
+
+    # Nothing running for IDLE_SHUTDOWN_MIN minutes -> power off so the instance stops billing.
+    if [ -n "$JOB_PID" ] && kill -0 "$JOB_PID" 2>/dev/null; then
+        IDLE_SINCE=$(date +%s)
+    else
+        limit="$(plan_value IDLE_SHUTDOWN_MIN)"; limit="${limit:-30}"
+        if [ "$limit" -gt 0 ] 2>/dev/null && [ $(( $(date +%s) - IDLE_SINCE )) -ge $((limit * 60)) ]; then
+            echo "$(date '+%F %T') idle for $limit min, shutting down"
+            echo "shutdown: idle for $limit min at $(date '+%F %T %Z')" >> "$PUB/status.txt"
+            git -C "$PUB" add -A && git -C "$PUB" -c user.name=autodl-runner -c user.email=runner@autodl commit -q --amend -m "shutdown $(date '+%F %T')"
+            net git -C "$PUB" push -q -f "$PUSH_URL" "HEAD:refs/heads/$LOG_BRANCH" 2>&1 | sed "s#$PUSH_URL#<repo>#" | tail -2
+            stop_group "$REVIEW_PID"
+            ${SHUTDOWN_CMD:-shutdown}
+            exit 0
+        fi
+    fi
     sleep "$INTERVAL"
 done
