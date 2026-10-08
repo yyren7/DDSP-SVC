@@ -2,7 +2,7 @@
 # Jobs: setup | uvr | features | train | infer | idle
 # A comma separated chain runs in order and stops at the first failure, e.g. JOB=uvr,features,train
 JOB=setup
-RUN_ID=1
+RUN_ID=2
 
 # Optional settings passed to the jobs
 UVR_ARGS=

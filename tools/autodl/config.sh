@@ -19,5 +19,16 @@ CONDA_BASE="$(conda info --base 2>/dev/null || echo /root/miniconda3)"
 # shellcheck disable=SC1091
 source "$CONDA_BASE/etc/profile.d/conda.sh"
 
+# The system disk on AutoDL is only ~30 GB, so environments and download caches live on the
+# data disk next to the repository (/root/autodl-tmp).
+DATA_ROOT="$(dirname "$REPO_DIR")"
+ENV_ROOT="$DATA_ROOT/conda_envs"       # conda activate "$ENV_ROOT/ddsp" | "$ENV_ROOT/uvr"
+export PIP_CACHE_DIR="$DATA_ROOT/.cache/pip"
+export CONDA_PKGS_DIRS="$DATA_ROOT/.cache/conda_pkgs"
+export HF_HOME="$DATA_ROOT/.cache/huggingface"
+export TORCH_HOME="$DATA_ROOT/.cache/torch"
+# torch is pinned in both environments so no dependency can swap it for another CUDA build.
+TORCH_CONSTRAINTS="$REPO_DIR/tools/autodl/torch-constraints.txt"
+
 export PYTHONUNBUFFERED=1
 mkdir -p "$RAW_DIR" "$TEST_DIR" "$STATE_DIR"

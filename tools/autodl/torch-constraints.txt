@@ -1,0 +1,6 @@
+# pip constraints for both conda environments (pip install -c this file).
+# audio-separator pulls torchvision, whose latest release drags in torch 2.14 + a full CUDA 13 stack;
+# pinning the matching trio keeps one CUDA 12.8 build that the AutoDL driver runs.
+torch==2.9.1
+torchaudio==2.9.1
+torchvision==0.24.1

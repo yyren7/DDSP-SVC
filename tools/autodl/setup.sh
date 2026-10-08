@@ -1,6 +1,6 @@
 #!/bin/bash
 # Create the two conda environments and download every pretrained model.
-# Safe to re-run: finished steps are skipped.
+# Everything large goes to the data disk (see config.sh). Safe to re-run: finished steps are skipped.
 set -euo pipefail
 source "$(dirname "${BASH_SOURCE[0]}")/config.sh"
 cd "$REPO_DIR"
@@ -8,26 +8,42 @@ cd "$REPO_DIR"
 # AutoDL academic acceleration for GitHub / HuggingFace downloads.
 [ -f /etc/network_turbo ] && source /etc/network_turbo || true
 
-TORCH_PIN="torch==2.9.1 torchaudio==2.9.1"
+mkdir -p "$ENV_ROOT" "$PIP_CACHE_DIR" "$CONDA_PKGS_DIRS"
 
-if ! conda env list | grep -qE '^ddsp\s'; then
-    echo "== creating env: ddsp"
-    conda create -y -n ddsp python=3.11
+# ---- free the system disk from earlier runs that installed there ----
+if [ -d /root/.cache/pip ] && [ ! -L /root/.cache/pip ]; then
+    echo "== moving old pip cache to the data disk (keeps already downloaded wheels)"
+    cp -a /root/.cache/pip/. "$PIP_CACHE_DIR"/ && rm -rf /root/.cache/pip
 fi
-conda activate ddsp
-python -c "import torch, torchaudio" 2>/dev/null || pip install $TORCH_PIN
-pip install -r requirements.txt
+for env in ddsp uvr; do
+    if [ -d "$CONDA_BASE/envs/$env" ]; then
+        echo "== removing old $env env from the system disk"
+        conda env remove -y -n "$env" || rm -rf "$CONDA_BASE/envs/$env"
+    fi
+done
+conda clean -y --all >/dev/null 2>&1 || true
+
+pip_install() { pip install -c "$TORCH_CONSTRAINTS" "$@"; }
+
+# ---- ddsp: training / inference ----
+if [ ! -x "$ENV_ROOT/ddsp/bin/python" ]; then
+    echo "== creating env: ddsp"
+    conda create -y -p "$ENV_ROOT/ddsp" python=3.11
+fi
+conda activate "$ENV_ROOT/ddsp"
+pip_install torch torchaudio
+pip_install -r requirements.txt
 python -c "import torch; print('ddsp env: torch', torch.__version__, 'cuda', torch.cuda.is_available())"
 conda deactivate
 
-if ! conda env list | grep -qE '^uvr\s'; then
+# ---- uvr: audio-separator for vocal separation / de-reverb / denoise ----
+if [ ! -x "$ENV_ROOT/uvr/bin/python" ]; then
     echo "== creating env: uvr"
-    conda create -y -n uvr python=3.11
+    conda create -y -p "$ENV_ROOT/uvr" python=3.11
 fi
-conda activate uvr
-# Install the same torch first so audio-separator does not pull a build the driver cannot run.
-python -c "import torch" 2>/dev/null || pip install $TORCH_PIN
-pip install "audio-separator[gpu]"
+conda activate "$ENV_ROOT/uvr"
+pip_install torch torchaudio torchvision
+pip_install "audio-separator[gpu]"
 python -c "import torch, onnxruntime as ort; print('uvr env: torch', torch.__version__, 'cuda', torch.cuda.is_available(), 'ort', ort.get_available_providers())"
 conda deactivate
 
@@ -56,5 +72,5 @@ if [ ! -s pretrain/rmvpe/model.pt ]; then
 fi
 
 nvidia-smi --query-gpu=name,driver_version,memory.total --format=csv,noheader || true
-df -h "$REPO_DIR" | tail -1
+df -h / "$DATA_ROOT" | tail -2
 echo "setup finished"

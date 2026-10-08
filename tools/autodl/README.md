@@ -87,4 +87,5 @@ bash tools/autodl/runner.sh
 - runner 每次拉代码都会用 GitHub 上的版本覆盖仓库里被 git 跟踪的文件。想改配置（比如 `configs/reflow.yaml`）请告诉 Claude，不要直接在 AutoDL 上改。音频、数据、模型和实验目录不受影响。
 - TensorBoard 可以照常用 6006 端口：`tensorboard --logdir exp --port 6006`。
 - 想自己看日志：`tail -f .autodl/job_<任务名>.log`。
+- 系统盘只有约 30G，所以 conda 环境（`/root/autodl-tmp/conda_envs/`）、pip/conda/HuggingFace 缓存（`/root/autodl-tmp/.cache/`）都放在数据盘上。两个环境里的 torch 都锁定为 2.9.1（见 `torch-constraints.txt`），防止依赖把它换成另一套 CUDA 版本。
 - runner 访问 GitHub 时先直连，失败再走学术加速，因为学术加速访问 GitHub 有时会返回 503。
