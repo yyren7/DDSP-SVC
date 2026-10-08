@@ -1,0 +1,4 @@
+=== 2026-10-20 20:10:40 start clips at dc3e342
+speaker: sakura_shunka (/root/autodl-tmp/speakers/sakura_shunka)
+sakura_shunka all: 3391 training clips, 9.13 h from 4413 of 4413 lines; 12 validation clips from the held-out songs ['2020-09-26_03_巡恋风', '2020-11-15_07_未知', '2020-12-19_05_未知', '2020-12-19_08_未知']
+=== 2026-10-20 20:13:41 exit 0

@@ -1,0 +1,33 @@
+=== 2026-10-22 00:20:53 start uvr at 285419d
+speaker: hanamaru_hareru (/root/autodl-tmp/speakers/hanamaru_hareru)
+Failed to load libcublasLt.so.13: libcublasLt.so.13: cannot open shared object file: No such file or directory
+Failed to load libcublas.so.13: libcublas.so.13: cannot open shared object file: No such file or directory
+Failed to load libnvrtc.so.13: libnvrtc.so.13: cannot open shared object file: No such file or directory
+Failed to load libcufft.so.12: libcufft.so.12: cannot open shared object file: No such file or directory
+Failed to load libcudart.so.13: libcudart.so.13: cannot open shared object file: No such file or directory
+Please follow https://onnxruntime.ai/docs/install/#cuda-and-cudnn to install CUDA.
+== bs_leap_xe_voc.ckpt
+== karaoke_bs_roformer_anvuew.ckpt
+== bs_roformer_karaoke_frazer_becruily.ckpt
+== bs_karaoke_gabox_IS.ckpt
+== dereverb_bs_roformer_anvuew_sdr_22.5050.ckpt
+all UVR models ready
+190 input files
+[vocals] bs_leap_xe_voc.ckpt: 0 done, 190 to process
+Failed to load libcublasLt.so.13: libcublasLt.so.13: cannot open shared object file: No such file or directory
+Failed to load libcublas.so.13: libcublas.so.13: cannot open shared object file: No such file or directory
+Failed to load libnvrtc.so.13: libnvrtc.so.13: cannot open shared object file: No such file or directory
+Failed to load libcufft.so.12: libcufft.so.12: cannot open shared object file: No such file or directory
+Failed to load libcudart.so.13: libcudart.so.13: cannot open shared object file: No such file or directory
+Please follow https://onnxruntime.ai/docs/install/#cuda-and-cudnn to install CUDA.
+2026-10-22 00:21:03,957 - WARNING - common_separator - Unknown audio subtype MPEG_LAYER_III, defaulting to 16-bit output
+100%|██████████| 26/26 [00:12<00:00,  2.12it/s]
+Traceback (most recent call last):
+  File "/root/autodl-tmp/DDSP-SVC/tools/prepare_dataset.py", line 339, in <module>
+    main()
+  File "/root/autodl-tmp/DDSP-SVC/tools/prepare_dataset.py", line 323, in main
+    run_uvr_stage(step, model, files, out_dir, args, made_by)
+  File "/root/autodl-tmp/DDSP-SVC/tools/prepare_dataset.py", line 211, in run_uvr_stage
+    raise RuntimeError(f'[{step}] {models[k]}: cannot tell which stem to keep from {list(stems)}; '
+RuntimeError: [vocals] bs_leap_xe_voc.ckpt: cannot tell which stem to keep from ['1']; expected one of ['vocals']
+=== 2026-10-22 00:21:23 exit 1

@@ -1,0 +1,4 @@
+=== 2026-10-22 18:35:49 start clips at 739129e
+speaker: umi (/root/autodl-tmp/speakers/umi)
+umi all: 2364 training clips, 6.12 h from 3982 of 3982 lines; 12 validation clips from the held-out songs ['2024-08-17_01_男孩别哭', '2025-11-05_01_据说真的有神', '2025-12-16_03_东北的冬', '2026-07-29_20_有何不可']
+=== 2026-10-22 18:37:32 exit 0

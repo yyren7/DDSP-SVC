@@ -1,0 +1,6 @@
+=== 2026-10-22 11:13:39 start download at 16102c1
+speaker: umi (/root/autodl-tmp/speakers/umi)
+WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.
+== listing https://space.bilibili.com/39870354/video
+ERROR: [BilibiliSpaceVideo] 39870354: Request is blocked by server (412), please wait and try later.
+=== 2026-10-22 11:13:42 exit 1
