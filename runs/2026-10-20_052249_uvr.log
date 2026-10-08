@@ -1,0 +1,1641 @@
+=== 2026-10-20 05:22:49 start uvr at 72c1b6a
+speaker: sakura_shunka (/root/autodl-tmp/speakers/sakura_shunka)
+Failed to load libcublasLt.so.13: libcublasLt.so.13: cannot open shared object file: No such file or directory
+Failed to load libcublas.so.13: libcublas.so.13: cannot open shared object file: No such file or directory
+Failed to load libnvrtc.so.13: libnvrtc.so.13: cannot open shared object file: No such file or directory
+Failed to load libcufft.so.12: libcufft.so.12: cannot open shared object file: No such file or directory
+Failed to load libcudart.so.13: libcudart.so.13: cannot open shared object file: No such file or directory
+Please follow https://onnxruntime.ai/docs/install/#cuda-and-cudnn to install CUDA.
+== bs_leap_xe_voc.ckpt
+== dereverb_bs_roformer_anvuew_sdr_22.5050.ckpt
+== karaoke_bs_roformer_anvuew.ckpt
+== denoise_mel_band_roformer_aufr33_aggr_sdr_27.9768.ckpt
+all UVR models ready
+removed 1 staged inputs that are no longer in /root/autodl-tmp/speakers/sakura_shunka/raw_songs
+177 input files
+removing 2_karaoke, a stage folder of an older stage order
+removing 3_dereverb, a stage folder of an older stage order
+1_vocals: made by other models or settings, starting it over
+[vocals] bs_leap_xe_voc.ckpt: 0 done, 177 to process
+Failed to load libcublasLt.so.13: libcublasLt.so.13: cannot open shared object file: No such file or directory
+Failed to load libcublas.so.13: libcublas.so.13: cannot open shared object file: No such file or directory
+Failed to load libnvrtc.so.13: libnvrtc.so.13: cannot open shared object file: No such file or directory
+Failed to load libcufft.so.12: libcufft.so.12: cannot open shared object file: No such file or directory
+Failed to load libcudart.so.13: libcudart.so.13: cannot open shared object file: No such file or directory
+Please follow https://onnxruntime.ai/docs/install/#cuda-and-cudnn to install CUDA.
+2026-10-20 05:22:57,555 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-08-31_01_未知.m4a': Format not recognised.
+100%|██████████| 24/24 [00:37<00:00,  1.54s/it]
+[vocals] 1/177 2020-08-31_01_未知.m4a (40.3s)
+2026-10-20 05:23:37,815 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-08-31_02_未知.m4a': Format not recognised.
+100%|██████████| 22/22 [00:33<00:00,  1.54s/it]
+[vocals] 2/177 2020-08-31_02_未知.m4a (35.9s)
+2026-10-20 05:24:13,705 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-08-31_03_未知.m4a': Format not recognised.
+100%|██████████| 23/23 [00:35<00:00,  1.54s/it]
+[vocals] 3/177 2020-08-31_03_未知.m4a (37.4s)
+2026-10-20 05:24:51,064 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-08-31_04_未知.m4a': Format not recognised.
+100%|██████████| 28/28 [00:43<00:00,  1.54s/it]
+[vocals] 4/177 2020-08-31_04_未知.m4a (45.3s)
+2026-10-20 05:25:36,406 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-08-31_05_未知.m4a': Format not recognised.
+100%|██████████| 27/27 [00:41<00:00,  1.54s/it]
+[vocals] 5/177 2020-08-31_05_未知.m4a (43.7s)
+2026-10-20 05:26:20,140 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-08-31_06_未知.m4a': Format not recognised.
+100%|██████████| 24/24 [00:37<00:00,  1.56s/it]
+[vocals] 6/177 2020-08-31_06_未知.m4a (39.3s)
+2026-10-20 05:26:59,449 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-08-31_07_未知.m4a': Format not recognised.
+100%|██████████| 24/24 [00:36<00:00,  1.54s/it]
+[vocals] 7/177 2020-08-31_07_未知.m4a (39.0s)
+2026-10-20 05:27:38,497 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-08-31_08_未知.m4a': Format not recognised.
+100%|██████████| 32/32 [00:49<00:00,  1.54s/it]
+[vocals] 8/177 2020-08-31_08_未知.m4a (51.8s)
+2026-10-20 05:28:30,301 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-08-31_09_未知.m4a': Format not recognised.
+100%|██████████| 28/28 [00:43<00:00,  1.54s/it]
+[vocals] 9/177 2020-08-31_09_未知.m4a (45.2s)
+2026-10-20 05:29:15,536 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-08-31_10_未知.m4a': Format not recognised.
+100%|██████████| 26/26 [00:40<00:00,  1.54s/it]
+[vocals] 10/177 2020-08-31_10_未知.m4a (42.3s)
+2026-10-20 05:29:57,815 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-09-03_01_地球をあげる.m4a': Format not recognised.
+100%|██████████| 23/23 [00:35<00:00,  1.55s/it]
+[vocals] 11/177 2020-09-03_01_地球をあげる.m4a (37.6s)
+2026-10-20 05:30:35,419 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-09-03_01_未知.m4a': Format not recognised.
+100%|██████████| 17/17 [00:26<00:00,  1.55s/it]
+[vocals] 12/177 2020-09-03_01_未知.m4a (27.8s)
+2026-10-20 05:31:03,214 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-09-03_01_渡月橋_〜君_想ふ〜.m4a': Format not recognised.
+100%|██████████| 21/21 [00:32<00:00,  1.54s/it]
+[vocals] 13/177 2020-09-03_01_渡月橋_〜君_想ふ〜.m4a (34.2s)
+2026-10-20 05:31:37,454 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-09-03_02_未知.m4a': Format not recognised.
+100%|██████████| 23/23 [00:35<00:00,  1.54s/it]
+[vocals] 14/177 2020-09-03_02_未知.m4a (37.4s)
+2026-10-20 05:32:14,817 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-09-03_03_未知.m4a': Format not recognised.
+100%|██████████| 19/19 [00:29<00:00,  1.54s/it]
+[vocals] 15/177 2020-09-03_03_未知.m4a (30.8s)
+2026-10-20 05:32:45,642 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-09-03_04_未知.m4a': Format not recognised.
+100%|██████████| 19/19 [00:29<00:00,  1.54s/it]
+[vocals] 16/177 2020-09-03_04_未知.m4a (31.0s)
+2026-10-20 05:33:16,608 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-09-06_01_小幸运.m4a': Format not recognised.
+100%|██████████| 23/23 [00:35<00:00,  1.54s/it]
+[vocals] 17/177 2020-09-06_01_小幸运.m4a (37.7s)
+2026-10-20 05:33:54,332 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-09-06_01_日不落.m4a': Format not recognised.
+100%|██████████| 18/18 [00:27<00:00,  1.54s/it]
+[vocals] 18/177 2020-09-06_01_日不落.m4a (29.6s)
+2026-10-20 05:34:23,919 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-09-06_01_未知.m4a': Format not recognised.
+100%|██████████| 20/20 [00:30<00:00,  1.54s/it]
+[vocals] 19/177 2020-09-06_01_未知.m4a (32.5s)
+2026-10-20 05:34:56,400 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-09-06_02_未知.m4a': Format not recognised.
+100%|██████████| 15/15 [00:23<00:00,  1.54s/it]
+[vocals] 20/177 2020-09-06_02_未知.m4a (24.2s)
+2026-10-20 05:35:20,557 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-09-06_03_未知.m4a': Format not recognised.
+100%|██████████| 27/27 [00:42<00:00,  1.56s/it]
+[vocals] 21/177 2020-09-06_03_未知.m4a (44.3s)
+2026-10-20 05:36:04,868 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-09-06_04_未知.m4a': Format not recognised.
+100%|██████████| 23/23 [00:35<00:00,  1.54s/it]
+[vocals] 22/177 2020-09-06_04_未知.m4a (37.5s)
+2026-10-20 05:36:42,322 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-09-06_05_未知.m4a': Format not recognised.
+100%|██████████| 26/26 [00:39<00:00,  1.54s/it]
+[vocals] 23/177 2020-09-06_05_未知.m4a (42.3s)
+2026-10-20 05:37:24,632 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-09-06_06_未知.m4a': Format not recognised.
+100%|██████████| 19/19 [00:29<00:00,  1.54s/it]
+[vocals] 24/177 2020-09-06_06_未知.m4a (30.9s)
+2026-10-20 05:37:55,557 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-09-06_07_未知.m4a': Format not recognised.
+100%|██████████| 21/21 [00:32<00:00,  1.54s/it]
+[vocals] 25/177 2020-09-06_07_未知.m4a (34.3s)
+2026-10-20 05:38:29,860 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-09-06_08_未知.m4a': Format not recognised.
+100%|██████████| 20/20 [00:30<00:00,  1.54s/it]
+[vocals] 26/177 2020-09-06_08_未知.m4a (32.5s)
+2026-10-20 05:39:02,336 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-09-06_09_未知.m4a': Format not recognised.
+100%|██████████| 19/19 [00:29<00:00,  1.54s/it]
+[vocals] 27/177 2020-09-06_09_未知.m4a (30.9s)
+2026-10-20 05:39:33,201 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-09-09_01_温柔巫女也能唱出啥霸炫狂拽的echo吗.m4a': Format not recognised.
+100%|██████████| 7/7 [00:10<00:00,  1.54s/it]
+[vocals] 28/177 2020-09-09_01_温柔巫女也能唱出啥霸炫狂拽的echo吗.m4a (11.7s)
+2026-10-20 05:39:44,866 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-09-11_01_爱してる_-_夏目友人帐.m4a': Format not recognised.
+100%|██████████| 28/28 [00:43<00:00,  1.54s/it]
+[vocals] 29/177 2020-09-11_01_爱してる_-_夏目友人帐.m4a (45.4s)
+2026-10-20 05:40:30,290 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-09-11_02_爱哭鬼_-_少年同盟.m4a': Format not recognised.
+100%|██████████| 27/27 [00:41<00:00,  1.54s/it]
+[vocals] 30/177 2020-09-11_02_爱哭鬼_-_少年同盟.m4a (43.9s)
+2026-10-20 05:41:14,204 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-09-11_03_ラピスラズリ_-_亚尔斯兰战记.m4a': Format not recognised.
+100%|██████████| 21/21 [00:32<00:00,  1.54s/it]
+[vocals] 31/177 2020-09-11_03_ラピスラズリ_-_亚尔斯兰战记.m4a (34.1s)
+2026-10-20 05:41:48,332 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-09-11_04_六等星之夜_-_未来都市No.6.m4a': Format not recognised.
+100%|██████████| 30/30 [00:46<00:00,  1.54s/it]
+[vocals] 32/177 2020-09-11_04_六等星之夜_-_未来都市No.6.m4a (48.7s)
+2026-10-20 05:42:37,057 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-09-11_05_平行线_-_人渣的本愿.m4a': Format not recognised.
+100%|██████████| 27/27 [00:41<00:00,  1.54s/it]
+[vocals] 33/177 2020-09-11_05_平行线_-_人渣的本愿.m4a (43.8s)
+2026-10-20 05:43:20,813 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-09-11_06_美しき残酷な世界_-_进击的巨人.m4a': Format not recognised.
+100%|██████████| 27/27 [00:41<00:00,  1.54s/it]
+[vocals] 34/177 2020-09-11_06_美しき残酷な世界_-_进击的巨人.m4a (44.0s)
+2026-10-20 05:44:04,766 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-09-11_07_最高の片想_-_彩云国物语.m4a': Format not recognised.
+100%|██████████| 24/24 [00:36<00:00,  1.54s/it]
+[vocals] 35/177 2020-09-11_07_最高の片想_-_彩云国物语.m4a (38.9s)
+2026-10-20 05:44:43,696 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-09-11_08_君の知らない物語_-_化物语.m4a': Format not recognised.
+100%|██████████| 31/31 [00:47<00:00,  1.54s/it]
+[vocals] 36/177 2020-09-11_08_君の知らない物語_-_化物语.m4a (50.2s)
+2026-10-20 05:45:33,863 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-09-11_09_オレンジ_-_四月是你的谎.m4a': Format not recognised.
+100%|██████████| 31/31 [00:48<00:00,  1.55s/it]
+[vocals] 37/177 2020-09-11_09_オレンジ_-_四月是你的谎.m4a (50.5s)
+2026-10-20 05:46:24,347 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-09-11_10_Angel_Beats_-_Brave_Song.m4a': Format not recognised.
+100%|██████████| 30/30 [00:46<00:00,  1.55s/it]
+[vocals] 38/177 2020-09-11_10_Angel_Beats_-_Brave_Song.m4a (48.8s)
+2026-10-20 05:47:13,135 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-09-16_01_Tell_Your_World.m4a': Format not recognised.
+100%|██████████| 21/21 [00:32<00:00,  1.55s/it]
+[vocals] 39/177 2020-09-16_01_Tell_Your_World.m4a (34.6s)
+2026-10-20 05:47:47,720 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-09-23_01_晓之车.m4a': Format not recognised.
+100%|██████████| 29/29 [00:44<00:00,  1.54s/it]
+[vocals] 40/177 2020-09-23_01_晓之车.m4a (46.9s)
+2026-10-20 05:48:34,589 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-09-26_01_Unit.m4a': Format not recognised.
+100%|██████████| 18/18 [00:27<00:00,  1.54s/it]
+[vocals] 41/177 2020-09-26_01_Unit.m4a (29.5s)
+2026-10-20 05:49:04,126 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-09-26_02_巡恋风.m4a': Format not recognised.
+100%|██████████| 24/24 [00:36<00:00,  1.54s/it]
+[vocals] 42/177 2020-09-26_02_巡恋风.m4a (39.4s)
+2026-10-20 05:49:43,556 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-09-26_03_巡恋风.m4a': Format not recognised.
+100%|██████████| 24/24 [00:37<00:00,  1.54s/it]
+[vocals] 43/177 2020-09-26_03_巡恋风.m4a (39.3s)
+2026-10-20 05:50:22,892 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-09-26_04_幽霊東京.m4a': Format not recognised.
+100%|██████████| 18/18 [00:27<00:00,  1.54s/it]
+[vocals] 44/177 2020-09-26_04_幽霊東京.m4a (29.8s)
+2026-10-20 05:50:52,650 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-09-26_05_今好きになる.m4a': Format not recognised.
+100%|██████████| 23/23 [00:35<00:00,  1.54s/it]
+[vocals] 45/177 2020-09-26_05_今好きになる.m4a (37.6s)
+2026-10-20 05:51:30,272 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-09-26_06_ツギハギスタッカート.m4a': Format not recognised.
+100%|██████████| 22/22 [00:33<00:00,  1.54s/it]
+[vocals] 46/177 2020-09-26_06_ツギハギスタッカート.m4a (36.0s)
+2026-10-20 05:52:06,276 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-09-26_07_歌に形はないれど.m4a': Format not recognised.
+100%|██████████| 28/28 [00:43<00:00,  1.54s/it]
+[vocals] 47/177 2020-09-26_07_歌に形はないれど.m4a (45.8s)
+2026-10-20 05:52:52,073 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-09-26_08_太阳系Disco.m4a': Format not recognised.
+100%|██████████| 18/18 [00:27<00:00,  1.54s/it]
+[vocals] 48/177 2020-09-26_08_太阳系Disco.m4a (29.5s)
+2026-10-20 05:53:21,611 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-09-26_09_バレリーコ.m4a': Format not recognised.
+100%|██████████| 22/22 [00:34<00:00,  1.55s/it]
+[vocals] 49/177 2020-09-26_09_バレリーコ.m4a (36.2s)
+2026-10-20 05:53:57,772 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-09-26_10_オオカミ少女.m4a': Format not recognised.
+100%|██████████| 19/19 [00:29<00:00,  1.55s/it]
+[vocals] 50/177 2020-09-26_10_オオカミ少女.m4a (31.4s)
+2026-10-20 05:54:29,192 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-09-26_11_小夜子.m4a': Format not recognised.
+100%|██████████| 21/21 [00:32<00:00,  1.54s/it]
+[vocals] 51/177 2020-09-26_11_小夜子.m4a (34.7s)
+2026-10-20 05:55:03,851 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-09-26_12_未知.m4a': Format not recognised.
+100%|██████████| 24/24 [00:36<00:00,  1.54s/it]
+[vocals] 52/177 2020-09-26_12_未知.m4a (39.7s)
+2026-10-20 05:55:43,532 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-10-01_01_カタオモイ（单相思）.m4a': Format not recognised.
+100%|██████████| 18/18 [00:27<00:00,  1.56s/it]
+[vocals] 53/177 2020-10-01_01_カタオモイ（单相思）.m4a (29.6s)
+2026-10-20 05:56:13,150 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-10-03_01_いのちの名前.m4a': Format not recognised.
+100%|██████████| 18/18 [00:27<00:00,  1.54s/it]
+[vocals] 54/177 2020-10-03_01_いのちの名前.m4a (29.4s)
+2026-10-20 05:56:42,518 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-10-03_02_Sakura.m4a': Format not recognised.
+100%|██████████| 31/31 [00:47<00:00,  1.55s/it]
+[vocals] 55/177 2020-10-03_02_Sakura.m4a (50.4s)
+2026-10-20 05:57:32,925 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-10-03_03_dearest.m4a': Format not recognised.
+100%|██████████| 25/25 [00:38<00:00,  1.55s/it]
+[vocals] 56/177 2020-10-03_03_dearest.m4a (41.4s)
+2026-10-20 05:58:14,279 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-10-03_04_美しきもの.m4a': Format not recognised.
+100%|██████████| 34/34 [00:52<00:00,  1.54s/it]
+[vocals] 57/177 2020-10-03_04_美しきもの.m4a (55.4s)
+2026-10-20 05:59:09,689 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-10-03_05_Hello_Goodbye_&amp;_Hello.m4a': Format not recognised.
+100%|██████████| 26/26 [00:40<00:00,  1.55s/it]
+[vocals] 58/177 2020-10-03_05_Hello_Goodbye_&amp;_Hello.m4a (42.7s)
+2026-10-20 05:59:52,422 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-10-10_01_For_フルールバスケト.m4a': Format not recognised.
+100%|██████████| 21/21 [00:32<00:00,  1.56s/it]
+[vocals] 59/177 2020-10-10_01_For_フルールバスケト.m4a (34.7s)
+2026-10-20 06:00:27,130 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-10-10_02_鸟之诗.m4a': Format not recognised.
+100%|██████████| 28/28 [00:43<00:00,  1.55s/it]
+[vocals] 60/177 2020-10-10_02_鸟之诗.m4a (45.6s)
+2026-10-20 06:01:12,731 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-10-10_03_残酷な天使のテーゼ.m4a': Format not recognised.
+100%|██████████| 22/22 [00:33<00:00,  1.54s/it]
+[vocals] 61/177 2020-10-10_03_残酷な天使のテーゼ.m4a (35.7s)
+2026-10-20 06:01:48,459 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-10-10_04_扉をあけて.m4a': Format not recognised.
+100%|██████████| 23/23 [00:35<00:00,  1.55s/it]
+[vocals] 62/177 2020-10-10_04_扉をあけて.m4a (37.9s)
+2026-10-20 06:02:26,383 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-10-10_05_Only_my_rail_gun.m4a': Format not recognised.
+100%|██████████| 23/23 [00:35<00:00,  1.54s/it]
+[vocals] 63/177 2020-10-10_05_Only_my_rail_gun.m4a (37.6s)
+2026-10-20 06:03:04,003 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-10-10_06_My_soul,_Your_Beats.m4a': Format not recognised.
+100%|██████████| 23/23 [00:35<00:00,  1.55s/it]
+[vocals] 64/177 2020-10-10_06_My_soul,_Your_Beats.m4a (37.5s)
+2026-10-20 06:03:41,529 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-10-10_07_比翼の羽根.m4a': Format not recognised.
+100%|██████████| 25/25 [00:38<00:00,  1.55s/it]
+[vocals] 65/177 2020-10-10_07_比翼の羽根.m4a (40.8s)
+2026-10-20 06:04:22,327 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-10-10_08_unravel.m4a': Format not recognised.
+100%|██████████| 22/22 [00:33<00:00,  1.54s/it]
+[vocals] 66/177 2020-10-10_08_unravel.m4a (35.7s)
+2026-10-20 06:04:58,040 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-10-10_09_紅蓮華.m4a': Format not recognised.
+100%|██████████| 21/21 [00:32<00:00,  1.54s/it]
+[vocals] 67/177 2020-10-10_09_紅蓮華.m4a (34.0s)
+2026-10-20 06:05:32,090 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-10-10_10_喜羊羊.m4a': Format not recognised.
+100%|██████████| 14/14 [00:21<00:00,  1.56s/it]
+[vocals] 68/177 2020-10-10_10_喜羊羊.m4a (22.9s)
+2026-10-20 06:05:55,018 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-10-16_01_for_フルーツバスケット.m4a': Format not recognised.
+100%|██████████| 21/21 [00:32<00:00,  1.54s/it]
+[vocals] 69/177 2020-10-16_01_for_フルーツバスケット.m4a (34.1s)
+2026-10-20 06:06:29,108 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-10-17_01_未知.m4a': Format not recognised.
+100%|██████████| 24/24 [00:37<00:00,  1.55s/it]
+[vocals] 70/177 2020-10-17_01_未知.m4a (39.1s)
+2026-10-20 06:07:08,204 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-10-17_02_未知.m4a': Format not recognised.
+100%|██████████| 31/31 [00:47<00:00,  1.54s/it]
+[vocals] 71/177 2020-10-17_02_未知.m4a (50.1s)
+2026-10-20 06:07:58,258 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-10-17_03_未知.m4a': Format not recognised.
+100%|██████████| 18/18 [00:27<00:00,  1.54s/it]
+[vocals] 72/177 2020-10-17_03_未知.m4a (29.3s)
+2026-10-20 06:08:27,545 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-10-17_04_未知.m4a': Format not recognised.
+100%|██████████| 16/16 [00:24<00:00,  1.54s/it]
+[vocals] 73/177 2020-10-17_04_未知.m4a (26.2s)
+2026-10-20 06:08:53,720 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-10-17_05_未知.m4a': Format not recognised.
+100%|██████████| 16/16 [00:24<00:00,  1.54s/it]
+[vocals] 74/177 2020-10-17_05_未知.m4a (26.0s)
+2026-10-20 06:09:19,765 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-10-17_06_未知.m4a': Format not recognised.
+100%|██████████| 7/7 [00:10<00:00,  1.55s/it]
+[vocals] 75/177 2020-10-17_06_未知.m4a (11.9s)
+2026-10-20 06:09:31,650 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-10-17_07_未知.m4a': Format not recognised.
+100%|██████████| 22/22 [00:33<00:00,  1.54s/it]
+[vocals] 76/177 2020-10-17_07_未知.m4a (35.8s)
+2026-10-20 06:10:07,473 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-10-17_08_未知.m4a': Format not recognised.
+100%|██████████| 19/19 [00:29<00:00,  1.54s/it]
+[vocals] 77/177 2020-10-17_08_未知.m4a (30.9s)
+2026-10-20 06:10:38,346 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-10-17_09_未知.m4a': Format not recognised.
+100%|██████████| 18/18 [00:27<00:00,  1.54s/it]
+[vocals] 78/177 2020-10-17_09_未知.m4a (29.5s)
+2026-10-20 06:11:07,857 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-10-17_10_未知.m4a': Format not recognised.
+100%|██████████| 21/21 [00:32<00:00,  1.54s/it]
+[vocals] 79/177 2020-10-17_10_未知.m4a (34.2s)
+2026-10-20 06:11:42,071 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-10-17_11_未知.m4a': Format not recognised.
+100%|██████████| 20/20 [00:30<00:00,  1.55s/it]
+[vocals] 80/177 2020-10-17_11_未知.m4a (32.6s)
+2026-10-20 06:12:14,693 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-10-17_12_未知.m4a': Format not recognised.
+100%|██████████| 22/22 [00:33<00:00,  1.54s/it]
+[vocals] 81/177 2020-10-17_12_未知.m4a (35.7s)
+2026-10-20 06:12:50,411 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-10-17_13_未知.m4a': Format not recognised.
+100%|██████████| 27/27 [00:41<00:00,  1.54s/it]
+[vocals] 82/177 2020-10-17_13_未知.m4a (43.7s)
+2026-10-20 06:13:34,145 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-10-17_14_未知.m4a': Format not recognised.
+100%|██████████| 25/25 [00:38<00:00,  1.54s/it]
+[vocals] 83/177 2020-10-17_14_未知.m4a (40.5s)
+2026-10-20 06:14:14,690 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-10-17_15_未知.m4a': Format not recognised.
+100%|██████████| 24/24 [00:37<00:00,  1.55s/it]
+[vocals] 84/177 2020-10-17_15_未知.m4a (39.3s)
+2026-10-20 06:14:53,955 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-10-17_16_未知.m4a': Format not recognised.
+100%|██████████| 23/23 [00:35<00:00,  1.54s/it]
+[vocals] 85/177 2020-10-17_16_未知.m4a (37.5s)
+2026-10-20 06:15:31,450 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-10-17_17_未知.m4a': Format not recognised.
+100%|██████████| 19/19 [00:29<00:00,  1.54s/it]
+[vocals] 86/177 2020-10-17_17_未知.m4a (30.9s)
+2026-10-20 06:16:02,307 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-10-17_18_未知.m4a': Format not recognised.
+100%|██████████| 19/19 [00:29<00:00,  1.54s/it]
+[vocals] 87/177 2020-10-17_18_未知.m4a (30.9s)
+2026-10-20 06:16:33,222 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-10-17_19_未知.m4a': Format not recognised.
+100%|██████████| 17/17 [00:26<00:00,  1.54s/it]
+[vocals] 88/177 2020-10-17_19_未知.m4a (27.7s)
+2026-10-20 06:17:00,972 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-10-17_20_未知.m4a': Format not recognised.
+100%|██████████| 19/19 [00:29<00:00,  1.54s/it]
+[vocals] 89/177 2020-10-17_20_未知.m4a (31.2s)
+2026-10-20 06:17:32,172 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-10-17_21_未知.m4a': Format not recognised.
+100%|██████████| 17/17 [00:26<00:00,  1.54s/it]
+[vocals] 90/177 2020-10-17_21_未知.m4a (27.7s)
+2026-10-20 06:17:59,876 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-10-21_01_画心.m4a': Format not recognised.
+100%|██████████| 32/32 [00:49<00:00,  1.54s/it]
+[vocals] 91/177 2020-10-21_01_画心.m4a (52.2s)
+2026-10-20 06:18:52,059 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-10-24_01_未知.m4a': Format not recognised.
+100%|██████████| 20/20 [00:30<00:00,  1.55s/it]
+[vocals] 92/177 2020-10-24_01_未知.m4a (32.7s)
+2026-10-20 06:19:24,723 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-10-24_02_未知.m4a': Format not recognised.
+100%|██████████| 22/22 [00:33<00:00,  1.54s/it]
+[vocals] 93/177 2020-10-24_02_未知.m4a (35.7s)
+2026-10-20 06:20:00,426 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-10-24_03_未知.m4a': Format not recognised.
+100%|██████████| 16/16 [00:24<00:00,  1.54s/it]
+[vocals] 94/177 2020-10-24_03_未知.m4a (26.6s)
+2026-10-20 06:20:26,983 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-10-24_04_未知.m4a': Format not recognised.
+100%|██████████| 25/25 [00:38<00:00,  1.54s/it]
+[vocals] 95/177 2020-10-24_04_未知.m4a (40.5s)
+2026-10-20 06:21:07,499 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-10-24_05_未知.m4a': Format not recognised.
+100%|██████████| 20/20 [00:30<00:00,  1.54s/it]
+[vocals] 96/177 2020-10-24_05_未知.m4a (32.6s)
+2026-10-20 06:21:40,093 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-10-24_06_未知.m4a': Format not recognised.
+100%|██████████| 28/28 [00:43<00:00,  1.54s/it]
+[vocals] 97/177 2020-10-24_06_未知.m4a (45.7s)
+2026-10-20 06:22:25,782 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-10-24_07_未知.m4a': Format not recognised.
+100%|██████████| 24/24 [00:36<00:00,  1.54s/it]
+[vocals] 98/177 2020-10-24_07_未知.m4a (38.9s)
+2026-10-20 06:23:04,730 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-10-24_08_未知.m4a': Format not recognised.
+100%|██████████| 14/14 [00:21<00:00,  1.54s/it]
+[vocals] 99/177 2020-10-24_08_未知.m4a (23.0s)
+2026-10-20 06:23:27,690 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-10-24_09_未知.m4a': Format not recognised.
+100%|██████████| 9/9 [00:14<00:00,  1.58s/it]
+[vocals] 100/177 2020-10-24_09_未知.m4a (15.2s)
+2026-10-20 06:23:42,928 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-10-24_10_未知.m4a': Format not recognised.
+100%|██████████| 25/25 [00:38<00:00,  1.54s/it]
+[vocals] 101/177 2020-10-24_10_未知.m4a (40.5s)
+2026-10-20 06:24:23,419 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-10-24_11_未知.m4a': Format not recognised.
+100%|██████████| 17/17 [00:26<00:00,  1.54s/it]
+[vocals] 102/177 2020-10-24_11_未知.m4a (27.9s)
+2026-10-20 06:24:51,282 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-10-24_12_未知.m4a': Format not recognised.
+100%|██████████| 24/24 [00:36<00:00,  1.54s/it]
+[vocals] 103/177 2020-10-24_12_未知.m4a (38.9s)
+2026-10-20 06:25:30,136 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-10-24_13_未知.m4a': Format not recognised.
+100%|██████████| 24/24 [00:36<00:00,  1.54s/it]
+[vocals] 104/177 2020-10-24_13_未知.m4a (38.9s)
+2026-10-20 06:26:09,077 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-10-30_01_未知.m4a': Format not recognised.
+100%|██████████| 21/21 [00:32<00:00,  1.55s/it]
+[vocals] 105/177 2020-10-30_01_未知.m4a (34.4s)
+2026-10-20 06:26:43,499 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-10-30_02_未知.m4a': Format not recognised.
+100%|██████████| 28/28 [00:43<00:00,  1.54s/it]
+[vocals] 106/177 2020-10-30_02_未知.m4a (45.4s)
+2026-10-20 06:27:28,942 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-10-30_03_未知.m4a': Format not recognised.
+100%|██████████| 17/17 [00:26<00:00,  1.54s/it]
+[vocals] 107/177 2020-10-30_03_未知.m4a (27.7s)
+2026-10-20 06:27:56,620 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-10-30_04_未知.m4a': Format not recognised.
+100%|██████████| 8/8 [00:12<00:00,  1.54s/it]
+[vocals] 108/177 2020-10-30_04_未知.m4a (13.1s)
+2026-10-20 06:28:09,767 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-10-30_05_未知.m4a': Format not recognised.
+100%|██████████| 21/21 [00:32<00:00,  1.55s/it]
+[vocals] 109/177 2020-10-30_05_未知.m4a (34.3s)
+2026-10-20 06:28:44,118 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-10-30_06_未知.m4a': Format not recognised.
+100%|██████████| 27/27 [00:41<00:00,  1.54s/it]
+[vocals] 110/177 2020-10-30_06_未知.m4a (43.7s)
+2026-10-20 06:29:27,864 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-10-30_07_未知.m4a': Format not recognised.
+100%|██████████| 24/24 [00:37<00:00,  1.56s/it]
+[vocals] 111/177 2020-10-30_07_未知.m4a (39.3s)
+2026-10-20 06:30:07,136 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-10-30_08_未知.m4a': Format not recognised.
+100%|██████████| 28/28 [00:43<00:00,  1.54s/it]
+[vocals] 112/177 2020-10-30_08_未知.m4a (45.3s)
+2026-10-20 06:30:52,464 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-10-30_09_未知.m4a': Format not recognised.
+100%|██████████| 23/23 [00:35<00:00,  1.56s/it]
+[vocals] 113/177 2020-10-30_09_未知.m4a (37.7s)
+2026-10-20 06:31:30,181 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-10-30_10_未知.m4a': Format not recognised.
+100%|██████████| 12/12 [00:18<00:00,  1.54s/it]
+[vocals] 114/177 2020-10-30_10_未知.m4a (19.7s)
+2026-10-20 06:31:49,838 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-10-30_11_未知.m4a': Format not recognised.
+100%|██████████| 20/20 [00:30<00:00,  1.54s/it]
+[vocals] 115/177 2020-10-30_11_未知.m4a (32.5s)
+2026-10-20 06:32:22,351 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-10-30_12_未知.m4a': Format not recognised.
+100%|██████████| 25/25 [00:38<00:00,  1.54s/it]
+[vocals] 116/177 2020-10-30_12_未知.m4a (40.5s)
+2026-10-20 06:33:02,863 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-10-30_13_未知.m4a': Format not recognised.
+100%|██████████| 18/18 [00:27<00:00,  1.55s/it]
+[vocals] 117/177 2020-10-30_13_未知.m4a (29.4s)
+2026-10-20 06:33:32,272 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-10-30_14_未知.m4a': Format not recognised.
+100%|██████████| 19/19 [00:29<00:00,  1.54s/it]
+[vocals] 118/177 2020-10-30_14_未知.m4a (30.8s)
+2026-10-20 06:34:03,109 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-10-30_15_未知.m4a': Format not recognised.
+100%|██████████| 23/23 [00:35<00:00,  1.55s/it]
+[vocals] 119/177 2020-10-30_15_未知.m4a (37.7s)
+2026-10-20 06:34:40,763 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-10-30_16_未知.m4a': Format not recognised.
+100%|██████████| 32/32 [00:49<00:00,  1.54s/it]
+[vocals] 120/177 2020-10-30_16_未知.m4a (51.7s)
+2026-10-20 06:35:32,503 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-10-30_17_未知.m4a': Format not recognised.
+100%|██████████| 24/24 [00:36<00:00,  1.54s/it]
+[vocals] 121/177 2020-10-30_17_未知.m4a (39.0s)
+2026-10-20 06:36:11,464 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-10-30_18_未知.m4a': Format not recognised.
+100%|██████████| 22/22 [00:34<00:00,  1.55s/it]
+[vocals] 122/177 2020-10-30_18_未知.m4a (35.9s)
+2026-10-20 06:36:47,359 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-10-30_19_未知.m4a': Format not recognised.
+100%|██████████| 16/16 [00:24<00:00,  1.56s/it]
+[vocals] 123/177 2020-10-30_19_未知.m4a (26.3s)
+2026-10-20 06:37:13,685 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-11-04_01_フリージア（希望之花）.m4a': Format not recognised.
+100%|██████████| 31/31 [00:47<00:00,  1.54s/it]
+[vocals] 124/177 2020-11-04_01_フリージア（希望之花）.m4a (50.6s)
+2026-10-20 06:38:04,302 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-11-07_01_偏爱.m4a': Format not recognised.
+100%|██████████| 18/18 [00:27<00:00,  1.54s/it]
+[vocals] 125/177 2020-11-07_01_偏爱.m4a (29.5s)
+2026-10-20 06:38:33,759 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-11-15_01_11.13后会无期.m4a': Format not recognised.
+100%|██████████| 19/19 [00:29<00:00,  1.54s/it]
+[vocals] 126/177 2020-11-15_01_11.13后会无期.m4a (31.1s)
+2026-10-20 06:39:04,812 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-11-15_01_未知.m4a': Format not recognised.
+100%|██████████| 22/22 [00:33<00:00,  1.54s/it]
+[vocals] 127/177 2020-11-15_01_未知.m4a (36.0s)
+2026-10-20 06:39:40,846 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-11-15_02_未知.m4a': Format not recognised.
+100%|██████████| 23/23 [00:35<00:00,  1.54s/it]
+[vocals] 128/177 2020-11-15_02_未知.m4a (37.3s)
+2026-10-20 06:40:18,157 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-11-15_03_未知.m4a': Format not recognised.
+100%|██████████| 20/20 [00:30<00:00,  1.54s/it]
+[vocals] 129/177 2020-11-15_03_未知.m4a (32.6s)
+2026-10-20 06:40:50,793 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-11-15_04_未知.m4a': Format not recognised.
+100%|██████████| 18/18 [00:27<00:00,  1.54s/it]
+[vocals] 130/177 2020-11-15_04_未知.m4a (29.3s)
+2026-10-20 06:41:20,083 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-11-15_05_未知.m4a': Format not recognised.
+100%|██████████| 13/13 [00:20<00:00,  1.56s/it]
+[vocals] 131/177 2020-11-15_05_未知.m4a (21.5s)
+2026-10-20 06:41:41,597 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-11-15_06_未知.m4a': Format not recognised.
+100%|██████████| 19/19 [00:29<00:00,  1.54s/it]
+[vocals] 132/177 2020-11-15_06_未知.m4a (31.2s)
+2026-10-20 06:42:12,793 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-11-15_07_未知.m4a': Format not recognised.
+100%|██████████| 20/20 [00:30<00:00,  1.54s/it]
+[vocals] 133/177 2020-11-15_07_未知.m4a (32.8s)
+2026-10-20 06:42:45,575 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-11-15_08_未知.m4a': Format not recognised.
+100%|██████████| 26/26 [00:40<00:00,  1.54s/it]
+[vocals] 134/177 2020-11-15_08_未知.m4a (42.3s)
+2026-10-20 06:43:27,883 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-11-15_09_未知.m4a': Format not recognised.
+100%|██████████| 22/22 [00:33<00:00,  1.54s/it]
+[vocals] 135/177 2020-11-15_09_未知.m4a (35.7s)
+2026-10-20 06:44:03,601 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-11-15_10_未知.m4a': Format not recognised.
+100%|██████████| 19/19 [00:29<00:00,  1.54s/it]
+[vocals] 136/177 2020-11-15_10_未知.m4a (31.0s)
+2026-10-20 06:44:34,557 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-11-15_11_未知.m4a': Format not recognised.
+100%|██████████| 23/23 [00:35<00:00,  1.54s/it]
+[vocals] 137/177 2020-11-15_11_未知.m4a (37.3s)
+2026-10-20 06:45:11,852 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-11-15_12_未知.m4a': Format not recognised.
+100%|██████████| 26/26 [00:40<00:00,  1.54s/it]
+[vocals] 138/177 2020-11-15_12_未知.m4a (42.2s)
+2026-10-20 06:45:54,069 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-11-15_13_未知.m4a': Format not recognised.
+100%|██████████| 24/24 [00:36<00:00,  1.54s/it]
+[vocals] 139/177 2020-11-15_13_未知.m4a (38.9s)
+2026-10-20 06:46:32,959 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-11-16_01_Weight_of_the_World.m4a': Format not recognised.
+100%|██████████| 29/29 [00:44<00:00,  1.54s/it]
+[vocals] 140/177 2020-11-16_01_Weight_of_the_World.m4a (46.8s)
+2026-10-20 06:47:19,794 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-11-27_01_学猫叫.m4a': Format not recognised.
+100%|██████████| 18/18 [00:27<00:00,  1.54s/it]
+[vocals] 141/177 2020-11-27_01_学猫叫.m4a (29.2s)
+2026-10-20 06:47:48,977 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-12-04_01_好想你.m4a': Format not recognised.
+100%|██████████| 13/13 [00:20<00:00,  1.54s/it]
+[vocals] 142/177 2020-12-04_01_好想你.m4a (21.6s)
+2026-10-20 06:48:10,611 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-12-05_01_鹿.m4a': Format not recognised.
+100%|██████████| 23/23 [00:35<00:00,  1.54s/it]
+[vocals] 143/177 2020-12-05_01_鹿.m4a (37.3s)
+2026-10-20 06:48:47,950 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-12-05_02_灰色と青.m4a': Format not recognised.
+100%|██████████| 30/30 [00:46<00:00,  1.54s/it]
+[vocals] 144/177 2020-12-05_02_灰色と青.m4a (48.7s)
+2026-10-20 06:49:36,687 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-12-05_03_あなたに出会わなければ～夏雪冬花.m4a': Format not recognised.
+100%|██████████| 33/33 [00:50<00:00,  1.54s/it]
+[vocals] 145/177 2020-12-05_03_あなたに出会わなければ～夏雪冬花.m4a (53.6s)
+2026-10-20 06:50:30,319 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-12-05_04_春はゆく.m4a': Format not recognised.
+100%|██████████| 26/26 [00:40<00:00,  1.54s/it]
+[vocals] 146/177 2020-12-05_04_春はゆく.m4a (42.1s)
+2026-10-20 06:51:12,449 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-12-05_05_I_beg_you.m4a': Format not recognised.
+100%|██████████| 24/24 [00:37<00:00,  1.55s/it]
+[vocals] 147/177 2020-12-05_05_I_beg_you.m4a (39.1s)
+2026-10-20 06:51:51,553 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-12-05_06_メリュー.m4a': Format not recognised.
+100%|██████████| 19/19 [00:29<00:00,  1.54s/it]
+[vocals] 148/177 2020-12-05_06_メリュー.m4a (30.8s)
+2026-10-20 06:52:22,385 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-12-05_07_Gimme_×_Gimme.m4a': Format not recognised.
+100%|██████████| 19/19 [00:29<00:00,  1.54s/it]
+[vocals] 149/177 2020-12-05_07_Gimme_×_Gimme.m4a (30.8s)
+2026-10-20 06:52:53,225 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-12-05_08_雪の华.m4a': Format not recognised.
+100%|██████████| 29/29 [00:44<00:00,  1.54s/it]
+[vocals] 150/177 2020-12-05_08_雪の华.m4a (46.9s)
+2026-10-20 06:53:40,128 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-12-05_09_WHITE_ALBLM.m4a': Format not recognised.
+100%|██████████| 22/22 [00:34<00:00,  1.55s/it]
+[vocals] 151/177 2020-12-05_09_WHITE_ALBLM.m4a (36.2s)
+2026-10-20 06:54:16,283 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-12-05_10_深爱.m4a': Format not recognised.
+100%|██████████| 28/28 [00:43<00:00,  1.54s/it]
+[vocals] 152/177 2020-12-05_10_深爱.m4a (45.8s)
+2026-10-20 06:55:02,065 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-12-05_11_アスノヨゾラ哨戒班.m4a': Format not recognised.
+100%|██████████| 14/14 [00:21<00:00,  1.54s/it]
+[vocals] 153/177 2020-12-05_11_アスノヨゾラ哨戒班.m4a (23.0s)
+2026-10-20 06:55:25,021 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-12-05_12_六等星之夜.m4a': Format not recognised.
+100%|██████████| 30/30 [00:46<00:00,  1.54s/it]
+[vocals] 154/177 2020-12-05_12_六等星之夜.m4a (48.5s)
+2026-10-20 06:56:13,534 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-12-05_13_I_beg_you_二度挑战.m4a': Format not recognised.
+100%|██████████| 16/16 [00:24<00:00,  1.54s/it]
+[vocals] 155/177 2020-12-05_13_I_beg_you_二度挑战.m4a (26.1s)
+2026-10-20 06:56:39,656 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-12-11_01_星与你消失之日.m4a': Format not recognised.
+100%|██████████| 10/10 [00:15<00:00,  1.55s/it]
+[vocals] 156/177 2020-12-11_01_星与你消失之日.m4a (17.0s)
+2026-10-20 06:56:56,688 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-12-19_01_未知.m4a': Format not recognised.
+100%|██████████| 23/23 [00:35<00:00,  1.54s/it]
+[vocals] 157/177 2020-12-19_01_未知.m4a (37.3s)
+2026-10-20 06:57:34,001 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-12-19_02_未知.m4a': Format not recognised.
+100%|██████████| 22/22 [00:33<00:00,  1.54s/it]
+[vocals] 158/177 2020-12-19_02_未知.m4a (35.9s)
+2026-10-20 06:58:09,858 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-12-19_03_未知.m4a': Format not recognised.
+100%|██████████| 22/22 [00:33<00:00,  1.54s/it]
+[vocals] 159/177 2020-12-19_03_未知.m4a (35.8s)
+2026-10-20 06:58:45,657 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-12-19_04_未知.m4a': Format not recognised.
+100%|██████████| 17/17 [00:26<00:00,  1.54s/it]
+[vocals] 160/177 2020-12-19_04_未知.m4a (27.8s)
+2026-10-20 06:59:13,485 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-12-19_05_未知.m4a': Format not recognised.
+100%|██████████| 24/24 [00:36<00:00,  1.54s/it]
+[vocals] 161/177 2020-12-19_05_未知.m4a (39.0s)
+2026-10-20 06:59:52,440 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-12-19_06_未知.m4a': Format not recognised.
+100%|██████████| 23/23 [00:35<00:00,  1.54s/it]
+[vocals] 162/177 2020-12-19_06_未知.m4a (37.3s)
+2026-10-20 07:00:29,733 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-12-19_07_未知.m4a': Format not recognised.
+100%|██████████| 22/22 [00:34<00:00,  1.55s/it]
+[vocals] 163/177 2020-12-19_07_未知.m4a (36.0s)
+2026-10-20 07:01:05,751 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-12-19_08_未知.m4a': Format not recognised.
+100%|██████████| 22/22 [00:33<00:00,  1.54s/it]
+[vocals] 164/177 2020-12-19_08_未知.m4a (35.8s)
+2026-10-20 07:01:41,571 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-12-19_09_未知.m4a': Format not recognised.
+100%|██████████| 26/26 [00:39<00:00,  1.54s/it]
+[vocals] 165/177 2020-12-19_09_未知.m4a (42.2s)
+2026-10-20 07:02:23,772 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-12-19_10_未知.m4a': Format not recognised.
+100%|██████████| 23/23 [00:35<00:00,  1.54s/it]
+[vocals] 166/177 2020-12-19_10_未知.m4a (37.2s)
+2026-10-20 07:03:01,002 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-12-19_11_未知.m4a': Format not recognised.
+100%|██████████| 24/24 [00:36<00:00,  1.54s/it]
+[vocals] 167/177 2020-12-19_11_未知.m4a (38.8s)
+2026-10-20 07:03:39,825 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-12-19_12_未知.m4a': Format not recognised.
+100%|██████████| 22/22 [00:34<00:00,  1.55s/it]
+[vocals] 168/177 2020-12-19_12_未知.m4a (36.1s)
+2026-10-20 07:04:15,896 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-12-19_13_未知.m4a': Format not recognised.
+100%|██████████| 26/26 [00:40<00:00,  1.55s/it]
+[vocals] 169/177 2020-12-19_13_未知.m4a (42.3s)
+2026-10-20 07:04:58,227 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-12-19_14_未知.m4a': Format not recognised.
+100%|██████████| 21/21 [00:32<00:00,  1.54s/it]
+[vocals] 170/177 2020-12-19_14_未知.m4a (34.0s)
+2026-10-20 07:05:32,264 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-12-19_15_未知.m4a': Format not recognised.
+100%|██████████| 27/27 [00:41<00:00,  1.54s/it]
+[vocals] 171/177 2020-12-19_15_未知.m4a (44.2s)
+2026-10-20 07:06:16,530 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2020-12-21_01_团子大家族.m4a': Format not recognised.
+100%|██████████| 23/23 [00:35<00:00,  1.54s/it]
+[vocals] 172/177 2020-12-21_01_团子大家族.m4a (37.3s)
+2026-10-20 07:06:53,793 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2025-10-08_01_偏爱.m4a': Format not recognised.
+100%|██████████| 18/18 [00:28<00:00,  1.56s/it]
+[vocals] 173/177 2025-10-08_01_偏爱.m4a (30.0s)
+2026-10-20 07:07:23,771 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2025-10-09_01_勇气.m4a': Format not recognised.
+100%|██████████| 19/19 [00:29<00:00,  1.55s/it]
+[vocals] 174/177 2025-10-09_01_勇气.m4a (31.0s)
+2026-10-20 07:07:54,811 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2025-10-09_01_童话.m4a': Format not recognised.
+100%|██████████| 19/19 [00:29<00:00,  1.54s/it]
+[vocals] 175/177 2025-10-09_01_童话.m4a (31.0s)
+2026-10-20 07:08:25,801 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2025-10-10_01_今天你要嫁给我.m4a': Format not recognised.
+100%|██████████| 22/22 [00:33<00:00,  1.54s/it]
+[vocals] 176/177 2025-10-10_01_今天你要嫁给我.m4a (35.8s)
+2026-10-20 07:09:01,554 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/sakura_shunka/work/0_input/2025-10-10_01_后来.m4a': Format not recognised.
+100%|██████████| 26/26 [00:40<00:00,  1.54s/it]
+[vocals] 177/177 2025-10-10_01_后来.m4a (42.2s)
+[dereverb] dereverb_bs_roformer_anvuew_sdr_22.5050.ckpt: 0 done, 177 to process
+Failed to load libcublasLt.so.13: libcublasLt.so.13: cannot open shared object file: No such file or directory
+Failed to load libcublas.so.13: libcublas.so.13: cannot open shared object file: No such file or directory
+Failed to load libnvrtc.so.13: libnvrtc.so.13: cannot open shared object file: No such file or directory
+Failed to load libcufft.so.12: libcufft.so.12: cannot open shared object file: No such file or directory
+Failed to load libcudart.so.13: libcudart.so.13: cannot open shared object file: No such file or directory
+Please follow https://onnxruntime.ai/docs/install/#cuda-and-cudnn to install CUDA.
+100%|██████████| 52/52 [00:15<00:00,  3.27it/s]
+[dereverb] 1/177 2020-08-31_01_未知.wav (17.5s)
+100%|██████████| 47/47 [00:14<00:00,  3.30it/s]
+[dereverb] 2/177 2020-08-31_02_未知.wav (15.7s)
+100%|██████████| 50/50 [00:15<00:00,  3.32it/s]
+[dereverb] 3/177 2020-08-31_03_未知.wav (16.6s)
+100%|██████████| 62/62 [00:18<00:00,  3.32it/s]
+[dereverb] 4/177 2020-08-31_04_未知.wav (20.8s)
+100%|██████████| 59/59 [00:17<00:00,  3.29it/s]
+[dereverb] 5/177 2020-08-31_05_未知.wav (19.7s)
+100%|██████████| 52/52 [00:15<00:00,  3.26it/s]
+[dereverb] 6/177 2020-08-31_06_未知.wav (17.4s)
+100%|██████████| 52/52 [00:15<00:00,  3.32it/s]
+[dereverb] 7/177 2020-08-31_07_未知.wav (17.6s)
+100%|██████████| 69/69 [00:20<00:00,  3.31it/s]
+[dereverb] 8/177 2020-08-31_08_未知.wav (23.0s)
+100%|██████████| 60/60 [00:18<00:00,  3.32it/s]
+[dereverb] 9/177 2020-08-31_09_未知.wav (19.9s)
+100%|██████████| 57/57 [00:17<00:00,  3.30it/s]
+[dereverb] 10/177 2020-08-31_10_未知.wav (18.9s)
+100%|██████████| 51/51 [00:15<00:00,  3.32it/s]
+[dereverb] 11/177 2020-09-03_01_地球をあげる.wav (17.0s)
+100%|██████████| 38/38 [00:11<00:00,  3.32it/s]
+[dereverb] 12/177 2020-09-03_01_未知.wav (12.4s)
+100%|██████████| 46/46 [00:13<00:00,  3.31it/s]
+[dereverb] 13/177 2020-09-03_01_渡月橋_〜君_想ふ〜.wav (15.5s)
+100%|██████████| 51/51 [00:15<00:00,  3.32it/s]
+[dereverb] 14/177 2020-09-03_02_未知.wav (17.0s)
+100%|██████████| 41/41 [00:12<00:00,  3.32it/s]
+[dereverb] 15/177 2020-09-03_03_未知.wav (13.4s)
+100%|██████████| 42/42 [00:12<00:00,  3.24it/s]
+[dereverb] 16/177 2020-09-03_04_未知.wav (14.0s)
+100%|██████████| 51/51 [00:15<00:00,  3.32it/s]
+[dereverb] 17/177 2020-09-06_01_小幸运.wav (17.2s)
+100%|██████████| 38/38 [00:11<00:00,  3.32it/s]
+[dereverb] 18/177 2020-09-06_01_日不落.wav (12.4s)
+100%|██████████| 44/44 [00:13<00:00,  3.32it/s]
+[dereverb] 19/177 2020-09-06_01_未知.wav (14.7s)
+100%|██████████| 32/32 [00:09<00:00,  3.32it/s]
+[dereverb] 20/177 2020-09-06_02_未知.wav (10.4s)
+100%|██████████| 58/58 [00:17<00:00,  3.32it/s]
+[dereverb] 21/177 2020-09-06_03_未知.wav (19.4s)
+100%|██████████| 50/50 [00:15<00:00,  3.30it/s]
+[dereverb] 22/177 2020-09-06_04_未知.wav (16.6s)
+100%|██████████| 56/56 [00:16<00:00,  3.32it/s]
+[dereverb] 23/177 2020-09-06_05_未知.wav (18.4s)
+100%|██████████| 41/41 [00:12<00:00,  3.32it/s]
+[dereverb] 24/177 2020-09-06_06_未知.wav (13.3s)
+100%|██████████| 46/46 [00:14<00:00,  3.20it/s]
+[dereverb] 25/177 2020-09-06_07_未知.wav (15.9s)
+100%|██████████| 44/44 [00:13<00:00,  3.30it/s]
+[dereverb] 26/177 2020-09-06_08_未知.wav (14.4s)
+100%|██████████| 42/42 [00:12<00:00,  3.32it/s]
+[dereverb] 27/177 2020-09-06_09_未知.wav (14.0s)
+100%|██████████| 16/16 [00:04<00:00,  3.32it/s]
+[dereverb] 28/177 2020-09-09_01_温柔巫女也能唱出啥霸炫狂拽的echo吗.wav (5.3s)
+100%|██████████| 61/61 [00:18<00:00,  3.24it/s]
+[dereverb] 29/177 2020-09-11_01_爱してる_-_夏目友人帐.wav (20.7s)
+100%|██████████| 59/59 [00:17<00:00,  3.30it/s]
+[dereverb] 30/177 2020-09-11_02_爱哭鬼_-_少年同盟.wav (19.5s)
+100%|██████████| 46/46 [00:13<00:00,  3.29it/s]
+[dereverb] 31/177 2020-09-11_03_ラピスラズリ_-_亚尔斯兰战记.wav (15.5s)
+100%|██████████| 65/65 [00:19<00:00,  3.32it/s]
+[dereverb] 32/177 2020-09-11_04_六等星之夜_-_未来都市No.6.wav (21.5s)
+100%|██████████| 59/59 [00:17<00:00,  3.32it/s]
+[dereverb] 33/177 2020-09-11_05_平行线_-_人渣的本愿.wav (19.4s)
+100%|██████████| 57/57 [00:17<00:00,  3.21it/s]
+[dereverb] 34/177 2020-09-11_06_美しき残酷な世界_-_进击的巨人.wav (19.4s)
+100%|██████████| 53/53 [00:16<00:00,  3.30it/s]
+[dereverb] 35/177 2020-09-11_07_最高の片想_-_彩云国物语.wav (17.9s)
+100%|██████████| 67/67 [00:20<00:00,  3.30it/s]
+[dereverb] 36/177 2020-09-11_08_君の知らない物語_-_化物语.wav (22.2s)
+100%|██████████| 66/66 [00:19<00:00,  3.32it/s]
+[dereverb] 37/177 2020-09-11_09_オレンジ_-_四月是你的谎.wav (21.9s)
+100%|██████████| 64/64 [00:19<00:00,  3.31it/s]
+[dereverb] 38/177 2020-09-11_10_Angel_Beats_-_Brave_Song.wav (21.1s)
+100%|██████████| 45/45 [00:13<00:00,  3.32it/s]
+[dereverb] 39/177 2020-09-16_01_Tell_Your_World.wav (14.9s)
+100%|██████████| 63/63 [00:19<00:00,  3.29it/s]
+[dereverb] 40/177 2020-09-23_01_晓之车.wav (20.9s)
+100%|██████████| 40/40 [00:12<00:00,  3.32it/s]
+[dereverb] 41/177 2020-09-26_01_Unit.wav (13.0s)
+100%|██████████| 52/52 [00:15<00:00,  3.32it/s]
+[dereverb] 42/177 2020-09-26_02_巡恋风.wav (17.2s)
+100%|██████████| 52/52 [00:15<00:00,  3.30it/s]
+[dereverb] 43/177 2020-09-26_03_巡恋风.wav (17.7s)
+100%|██████████| 39/39 [00:11<00:00,  3.30it/s]
+[dereverb] 44/177 2020-09-26_04_幽霊東京.wav (13.0s)
+100%|██████████| 50/50 [00:15<00:00,  3.29it/s]
+[dereverb] 45/177 2020-09-26_05_今好きになる.wav (16.6s)
+100%|██████████| 48/48 [00:14<00:00,  3.32it/s]
+[dereverb] 46/177 2020-09-26_06_ツギハギスタッカート.wav (16.0s)
+100%|██████████| 61/61 [00:18<00:00,  3.31it/s]
+[dereverb] 47/177 2020-09-26_07_歌に形はないれど.wav (20.2s)
+100%|██████████| 39/39 [00:11<00:00,  3.32it/s]
+[dereverb] 48/177 2020-09-26_08_太阳系Disco.wav (12.7s)
+100%|██████████| 48/48 [00:14<00:00,  3.22it/s]
+[dereverb] 49/177 2020-09-26_09_バレリーコ.wav (16.3s)
+100%|██████████| 42/42 [00:12<00:00,  3.32it/s]
+[dereverb] 50/177 2020-09-26_10_オオカミ少女.wav (13.6s)
+100%|██████████| 45/45 [00:14<00:00,  3.19it/s]
+[dereverb] 51/177 2020-09-26_11_小夜子.wav (15.5s)
+100%|██████████| 52/52 [00:15<00:00,  3.32it/s]
+[dereverb] 52/177 2020-09-26_12_未知.wav (17.3s)
+100%|██████████| 40/40 [00:12<00:00,  3.26it/s]
+[dereverb] 53/177 2020-10-01_01_カタオモイ（单相思）.wav (13.3s)
+100%|██████████| 38/38 [00:11<00:00,  3.32it/s]
+[dereverb] 54/177 2020-10-03_01_いのちの名前.wav (12.4s)
+100%|██████████| 67/67 [00:20<00:00,  3.32it/s]
+[dereverb] 55/177 2020-10-03_02_Sakura.wav (22.1s)
+100%|██████████| 54/54 [00:16<00:00,  3.28it/s]
+[dereverb] 56/177 2020-10-03_03_dearest.wav (17.9s)
+100%|██████████| 74/74 [00:22<00:00,  3.32it/s]
+[dereverb] 57/177 2020-10-03_04_美しきもの.wav (24.4s)
+100%|██████████| 56/56 [00:16<00:00,  3.31it/s]
+[dereverb] 58/177 2020-10-03_05_Hello_Goodbye_&amp;_Hello.wav (18.5s)
+100%|██████████| 45/45 [00:13<00:00,  3.29it/s]
+[dereverb] 59/177 2020-10-10_01_For_フルールバスケト.wav (15.0s)
+100%|██████████| 60/60 [00:18<00:00,  3.32it/s]
+[dereverb] 60/177 2020-10-10_02_鸟之诗.wav (19.8s)
+100%|██████████| 48/48 [00:14<00:00,  3.22it/s]
+[dereverb] 61/177 2020-10-10_03_残酷な天使のテーゼ.wav (16.5s)
+100%|██████████| 51/51 [00:15<00:00,  3.32it/s]
+[dereverb] 62/177 2020-10-10_04_扉をあけて.wav (17.2s)
+100%|██████████| 50/50 [00:15<00:00,  3.32it/s]
+[dereverb] 63/177 2020-10-10_05_Only_my_rail_gun.wav (16.6s)
+100%|██████████| 50/50 [00:15<00:00,  3.32it/s]
+[dereverb] 64/177 2020-10-10_06_My_soul,_Your_Beats.wav (16.5s)
+100%|██████████| 54/54 [00:16<00:00,  3.32it/s]
+[dereverb] 65/177 2020-10-10_07_比翼の羽根.wav (17.8s)
+100%|██████████| 47/47 [00:14<00:00,  3.32it/s]
+[dereverb] 66/177 2020-10-10_08_unravel.wav (15.6s)
+100%|██████████| 46/46 [00:14<00:00,  3.25it/s]
+[dereverb] 67/177 2020-10-10_09_紅蓮華.wav (15.5s)
+100%|██████████| 30/30 [00:09<00:00,  3.14it/s]
+[dereverb] 68/177 2020-10-10_10_喜羊羊.wav (10.3s)
+100%|██████████| 46/46 [00:13<00:00,  3.32it/s]
+[dereverb] 69/177 2020-10-16_01_for_フルーツバスケット.wav (15.4s)
+100%|██████████| 52/52 [00:15<00:00,  3.32it/s]
+[dereverb] 70/177 2020-10-17_01_未知.wav (17.4s)
+100%|██████████| 66/66 [00:20<00:00,  3.29it/s]
+[dereverb] 71/177 2020-10-17_02_未知.wav (22.1s)
+100%|██████████| 39/39 [00:11<00:00,  3.32it/s]
+[dereverb] 72/177 2020-10-17_03_未知.wav (12.7s)
+100%|██████████| 36/36 [00:10<00:00,  3.32it/s]
+[dereverb] 73/177 2020-10-17_04_未知.wav (11.7s)
+100%|██████████| 34/34 [00:10<00:00,  3.32it/s]
+[dereverb] 74/177 2020-10-17_05_未知.wav (11.1s)
+100%|██████████| 15/15 [00:04<00:00,  3.32it/s]
+[dereverb] 75/177 2020-10-17_06_未知.wav (5.1s)
+100%|██████████| 47/47 [00:14<00:00,  3.32it/s]
+[dereverb] 76/177 2020-10-17_07_未知.wav (15.8s)
+100%|██████████| 41/41 [00:12<00:00,  3.32it/s]
+[dereverb] 77/177 2020-10-17_08_未知.wav (13.5s)
+100%|██████████| 39/39 [00:12<00:00,  3.23it/s]
+[dereverb] 78/177 2020-10-17_09_未知.wav (13.0s)
+100%|██████████| 45/45 [00:13<00:00,  3.32it/s]
+[dereverb] 79/177 2020-10-17_10_未知.wav (15.4s)
+100%|██████████| 42/42 [00:12<00:00,  3.32it/s]
+[dereverb] 80/177 2020-10-17_11_未知.wav (14.0s)
+100%|██████████| 48/48 [00:14<00:00,  3.28it/s]
+[dereverb] 81/177 2020-10-17_12_未知.wav (16.3s)
+100%|██████████| 57/57 [00:17<00:00,  3.29it/s]
+[dereverb] 82/177 2020-10-17_13_未知.wav (19.1s)
+100%|██████████| 55/55 [00:16<00:00,  3.32it/s]
+[dereverb] 83/177 2020-10-17_14_未知.wav (18.2s)
+100%|██████████| 53/53 [00:16<00:00,  3.31it/s]
+[dereverb] 84/177 2020-10-17_15_未知.wav (17.7s)
+100%|██████████| 49/49 [00:14<00:00,  3.32it/s]
+[dereverb] 85/177 2020-10-17_16_未知.wav (16.3s)
+100%|██████████| 42/42 [00:12<00:00,  3.30it/s]
+[dereverb] 86/177 2020-10-17_17_未知.wav (13.8s)
+100%|██████████| 40/40 [00:12<00:00,  3.32it/s]
+[dereverb] 87/177 2020-10-17_18_未知.wav (13.1s)
+100%|██████████| 38/38 [00:11<00:00,  3.32it/s]
+[dereverb] 88/177 2020-10-17_19_未知.wav (12.4s)
+100%|██████████| 40/40 [00:12<00:00,  3.32it/s]
+[dereverb] 89/177 2020-10-17_20_未知.wav (13.1s)
+100%|██████████| 38/38 [00:11<00:00,  3.24it/s]
+[dereverb] 90/177 2020-10-17_21_未知.wav (12.8s)
+100%|██████████| 70/70 [00:21<00:00,  3.32it/s]
+[dereverb] 91/177 2020-10-21_01_画心.wav (23.4s)
+100%|██████████| 44/44 [00:13<00:00,  3.32it/s]
+[dereverb] 92/177 2020-10-24_01_未知.wav (14.5s)
+100%|██████████| 47/47 [00:14<00:00,  3.32it/s]
+[dereverb] 93/177 2020-10-24_02_未知.wav (15.6s)
+100%|██████████| 36/36 [00:10<00:00,  3.29it/s]
+[dereverb] 94/177 2020-10-24_03_未知.wav (11.8s)
+100%|██████████| 53/53 [00:16<00:00,  3.31it/s]
+[dereverb] 95/177 2020-10-24_04_未知.wav (17.8s)
+100%|██████████| 44/44 [00:13<00:00,  3.32it/s]
+[dereverb] 96/177 2020-10-24_05_未知.wav (14.3s)
+100%|██████████| 61/61 [00:18<00:00,  3.31it/s]
+[dereverb] 97/177 2020-10-24_06_未知.wav (20.2s)
+100%|██████████| 53/53 [00:16<00:00,  3.18it/s]
+[dereverb] 98/177 2020-10-24_07_未知.wav (18.2s)
+100%|██████████| 31/31 [00:09<00:00,  3.32it/s]
+[dereverb] 99/177 2020-10-24_08_未知.wav (10.2s)
+100%|██████████| 20/20 [00:06<00:00,  3.32it/s]
+[dereverb] 100/177 2020-10-24_09_未知.wav (6.7s)
+100%|██████████| 54/54 [00:16<00:00,  3.32it/s]
+[dereverb] 101/177 2020-10-24_10_未知.wav (17.8s)
+100%|██████████| 36/36 [00:10<00:00,  3.32it/s]
+[dereverb] 102/177 2020-10-24_11_未知.wav (11.8s)
+100%|██████████| 52/52 [00:15<00:00,  3.32it/s]
+[dereverb] 103/177 2020-10-24_12_未知.wav (17.3s)
+100%|██████████| 51/51 [00:15<00:00,  3.32it/s]
+[dereverb] 104/177 2020-10-24_13_未知.wav (16.9s)
+100%|██████████| 46/46 [00:13<00:00,  3.32it/s]
+[dereverb] 105/177 2020-10-30_01_未知.wav (15.2s)
+100%|██████████| 60/60 [00:18<00:00,  3.32it/s]
+[dereverb] 106/177 2020-10-30_02_未知.wav (19.8s)
+100%|██████████| 37/37 [00:11<00:00,  3.30it/s]
+[dereverb] 107/177 2020-10-30_03_未知.wav (12.3s)
+100%|██████████| 17/17 [00:05<00:00,  3.26it/s]
+[dereverb] 108/177 2020-10-30_04_未知.wav (5.9s)
+100%|██████████| 47/47 [00:14<00:00,  3.31it/s]
+[dereverb] 109/177 2020-10-30_05_未知.wav (15.7s)
+100%|██████████| 59/59 [00:17<00:00,  3.32it/s]
+[dereverb] 110/177 2020-10-30_06_未知.wav (19.8s)
+100%|██████████| 51/51 [00:15<00:00,  3.28it/s]
+[dereverb] 111/177 2020-10-30_07_未知.wav (17.1s)
+100%|██████████| 61/61 [00:18<00:00,  3.25it/s]
+[dereverb] 112/177 2020-10-30_08_未知.wav (20.6s)
+100%|██████████| 51/51 [00:15<00:00,  3.28it/s]
+[dereverb] 113/177 2020-10-30_09_未知.wav (17.1s)
+100%|██████████| 27/27 [00:08<00:00,  3.32it/s]
+[dereverb] 114/177 2020-10-30_10_未知.wav (8.9s)
+100%|██████████| 43/43 [00:12<00:00,  3.32it/s]
+[dereverb] 115/177 2020-10-30_11_未知.wav (14.5s)
+100%|██████████| 53/53 [00:16<00:00,  3.27it/s]
+[dereverb] 116/177 2020-10-30_12_未知.wav (17.9s)
+100%|██████████| 40/40 [00:12<00:00,  3.32it/s]
+[dereverb] 117/177 2020-10-30_13_未知.wav (13.1s)
+100%|██████████| 41/41 [00:12<00:00,  3.32it/s]
+[dereverb] 118/177 2020-10-30_14_未知.wav (13.6s)
+100%|██████████| 50/50 [00:15<00:00,  3.32it/s]
+[dereverb] 119/177 2020-10-30_15_未知.wav (16.7s)
+100%|██████████| 68/68 [00:20<00:00,  3.32it/s]
+[dereverb] 120/177 2020-10-30_16_未知.wav (22.5s)
+100%|██████████| 51/51 [00:15<00:00,  3.31it/s]
+[dereverb] 121/177 2020-10-30_17_未知.wav (17.0s)
+100%|██████████| 48/48 [00:14<00:00,  3.27it/s]
+[dereverb] 122/177 2020-10-30_18_未知.wav (16.2s)
+100%|██████████| 36/36 [00:10<00:00,  3.32it/s]
+[dereverb] 123/177 2020-10-30_19_未知.wav (11.8s)
+100%|██████████| 66/66 [00:19<00:00,  3.32it/s]
+[dereverb] 124/177 2020-11-04_01_フリージア（希望之花）.wav (22.0s)
+100%|██████████| 39/39 [00:11<00:00,  3.27it/s]
+[dereverb] 125/177 2020-11-07_01_偏爱.wav (12.9s)
+100%|██████████| 42/42 [00:12<00:00,  3.32it/s]
+[dereverb] 126/177 2020-11-15_01_11.13后会无期.wav (13.6s)
+100%|██████████| 49/49 [00:14<00:00,  3.32it/s]
+[dereverb] 127/177 2020-11-15_01_未知.wav (16.3s)
+100%|██████████| 50/50 [00:15<00:00,  3.32it/s]
+[dereverb] 128/177 2020-11-15_02_未知.wav (16.7s)
+100%|██████████| 43/43 [00:13<00:00,  3.28it/s]
+[dereverb] 129/177 2020-11-15_03_未知.wav (14.1s)
+100%|██████████| 38/38 [00:11<00:00,  3.31it/s]
+[dereverb] 130/177 2020-11-15_04_未知.wav (12.4s)
+100%|██████████| 28/28 [00:08<00:00,  3.32it/s]
+[dereverb] 131/177 2020-11-15_05_未知.wav (9.2s)
+100%|██████████| 42/42 [00:12<00:00,  3.27it/s]
+[dereverb] 132/177 2020-11-15_06_未知.wav (13.9s)
+100%|██████████| 43/43 [00:12<00:00,  3.32it/s]
+[dereverb] 133/177 2020-11-15_07_未知.wav (14.0s)
+100%|██████████| 55/55 [00:16<00:00,  3.30it/s]
+[dereverb] 134/177 2020-11-15_08_未知.wav (18.4s)
+100%|██████████| 47/47 [00:14<00:00,  3.31it/s]
+[dereverb] 135/177 2020-11-15_09_未知.wav (15.6s)
+100%|██████████| 41/41 [00:12<00:00,  3.32it/s]
+[dereverb] 136/177 2020-11-15_10_未知.wav (13.3s)
+100%|██████████| 51/51 [00:15<00:00,  3.32it/s]
+[dereverb] 137/177 2020-11-15_11_未知.wav (16.9s)
+100%|██████████| 55/55 [00:16<00:00,  3.32it/s]
+[dereverb] 138/177 2020-11-15_12_未知.wav (18.2s)
+100%|██████████| 52/52 [00:15<00:00,  3.32it/s]
+[dereverb] 139/177 2020-11-15_13_未知.wav (17.2s)
+100%|██████████| 63/63 [00:18<00:00,  3.32it/s]
+[dereverb] 140/177 2020-11-16_01_Weight_of_the_World.wav (20.8s)
+100%|██████████| 38/38 [00:11<00:00,  3.20it/s]
+[dereverb] 141/177 2020-11-27_01_学猫叫.wav (12.8s)
+100%|██████████| 29/29 [00:08<00:00,  3.32it/s]
+[dereverb] 142/177 2020-12-04_01_好想你.wav (9.6s)
+100%|██████████| 49/49 [00:14<00:00,  3.32it/s]
+[dereverb] 143/177 2020-12-05_01_鹿.wav (16.4s)
+100%|██████████| 65/65 [00:19<00:00,  3.26it/s]
+[dereverb] 144/177 2020-12-05_02_灰色と青.wav (22.1s)
+100%|██████████| 70/70 [00:21<00:00,  3.30it/s]
+[dereverb] 145/177 2020-12-05_03_あなたに出会わなければ～夏雪冬花.wav (23.3s)
+100%|██████████| 56/56 [00:17<00:00,  3.26it/s]
+[dereverb] 146/177 2020-12-05_04_春はゆく.wav (18.8s)
+100%|██████████| 52/52 [00:16<00:00,  3.25it/s]
+[dereverb] 147/177 2020-12-05_05_I_beg_you.wav (18.1s)
+100%|██████████| 41/41 [00:12<00:00,  3.32it/s]
+[dereverb] 148/177 2020-12-05_06_メリュー.wav (13.4s)
+100%|██████████| 41/41 [00:12<00:00,  3.31it/s]
+[dereverb] 149/177 2020-12-05_07_Gimme_×_Gimme.wav (13.5s)
+100%|██████████| 64/64 [00:19<00:00,  3.32it/s]
+[dereverb] 150/177 2020-12-05_08_雪の华.wav (21.2s)
+100%|██████████| 49/49 [00:15<00:00,  3.26it/s]
+[dereverb] 151/177 2020-12-05_09_WHITE_ALBLM.wav (16.5s)
+100%|██████████| 61/61 [00:18<00:00,  3.32it/s]
+[dereverb] 152/177 2020-12-05_10_深爱.wav (20.2s)
+100%|██████████| 32/32 [00:09<00:00,  3.23it/s]
+[dereverb] 153/177 2020-12-05_11_アスノヨゾラ哨戒班.wav (10.7s)
+100%|██████████| 65/65 [00:19<00:00,  3.32it/s]
+[dereverb] 154/177 2020-12-05_12_六等星之夜.wav (21.6s)
+100%|██████████| 35/35 [00:10<00:00,  3.32it/s]
+[dereverb] 155/177 2020-12-05_13_I_beg_you_二度挑战.wav (11.6s)
+100%|██████████| 21/21 [00:06<00:00,  3.23it/s]
+[dereverb] 156/177 2020-12-11_01_星与你消失之日.wav (7.2s)
+100%|██████████| 50/50 [00:15<00:00,  3.32it/s]
+[dereverb] 157/177 2020-12-19_01_未知.wav (16.8s)
+100%|██████████| 48/48 [00:14<00:00,  3.31it/s]
+[dereverb] 158/177 2020-12-19_02_未知.wav (16.0s)
+100%|██████████| 48/48 [00:14<00:00,  3.32it/s]
+[dereverb] 159/177 2020-12-19_03_未知.wav (16.4s)
+100%|██████████| 37/37 [00:11<00:00,  3.24it/s]
+[dereverb] 160/177 2020-12-19_04_未知.wav (12.4s)
+100%|██████████| 53/53 [00:15<00:00,  3.32it/s]
+[dereverb] 161/177 2020-12-19_05_未知.wav (17.9s)
+100%|██████████| 49/49 [00:14<00:00,  3.28it/s]
+[dereverb] 162/177 2020-12-19_06_未知.wav (16.5s)
+100%|██████████| 48/48 [00:14<00:00,  3.32it/s]
+[dereverb] 163/177 2020-12-19_07_未知.wav (15.9s)
+100%|██████████| 49/49 [00:14<00:00,  3.32it/s]
+[dereverb] 164/177 2020-12-19_08_未知.wav (16.2s)
+100%|██████████| 56/56 [00:16<00:00,  3.32it/s]
+[dereverb] 165/177 2020-12-19_09_未知.wav (18.5s)
+100%|██████████| 50/50 [00:15<00:00,  3.30it/s]
+[dereverb] 166/177 2020-12-19_10_未知.wav (16.7s)
+100%|██████████| 53/53 [00:15<00:00,  3.32it/s]
+[dereverb] 167/177 2020-12-19_11_未知.wav (17.6s)
+100%|██████████| 48/48 [00:14<00:00,  3.32it/s]
+[dereverb] 168/177 2020-12-19_12_未知.wav (15.9s)
+100%|██████████| 57/57 [00:17<00:00,  3.32it/s]
+[dereverb] 169/177 2020-12-19_13_未知.wav (19.2s)
+100%|██████████| 47/47 [00:14<00:00,  3.30it/s]
+[dereverb] 170/177 2020-12-19_14_未知.wav (15.7s)
+100%|██████████| 58/58 [00:17<00:00,  3.32it/s]
+[dereverb] 171/177 2020-12-19_15_未知.wav (19.2s)
+100%|██████████| 50/50 [00:15<00:00,  3.32it/s]
+[dereverb] 172/177 2020-12-21_01_团子大家族.wav (16.6s)
+100%|██████████| 39/39 [00:11<00:00,  3.32it/s]
+[dereverb] 173/177 2025-10-08_01_偏爱.wav (12.8s)
+100%|██████████| 41/41 [00:12<00:00,  3.32it/s]
+[dereverb] 174/177 2025-10-09_01_勇气.wav (13.4s)
+100%|██████████| 42/42 [00:12<00:00,  3.32it/s]
+[dereverb] 175/177 2025-10-09_01_童话.wav (13.8s)
+100%|██████████| 49/49 [00:15<00:00,  3.27it/s]
+[dereverb] 176/177 2025-10-10_01_今天你要嫁给我.wav (16.5s)
+100%|██████████| 57/57 [00:17<00:00,  3.32it/s]
+[dereverb] 177/177 2025-10-10_01_后来.wav (18.9s)
+[karaoke] karaoke_bs_roformer_anvuew.ckpt: 0 done, 177 to process
+Failed to load libcublasLt.so.13: libcublasLt.so.13: cannot open shared object file: No such file or directory
+Failed to load libcublas.so.13: libcublas.so.13: cannot open shared object file: No such file or directory
+Failed to load libnvrtc.so.13: libnvrtc.so.13: cannot open shared object file: No such file or directory
+Failed to load libcufft.so.12: libcufft.so.12: cannot open shared object file: No such file or directory
+Failed to load libcudart.so.13: libcudart.so.13: cannot open shared object file: No such file or directory
+Please follow https://onnxruntime.ai/docs/install/#cuda-and-cudnn to install CUDA.
+100%|██████████| 71/71 [00:33<00:00,  2.14it/s]
+[karaoke] 1/177 2020-08-31_01_未知.wav (34.9s)
+100%|██████████| 64/64 [00:29<00:00,  2.14it/s]
+[karaoke] 2/177 2020-08-31_02_未知.wav (31.8s)
+100%|██████████| 68/68 [00:31<00:00,  2.14it/s]
+[karaoke] 3/177 2020-08-31_03_未知.wav (33.5s)
+100%|██████████| 84/84 [00:39<00:00,  2.14it/s]
+[karaoke] 4/177 2020-08-31_04_未知.wav (41.4s)
+100%|██████████| 81/81 [00:37<00:00,  2.14it/s]
+[karaoke] 5/177 2020-08-31_05_未知.wav (39.9s)
+100%|██████████| 71/71 [00:33<00:00,  2.13it/s]
+[karaoke] 6/177 2020-08-31_06_未知.wav (34.9s)
+100%|██████████| 71/71 [00:33<00:00,  2.13it/s]
+[karaoke] 7/177 2020-08-31_07_未知.wav (35.0s)
+100%|██████████| 95/95 [00:44<00:00,  2.14it/s]
+[karaoke] 8/177 2020-08-31_08_未知.wav (46.5s)
+100%|██████████| 82/82 [00:38<00:00,  2.13it/s]
+[karaoke] 9/177 2020-08-31_09_未知.wav (40.5s)
+100%|██████████| 78/78 [00:36<00:00,  2.14it/s]
+[karaoke] 10/177 2020-08-31_10_未知.wav (38.3s)
+100%|██████████| 69/69 [00:32<00:00,  2.14it/s]
+[karaoke] 11/177 2020-09-03_01_地球をあげる.wav (33.9s)
+100%|██████████| 51/51 [00:24<00:00,  2.12it/s]
+[karaoke] 12/177 2020-09-03_01_未知.wav (25.4s)
+100%|██████████| 63/63 [00:29<00:00,  2.14it/s]
+[karaoke] 13/177 2020-09-03_01_渡月橋_〜君_想ふ〜.wav (30.9s)
+100%|██████████| 69/69 [00:32<00:00,  2.14it/s]
+[karaoke] 14/177 2020-09-03_02_未知.wav (33.8s)
+100%|██████████| 56/56 [00:26<00:00,  2.13it/s]
+[karaoke] 15/177 2020-09-03_03_未知.wav (27.6s)
+100%|██████████| 57/57 [00:26<00:00,  2.13it/s]
+[karaoke] 16/177 2020-09-03_04_未知.wav (28.1s)
+100%|██████████| 69/69 [00:32<00:00,  2.13it/s]
+[karaoke] 17/177 2020-09-06_01_小幸运.wav (33.9s)
+100%|██████████| 52/52 [00:24<00:00,  2.13it/s]
+[karaoke] 18/177 2020-09-06_01_日不落.wav (25.8s)
+100%|██████████| 59/59 [00:27<00:00,  2.14it/s]
+[karaoke] 19/177 2020-09-06_01_未知.wav (29.0s)
+100%|██████████| 43/43 [00:20<00:00,  2.13it/s]
+[karaoke] 20/177 2020-09-06_02_未知.wav (21.2s)
+100%|██████████| 80/80 [00:37<00:00,  2.14it/s]
+[karaoke] 21/177 2020-09-06_03_未知.wav (39.1s)
+100%|██████████| 68/68 [00:31<00:00,  2.14it/s]
+[karaoke] 22/177 2020-09-06_04_未知.wav (33.4s)
+100%|██████████| 76/76 [00:35<00:00,  2.14it/s]
+[karaoke] 23/177 2020-09-06_05_未知.wav (37.5s)
+100%|██████████| 55/55 [00:25<00:00,  2.14it/s]
+[karaoke] 24/177 2020-09-06_06_未知.wav (27.0s)
+100%|██████████| 63/63 [00:29<00:00,  2.14it/s]
+[karaoke] 25/177 2020-09-06_07_未知.wav (30.9s)
+100%|██████████| 60/60 [00:28<00:00,  2.14it/s]
+[karaoke] 26/177 2020-09-06_08_未知.wav (29.5s)
+100%|██████████| 57/57 [00:26<00:00,  2.13it/s]
+[karaoke] 27/177 2020-09-06_09_未知.wav (28.1s)
+100%|██████████| 20/20 [00:09<00:00,  2.14it/s]
+[karaoke] 28/177 2020-09-09_01_温柔巫女也能唱出啥霸炫狂拽的echo吗.wav (9.9s)
+100%|██████████| 84/84 [00:39<00:00,  2.14it/s]
+[karaoke] 29/177 2020-09-11_01_爱してる_-_夏目友人帐.wav (41.3s)
+100%|██████████| 81/81 [00:37<00:00,  2.14it/s]
+[karaoke] 30/177 2020-09-11_02_爱哭鬼_-_少年同盟.wav (39.7s)
+100%|██████████| 62/62 [00:28<00:00,  2.14it/s]
+[karaoke] 31/177 2020-09-11_03_ラピスラズリ_-_亚尔斯兰战记.wav (30.4s)
+100%|██████████| 89/89 [00:41<00:00,  2.14it/s]
+[karaoke] 32/177 2020-09-11_04_六等星之夜_-_未来都市No.6.wav (43.7s)
+100%|██████████| 80/80 [00:37<00:00,  2.14it/s]
+[karaoke] 33/177 2020-09-11_05_平行线_-_人渣的本愿.wav (39.2s)
+100%|██████████| 79/79 [00:36<00:00,  2.14it/s]
+[karaoke] 34/177 2020-09-11_06_美しき残酷な世界_-_进击的巨人.wav (38.8s)
+100%|██████████| 72/72 [00:33<00:00,  2.13it/s]
+[karaoke] 35/177 2020-09-11_07_最高の片想_-_彩云国物语.wav (35.4s)
+100%|██████████| 91/91 [00:42<00:00,  2.14it/s]
+[karaoke] 36/177 2020-09-11_08_君の知らない物語_-_化物语.wav (44.5s)
+100%|██████████| 91/91 [00:42<00:00,  2.14it/s]
+[karaoke] 37/177 2020-09-11_09_オレンジ_-_四月是你的谎.wav (44.5s)
+100%|██████████| 88/88 [00:41<00:00,  2.14it/s]
+[karaoke] 38/177 2020-09-11_10_Angel_Beats_-_Brave_Song.wav (43.1s)
+100%|██████████| 61/61 [00:28<00:00,  2.14it/s]
+[karaoke] 39/177 2020-09-16_01_Tell_Your_World.wav (30.0s)
+100%|██████████| 86/86 [00:40<00:00,  2.13it/s]
+[karaoke] 40/177 2020-09-23_01_晓之车.wav (42.2s)
+100%|██████████| 54/54 [00:25<00:00,  2.14it/s]
+[karaoke] 41/177 2020-09-26_01_Unit.wav (26.8s)
+100%|██████████| 71/71 [00:33<00:00,  2.14it/s]
+[karaoke] 42/177 2020-09-26_02_巡恋风.wav (34.8s)
+100%|██████████| 71/71 [00:33<00:00,  2.14it/s]
+[karaoke] 43/177 2020-09-26_03_巡恋风.wav (34.9s)
+100%|██████████| 53/53 [00:24<00:00,  2.14it/s]
+[karaoke] 44/177 2020-09-26_04_幽霊東京.wav (26.5s)
+100%|██████████| 68/68 [00:31<00:00,  2.14it/s]
+[karaoke] 45/177 2020-09-26_05_今好きになる.wav (33.4s)
+100%|██████████| 65/65 [00:30<00:00,  2.13it/s]
+[karaoke] 46/177 2020-09-26_06_ツギハギスタッカート.wav (32.1s)
+100%|██████████| 84/84 [00:39<00:00,  2.14it/s]
+[karaoke] 47/177 2020-09-26_07_歌に形はないれど.wav (41.1s)
+100%|██████████| 53/53 [00:25<00:00,  2.12it/s]
+[karaoke] 48/177 2020-09-26_08_太阳系Disco.wav (26.3s)
+100%|██████████| 65/65 [00:30<00:00,  2.14it/s]
+[karaoke] 49/177 2020-09-26_09_バレリーコ.wav (31.9s)
+100%|██████████| 56/56 [00:26<00:00,  2.12it/s]
+[karaoke] 50/177 2020-09-26_10_オオカミ少女.wav (27.9s)
+100%|██████████| 62/62 [00:29<00:00,  2.14it/s]
+[karaoke] 51/177 2020-09-26_11_小夜子.wav (30.5s)
+100%|██████████| 71/71 [00:33<00:00,  2.14it/s]
+[karaoke] 52/177 2020-09-26_12_未知.wav (34.8s)
+100%|██████████| 54/54 [00:25<00:00,  2.14it/s]
+[karaoke] 53/177 2020-10-01_01_カタオモイ（单相思）.wav (26.6s)
+100%|██████████| 52/52 [00:24<00:00,  2.14it/s]
+[karaoke] 54/177 2020-10-03_01_いのちの名前.wav (25.6s)
+100%|██████████| 92/92 [00:43<00:00,  2.13it/s]
+[karaoke] 55/177 2020-10-03_02_Sakura.wav (45.1s)
+100%|██████████| 73/73 [00:34<00:00,  2.13it/s]
+[karaoke] 56/177 2020-10-03_03_dearest.wav (36.0s)
+100%|██████████| 101/101 [00:47<00:00,  2.14it/s]
+[karaoke] 57/177 2020-10-03_04_美しきもの.wav (49.6s)
+100%|██████████| 76/76 [00:35<00:00,  2.13it/s]
+[karaoke] 58/177 2020-10-03_05_Hello_Goodbye_&amp;_Hello.wav (37.4s)
+100%|██████████| 61/61 [00:28<00:00,  2.14it/s]
+[karaoke] 59/177 2020-10-10_01_For_フルールバスケト.wav (30.0s)
+100%|██████████| 82/82 [00:38<00:00,  2.14it/s]
+[karaoke] 60/177 2020-10-10_02_鸟之诗.wav (40.2s)
+100%|██████████| 65/65 [00:30<00:00,  2.14it/s]
+[karaoke] 61/177 2020-10-10_03_残酷な天使のテーゼ.wav (31.9s)
+100%|██████████| 69/69 [00:32<00:00,  2.14it/s]
+[karaoke] 62/177 2020-10-10_04_扉をあけて.wav (33.9s)
+100%|██████████| 68/68 [00:31<00:00,  2.13it/s]
+[karaoke] 63/177 2020-10-10_05_Only_my_rail_gun.wav (33.6s)
+100%|██████████| 69/69 [00:32<00:00,  2.13it/s]
+[karaoke] 64/177 2020-10-10_06_My_soul,_Your_Beats.wav (34.0s)
+100%|██████████| 73/73 [00:34<00:00,  2.14it/s]
+[karaoke] 65/177 2020-10-10_07_比翼の羽根.wav (35.8s)
+100%|██████████| 64/64 [00:30<00:00,  2.13it/s]
+[karaoke] 66/177 2020-10-10_08_unravel.wav (31.6s)
+100%|██████████| 62/62 [00:28<00:00,  2.14it/s]
+[karaoke] 67/177 2020-10-10_09_紅蓮華.wav (30.5s)
+100%|██████████| 40/40 [00:18<00:00,  2.14it/s]
+[karaoke] 68/177 2020-10-10_10_喜羊羊.wav (19.7s)
+100%|██████████| 63/63 [00:29<00:00,  2.14it/s]
+[karaoke] 69/177 2020-10-16_01_for_フルーツバスケット.wav (30.9s)
+100%|██████████| 71/71 [00:33<00:00,  2.14it/s]
+[karaoke] 70/177 2020-10-17_01_未知.wav (34.9s)
+100%|██████████| 91/91 [00:42<00:00,  2.13it/s]
+[karaoke] 71/177 2020-10-17_02_未知.wav (45.0s)
+100%|██████████| 53/53 [00:24<00:00,  2.14it/s]
+[karaoke] 72/177 2020-10-17_03_未知.wav (26.1s)
+100%|██████████| 48/48 [00:22<00:00,  2.14it/s]
+[karaoke] 73/177 2020-10-17_04_未知.wav (23.6s)
+100%|██████████| 46/46 [00:21<00:00,  2.14it/s]
+[karaoke] 74/177 2020-10-17_05_未知.wav (22.8s)
+100%|██████████| 20/20 [00:09<00:00,  2.14it/s]
+[karaoke] 75/177 2020-10-17_06_未知.wav (10.2s)
+100%|██████████| 64/64 [00:29<00:00,  2.14it/s]
+[karaoke] 76/177 2020-10-17_07_未知.wav (31.4s)
+100%|██████████| 56/56 [00:26<00:00,  2.12it/s]
+[karaoke] 77/177 2020-10-17_08_未知.wav (27.9s)
+100%|██████████| 53/53 [00:24<00:00,  2.12it/s]
+[karaoke] 78/177 2020-10-17_09_未知.wav (26.3s)
+100%|██████████| 61/61 [00:28<00:00,  2.13it/s]
+[karaoke] 79/177 2020-10-17_10_未知.wav (30.2s)
+100%|██████████| 58/58 [00:27<00:00,  2.11it/s]
+[karaoke] 80/177 2020-10-17_11_未知.wav (28.8s)
+100%|██████████| 65/65 [00:30<00:00,  2.13it/s]
+[karaoke] 81/177 2020-10-17_12_未知.wav (32.1s)
+100%|██████████| 79/79 [00:37<00:00,  2.13it/s]
+[karaoke] 82/177 2020-10-17_13_未知.wav (38.8s)
+100%|██████████| 75/75 [00:35<00:00,  2.14it/s]
+[karaoke] 83/177 2020-10-17_14_未知.wav (36.7s)
+100%|██████████| 72/72 [00:33<00:00,  2.14it/s]
+[karaoke] 84/177 2020-10-17_15_未知.wav (35.3s)
+100%|██████████| 67/67 [00:31<00:00,  2.13it/s]
+[karaoke] 85/177 2020-10-17_16_未知.wav (33.0s)
+100%|██████████| 57/57 [00:26<00:00,  2.14it/s]
+[karaoke] 86/177 2020-10-17_17_未知.wav (28.0s)
+100%|██████████| 55/55 [00:25<00:00,  2.13it/s]
+[karaoke] 87/177 2020-10-17_18_未知.wav (27.1s)
+100%|██████████| 51/51 [00:23<00:00,  2.14it/s]
+[karaoke] 88/177 2020-10-17_19_未知.wav (25.5s)
+100%|██████████| 55/55 [00:25<00:00,  2.14it/s]
+[karaoke] 89/177 2020-10-17_20_未知.wav (27.1s)
+100%|██████████| 51/51 [00:23<00:00,  2.13it/s]
+[karaoke] 90/177 2020-10-17_21_未知.wav (25.2s)
+100%|██████████| 96/96 [00:44<00:00,  2.14it/s]
+[karaoke] 91/177 2020-10-21_01_画心.wav (46.9s)
+100%|██████████| 60/60 [00:28<00:00,  2.14it/s]
+[karaoke] 92/177 2020-10-24_01_未知.wav (29.6s)
+100%|██████████| 64/64 [00:30<00:00,  2.13it/s]
+[karaoke] 93/177 2020-10-24_02_未知.wav (31.6s)
+100%|██████████| 48/48 [00:22<00:00,  2.14it/s]
+[karaoke] 94/177 2020-10-24_03_未知.wav (23.7s)
+100%|██████████| 73/73 [00:34<00:00,  2.12it/s]
+[karaoke] 95/177 2020-10-24_04_未知.wav (36.0s)
+100%|██████████| 60/60 [00:28<00:00,  2.13it/s]
+[karaoke] 96/177 2020-10-24_05_未知.wav (29.6s)
+100%|██████████| 83/83 [00:38<00:00,  2.14it/s]
+[karaoke] 97/177 2020-10-24_06_未知.wav (40.6s)
+100%|██████████| 72/72 [00:33<00:00,  2.14it/s]
+[karaoke] 98/177 2020-10-24_07_未知.wav (35.3s)
+100%|██████████| 41/41 [00:19<00:00,  2.14it/s]
+[karaoke] 99/177 2020-10-24_08_未知.wav (20.5s)
+100%|██████████| 27/27 [00:12<00:00,  2.13it/s]
+[karaoke] 100/177 2020-10-24_09_未知.wav (13.3s)
+100%|██████████| 74/74 [00:34<00:00,  2.14it/s]
+[karaoke] 101/177 2020-10-24_10_未知.wav (36.3s)
+100%|██████████| 49/49 [00:22<00:00,  2.14it/s]
+[karaoke] 102/177 2020-10-24_11_未知.wav (24.1s)
+100%|██████████| 71/71 [00:33<00:00,  2.13it/s]
+[karaoke] 103/177 2020-10-24_12_未知.wav (35.0s)
+100%|██████████| 70/70 [00:32<00:00,  2.14it/s]
+[karaoke] 104/177 2020-10-24_13_未知.wav (34.4s)
+100%|██████████| 62/62 [00:28<00:00,  2.14it/s]
+[karaoke] 105/177 2020-10-30_01_未知.wav (30.4s)
+100%|██████████| 83/83 [00:38<00:00,  2.13it/s]
+[karaoke] 106/177 2020-10-30_02_未知.wav (40.7s)
+100%|██████████| 50/50 [00:23<00:00,  2.14it/s]
+[karaoke] 107/177 2020-10-30_03_未知.wav (25.0s)
+100%|██████████| 22/22 [00:10<00:00,  2.14it/s]
+[karaoke] 108/177 2020-10-30_04_未知.wav (10.9s)
+100%|██████████| 63/63 [00:29<00:00,  2.14it/s]
+[karaoke] 109/177 2020-10-30_05_未知.wav (31.0s)
+100%|██████████| 80/80 [00:37<00:00,  2.13it/s]
+[karaoke] 110/177 2020-10-30_06_未知.wav (39.3s)
+100%|██████████| 70/70 [00:32<00:00,  2.13it/s]
+[karaoke] 111/177 2020-10-30_07_未知.wav (34.4s)
+100%|██████████| 84/84 [00:39<00:00,  2.13it/s]
+[karaoke] 112/177 2020-10-30_08_未知.wav (41.4s)
+100%|██████████| 69/69 [00:32<00:00,  2.12it/s]
+[karaoke] 113/177 2020-10-30_09_未知.wav (34.1s)
+100%|██████████| 36/36 [00:16<00:00,  2.14it/s]
+[karaoke] 114/177 2020-10-30_10_未知.wav (17.6s)
+100%|██████████| 59/59 [00:27<00:00,  2.14it/s]
+[karaoke] 115/177 2020-10-30_11_未知.wav (28.9s)
+100%|██████████| 73/73 [00:34<00:00,  2.12it/s]
+[karaoke] 116/177 2020-10-30_12_未知.wav (36.0s)
+100%|██████████| 54/54 [00:25<00:00,  2.13it/s]
+[karaoke] 117/177 2020-10-30_13_未知.wav (26.6s)
+100%|██████████| 55/55 [00:25<00:00,  2.14it/s]
+[karaoke] 118/177 2020-10-30_14_未知.wav (27.3s)
+100%|██████████| 68/68 [00:31<00:00,  2.14it/s]
+[karaoke] 119/177 2020-10-30_15_未知.wav (33.3s)
+100%|██████████| 94/94 [00:43<00:00,  2.14it/s]
+[karaoke] 120/177 2020-10-30_16_未知.wav (46.0s)
+100%|██████████| 70/70 [00:32<00:00,  2.13it/s]
+[karaoke] 121/177 2020-10-30_17_未知.wav (34.5s)
+100%|██████████| 66/66 [00:31<00:00,  2.13it/s]
+[karaoke] 122/177 2020-10-30_18_未知.wav (32.5s)
+100%|██████████| 48/48 [00:22<00:00,  2.14it/s]
+[karaoke] 123/177 2020-10-30_19_未知.wav (23.6s)
+100%|██████████| 91/91 [00:42<00:00,  2.14it/s]
+[karaoke] 124/177 2020-11-04_01_フリージア（希望之花）.wav (44.6s)
+100%|██████████| 53/53 [00:24<00:00,  2.14it/s]
+[karaoke] 125/177 2020-11-07_01_偏爱.wav (26.1s)
+100%|██████████| 57/57 [00:26<00:00,  2.13it/s]
+[karaoke] 126/177 2020-11-15_01_11.13后会无期.wav (28.0s)
+100%|██████████| 66/66 [00:30<00:00,  2.14it/s]
+[karaoke] 127/177 2020-11-15_01_未知.wav (32.4s)
+100%|██████████| 68/68 [00:31<00:00,  2.14it/s]
+[karaoke] 128/177 2020-11-15_02_未知.wav (33.5s)
+100%|██████████| 58/58 [00:27<00:00,  2.14it/s]
+[karaoke] 129/177 2020-11-15_03_未知.wav (28.5s)
+100%|██████████| 52/52 [00:24<00:00,  2.14it/s]
+[karaoke] 130/177 2020-11-15_04_未知.wav (25.8s)
+100%|██████████| 37/37 [00:17<00:00,  2.14it/s]
+[karaoke] 131/177 2020-11-15_05_未知.wav (18.3s)
+100%|██████████| 56/56 [00:26<00:00,  2.14it/s]
+[karaoke] 132/177 2020-11-15_06_未知.wav (27.6s)
+100%|██████████| 59/59 [00:27<00:00,  2.14it/s]
+[karaoke] 133/177 2020-11-15_07_未知.wav (29.0s)
+100%|██████████| 76/76 [00:35<00:00,  2.14it/s]
+[karaoke] 134/177 2020-11-15_08_未知.wav (37.3s)
+100%|██████████| 64/64 [00:29<00:00,  2.14it/s]
+[karaoke] 135/177 2020-11-15_09_未知.wav (31.7s)
+100%|██████████| 55/55 [00:25<00:00,  2.14it/s]
+[karaoke] 136/177 2020-11-15_10_未知.wav (27.0s)
+100%|██████████| 69/69 [00:32<00:00,  2.14it/s]
+[karaoke] 137/177 2020-11-15_11_未知.wav (34.0s)
+100%|██████████| 76/76 [00:35<00:00,  2.14it/s]
+[karaoke] 138/177 2020-11-15_12_未知.wav (37.3s)
+100%|██████████| 71/71 [00:33<00:00,  2.13it/s]
+[karaoke] 139/177 2020-11-15_13_未知.wav (35.0s)
+100%|██████████| 87/87 [00:40<00:00,  2.14it/s]
+[karaoke] 140/177 2020-11-16_01_Weight_of_the_World.wav (42.4s)
+100%|██████████| 52/52 [00:24<00:00,  2.14it/s]
+[karaoke] 141/177 2020-11-27_01_学猫叫.wav (25.6s)
+100%|██████████| 39/39 [00:18<00:00,  2.12it/s]
+[karaoke] 142/177 2020-12-04_01_好想你.wav (19.3s)
+100%|██████████| 67/67 [00:31<00:00,  2.14it/s]
+[karaoke] 143/177 2020-12-05_01_鹿.wav (33.0s)
+100%|██████████| 89/89 [00:41<00:00,  2.14it/s]
+[karaoke] 144/177 2020-12-05_02_灰色と青.wav (43.4s)
+100%|██████████| 97/97 [00:45<00:00,  2.14it/s]
+[karaoke] 145/177 2020-12-05_03_あなたに出会わなければ～夏雪冬花.wav (47.5s)
+100%|██████████| 76/76 [00:35<00:00,  2.13it/s]
+[karaoke] 146/177 2020-12-05_04_春はゆく.wav (37.2s)
+100%|██████████| 71/71 [00:33<00:00,  2.14it/s]
+[karaoke] 147/177 2020-12-05_05_I_beg_you.wav (34.9s)
+100%|██████████| 56/56 [00:26<00:00,  2.14it/s]
+[karaoke] 148/177 2020-12-05_06_メリュー.wav (27.8s)
+100%|██████████| 55/55 [00:25<00:00,  2.14it/s]
+[karaoke] 149/177 2020-12-05_07_Gimme_×_Gimme.wav (27.0s)
+100%|██████████| 87/87 [00:40<00:00,  2.13it/s]
+[karaoke] 150/177 2020-12-05_08_雪の华.wav (42.7s)
+100%|██████████| 66/66 [00:31<00:00,  2.13it/s]
+[karaoke] 151/177 2020-12-05_09_WHITE_ALBLM.wav (32.5s)
+100%|██████████| 83/83 [00:38<00:00,  2.14it/s]
+[karaoke] 152/177 2020-12-05_10_深爱.wav (40.7s)
+100%|██████████| 42/42 [00:19<00:00,  2.14it/s]
+[karaoke] 153/177 2020-12-05_11_アスノヨゾラ哨戒班.wav (20.7s)
+100%|██████████| 89/89 [00:41<00:00,  2.14it/s]
+[karaoke] 154/177 2020-12-05_12_六等星之夜.wav (43.6s)
+100%|██████████| 47/47 [00:21<00:00,  2.14it/s]
+[karaoke] 155/177 2020-12-05_13_I_beg_you_二度挑战.wav (23.1s)
+100%|██████████| 28/28 [00:13<00:00,  2.13it/s]
+[karaoke] 156/177 2020-12-11_01_星与你消失之日.wav (13.8s)
+100%|██████████| 68/68 [00:31<00:00,  2.13it/s]
+[karaoke] 157/177 2020-12-19_01_未知.wav (33.5s)
+100%|██████████| 65/65 [00:30<00:00,  2.14it/s]
+[karaoke] 158/177 2020-12-19_02_未知.wav (31.9s)
+100%|██████████| 66/66 [00:30<00:00,  2.14it/s]
+[karaoke] 159/177 2020-12-19_03_未知.wav (32.5s)
+100%|██████████| 50/50 [00:23<00:00,  2.12it/s]
+[karaoke] 160/177 2020-12-19_04_未知.wav (25.1s)
+100%|██████████| 72/72 [00:33<00:00,  2.14it/s]
+[karaoke] 161/177 2020-12-19_05_未知.wav (35.3s)
+100%|██████████| 67/67 [00:31<00:00,  2.14it/s]
+[karaoke] 162/177 2020-12-19_06_未知.wav (33.3s)
+100%|██████████| 65/65 [00:30<00:00,  2.14it/s]
+[karaoke] 163/177 2020-12-19_07_未知.wav (31.9s)
+100%|██████████| 66/66 [00:30<00:00,  2.14it/s]
+[karaoke] 164/177 2020-12-19_08_未知.wav (32.4s)
+100%|██████████| 77/77 [00:36<00:00,  2.14it/s]
+[karaoke] 165/177 2020-12-19_09_未知.wav (37.7s)
+100%|██████████| 69/69 [00:32<00:00,  2.14it/s]
+[karaoke] 166/177 2020-12-19_10_未知.wav (33.9s)
+100%|██████████| 72/72 [00:33<00:00,  2.14it/s]
+[karaoke] 167/177 2020-12-19_11_未知.wav (35.4s)
+100%|██████████| 66/66 [00:30<00:00,  2.14it/s]
+[karaoke] 168/177 2020-12-19_12_未知.wav (32.4s)
+100%|██████████| 78/78 [00:36<00:00,  2.14it/s]
+[karaoke] 169/177 2020-12-19_13_未知.wav (38.2s)
+100%|██████████| 63/63 [00:29<00:00,  2.14it/s]
+[karaoke] 170/177 2020-12-19_14_未知.wav (31.0s)
+100%|██████████| 80/80 [00:37<00:00,  2.14it/s]
+[karaoke] 171/177 2020-12-19_15_未知.wav (39.3s)
+100%|██████████| 68/68 [00:31<00:00,  2.13it/s]
+[karaoke] 172/177 2020-12-21_01_团子大家族.wav (33.5s)
+100%|██████████| 53/53 [00:24<00:00,  2.14it/s]
+[karaoke] 173/177 2025-10-08_01_偏爱.wav (26.2s)
+100%|██████████| 55/55 [00:25<00:00,  2.14it/s]
+[karaoke] 174/177 2025-10-09_01_勇气.wav (27.1s)
+100%|██████████| 57/57 [00:26<00:00,  2.14it/s]
+[karaoke] 175/177 2025-10-09_01_童话.wav (28.3s)
+100%|██████████| 66/66 [00:30<00:00,  2.14it/s]
+[karaoke] 176/177 2025-10-10_01_今天你要嫁给我.wav (32.4s)
+100%|██████████| 78/78 [00:36<00:00,  2.14it/s]
+[karaoke] 177/177 2025-10-10_01_后来.wav (38.2s)
+4_denoise: made by other models or settings, starting it over
+[denoise] denoise_mel_band_roformer_aufr33_aggr_sdr_27.9768.ckpt: 0 done, 177 to process
+Failed to load libcublasLt.so.13: libcublasLt.so.13: cannot open shared object file: No such file or directory
+Failed to load libcublas.so.13: libcublas.so.13: cannot open shared object file: No such file or directory
+Failed to load libnvrtc.so.13: libnvrtc.so.13: cannot open shared object file: No such file or directory
+Failed to load libcufft.so.12: libcufft.so.12: cannot open shared object file: No such file or directory
+Failed to load libcudart.so.13: libcudart.so.13: cannot open shared object file: No such file or directory
+Please follow https://onnxruntime.ai/docs/install/#cuda-and-cudnn to install CUDA.
+100%|██████████| 131/131 [00:24<00:00,  5.27it/s]
+[denoise] 1/177 2020-08-31_01_未知.wav (26.3s)
+100%|██████████| 118/118 [00:22<00:00,  5.31it/s]
+[denoise] 2/177 2020-08-31_02_未知.wav (23.4s)
+100%|██████████| 125/125 [00:23<00:00,  5.29it/s]
+[denoise] 3/177 2020-08-31_03_未知.wav (24.7s)
+100%|██████████| 155/155 [00:29<00:00,  5.32it/s]
+[denoise] 4/177 2020-08-31_04_未知.wav (30.8s)
+100%|██████████| 149/149 [00:28<00:00,  5.31it/s]
+[denoise] 5/177 2020-08-31_05_未知.wav (29.6s)
+100%|██████████| 132/132 [00:24<00:00,  5.31it/s]
+[denoise] 6/177 2020-08-31_06_未知.wav (26.0s)
+100%|██████████| 131/131 [00:24<00:00,  5.30it/s]
+[denoise] 7/177 2020-08-31_07_未知.wav (25.9s)
+100%|██████████| 174/174 [00:32<00:00,  5.31it/s]
+[denoise] 8/177 2020-08-31_08_未知.wav (34.7s)
+100%|██████████| 152/152 [00:28<00:00,  5.30it/s]
+[denoise] 9/177 2020-08-31_09_未知.wav (30.4s)
+100%|██████████| 144/144 [00:27<00:00,  5.31it/s]
+[denoise] 10/177 2020-08-31_10_未知.wav (28.7s)
+100%|██████████| 128/128 [00:24<00:00,  5.30it/s]
+[denoise] 11/177 2020-09-03_01_地球をあげる.wav (25.3s)
+100%|██████████| 95/95 [00:17<00:00,  5.31it/s]
+[denoise] 12/177 2020-09-03_01_未知.wav (18.8s)
+100%|██████████| 116/116 [00:21<00:00,  5.32it/s]
+[denoise] 13/177 2020-09-03_01_渡月橋_〜君_想ふ〜.wav (22.8s)
+100%|██████████| 128/128 [00:24<00:00,  5.23it/s]
+[denoise] 14/177 2020-09-03_02_未知.wav (25.6s)
+100%|██████████| 104/104 [00:19<00:00,  5.31it/s]
+[denoise] 15/177 2020-09-03_03_未知.wav (20.5s)
+100%|██████████| 105/105 [00:19<00:00,  5.32it/s]
+[denoise] 16/177 2020-09-03_04_未知.wav (21.2s)
+100%|██████████| 127/127 [00:23<00:00,  5.31it/s]
+[denoise] 17/177 2020-09-06_01_小幸运.wav (25.3s)
+100%|██████████| 96/96 [00:18<00:00,  5.32it/s]
+[denoise] 18/177 2020-09-06_01_日不落.wav (19.0s)
+100%|██████████| 110/110 [00:20<00:00,  5.24it/s]
+[denoise] 19/177 2020-09-06_01_未知.wav (22.3s)
+100%|██████████| 80/80 [00:15<00:00,  5.32it/s]
+[denoise] 20/177 2020-09-06_02_未知.wav (15.8s)
+100%|██████████| 147/147 [00:27<00:00,  5.31it/s]
+[denoise] 21/177 2020-09-06_03_未知.wav (29.2s)
+100%|██████████| 126/126 [00:23<00:00,  5.30it/s]
+[denoise] 22/177 2020-09-06_04_未知.wav (24.8s)
+100%|██████████| 141/141 [00:26<00:00,  5.32it/s]
+[denoise] 23/177 2020-09-06_05_未知.wav (28.0s)
+100%|██████████| 102/102 [00:19<00:00,  5.31it/s]
+[denoise] 24/177 2020-09-06_06_未知.wav (20.2s)
+100%|██████████| 116/116 [00:21<00:00,  5.29it/s]
+[denoise] 25/177 2020-09-06_07_未知.wav (23.1s)
+100%|██████████| 111/111 [00:21<00:00,  5.27it/s]
+[denoise] 26/177 2020-09-06_08_未知.wav (22.3s)
+100%|██████████| 106/106 [00:19<00:00,  5.31it/s]
+[denoise] 27/177 2020-09-06_09_未知.wav (21.1s)
+100%|██████████| 39/39 [00:07<00:00,  5.31it/s]
+[denoise] 28/177 2020-09-09_01_温柔巫女也能唱出啥霸炫狂拽的echo吗.wav (7.9s)
+100%|██████████| 154/154 [00:29<00:00,  5.31it/s]
+[denoise] 29/177 2020-09-11_01_爱してる_-_夏目友人帐.wav (30.9s)
+100%|██████████| 150/150 [00:28<00:00,  5.31it/s]
+[denoise] 30/177 2020-09-11_02_爱哭鬼_-_少年同盟.wav (29.9s)
+100%|██████████| 115/115 [00:21<00:00,  5.29it/s]
+[denoise] 31/177 2020-09-11_03_ラピスラズリ_-_亚尔斯兰战记.wav (22.7s)
+100%|██████████| 164/164 [00:30<00:00,  5.31it/s]
+[denoise] 32/177 2020-09-11_04_六等星之夜_-_未来都市No.6.wav (32.6s)
+100%|██████████| 148/148 [00:27<00:00,  5.29it/s]
+[denoise] 33/177 2020-09-11_05_平行线_-_人渣的本愿.wav (29.5s)
+100%|██████████| 145/145 [00:27<00:00,  5.26it/s]
+[denoise] 34/177 2020-09-11_06_美しき残酷な世界_-_进击的巨人.wav (29.1s)
+100%|██████████| 133/133 [00:25<00:00,  5.32it/s]
+[denoise] 35/177 2020-09-11_07_最高の片想_-_彩云国物语.wav (26.3s)
+100%|██████████| 168/168 [00:31<00:00,  5.29it/s]
+[denoise] 36/177 2020-09-11_08_君の知らない物語_-_化物语.wav (33.6s)
+100%|██████████| 167/167 [00:31<00:00,  5.31it/s]
+[denoise] 37/177 2020-09-11_09_オレンジ_-_四月是你的谎.wav (33.4s)
+100%|██████████| 162/162 [00:30<00:00,  5.29it/s]
+[denoise] 38/177 2020-09-11_10_Angel_Beats_-_Brave_Song.wav (32.4s)
+100%|██████████| 113/113 [00:21<00:00,  5.27it/s]
+[denoise] 39/177 2020-09-16_01_Tell_Your_World.wav (22.8s)
+100%|██████████| 159/159 [00:30<00:00,  5.27it/s]
+[denoise] 40/177 2020-09-23_01_晓之车.wav (31.9s)
+100%|██████████| 100/100 [00:18<00:00,  5.31it/s]
+[denoise] 41/177 2020-09-26_01_Unit.wav (19.7s)
+100%|██████████| 131/131 [00:24<00:00,  5.31it/s]
+[denoise] 42/177 2020-09-26_02_巡恋风.wav (25.8s)
+100%|██████████| 131/131 [00:24<00:00,  5.31it/s]
+[denoise] 43/177 2020-09-26_03_巡恋风.wav (25.9s)
+100%|██████████| 99/99 [00:18<00:00,  5.31it/s]
+[denoise] 44/177 2020-09-26_04_幽霊東京.wav (19.5s)
+100%|██████████| 125/125 [00:23<00:00,  5.30it/s]
+[denoise] 45/177 2020-09-26_05_今好きになる.wav (24.6s)
+100%|██████████| 120/120 [00:22<00:00,  5.31it/s]
+[denoise] 46/177 2020-09-26_06_ツギハギスタッカート.wav (23.7s)
+100%|██████████| 155/155 [00:29<00:00,  5.30it/s]
+[denoise] 47/177 2020-09-26_07_歌に形はないれど.wav (30.9s)
+100%|██████████| 98/98 [00:18<00:00,  5.31it/s]
+[denoise] 48/177 2020-09-26_08_太阳系Disco.wav (19.6s)
+100%|██████████| 121/121 [00:22<00:00,  5.30it/s]
+[denoise] 49/177 2020-09-26_09_バレリーコ.wav (24.2s)
+100%|██████████| 105/105 [00:19<00:00,  5.26it/s]
+[denoise] 50/177 2020-09-26_10_オオカミ少女.wav (20.9s)
+100%|██████████| 114/114 [00:21<00:00,  5.32it/s]
+[denoise] 51/177 2020-09-26_11_小夜子.wav (22.4s)
+100%|██████████| 131/131 [00:24<00:00,  5.31it/s]
+[denoise] 52/177 2020-09-26_12_未知.wav (25.9s)
+100%|██████████| 99/99 [00:18<00:00,  5.32it/s]
+[denoise] 53/177 2020-10-01_01_カタオモイ（单相思）.wav (19.8s)
+100%|██████████| 97/97 [00:18<00:00,  5.32it/s]
+[denoise] 54/177 2020-10-03_01_いのちの名前.wav (19.2s)
+100%|██████████| 170/170 [00:31<00:00,  5.32it/s]
+[denoise] 55/177 2020-10-03_02_Sakura.wav (34.0s)
+100%|██████████| 135/135 [00:25<00:00,  5.31it/s]
+[denoise] 56/177 2020-10-03_03_dearest.wav (26.7s)
+100%|██████████| 186/186 [00:35<00:00,  5.31it/s]
+[denoise] 57/177 2020-10-03_04_美しきもの.wav (37.1s)
+100%|██████████| 140/140 [00:26<00:00,  5.31it/s]
+[denoise] 58/177 2020-10-03_05_Hello_Goodbye_&amp;_Hello.wav (27.8s)
+100%|██████████| 113/113 [00:21<00:00,  5.25it/s]
+[denoise] 59/177 2020-10-10_01_For_フルールバスケト.wav (22.8s)
+100%|██████████| 151/151 [00:28<00:00,  5.25it/s]
+[denoise] 60/177 2020-10-10_02_鸟之诗.wav (30.5s)
+100%|██████████| 120/120 [00:22<00:00,  5.32it/s]
+[denoise] 61/177 2020-10-10_03_残酷な天使のテーゼ.wav (23.6s)
+100%|██████████| 128/128 [00:24<00:00,  5.28it/s]
+[denoise] 62/177 2020-10-10_04_扉をあけて.wav (25.7s)
+100%|██████████| 125/125 [00:23<00:00,  5.32it/s]
+[denoise] 63/177 2020-10-10_05_Only_my_rail_gun.wav (24.5s)
+100%|██████████| 127/127 [00:23<00:00,  5.31it/s]
+[denoise] 64/177 2020-10-10_06_My_soul,_Your_Beats.wav (25.2s)
+100%|██████████| 135/135 [00:25<00:00,  5.32it/s]
+[denoise] 65/177 2020-10-10_07_比翼の羽根.wav (26.6s)
+100%|██████████| 119/119 [00:22<00:00,  5.31it/s]
+[denoise] 66/177 2020-10-10_08_unravel.wav (23.7s)
+100%|██████████| 115/115 [00:21<00:00,  5.24it/s]
+[denoise] 67/177 2020-10-10_09_紅蓮華.wav (23.1s)
+100%|██████████| 76/76 [00:14<00:00,  5.29it/s]
+[denoise] 68/177 2020-10-10_10_喜羊羊.wav (15.1s)
+100%|██████████| 116/116 [00:21<00:00,  5.31it/s]
+[denoise] 69/177 2020-10-16_01_for_フルーツバスケット.wav (23.0s)
+100%|██████████| 131/131 [00:24<00:00,  5.28it/s]
+[denoise] 70/177 2020-10-17_01_未知.wav (26.1s)
+100%|██████████| 167/167 [00:31<00:00,  5.31it/s]
+[denoise] 71/177 2020-10-17_02_未知.wav (33.4s)
+100%|██████████| 98/98 [00:18<00:00,  5.31it/s]
+[denoise] 72/177 2020-10-17_03_未知.wav (19.4s)
+100%|██████████| 90/90 [00:17<00:00,  5.26it/s]
+[denoise] 73/177 2020-10-17_04_未知.wav (18.0s)
+100%|██████████| 85/85 [00:16<00:00,  5.29it/s]
+[denoise] 74/177 2020-10-17_05_未知.wav (16.9s)
+100%|██████████| 38/38 [00:07<00:00,  5.30it/s]
+[denoise] 75/177 2020-10-17_06_未知.wav (7.7s)
+100%|██████████| 118/118 [00:22<00:00,  5.26it/s]
+[denoise] 76/177 2020-10-17_07_未知.wav (23.4s)
+100%|██████████| 103/103 [00:19<00:00,  5.31it/s]
+[denoise] 77/177 2020-10-17_08_未知.wav (20.3s)
+100%|██████████| 98/98 [00:18<00:00,  5.32it/s]
+[denoise] 78/177 2020-10-17_09_未知.wav (19.5s)
+100%|██████████| 113/113 [00:21<00:00,  5.32it/s]
+[denoise] 79/177 2020-10-17_10_未知.wav (22.2s)
+100%|██████████| 107/107 [00:20<00:00,  5.31it/s]
+[denoise] 80/177 2020-10-17_11_未知.wav (21.1s)
+100%|██████████| 120/120 [00:22<00:00,  5.31it/s]
+[denoise] 81/177 2020-10-17_12_未知.wav (23.7s)
+100%|██████████| 145/145 [00:27<00:00,  5.31it/s]
+[denoise] 82/177 2020-10-17_13_未知.wav (28.9s)
+100%|██████████| 138/138 [00:26<00:00,  5.30it/s]
+[denoise] 83/177 2020-10-17_14_未知.wav (27.7s)
+100%|██████████| 133/133 [00:25<00:00,  5.32it/s]
+[denoise] 84/177 2020-10-17_15_未知.wav (26.1s)
+100%|██████████| 123/123 [00:23<00:00,  5.32it/s]
+[denoise] 85/177 2020-10-17_16_未知.wav (24.2s)
+100%|██████████| 106/106 [00:19<00:00,  5.31it/s]
+[denoise] 86/177 2020-10-17_17_未知.wav (20.9s)
+100%|██████████| 101/101 [00:19<00:00,  5.31it/s]
+[denoise] 87/177 2020-10-17_18_未知.wav (20.1s)
+100%|██████████| 95/95 [00:17<00:00,  5.32it/s]
+[denoise] 88/177 2020-10-17_19_未知.wav (18.8s)
+100%|██████████| 101/101 [00:19<00:00,  5.31it/s]
+[denoise] 89/177 2020-10-17_20_未知.wav (19.9s)
+100%|██████████| 95/95 [00:17<00:00,  5.31it/s]
+[denoise] 90/177 2020-10-17_21_未知.wav (18.8s)
+100%|██████████| 176/176 [00:33<00:00,  5.25it/s]
+[denoise] 91/177 2020-10-21_01_画心.wav (35.4s)
+100%|██████████| 112/112 [00:21<00:00,  5.31it/s]
+[denoise] 92/177 2020-10-24_01_未知.wav (22.0s)
+100%|██████████| 119/119 [00:22<00:00,  5.32it/s]
+[denoise] 93/177 2020-10-24_02_未知.wav (23.5s)
+100%|██████████| 89/89 [00:16<00:00,  5.32it/s]
+[denoise] 94/177 2020-10-24_03_未知.wav (17.6s)
+100%|██████████| 134/134 [00:25<00:00,  5.30it/s]
+[denoise] 95/177 2020-10-24_04_未知.wav (26.6s)
+100%|██████████| 111/111 [00:20<00:00,  5.31it/s]
+[denoise] 96/177 2020-10-24_05_未知.wav (21.9s)
+100%|██████████| 153/153 [00:28<00:00,  5.28it/s]
+[denoise] 97/177 2020-10-24_06_未知.wav (30.9s)
+100%|██████████| 133/133 [00:25<00:00,  5.28it/s]
+[denoise] 98/177 2020-10-24_07_未知.wav (26.5s)
+100%|██████████| 77/77 [00:14<00:00,  5.31it/s]
+[denoise] 99/177 2020-10-24_08_未知.wav (15.5s)
+100%|██████████| 51/51 [00:09<00:00,  5.27it/s]
+[denoise] 100/177 2020-10-24_09_未知.wav (10.3s)
+100%|██████████| 136/136 [00:25<00:00,  5.32it/s]
+[denoise] 101/177 2020-10-24_10_未知.wav (26.7s)
+100%|██████████| 91/91 [00:17<00:00,  5.31it/s]
+[denoise] 102/177 2020-10-24_11_未知.wav (18.0s)
+100%|██████████| 131/131 [00:24<00:00,  5.32it/s]
+[denoise] 103/177 2020-10-24_12_未知.wav (26.0s)
+100%|██████████| 130/130 [00:24<00:00,  5.32it/s]
+[denoise] 104/177 2020-10-24_13_未知.wav (26.0s)
+100%|██████████| 115/115 [00:21<00:00,  5.32it/s]
+[denoise] 105/177 2020-10-30_01_未知.wav (22.6s)
+100%|██████████| 152/152 [00:28<00:00,  5.26it/s]
+[denoise] 106/177 2020-10-30_02_未知.wav (30.7s)
+100%|██████████| 93/93 [00:17<00:00,  5.25it/s]
+[denoise] 107/177 2020-10-30_03_未知.wav (18.6s)
+100%|██████████| 43/43 [00:08<00:00,  5.32it/s]
+[denoise] 108/177 2020-10-30_04_未知.wav (8.6s)
+100%|██████████| 117/117 [00:21<00:00,  5.32it/s]
+[denoise] 109/177 2020-10-30_05_未知.wav (23.0s)
+100%|██████████| 148/148 [00:27<00:00,  5.31it/s]
+[denoise] 110/177 2020-10-30_06_未知.wav (29.5s)
+100%|██████████| 129/129 [00:24<00:00,  5.26it/s]
+[denoise] 111/177 2020-10-30_07_未知.wav (25.7s)
+100%|██████████| 154/154 [00:29<00:00,  5.30it/s]
+[denoise] 112/177 2020-10-30_08_未知.wav (30.8s)
+100%|██████████| 128/128 [00:24<00:00,  5.26it/s]
+[denoise] 113/177 2020-10-30_09_未知.wav (25.4s)
+100%|██████████| 67/67 [00:12<00:00,  5.31it/s]
+[denoise] 114/177 2020-10-30_10_未知.wav (13.3s)
+100%|██████████| 109/109 [00:20<00:00,  5.32it/s]
+[denoise] 115/177 2020-10-30_11_未知.wav (21.4s)
+100%|██████████| 134/134 [00:25<00:00,  5.31it/s]
+[denoise] 116/177 2020-10-30_12_未知.wav (26.3s)
+100%|██████████| 101/101 [00:19<00:00,  5.29it/s]
+[denoise] 117/177 2020-10-30_13_未知.wav (20.0s)
+100%|██████████| 103/103 [00:19<00:00,  5.31it/s]
+[denoise] 118/177 2020-10-30_14_未知.wav (20.4s)
+100%|██████████| 126/126 [00:23<00:00,  5.32it/s]
+[denoise] 119/177 2020-10-30_15_未知.wav (25.1s)
+100%|██████████| 173/173 [00:32<00:00,  5.31it/s]
+[denoise] 120/177 2020-10-30_16_未知.wav (34.4s)
+100%|██████████| 129/129 [00:24<00:00,  5.32it/s]
+[denoise] 121/177 2020-10-30_17_未知.wav (25.4s)
+100%|██████████| 122/122 [00:23<00:00,  5.23it/s]
+[denoise] 122/177 2020-10-30_18_未知.wav (24.6s)
+100%|██████████| 90/90 [00:17<00:00,  5.29it/s]
+[denoise] 123/177 2020-10-30_19_未知.wav (17.9s)
+100%|██████████| 168/168 [00:31<00:00,  5.25it/s]
+[denoise] 124/177 2020-11-04_01_フリージア（希望之花）.wav (33.8s)
+100%|██████████| 98/98 [00:18<00:00,  5.29it/s]
+[denoise] 125/177 2020-11-07_01_偏爱.wav (19.4s)
+100%|██████████| 105/105 [00:19<00:00,  5.31it/s]
+[denoise] 126/177 2020-11-15_01_11.13后会无期.wav (21.0s)
+100%|██████████| 123/123 [00:23<00:00,  5.32it/s]
+[denoise] 127/177 2020-11-15_01_未知.wav (24.3s)
+100%|██████████| 126/126 [00:23<00:00,  5.30it/s]
+[denoise] 128/177 2020-11-15_02_未知.wav (24.9s)
+100%|██████████| 107/107 [00:20<00:00,  5.32it/s]
+[denoise] 129/177 2020-11-15_03_未知.wav (21.1s)
+100%|██████████| 97/97 [00:18<00:00,  5.31it/s]
+[denoise] 130/177 2020-11-15_04_未知.wav (19.1s)
+100%|██████████| 70/70 [00:13<00:00,  5.31it/s]
+[denoise] 131/177 2020-11-15_05_未知.wav (14.1s)
+100%|██████████| 105/105 [00:19<00:00,  5.27it/s]
+[denoise] 132/177 2020-11-15_06_未知.wav (20.9s)
+100%|██████████| 109/109 [00:20<00:00,  5.32it/s]
+[denoise] 133/177 2020-11-15_07_未知.wav (21.7s)
+100%|██████████| 140/140 [00:26<00:00,  5.32it/s]
+[denoise] 134/177 2020-11-15_08_未知.wav (28.0s)
+100%|██████████| 119/119 [00:22<00:00,  5.27it/s]
+[denoise] 135/177 2020-11-15_09_未知.wav (23.6s)
+100%|██████████| 102/102 [00:19<00:00,  5.31it/s]
+[denoise] 136/177 2020-11-15_10_未知.wav (20.1s)
+100%|██████████| 128/128 [00:24<00:00,  5.32it/s]
+[denoise] 137/177 2020-11-15_11_未知.wav (25.5s)
+100%|██████████| 139/139 [00:26<00:00,  5.29it/s]
+[denoise] 138/177 2020-11-15_12_未知.wav (28.0s)
+100%|██████████| 132/132 [00:24<00:00,  5.32it/s]
+[denoise] 139/177 2020-11-15_13_未知.wav (26.3s)
+100%|██████████| 159/159 [00:30<00:00,  5.29it/s]
+[denoise] 140/177 2020-11-16_01_Weight_of_the_World.wav (31.8s)
+100%|██████████| 96/96 [00:18<00:00,  5.31it/s]
+[denoise] 141/177 2020-11-27_01_学猫叫.wav (18.9s)
+100%|██████████| 72/72 [00:13<00:00,  5.31it/s]
+[denoise] 142/177 2020-12-04_01_好想你.wav (14.3s)
+100%|██████████| 124/124 [00:23<00:00,  5.31it/s]
+[denoise] 143/177 2020-12-05_01_鹿.wav (24.3s)
+100%|██████████| 163/163 [00:30<00:00,  5.31it/s]
+[denoise] 144/177 2020-12-05_02_灰色と青.wav (32.4s)
+100%|██████████| 178/178 [00:33<00:00,  5.31it/s]
+[denoise] 145/177 2020-12-05_03_あなたに出会わなければ～夏雪冬花.wav (35.6s)
+100%|██████████| 140/140 [00:26<00:00,  5.31it/s]
+[denoise] 146/177 2020-12-05_04_春はゆく.wav (27.8s)
+100%|██████████| 132/132 [00:24<00:00,  5.31it/s]
+[denoise] 147/177 2020-12-05_05_I_beg_you.wav (26.0s)
+100%|██████████| 103/103 [00:19<00:00,  5.28it/s]
+[denoise] 148/177 2020-12-05_06_メリュー.wav (20.5s)
+100%|██████████| 103/103 [00:19<00:00,  5.24it/s]
+[denoise] 149/177 2020-12-05_07_Gimme_×_Gimme.wav (20.6s)
+100%|██████████| 161/161 [00:30<00:00,  5.31it/s]
+[denoise] 150/177 2020-12-05_08_雪の华.wav (32.0s)
+100%|██████████| 123/123 [00:23<00:00,  5.30it/s]
+[denoise] 151/177 2020-12-05_09_WHITE_ALBLM.wav (24.3s)
+100%|██████████| 153/153 [00:28<00:00,  5.30it/s]
+[denoise] 152/177 2020-12-05_10_深爱.wav (30.6s)
+100%|██████████| 79/79 [00:14<00:00,  5.32it/s]
+[denoise] 153/177 2020-12-05_11_アスノヨゾラ哨戒班.wav (15.8s)
+100%|██████████| 164/164 [00:30<00:00,  5.30it/s]
+[denoise] 154/177 2020-12-05_12_六等星之夜.wav (33.0s)
+100%|██████████| 87/87 [00:16<00:00,  5.28it/s]
+[denoise] 155/177 2020-12-05_13_I_beg_you_二度挑战.wav (17.3s)
+100%|██████████| 52/52 [00:09<00:00,  5.32it/s]
+[denoise] 156/177 2020-12-11_01_星与你消失之日.wav (10.3s)
+100%|██████████| 126/126 [00:24<00:00,  5.24it/s]
+[denoise] 157/177 2020-12-19_01_未知.wav (25.3s)
+100%|██████████| 121/121 [00:22<00:00,  5.30it/s]
+[denoise] 158/177 2020-12-19_02_未知.wav (23.9s)
+100%|██████████| 122/122 [00:23<00:00,  5.30it/s]
+[denoise] 159/177 2020-12-19_03_未知.wav (24.1s)
+100%|██████████| 93/93 [00:17<00:00,  5.25it/s]
+[denoise] 160/177 2020-12-19_04_未知.wav (18.9s)
+100%|██████████| 133/133 [00:25<00:00,  5.32it/s]
+[denoise] 161/177 2020-12-19_05_未知.wav (26.1s)
+100%|██████████| 124/124 [00:23<00:00,  5.32it/s]
+[denoise] 162/177 2020-12-19_06_未知.wav (24.5s)
+100%|██████████| 120/120 [00:22<00:00,  5.32it/s]
+[denoise] 163/177 2020-12-19_07_未知.wav (23.6s)
+100%|██████████| 122/122 [00:23<00:00,  5.28it/s]
+[denoise] 164/177 2020-12-19_08_未知.wav (24.2s)
+100%|██████████| 142/142 [00:26<00:00,  5.31it/s]
+[denoise] 165/177 2020-12-19_09_未知.wav (28.3s)
+100%|██████████| 127/127 [00:23<00:00,  5.32it/s]
+[denoise] 166/177 2020-12-19_10_未知.wav (25.0s)
+100%|██████████| 133/133 [00:25<00:00,  5.27it/s]
+[denoise] 167/177 2020-12-19_11_未知.wav (26.7s)
+100%|██████████| 121/121 [00:22<00:00,  5.29it/s]
+[denoise] 168/177 2020-12-19_12_未知.wav (24.1s)
+100%|██████████| 143/143 [00:26<00:00,  5.31it/s]
+[denoise] 169/177 2020-12-19_13_未知.wav (28.5s)
+100%|██████████| 117/117 [00:22<00:00,  5.30it/s]
+[denoise] 170/177 2020-12-19_14_未知.wav (23.0s)
+100%|██████████| 147/147 [00:27<00:00,  5.32it/s]
+[denoise] 171/177 2020-12-19_15_未知.wav (29.4s)
+100%|██████████| 126/126 [00:23<00:00,  5.30it/s]
+[denoise] 172/177 2020-12-21_01_团子大家族.wav (24.9s)
+100%|██████████| 98/98 [00:18<00:00,  5.31it/s]
+[denoise] 173/177 2025-10-08_01_偏爱.wav (19.4s)
+100%|██████████| 102/102 [00:19<00:00,  5.31it/s]
+[denoise] 174/177 2025-10-09_01_勇气.wav (20.1s)
+100%|██████████| 106/106 [00:19<00:00,  5.31it/s]
+[denoise] 175/177 2025-10-09_01_童话.wav (21.2s)
+100%|██████████| 122/122 [00:23<00:00,  5.26it/s]
+[denoise] 176/177 2025-10-10_01_今天你要嫁给我.wav (24.5s)
+100%|██████████| 144/144 [00:27<00:00,  5.28it/s]
+[denoise] 177/177 2025-10-10_01_后来.wav (28.9s)
+=== 2026-10-20 10:43:33 exit 0

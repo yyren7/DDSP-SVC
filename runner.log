@@ -1,0 +1,500 @@
+fatal: Authentication failed for 'https://github.com/yyren7/DDSP-SVC.git/'
+fatal: Authentication failed for 'https://github.com/yyren7/DDSP-SVC.git/'
+2026-10-20 23:47:09 updated to dda1504
+2026-10-20 23:47:10 starting job uvr
+fatal: Authentication failed for 'https://github.com/yyren7/DDSP-SVC.git/'
+2026-10-21 00:01:06 updated to a8cab8f
+2026-10-21 00:01:06 runner.sh changed, restarting runner (jobs keep running)
+runner started; review key: ***
+adopted running job uvr (pid 170352)
+2026-10-21 00:02:40 starting job uvr
+2026-10-21 00:14:38 updated to a81da18
+2026-10-21 00:14:39 starting job uvr
+2026-10-21 00:51:18 updated to e2d961b
+2026-10-21 00:51:18 runner.sh changed, restarting runner (jobs keep running)
+runner started; review key: ***
+adopted running job uvr (pid 226321)
+2026-10-21 00:52:51 chain changed only after uvr, carrying on with it
+fatal: Authentication failed for 'https://github.com/yyren7/DDSP-SVC.git/'
+fatal: Authentication failed for 'https://github.com/yyren7/DDSP-SVC.git/'
+2026-10-21 00:59:19 updated to 930fdf3
+2026-10-21 01:01:58 updated to 6395fc7
+2026-10-21 01:18:58 uvr done, starting job uvr@sakura_shunka
+2026-10-21 02:25:30 uvr done, starting job lines
+2026-10-21 02:28:44 lines done, starting job lines@sakura_shunka
+2026-10-21 02:34:35 lines done, starting job scorelines
+2026-10-21 03:03:07 scorelines done, starting job scorelines@sakura_shunka
+fatal: Authentication failed for 'https://github.com/yyren7/DDSP-SVC.git/'
+2026-10-21 03:28:07 scorelines done, starting job fitlines
+fatal: Authentication failed for 'https://github.com/yyren7/DDSP-SVC.git/'
+fatal: Authentication failed for 'https://github.com/yyren7/DDSP-SVC.git/'
+fatal: Authentication failed for 'https://github.com/yyren7/DDSP-SVC.git/'
+fatal: Authentication failed for 'https://github.com/yyren7/DDSP-SVC.git/'
+fatal: Authentication failed for 'https://github.com/yyren7/DDSP-SVC.git/'
+fatal: Authentication failed for 'https://github.com/yyren7/DDSP-SVC.git/'
+fatal: Authentication failed for 'https://github.com/yyren7/DDSP-SVC.git/'
+2026-10-21 08:29:59 updated to 307dbee
+2026-10-21 08:30:00 starting job fitlines
+2026-10-21 08:31:05 fitlines done, starting job clips:all
+2026-10-21 08:33:45 clips done, starting job clips:clean
+2026-10-21 08:35:54 clips done, starting job clips@sakura_shunka:all
+2026-10-21 08:38:29 clips done, starting job clips@sakura_shunka:clean
+2026-10-21 08:42:35 clips done, starting job features:all
+2026-10-21 08:44:42 features done, starting job features:clean
+2026-10-21 08:46:51 features done, starting job features@sakura_shunka:all
+2026-10-21 08:50:03 features done, starting job features@sakura_shunka:clean
+2026-10-21 08:53:16 features done, starting job train:all
+2026-10-21 09:03:48 updated to 1e7bbf7
+2026-10-21 09:03:49 chain changed only after train, carrying on with it
+2026-10-21 09:07:03 updated to ed88a08
+2026-10-21 09:23:14 updated to 96bc77d
+fatal: Authentication failed for 'https://github.com/yyren7/DDSP-SVC.git/'
+fatal: Authentication failed for 'https://github.com/yyren7/DDSP-SVC.git/'
+2026-10-21 09:55:55 updated to e0d62e3
+2026-10-21 09:55:56 chain changed only after train, carrying on with it
+2026-10-21 09:55:56 train done, starting job train@sakura_shunka:all
+fatal: Authentication failed for 'https://github.com/yyren7/DDSP-SVC.git/'
+fatal: Authentication failed for 'https://github.com/yyren7/DDSP-SVC.git/'
+2026-10-21 11:03:44 train done, starting job fitlines
+2026-10-21 11:04:49 fitlines done, starting job clips:clean
+2026-10-21 11:06:57 clips done, starting job clips@sakura_shunka:clean
+2026-10-21 11:09:07 clips done, starting job features:clean
+2026-10-21 11:11:43 features done, starting job features@sakura_shunka:clean
+2026-10-21 11:15:50 features done, starting job train:clean
+fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': HTTP/2 stream 1 was not closed cleanly before end of the underlying stream
+fatal: Authentication failed for 'https://github.com/yyren7/DDSP-SVC.git/'
+2026-10-21 12:18:46 train done, starting job train@sakura_shunka:clean
+fatal: Authentication failed for 'https://github.com/yyren7/DDSP-SVC.git/'
+2026-10-21 13:25:08 train done, starting job abtest
+2026-10-21 13:26:53 abtest done, starting job abtest@sakura_shunka
+fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': HTTP/2 stream 1 was not closed cleanly before end of the underlying stream
+fatal: Authentication failed for 'https://github.com/yyren7/DDSP-SVC.git/'
+2026-10-21 14:36:08 updated to 04f119c
+2026-10-21 14:52:17 updated to 66f08a1
+2026-10-21 14:52:18 starting job train:all
+fatal: Authentication failed for 'https://github.com/yyren7/DDSP-SVC.git/'
+send-pack: unexpected disconnect while reading sideband packet
+fatal: the remote end hung up unexpectedly
+2026-10-21 15:55:59 train done, starting job train@sakura_shunka:all
+2026-10-21 15:58:09 updated to cdfbfc5
+2026-10-21 15:58:11 chain changed only after train, carrying on with it
+fatal: Authentication failed for 'https://github.com/yyren7/DDSP-SVC.git/'
+2026-10-21 17:03:47 train done, starting job abtest@sakura_shunka:steps80=all@40000+all@80000
+fatal: Authentication failed for 'https://github.com/yyren7/DDSP-SVC.git/'
+fatal: Authentication failed for 'https://github.com/yyren7/DDSP-SVC.git/'
+fatal: Authentication failed for 'https://github.com/yyren7/DDSP-SVC.git/'
+fatal: Authentication failed for 'https://github.com/yyren7/DDSP-SVC.git/'
+fatal: Authentication failed for 'https://github.com/yyren7/DDSP-SVC.git/'
+fatal: Authentication failed for 'https://github.com/yyren7/DDSP-SVC.git/'
+fatal: Authentication failed for 'https://github.com/yyren7/DDSP-SVC.git/'
+fatal: Authentication failed for 'https://github.com/yyren7/DDSP-SVC.git/'
+fatal: Authentication failed for 'https://github.com/yyren7/DDSP-SVC.git/'
+fatal: Authentication failed for 'https://github.com/yyren7/DDSP-SVC.git/'
+fatal: Authentication failed for 'https://github.com/yyren7/DDSP-SVC.git/'
+fatal: Authentication failed for 'https://github.com/yyren7/DDSP-SVC.git/'
+fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': HTTP/2 stream 1 was not closed cleanly before end of the underlying stream
+fatal: Authentication failed for 'https://github.com/yyren7/DDSP-SVC.git/'
+fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': HTTP/2 stream 1 was not closed cleanly before end of the underlying stream
+fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': HTTP/2 stream 1 was not closed cleanly before end of the underlying stream
+fatal: Authentication failed for 'https://github.com/yyren7/DDSP-SVC.git/'
+2026-10-22 00:20:52 updated to 285419d
+2026-10-22 00:20:53 starting job uvr
+2026-10-22 00:26:19 updated to d74ac5b
+2026-10-22 00:26:20 starting job uvr
+fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': HTTP/2 stream 1 was not closed cleanly before end of the underlying stream
+fatal: Authentication failed for 'https://github.com/yyren7/DDSP-SVC.git/'
+fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': Empty reply from server
+fatal: Authentication failed for 'https://github.com/yyren7/DDSP-SVC.git/'
+2026-10-22 01:37:33 updated to 904c558
+fatal: Authentication failed for 'https://github.com/yyren7/DDSP-SVC.git/'
+fatal: Authentication failed for 'https://github.com/yyren7/DDSP-SVC.git/'
+2026-10-22 02:59:10 uvr done, starting job lines
+2026-10-22 03:06:00 updated to 71bcb31
+2026-10-22 03:06:01 starting job lines
+fatal: Authentication failed for 'https://github.com/yyren7/DDSP-SVC.git/'
+2026-10-22 03:09:10 lines done, starting job clips:all
+2026-10-22 03:12:33 clips done, starting job features:all
+2026-10-22 03:16:39 features done, starting job train:all
+fatal: Authentication failed for 'https://github.com/yyren7/DDSP-SVC.git/'
+fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': HTTP/2 stream 1 was not closed cleanly before end of the underlying stream
+fatal: Authentication failed for 'https://github.com/yyren7/DDSP-SVC.git/'
+fatal: Authentication failed for 'https://github.com/yyren7/DDSP-SVC.git/'
+fatal: Authentication failed for 'https://github.com/yyren7/DDSP-SVC.git/'
+fatal: Authentication failed for 'https://github.com/yyren7/DDSP-SVC.git/'
+2026-10-22 05:26:15 updated to f79424e
+2026-10-22 05:26:16 starting job abtest:steps80=all@40000+all@80000
+2026-10-22 05:30:05 updated to 82878b4
+fatal: Authentication failed for 'https://github.com/yyren7/DDSP-SVC.git/'
+fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': HTTP/2 stream 1 was not closed cleanly before end of the underlying stream
+fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': Error in the HTTP2 framing layer
+fatal: Authentication failed for 'https://github.com/yyren7/DDSP-SVC.git/'
+2026-10-22 09:42:12 updated to 3541e0c
+2026-10-22 09:42:12 runner.sh changed, restarting runner (jobs keep running)
+runner started; review key: ***
+2026-10-22 10:00:17 updated to 6338a88
+2026-10-22 10:00:17 runner.sh changed, restarting runner (jobs keep running)
+runner started; review key: ***
+2026-10-22 10:04:56 updated to ee710c4
+fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-22 10:40:14 git push via proxy failed: fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': Empty reply from server
+2026-10-22 10:40:19 git push via direct failed: fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': Empty reply from server
+2026-10-22 10:40:34 git push ok via proxy after retrying
+2026-10-22 10:53:58 updated to eaf0a3d
+fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-22 10:55:25 git fetch via proxy failed: fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-22 10:55:26 git fetch ok via direct after retrying
+fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': Operation too slow. Less than 1000 bytes/sec transferred the last 30 seconds
+2026-10-22 10:59:08 git fetch via direct failed: fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': Operation too slow. Less than 1000 bytes/sec transferred the last 30 seconds
+2026-10-22 10:59:14 git fetch ok via proxy after retrying
+2026-10-22 11:13:38 updated to 16102c1
+2026-10-22 11:13:39 starting job download
+fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-22 11:15:07 git push via proxy failed: fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-22 11:15:10 git push ok via direct after retrying
+2026-10-22 11:16:11 updated to d879e1d
+error: RPC failed; curl 28 Operation too slow. Less than 1000 bytes/sec transferred the last 30 seconds
+fatal: expected flush after ref listing
+2026-10-22 11:18:50 git fetch via direct failed: fatal: expected flush after ref listing
+2026-10-22 11:18:58 git fetch ok via proxy after retrying
+2026-10-22 11:18:58 updated to 1fcfbb4
+2026-10-22 11:18:59 starting job download
+2026-10-22 11:20:08 updated to 4a7f365
+2026-10-22 11:20:09 starting job download
+2026-10-22 11:30:51 updated to 23c9762
+fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-22 11:33:42 git fetch via proxy failed: fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-22 11:34:13 git fetch ok via direct after retrying
+2026-10-22 11:34:59 git push via direct failed: no answer in 45 s
+2026-10-22 11:35:02 git push ok via proxy after retrying
+fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-22 12:31:53 git push via proxy failed: fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-22 12:31:56 git push ok via direct after retrying
+2026-10-22 12:33:41 git fetch via direct failed: no answer in 45 s
+2026-10-22 12:33:45 git fetch ok via proxy after retrying
+fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-22 12:36:36 git push via proxy failed: fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-22 12:36:39 git push ok via direct after retrying
+fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': Operation too slow. Less than 1000 bytes/sec transferred the last 30 seconds
+2026-10-22 12:56:20 git fetch via direct failed: fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': Operation too slow. Less than 1000 bytes/sec transferred the last 30 seconds
+2026-10-22 12:56:26 git fetch ok via proxy after retrying
+error: RPC failed; HTTP 408 curl 22 The requested URL returned error: 408
+send-pack: unexpected disconnect while reading sideband packet
+fatal: the remote end hung up unexpectedly
+2026-10-22 12:59:22 git push via proxy failed: fatal: the remote end hung up unexpectedly
+2026-10-22 12:59:25 git push ok via direct after retrying
+2026-10-22 13:03:20 git push via direct failed: no answer in 45 s
+2026-10-22 13:03:24 git push ok via proxy after retrying
+runner started; review key: ***
+2026-10-22 13:48:19 resuming download (last run: interrupted)
+2026-10-22 13:49:40 updated to 2d49508
+fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-22 14:07:00 git push via proxy failed: fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-22 14:07:03 git push ok via direct after retrying
+2026-10-22 14:08:48 git fetch via direct failed: no answer in 45 s
+2026-10-22 14:08:50 git fetch ok via proxy after retrying
+fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-22 15:00:22 git push via proxy failed: fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-22 15:00:24 git push ok via direct after retrying
+2026-10-22 15:04:18 git fetch via direct failed: no answer in 45 s
+2026-10-22 15:04:22 git fetch ok via proxy after retrying
+fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-22 15:11:22 git fetch via proxy failed: fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': Operation too slow. Less than 1000 bytes/sec transferred the last 30 seconds
+2026-10-22 15:11:53 git fetch via direct failed: fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': Operation too slow. Less than 1000 bytes/sec transferred the last 30 seconds
+2026-10-22 15:12:04 git fetch ok via proxy after retrying
+2026-10-22 16:30:35 updated to 364efd7
+2026-10-22 16:30:36 starting job uvr
+2026-10-22 18:28:03 uvr done, starting job lines
+2026-10-22 18:34:42 updated to 739129e
+2026-10-22 18:34:43 starting job lines
+2026-10-22 18:35:49 lines done, starting job clips:all
+2026-10-22 18:38:04 clips done, starting job multi@umi_pheebie:all=pheebie+umi
+2026-10-22 18:39:25 multi done, starting job features@umi_pheebie:all
+2026-10-22 18:42:45 features done, starting job train@umi_pheebie:all
+fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-23 03:17:26 git push via proxy failed: fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-23 03:17:28 git push ok via direct after retrying
+2026-10-23 03:21:24 git push via direct failed: no answer in 45 s
+2026-10-23 03:21:27 git push ok via proxy after retrying
+fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-23 04:02:30 git fetch via proxy failed: fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-23 04:02:31 git fetch ok via direct after retrying
+error: RPC failed; curl 28 Operation too slow. Less than 1000 bytes/sec transferred the last 30 seconds
+fatal: expected flush after ref listing
+2026-10-23 04:12:40 git fetch via direct failed: fatal: expected flush after ref listing
+2026-10-23 04:12:42 git fetch ok via proxy after retrying
+fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-23 04:23:20 git fetch via proxy failed: fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-23 04:23:51 git fetch ok via direct after retrying
+2026-10-23 04:24:36 git push via direct failed: no answer in 45 s
+2026-10-23 04:24:41 git push ok via proxy after retrying
+2026-10-23 09:36:52 updated to 9fbe22b
+2026-10-23 09:36:53 starting job abtest@umi_pheebie:steps80=all@40000+all@80000
+2026-10-23 09:40:10 updated to 9158598
+2026-10-23 09:41:18 updated to d8092d3
+2026-10-23 09:41:19 starting job abtest@umi_pheebie:steps80_pheebie=all@40000+all@80000
+2026-10-23 09:51:16 updated to b0f91ef
+2026-10-23 11:30:30 updated to 6cbc26d
+2026-10-23 11:52:32 updated to db174aa
+fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-23 12:02:33 git push via proxy failed: fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-23 12:02:35 git push ok via direct after retrying
+2026-10-23 12:10:10 git fetch via direct failed: no answer in 45 s
+2026-10-23 12:10:13 git fetch ok via proxy after retrying
+2026-10-23 12:12:47 updated to 350dacd
+fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-23 12:15:20 git push via proxy failed: fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': Operation too slow. Less than 1000 bytes/sec transferred the last 30 seconds
+2026-10-23 12:15:51 git push via direct failed: fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': Operation too slow. Less than 1000 bytes/sec transferred the last 30 seconds
+fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-23 12:16:21 git push via proxy failed: fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-23 12:17:06 git push via direct failed: no answer in 45 s
+fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-23 12:18:26 git fetch via proxy failed: fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-23 12:19:11 git fetch via direct failed: no answer in 45 s
+fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-23 12:19:41 git fetch via proxy failed: fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-23 12:20:26 git fetch via direct failed: no answer in 45 s
+fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-23 12:20:47 git push via proxy failed: fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-23 12:20:49 git push ok via direct after retrying
+2026-10-23 12:24:44 git push via direct failed: no answer in 45 s
+fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-23 12:25:04 git push via proxy failed: fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': Operation too slow. Less than 1000 bytes/sec transferred the last 30 seconds
+2026-10-23 12:25:44 git push via direct failed: fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': Operation too slow. Less than 1000 bytes/sec transferred the last 30 seconds
+fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-23 12:26:04 git push via proxy failed: fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-23 12:27:50 git fetch via direct failed: no answer in 45 s
+fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-23 12:28:10 git fetch via proxy failed: fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-23 12:28:21 git fetch ok via direct after retrying
+2026-10-23 12:29:06 git push via direct failed: no answer in 45 s
+fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-23 12:29:26 git push via proxy failed: fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-23 12:29:39 git push ok via direct after retrying
+fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': Operation too slow. Less than 1000 bytes/sec transferred the last 30 seconds
+2026-10-23 12:38:39 git fetch via direct failed: fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': Operation too slow. Less than 1000 bytes/sec transferred the last 30 seconds
+fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-23 12:38:59 git fetch via proxy failed: fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-23 12:39:54 git fetch via direct failed: no answer in 45 s
+fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-23 12:40:14 git fetch via proxy failed: fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-23 12:41:00 git push via direct failed: no answer in 45 s
+fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-23 12:41:20 git push via proxy failed: fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-23 12:41:33 git push ok via direct after retrying
+2026-10-23 12:43:19 git push via direct failed: no answer in 45 s
+fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-23 12:43:39 git push via proxy failed: fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-23 12:43:52 git push ok via direct after retrying
+error: RPC failed; curl 28 Operation too slow. Less than 1000 bytes/sec transferred the last 30 seconds
+fatal: expected flush after ref listing
+2026-10-23 12:55:02 git fetch via direct failed: fatal: expected flush after ref listing
+fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-23 12:55:22 git fetch via proxy failed: fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-23 12:55:33 git fetch ok via direct after retrying
+2026-10-23 12:56:18 git push via direct failed: no answer in 45 s
+fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-23 12:56:38 git push via proxy failed: fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-23 12:57:33 git push via direct failed: no answer in 45 s
+fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-23 12:57:54 git push via proxy failed: fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+error: RPC failed; curl 28 Operation too slow. Less than 1000 bytes/sec transferred the last 30 seconds
+fatal: expected flush after ref listing
+2026-10-23 12:59:24 git fetch via direct failed: fatal: expected flush after ref listing
+fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-23 12:59:44 git fetch via proxy failed: fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-23 13:00:39 git fetch via direct failed: no answer in 45 s
+fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-23 13:00:59 git fetch via proxy failed: fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-23 13:01:45 git push via direct failed: no answer in 45 s
+fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-23 13:02:05 git push via proxy failed: fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-23 13:02:18 git push ok via direct after retrying
+2026-10-23 13:07:36 updated to c3bc9fb
+2026-10-23 13:15:54 git push via direct failed: no answer in 45 s
+fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-23 13:16:14 git push via proxy failed: fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': Operation too slow. Less than 1000 bytes/sec transferred the last 30 seconds
+2026-10-23 13:16:54 git push via direct failed: fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': Operation too slow. Less than 1000 bytes/sec transferred the last 30 seconds
+fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-23 13:17:14 git push via proxy failed: fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-23 13:19:00 git fetch via direct failed: no answer in 45 s
+fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-23 13:19:20 git fetch via proxy failed: fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-23 13:19:31 git fetch ok via direct after retrying
+2026-10-23 13:22:24 git fetch via direct failed: no answer in 45 s
+fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-23 13:22:44 git fetch via proxy failed: fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-23 13:22:55 git fetch ok via direct after retrying
+2026-10-23 13:33:28 git fetch via direct failed: no answer in 45 s
+fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-23 13:33:48 git fetch via proxy failed: fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-23 13:34:43 git fetch via direct failed: no answer in 45 s
+fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-23 13:35:03 git fetch via proxy failed: fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-23 13:35:49 git push via direct failed: no answer in 45 s
+fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-23 13:36:09 git push via proxy failed: fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-23 13:37:04 git push via direct failed: no answer in 45 s
+fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-23 13:37:24 git push via proxy failed: fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': Empty reply from server
+2026-10-23 13:39:01 git fetch via direct failed: fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': Empty reply from server
+fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-23 13:39:21 git fetch via proxy failed: fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-23 13:40:16 git fetch via direct failed: no answer in 45 s
+fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-23 13:40:36 git fetch via proxy failed: fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-23 13:41:22 git push via direct failed: no answer in 45 s
+fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-23 13:41:42 git push via proxy failed: fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-23 13:42:37 git push via direct failed: no answer in 45 s
+fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-23 13:42:57 git push via proxy failed: fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-23 13:44:42 git fetch via direct failed: no answer in 45 s
+fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-23 13:45:02 git fetch via proxy failed: fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-23 13:45:13 git fetch ok via direct after retrying
+2026-10-23 13:45:13 updated to df01416
+2026-10-23 13:46:20 updated to 85aa7f7
+2026-10-23 13:50:54 updated to f1d6890
+fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': Operation too slow. Less than 1000 bytes/sec transferred the last 30 seconds
+2026-10-23 13:52:31 git fetch via direct failed: fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': Operation too slow. Less than 1000 bytes/sec transferred the last 30 seconds
+fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-23 13:52:51 git fetch via proxy failed: fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+error: RPC failed; curl 28 Operation too slow. Less than 1000 bytes/sec transferred the last 30 seconds
+fatal: expected flush after ref listing
+2026-10-23 13:53:32 git fetch via direct failed: fatal: expected flush after ref listing
+fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-23 13:53:53 git fetch via proxy failed: fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-23 13:54:41 git push via direct failed: no answer in 45 s
+fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-23 13:55:02 git push via proxy failed: fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-23 13:55:57 git push via direct failed: no answer in 45 s
+fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-23 13:56:18 git push via proxy failed: fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-23 13:58:03 git fetch via direct failed: no answer in 45 s
+fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-23 13:58:24 git fetch via proxy failed: fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-23 13:59:06 git fetch ok via direct after retrying
+error: RPC failed; curl 28 Operation too slow. Less than 1000 bytes/sec transferred the last 30 seconds
+fatal: expected flush after ref listing
+2026-10-23 14:06:06 git fetch via direct failed: fatal: expected flush after ref listing
+2026-10-23 14:06:09 git fetch ok via proxy after retrying
+2026-10-23 14:20:11 updated to 2576d77
+2026-10-23 14:31:40 updated to d93e6eb
+2026-10-23 14:58:49 updated to eea060f
+fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-23 15:54:22 git fetch via proxy failed: fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-23 15:54:23 git fetch ok via direct after retrying
+2026-10-23 16:04:53 git push via direct failed: no answer in 45 s
+2026-10-23 16:05:03 git push ok via proxy after retrying
+fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-23 16:09:53 git fetch via proxy failed: fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-23 16:09:54 git fetch ok via direct after retrying
+2026-10-23 16:26:49 git fetch via direct failed: no answer in 45 s
+2026-10-23 16:26:51 git fetch ok via proxy after retrying
+fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-23 16:31:50 git push via proxy failed: fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-23 16:32:09 git push ok via direct after retrying
+error: RPC failed; curl 28 Operation too slow. Less than 1000 bytes/sec transferred the last 30 seconds
+fatal: expected flush after ref listing
+2026-10-23 16:39:05 git fetch via direct failed: fatal: expected flush after ref listing
+2026-10-23 16:39:13 git fetch ok via proxy after retrying
+fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-23 18:06:14 git fetch via proxy failed: fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-23 18:06:15 git fetch ok via direct after retrying
+fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': Operation too slow. Less than 1000 bytes/sec transferred the last 30 seconds
+2026-10-23 18:09:57 git fetch via direct failed: fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': Operation too slow. Less than 1000 bytes/sec transferred the last 30 seconds
+2026-10-23 18:10:00 git fetch ok via proxy after retrying
+fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-23 19:05:52 git push via proxy failed: fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-23 19:06:00 git push ok via direct after retrying
+2026-10-23 19:29:49 git push via direct failed: no answer in 45 s
+2026-10-23 19:29:52 git push ok via proxy after retrying
+fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-23 22:00:08 git push via proxy failed: fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-23 22:00:10 git push ok via direct after retrying
+2026-10-23 22:01:12 updated to fe47d72
+2026-10-23 22:06:39 updated to 173caea
+fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': Operation too slow. Less than 1000 bytes/sec transferred the last 30 seconds
+2026-10-23 22:07:10 git push via direct failed: fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': Operation too slow. Less than 1000 bytes/sec transferred the last 30 seconds
+2026-10-23 22:07:17 git push ok via proxy after retrying
+2026-10-23 23:02:02 updated to edc7c43
+2026-10-23 23:05:47 updated to 2e800b8
+2026-10-23 23:15:04 updated to af46dec
+fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-23 23:39:03 git push via proxy failed: fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': Operation too slow. Less than 1000 bytes/sec transferred the last 30 seconds
+2026-10-23 23:39:33 git push via direct failed: fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': Operation too slow. Less than 1000 bytes/sec transferred the last 30 seconds
+2026-10-23 23:39:49 git push ok via proxy after retrying
+fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-23 23:44:01 git push via proxy failed: fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-23 23:44:04 git push ok via direct after retrying
+2026-10-23 23:52:46 updated to e83952a
+2026-10-23 23:57:11 updated to f5e410a
+2026-10-23 23:59:02 git fetch via direct failed: no answer in 45 s
+2026-10-23 23:59:05 git fetch ok via proxy after retrying
+2026-10-23 23:59:05 updated to 7ba9edf
+2026-10-24 00:02:49 updated to 2c52840
+2026-10-24 00:06:34 updated to afd620f
+2026-10-24 00:09:09 updated to beaa0b3
+2026-10-24 00:54:05 updated to ba5d9cc
+2026-10-24 01:00:48 updated to 25b3f65
+2026-10-24 01:01:55 updated to 8a6a0bf
+2026-10-24 01:10:50 updated to 61f1039
+fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-24 02:12:27 git push via proxy failed: fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-24 02:12:30 git push ok via direct after retrying
+fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': Operation too slow. Less than 1000 bytes/sec transferred the last 30 seconds
+2026-10-24 02:45:12 git fetch via direct failed: fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': Operation too slow. Less than 1000 bytes/sec transferred the last 30 seconds
+2026-10-24 02:45:13 git fetch ok via proxy after retrying
+fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-24 08:35:51 git push via proxy failed: fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-24 08:35:54 git push ok via direct after retrying
+error: RPC failed; curl 28 Operation too slow. Less than 1000 bytes/sec transferred the last 30 seconds
+fatal: expected flush after ref listing
+2026-10-24 08:55:36 git fetch via direct failed: fatal: expected flush after ref listing
+2026-10-24 08:55:44 git fetch ok via proxy after retrying
+2026-10-24 10:12:53 updated to 4acdd9c
+2026-10-24 10:23:00 updated to 1e54b7c
+2026-10-24 10:57:42 updated to 25cdf4d
+fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-24 11:24:45 git push via proxy failed: fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-24 11:24:53 git push ok via direct after retrying
+2026-10-24 11:28:48 git fetch via direct failed: no answer in 45 s
+2026-10-24 11:28:49 git fetch ok via proxy after retrying
+2026-10-24 11:31:22 updated to 4b449ef
+2026-10-24 11:49:47 updated to 6a9f41e
+2026-10-24 11:58:37 updated to 3e55fb6
+2026-10-24 12:01:02 updated to 89eb8e6
+fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-24 12:18:27 git fetch via proxy failed: fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-24 12:18:28 git fetch ok via direct after retrying
+2026-10-24 12:19:13 git push via direct failed: no answer in 45 s
+2026-10-24 12:19:24 git push ok via proxy after retrying
+error: RPC failed; HTTP 408 curl 22 The requested URL returned error: 408
+send-pack: unexpected disconnect while reading sideband packet
+fatal: the remote end hung up unexpectedly
+2026-10-24 15:35:42 git push via proxy failed: fatal: the remote end hung up unexpectedly
+2026-10-24 15:35:44 git push ok via direct after retrying
+fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': Operation too slow. Less than 1000 bytes/sec transferred the last 30 seconds
+2026-10-24 15:39:25 git push via direct failed: fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': Operation too slow. Less than 1000 bytes/sec transferred the last 30 seconds
+2026-10-24 15:39:34 git push ok via proxy after retrying
+fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-24 22:15:24 git fetch via proxy failed: fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 503
+2026-10-24 22:15:25 git fetch ok via direct after retrying
+2026-10-24 22:25:56 git push via direct failed: no answer in 45 s
+2026-10-24 22:25:59 git push ok via proxy after retrying
+2026-10-25 00:43:28 updated to bab4194
+2026-10-25 01:23:57 updated to 3907c1a
+2026-10-25 01:31:53 updated to 537efa9
+2026-10-25 02:20:34 updated to a1f9668
+fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 500
+2026-10-25 03:42:59 git fetch via proxy failed: fatal: unable to access 'https://github.com/yyren7/DDSP-SVC.git/': The requested URL returned error: 500
+2026-10-25 03:43:30 git fetch ok via direct after retrying
+2026-10-25 03:44:16 git push via direct failed: no answer in 45 s
+2026-10-25 03:44:19 git push ok via proxy after retrying

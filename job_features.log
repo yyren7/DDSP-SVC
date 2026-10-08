@@ -1,0 +1,76 @@
+=== 2026-10-22 18:39:25 start features at 739129e
+speaker: umi_pheebie (/root/autodl-tmp/speakers/umi_pheebie)
+config: configs/speakers/umi_pheebie.yaml -> /root/autodl-tmp/speakers/umi_pheebie/reflow_all.yaml
+/root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages/pyworld/__init__.py:13: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+Using 8 worker processes
+Storing units/mel/aug_mel as fp32
+  0%|          | 0/4945 [00:00<?, ?it/s]/root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages/pyworld/__init__.py:13: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+/root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages/pyworld/__init__.py:13: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+/root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages/pyworld/__init__.py:13: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+/root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages/pyworld/__init__.py:13: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+/root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages/pyworld/__init__.py:13: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+/root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages/pyworld/__init__.py:13: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+/root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages/pyworld/__init__.py:13: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+/root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages/pyworld/__init__.py:13: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+ [Encoder Model] Content Vec
+ [Loading] pretrain/contentvec/pytorch_model.bin
+ [Encoder Model] Content Vec
+ [Loading] pretrain/contentvec/pytorch_model.bin
+ [Encoder Model] Content Vec
+ [Loading] pretrain/contentvec/pytorch_model.bin
+ [Encoder Model] Content Vec
+ [Loading] pretrain/contentvec/pytorch_model.bin
+ [Encoder Model] Content Vec
+ [Loading] pretrain/contentvec/pytorch_model.bin
+ [Encoder Model] Content Vec
+ [Loading] pretrain/contentvec/pytorch_model.bin
+ [Encoder Model] Content Vec
+ [Loading] pretrain/contentvec/pytorch_model.bin
+ [Encoder Model] Content Vec
+ [Loading] pretrain/contentvec/pytorch_model.bin
+100%|██████████| 4945/4945 [02:27<00:00, 33.42it/s]
+Saved pitch augmentation dictionary to /root/autodl-tmp/speakers/umi_pheebie/data_all/train/pitch_aug_dict.npy
+  0%|          | 0/24 [00:00<?, ?it/s]/root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages/pyworld/__init__.py:13: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+/root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages/pyworld/__init__.py:13: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+/root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages/pyworld/__init__.py:13: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+/root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages/pyworld/__init__.py:13: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+/root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages/pyworld/__init__.py:13: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+/root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages/pyworld/__init__.py:13: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+/root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages/pyworld/__init__.py:13: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+/root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages/pyworld/__init__.py:13: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+ [Encoder Model] Content Vec
+ [Loading] pretrain/contentvec/pytorch_model.bin
+ [Encoder Model] Content Vec
+ [Loading] pretrain/contentvec/pytorch_model.bin
+ [Encoder Model] Content Vec
+ [Loading] pretrain/contentvec/pytorch_model.bin
+ [Encoder Model] Content Vec
+ [Loading] pretrain/contentvec/pytorch_model.bin
+ [Encoder Model] Content Vec
+ [Loading] pretrain/contentvec/pytorch_model.bin
+ [Encoder Model] Content Vec
+ [Loading] pretrain/contentvec/pytorch_model.bin
+ [Encoder Model] Content Vec
+ [Loading] pretrain/contentvec/pytorch_model.bin
+ [Encoder Model] Content Vec
+ [Loading] pretrain/contentvec/pytorch_model.bin
+100%|██████████| 24/24 [00:13<00:00,  1.80it/s]
+Saved pitch augmentation dictionary to /root/autodl-tmp/speakers/umi_pheebie/data_all/val/pitch_aug_dict.npy
+=== 2026-10-22 18:42:20 exit 0
