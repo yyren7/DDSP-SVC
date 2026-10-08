@@ -1,0 +1,21 @@
+=== 2026-10-21 08:30:00 start fitlines at 307dbee
+speaker: pheebie (/root/autodl-tmp/speakers/pheebie)
+pheebie: 47 marked lines, 29 keep
+sakura_shunka: 35 marked lines, 22 keep
+how each score alone agrees with the marks (weighted AUC; 0.5 = chance, 1 = perfect):
+  aes_pq        0.798  (higher = keep)
+  aes_cu        0.785  (higher = keep)
+  aes_ce        0.777  (higher = keep)
+  pitch_steady  0.697  (higher = keep)
+  p_music       0.676  (higher = keep)
+  p_speech      0.622  (lower = keep)
+  dns_sig       0.603  (higher = keep)
+  level         0.548  (higher = keep)
+  tail_src      0.532  (higher = keep)
+  bgm_db        0.525  (higher = keep)
+signal score alone: AUC 0.636, balanced accuracy at 75 points 0.595
+fitted model (C=0.03, 5-fold cross-validation): AUC 0.761, balanced accuracy 0.686 at p >= 0.60, keeping 86% of the lines the listener keeps and 48% of those excluded
+weights (standardized features, + = keep): aes_ce +0.22, aes_cu +0.21, aes_pq +0.21, pitch_steady +0.16, p_speech -0.09, p_music +0.06, tail_src +0.05, dns_sig +0.05, bgm_db -0.02, level -0.01
+pheebie: model keeps 2901 of 3865 lines, 5.82 h
+sakura_shunka: model keeps 2576 of 3138 lines, 6.25 h
+=== 2026-10-21 08:30:03 exit 0

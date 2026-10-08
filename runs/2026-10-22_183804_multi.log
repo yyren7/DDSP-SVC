@@ -1,0 +1,7 @@
+=== 2026-10-22 18:38:04 start multi at 739129e
+speaker: umi_pheebie (/root/autodl-tmp/speakers/umi_pheebie)
+umi_pheebie all: speaker 1 = pheebie, 2581 train clips
+umi_pheebie all: speaker 1 = pheebie, 12 val clips
+umi_pheebie all: speaker 2 = umi, 2364 train clips
+umi_pheebie all: speaker 2 = umi, 12 val clips
+=== 2026-10-22 18:38:05 exit 0

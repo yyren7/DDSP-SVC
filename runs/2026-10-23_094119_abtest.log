@@ -1,0 +1,34 @@
+=== 2026-10-23 09:41:19 start abtest at d8092d3
+speaker: umi_pheebie (/root/autodl-tmp/speakers/umi_pheebie)
+/root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages/pyworld/__init__.py:13: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+ [Encoder Model] Content Vec
+ [Loading] pretrain/contentvec/pytorch_model.bin
+umi_pheebie: 48 clips prepared in 9 s
+ [DDSP Model] Combtooth Subtractive Synthesiser
+/root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages/torch/nn/utils/weight_norm.py:144: FutureWarning: `torch.nn.utils.weight_norm` is deprecated in favor of `torch.nn.utils.parametrizations.weight_norm`.
+  WeightNorm.apply(module, name, dim)
+ [Loading] /root/autodl-tmp/speakers/umi_pheebie/exp_all/model_40000.pt
+| Load HifiGAN:  pretrain/nsf_hifigan/model
+Removing weight norm...
+umi_pheebie all@40000: 48 clips converted with model_40000.pt in 10 s
+ [DDSP Model] Combtooth Subtractive Synthesiser
+ [Loading] /root/autodl-tmp/speakers/umi_pheebie/exp_all/model_80000.pt
+| Load HifiGAN:  pretrain/nsf_hifigan/model
+Removing weight norm...
+umi_pheebie all@80000: 48 clips converted with model_80000.pt in 8 s
+Using cache found in /root/autodl-tmp/.cache/torch/hub/South-Twilight_SingMOS_v1.1.2
+ESPnet is not installed, cannot use espnet_hubert upstream
+/root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages/torch/nn/utils/weight_norm.py:144: FutureWarning: `torch.nn.utils.weight_norm` is deprecated in favor of `torch.nn.utils.parametrizations.weight_norm`.
+  WeightNorm.apply(module, name, dim)
+Loading weights: 100%|██████████| 266/266 [00:00<00:00, 25195.00it/s]
+models loaded in 12 s on cuda
+/root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages/torch/nn/functional.py:6044: UserWarning: Support for mismatched key_padding_mask and attn_mask is deprecated. Use same type for both instead.
+  warnings.warn(
+umi_pheebie _source  her clips (12): singmos 4.011, aes_pq 7.634, aes_ce 5.510, dns_ovrl 2.759, spk_cos 0.912
+umi_pheebie _source  others    (36): singmos 4.119, aes_pq 7.530, aes_ce 5.628, dns_ovrl 2.977, spk_cos 0.889
+umi_pheebie all@40000 her clips (12): singmos 3.733, aes_pq 7.567, aes_ce 5.471, dns_ovrl 2.730, spk_cos 0.919, f0_rmse_cents 27.365
+umi_pheebie all@40000 others    (36): singmos 3.783, aes_pq 7.686, aes_ce 5.745, dns_ovrl 2.881, spk_cos 0.940, f0_rmse_cents 32.706
+umi_pheebie all@80000 her clips (12): singmos 3.809, aes_pq 7.572, aes_ce 5.461, dns_ovrl 2.729, spk_cos 0.921, f0_rmse_cents 37.175
+umi_pheebie all@80000 others    (36): singmos 3.878, aes_pq 7.702, aes_ce 5.812, dns_ovrl 2.916, spk_cos 0.942, f0_rmse_cents 33.138
+=== 2026-10-23 09:43:05 exit 0

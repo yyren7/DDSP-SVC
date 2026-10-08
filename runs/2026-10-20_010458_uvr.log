@@ -1,0 +1,1561 @@
+=== 2026-10-20 01:04:58 start uvr at 72c1b6a
+speaker: pheebie (/root/autodl-tmp/speakers/pheebie)
+Failed to load libcublasLt.so.13: libcublasLt.so.13: cannot open shared object file: No such file or directory
+Failed to load libcublas.so.13: libcublas.so.13: cannot open shared object file: No such file or directory
+Failed to load libnvrtc.so.13: libnvrtc.so.13: cannot open shared object file: No such file or directory
+Failed to load libcufft.so.12: libcufft.so.12: cannot open shared object file: No such file or directory
+Failed to load libcudart.so.13: libcudart.so.13: cannot open shared object file: No such file or directory
+Please follow https://onnxruntime.ai/docs/install/#cuda-and-cudnn to install CUDA.
+== bs_leap_xe_voc.ckpt
+== dereverb_bs_roformer_anvuew_sdr_22.5050.ckpt
+== karaoke_bs_roformer_anvuew.ckpt
+== denoise_mel_band_roformer_aufr33_aggr_sdr_27.9768.ckpt
+all UVR models ready
+185 input files
+[vocals] bs_leap_xe_voc.ckpt: 49 done, 136 to process
+Failed to load libcublasLt.so.13: libcublasLt.so.13: cannot open shared object file: No such file or directory
+Failed to load libcublas.so.13: libcublas.so.13: cannot open shared object file: No such file or directory
+Failed to load libnvrtc.so.13: libnvrtc.so.13: cannot open shared object file: No such file or directory
+Failed to load libcufft.so.12: libcufft.so.12: cannot open shared object file: No such file or directory
+Failed to load libcudart.so.13: libcudart.so.13: cannot open shared object file: No such file or directory
+Please follow https://onnxruntime.ai/docs/install/#cuda-and-cudnn to install CUDA.
+2026-10-20 01:05:07,216 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-03_06_未知_[BV1Q2Hv65Eft_p2].m4a': Format not recognised.
+100%|██████████| 20/20 [00:30<00:00,  1.55s/it]
+[vocals] 1/136 2026-10-03_06_未知_[BV1Q2Hv65Eft_p2].m4a (33.6s)
+2026-10-20 01:05:40,771 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-03_07_未知.m4a': Format not recognised.
+100%|██████████| 12/12 [00:18<00:00,  1.55s/it]
+[vocals] 2/136 2026-10-03_07_未知.m4a (20.0s)
+2026-10-20 01:06:00,741 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-03_07_未知_[BV1Q2Hv65Eft_p2].m4a': Format not recognised.
+100%|██████████| 18/18 [00:27<00:00,  1.54s/it]
+[vocals] 3/136 2026-10-03_07_未知_[BV1Q2Hv65Eft_p2].m4a (29.4s)
+2026-10-20 01:06:30,129 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-03_08_未知.m4a': Format not recognised.
+100%|██████████| 18/18 [00:28<00:00,  1.56s/it]
+[vocals] 4/136 2026-10-03_08_未知.m4a (30.1s)
+2026-10-20 01:07:00,261 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-05_01_唱唱歌~~-2026年10月05日20时_p03_P3-_唱唱歌~~-10月05日22点00分.m4a': Format not recognised.
+100%|██████████| 14/14 [00:21<00:00,  1.54s/it]
+[vocals] 5/136 2026-10-05_01_唱唱歌~~-2026年10月05日20时_p03_P3-_唱唱歌~~-10月05日22点00分.m4a (23.1s)
+2026-10-20 01:07:23,321 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-05_01_未知.m4a': Format not recognised.
+100%|██████████| 15/15 [00:23<00:00,  1.54s/it]
+[vocals] 6/136 2026-10-05_01_未知.m4a (24.6s)
+2026-10-20 01:07:47,892 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-05_01_未知_[BV16YHx6wEpX_p2].m4a': Format not recognised.
+100%|██████████| 19/19 [00:29<00:00,  1.54s/it]
+[vocals] 7/136 2026-10-05_01_未知_[BV16YHx6wEpX_p2].m4a (31.4s)
+2026-10-20 01:08:19,325 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-05_01_未知_[BV16YHx6wEpX_p7].m4a': Format not recognised.
+100%|██████████| 14/14 [00:21<00:00,  1.54s/it]
+[vocals] 8/136 2026-10-05_01_未知_[BV16YHx6wEpX_p7].m4a (22.8s)
+2026-10-20 01:08:42,110 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-05_02_唱唱歌~~-2026年10月05日20时_p03_P3-_唱唱歌~~-10月05日22点00分.m4a': Format not recognised.
+100%|██████████| 20/20 [00:30<00:00,  1.54s/it]
+[vocals] 9/136 2026-10-05_02_唱唱歌~~-2026年10月05日20时_p03_P3-_唱唱歌~~-10月05日22点00分.m4a (32.9s)
+2026-10-20 01:09:14,969 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-05_02_未知.m4a': Format not recognised.
+100%|██████████| 12/12 [00:18<00:00,  1.54s/it]
+[vocals] 10/136 2026-10-05_02_未知.m4a (19.9s)
+2026-10-20 01:09:34,861 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-05_02_未知_[BV16YHx6wEpX_p2].m4a': Format not recognised.
+100%|██████████| 13/13 [00:20<00:00,  1.54s/it]
+[vocals] 11/136 2026-10-05_02_未知_[BV16YHx6wEpX_p2].m4a (21.5s)
+2026-10-20 01:09:56,375 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-05_03_未知.m4a': Format not recognised.
+100%|██████████| 19/19 [00:29<00:00,  1.54s/it]
+[vocals] 12/136 2026-10-05_03_未知.m4a (31.1s)
+2026-10-20 01:10:27,495 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-05_03_未知_[BV16YHx6wEpX_p2].m4a': Format not recognised.
+100%|██████████| 27/27 [00:41<00:00,  1.55s/it]
+[vocals] 13/136 2026-10-05_03_未知_[BV16YHx6wEpX_p2].m4a (44.7s)
+2026-10-20 01:11:12,171 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-05_04_未知.m4a': Format not recognised.
+100%|██████████| 17/17 [00:26<00:00,  1.54s/it]
+[vocals] 14/136 2026-10-05_04_未知.m4a (27.9s)
+2026-10-20 01:11:40,102 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-05_05_未知.m4a': Format not recognised.
+100%|██████████| 19/19 [00:29<00:00,  1.54s/it]
+[vocals] 15/136 2026-10-05_05_未知.m4a (31.2s)
+2026-10-20 01:12:11,320 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-05_06_未知.m4a': Format not recognised.
+100%|██████████| 22/22 [00:33<00:00,  1.54s/it]
+[vocals] 16/136 2026-10-05_06_未知.m4a (36.5s)
+2026-10-20 01:12:47,800 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-08_01_👑迪士尼在逃公主驾到！🏰生命力爆棚！For_the_First_Time_in_Forever.m4a': Format not recognised.
+100%|██████████| 19/19 [00:29<00:00,  1.55s/it]
+[vocals] 17/136 2026-10-08_01_👑迪士尼在逃公主驾到！🏰生命力爆棚！For_the_First_Time_in_Forever.m4a (31.3s)
+2026-10-20 01:13:19,117 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-09_01_未知.m4a': Format not recognised.
+100%|██████████| 17/17 [00:26<00:00,  1.54s/it]
+[vocals] 18/136 2026-10-09_01_未知.m4a (27.9s)
+2026-10-20 01:13:47,016 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-09_01_未知_[BV1upp46QEfz_p2].m4a': Format not recognised.
+100%|██████████| 23/23 [00:35<00:00,  1.55s/it]
+[vocals] 19/136 2026-10-09_01_未知_[BV1upp46QEfz_p2].m4a (38.0s)
+2026-10-20 01:14:24,978 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-09_02_未知.m4a': Format not recognised.
+100%|██████████| 14/14 [00:21<00:00,  1.54s/it]
+[vocals] 20/136 2026-10-09_02_未知.m4a (23.0s)
+2026-10-20 01:14:47,998 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-09_02_未知_[BV1upp46QEfz_p2].m4a': Format not recognised.
+100%|██████████| 20/20 [00:30<00:00,  1.54s/it]
+[vocals] 21/136 2026-10-09_02_未知_[BV1upp46QEfz_p2].m4a (32.8s)
+2026-10-20 01:15:20,767 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-09_03_未知.m4a': Format not recognised.
+100%|██████████| 21/21 [00:32<00:00,  1.55s/it]
+[vocals] 22/136 2026-10-09_03_未知.m4a (35.0s)
+2026-10-20 01:15:55,785 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-09_03_未知_[BV1upp46QEfz_p2].m4a': Format not recognised.
+100%|██████████| 21/21 [00:32<00:00,  1.54s/it]
+[vocals] 23/136 2026-10-09_03_未知_[BV1upp46QEfz_p2].m4a (34.5s)
+2026-10-20 01:16:30,239 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-09_04_未知.m4a': Format not recognised.
+100%|██████████| 19/19 [00:29<00:00,  1.54s/it]
+[vocals] 24/136 2026-10-09_04_未知.m4a (31.4s)
+2026-10-20 01:17:01,677 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-09_04_未知_[BV1upp46QEfz_p2].m4a': Format not recognised.
+100%|██████████| 14/14 [00:21<00:00,  1.54s/it]
+[vocals] 25/136 2026-10-09_04_未知_[BV1upp46QEfz_p2].m4a (23.1s)
+2026-10-20 01:17:24,767 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-09_05_未知.m4a': Format not recognised.
+100%|██████████| 21/21 [00:32<00:00,  1.55s/it]
+[vocals] 26/136 2026-10-09_05_未知.m4a (34.7s)
+2026-10-20 01:17:59,442 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-09_05_未知_[BV1upp46QEfz_p2].m4a': Format not recognised.
+100%|██████████| 25/25 [00:38<00:00,  1.54s/it]
+[vocals] 27/136 2026-10-09_05_未知_[BV1upp46QEfz_p2].m4a (41.0s)
+2026-10-20 01:18:40,398 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-09_06_未知.m4a': Format not recognised.
+100%|██████████| 24/24 [00:36<00:00,  1.54s/it]
+[vocals] 28/136 2026-10-09_06_未知.m4a (39.3s)
+2026-10-20 01:19:19,709 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-09_06_未知_[BV1upp46QEfz_p2].m4a': Format not recognised.
+100%|██████████| 12/12 [00:18<00:00,  1.56s/it]
+[vocals] 29/136 2026-10-09_06_未知_[BV1upp46QEfz_p2].m4a (20.1s)
+2026-10-20 01:19:39,828 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-09_07_未知.m4a': Format not recognised.
+100%|██████████| 24/24 [00:36<00:00,  1.54s/it]
+[vocals] 30/136 2026-10-09_07_未知.m4a (39.3s)
+2026-10-20 01:20:19,147 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-10_01_未知.m4a': Format not recognised.
+100%|██████████| 13/13 [00:20<00:00,  1.54s/it]
+[vocals] 31/136 2026-10-10_01_未知.m4a (21.5s)
+2026-10-20 01:20:40,607 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-10_01_未知_[BV1Gmpu6rEP9_p6].m4a': Format not recognised.
+100%|██████████| 30/30 [00:46<00:00,  1.54s/it]
+[vocals] 32/136 2026-10-10_01_未知_[BV1Gmpu6rEP9_p6].m4a (49.0s)
+2026-10-20 01:21:29,593 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-10_02_未知.m4a': Format not recognised.
+100%|██████████| 12/12 [00:18<00:00,  1.54s/it]
+[vocals] 33/136 2026-10-10_02_未知.m4a (20.0s)
+2026-10-20 01:21:49,602 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-11_01_早！唱聊！！-2026年10月11日11时_p03_P3-_午！唱聊！！-10月11日13点40分.m4a': Format not recognised.
+100%|██████████| 17/17 [00:26<00:00,  1.54s/it]
+[vocals] 34/136 2026-10-11_01_早！唱聊！！-2026年10月11日11时_p03_P3-_午！唱聊！！-10月11日13点40分.m4a (27.9s)
+2026-10-20 01:22:17,483 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-11_01_未知.m4a': Format not recognised.
+100%|██████████| 24/24 [00:37<00:00,  1.56s/it]
+[vocals] 35/136 2026-10-11_01_未知.m4a (39.8s)
+2026-10-20 01:22:57,307 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-11_01_未知_[BV11dpj6EE8u_p1].m4a': Format not recognised.
+100%|██████████| 21/21 [00:32<00:00,  1.54s/it]
+[vocals] 36/136 2026-10-11_01_未知_[BV11dpj6EE8u_p1].m4a (34.6s)
+2026-10-20 01:23:31,955 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-11_01_未知_[BV11dpj6EE8u_p2].m4a': Format not recognised.
+100%|██████████| 16/16 [00:24<00:00,  1.54s/it]
+[vocals] 37/136 2026-10-11_01_未知_[BV11dpj6EE8u_p2].m4a (26.3s)
+2026-10-20 01:23:58,209 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-11_01_未知_[BV1rDpJ6JEwu_p2].m4a': Format not recognised.
+100%|██████████| 15/15 [00:23<00:00,  1.55s/it]
+[vocals] 38/136 2026-10-11_01_未知_[BV1rDpJ6JEwu_p2].m4a (24.9s)
+2026-10-20 01:24:23,079 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-11_01_未知_[BV1rDpJ6JEwu_p6].m4a': Format not recognised.
+100%|██████████| 20/20 [00:30<00:00,  1.54s/it]
+[vocals] 39/136 2026-10-11_01_未知_[BV1rDpJ6JEwu_p6].m4a (32.8s)
+2026-10-20 01:24:55,832 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-11_02_早！唱聊！！-2026年10月11日11时_p03_P3-_午！唱聊！！-10月11日13点40分.m4a': Format not recognised.
+100%|██████████| 18/18 [00:28<00:00,  1.57s/it]
+[vocals] 40/136 2026-10-11_02_早！唱聊！！-2026年10月11日11时_p03_P3-_午！唱聊！！-10月11日13点40分.m4a (30.0s)
+2026-10-20 01:25:25,851 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-11_02_未知.m4a': Format not recognised.
+100%|██████████| 18/18 [00:27<00:00,  1.54s/it]
+[vocals] 41/136 2026-10-11_02_未知.m4a (29.5s)
+2026-10-20 01:25:55,329 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-11_02_未知_[BV11dpj6EE8u_p1].m4a': Format not recognised.
+100%|██████████| 24/24 [00:36<00:00,  1.54s/it]
+[vocals] 42/136 2026-10-11_02_未知_[BV11dpj6EE8u_p1].m4a (39.3s)
+2026-10-20 01:26:34,629 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-11_02_未知_[BV11dpj6EE8u_p2].m4a': Format not recognised.
+100%|██████████| 20/20 [00:30<00:00,  1.54s/it]
+[vocals] 43/136 2026-10-11_02_未知_[BV11dpj6EE8u_p2].m4a (32.7s)
+2026-10-20 01:27:07,357 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-11_02_未知_[BV1rDpJ6JEwu_p2].m4a': Format not recognised.
+100%|██████████| 28/28 [00:43<00:00,  1.54s/it]
+[vocals] 44/136 2026-10-11_02_未知_[BV1rDpJ6JEwu_p2].m4a (45.6s)
+2026-10-20 01:27:52,947 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-11_03_未知.m4a': Format not recognised.
+100%|██████████| 13/13 [00:20<00:00,  1.54s/it]
+[vocals] 45/136 2026-10-11_03_未知.m4a (21.6s)
+2026-10-20 01:28:14,560 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-11_03_未知_[BV11dpj6EE8u_p1].m4a': Format not recognised.
+100%|██████████| 12/12 [00:18<00:00,  1.54s/it]
+[vocals] 46/136 2026-10-11_03_未知_[BV11dpj6EE8u_p1].m4a (19.8s)
+2026-10-20 01:28:34,354 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-11_03_未知_[BV11dpj6EE8u_p2].m4a': Format not recognised.
+100%|██████████| 17/17 [00:26<00:00,  1.55s/it]
+[vocals] 47/136 2026-10-11_03_未知_[BV11dpj6EE8u_p2].m4a (28.0s)
+2026-10-20 01:29:02,360 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-11_03_未知_[BV1rDpJ6JEwu_p2].m4a': Format not recognised.
+100%|██████████| 15/15 [00:23<00:00,  1.54s/it]
+[vocals] 48/136 2026-10-11_03_未知_[BV1rDpJ6JEwu_p2].m4a (24.6s)
+2026-10-20 01:29:27,005 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-11_04_未知.m4a': Format not recognised.
+100%|██████████| 18/18 [00:27<00:00,  1.54s/it]
+[vocals] 49/136 2026-10-11_04_未知.m4a (29.9s)
+2026-10-20 01:29:56,867 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-11_04_未知_[BV11dpj6EE8u_p1].m4a': Format not recognised.
+100%|██████████| 14/14 [00:21<00:00,  1.54s/it]
+[vocals] 50/136 2026-10-11_04_未知_[BV11dpj6EE8u_p1].m4a (23.0s)
+2026-10-20 01:30:19,908 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-11_04_未知_[BV11dpj6EE8u_p2].m4a': Format not recognised.
+100%|██████████| 22/22 [00:34<00:00,  1.55s/it]
+[vocals] 51/136 2026-10-11_04_未知_[BV11dpj6EE8u_p2].m4a (36.1s)
+2026-10-20 01:30:56,007 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-11_05_未知.m4a': Format not recognised.
+100%|██████████| 22/22 [00:33<00:00,  1.54s/it]
+[vocals] 52/136 2026-10-11_05_未知.m4a (36.0s)
+2026-10-20 01:31:32,031 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-11_05_未知_[BV11dpj6EE8u_p2].m4a': Format not recognised.
+100%|██████████| 24/24 [00:36<00:00,  1.54s/it]
+[vocals] 53/136 2026-10-11_05_未知_[BV11dpj6EE8u_p2].m4a (39.2s)
+2026-10-20 01:32:11,243 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-11_06_未知.m4a': Format not recognised.
+100%|██████████| 16/16 [00:24<00:00,  1.54s/it]
+[vocals] 54/136 2026-10-11_06_未知.m4a (26.3s)
+2026-10-20 01:32:37,590 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-11_06_未知_[BV11dpj6EE8u_p2].m4a': Format not recognised.
+100%|██████████| 16/16 [00:24<00:00,  1.54s/it]
+[vocals] 55/136 2026-10-11_06_未知_[BV11dpj6EE8u_p2].m4a (26.2s)
+2026-10-20 01:33:03,797 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-11_07_未知.m4a': Format not recognised.
+100%|██████████| 18/18 [00:27<00:00,  1.55s/it]
+[vocals] 56/136 2026-10-11_07_未知.m4a (29.5s)
+2026-10-20 01:33:33,337 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-11_07_未知_[BV11dpj6EE8u_p2].m4a': Format not recognised.
+100%|██████████| 12/12 [00:18<00:00,  1.54s/it]
+[vocals] 57/136 2026-10-11_07_未知_[BV11dpj6EE8u_p2].m4a (19.8s)
+2026-10-20 01:33:53,136 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-11_08_未知.m4a': Format not recognised.
+100%|██████████| 19/19 [00:29<00:00,  1.56s/it]
+[vocals] 58/136 2026-10-11_08_未知.m4a (31.3s)
+2026-10-20 01:34:24,477 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-11_09_未知.m4a': Format not recognised.
+100%|██████████| 31/31 [00:47<00:00,  1.54s/it]
+[vocals] 59/136 2026-10-11_09_未知.m4a (50.4s)
+2026-10-20 01:35:14,927 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-13_01_未知.m4a': Format not recognised.
+100%|██████████| 20/20 [00:30<00:00,  1.54s/it]
+[vocals] 60/136 2026-10-13_01_未知.m4a (33.0s)
+2026-10-20 01:35:47,929 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-13_01_未知_[BV18cpq62E7c_p2].m4a': Format not recognised.
+100%|██████████| 18/18 [00:27<00:00,  1.55s/it]
+[vocals] 61/136 2026-10-13_01_未知_[BV18cpq62E7c_p2].m4a (29.8s)
+2026-10-20 01:36:17,712 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-13_01_未知_[BV18cpq62E7c_p3].m4a': Format not recognised.
+100%|██████████| 24/24 [00:36<00:00,  1.54s/it]
+[vocals] 62/136 2026-10-13_01_未知_[BV18cpq62E7c_p3].m4a (39.3s)
+2026-10-20 01:36:57,054 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-13_01_未知_[BV18cpq62E7c_p4].m4a': Format not recognised.
+100%|██████████| 12/12 [00:18<00:00,  1.54s/it]
+[vocals] 63/136 2026-10-13_01_未知_[BV18cpq62E7c_p4].m4a (19.8s)
+2026-10-20 01:37:16,837 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-13_01_歌！-2026年10月13日20时_p05_P5-_歌！-10月14日00点55分.m4a': Format not recognised.
+100%|██████████| 15/15 [00:23<00:00,  1.54s/it]
+[vocals] 64/136 2026-10-13_01_歌！-2026年10月13日20时_p05_P5-_歌！-10月14日00点55分.m4a (24.7s)
+2026-10-20 01:37:41,486 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-13_02_未知.m4a': Format not recognised.
+100%|██████████| 22/22 [00:33<00:00,  1.54s/it]
+[vocals] 65/136 2026-10-13_02_未知.m4a (36.0s)
+2026-10-20 01:38:17,462 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-13_02_未知_[BV18cpq62E7c_p2].m4a': Format not recognised.
+100%|██████████| 20/20 [00:30<00:00,  1.54s/it]
+[vocals] 66/136 2026-10-13_02_未知_[BV18cpq62E7c_p2].m4a (32.7s)
+2026-10-20 01:38:50,211 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-13_02_未知_[BV18cpq62E7c_p3].m4a': Format not recognised.
+100%|██████████| 22/22 [00:34<00:00,  1.56s/it]
+[vocals] 67/136 2026-10-13_02_未知_[BV18cpq62E7c_p3].m4a (36.4s)
+2026-10-20 01:39:26,582 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-13_02_未知_[BV18cpq62E7c_p4].m4a': Format not recognised.
+100%|██████████| 23/23 [00:35<00:00,  1.54s/it]
+[vocals] 68/136 2026-10-13_02_未知_[BV18cpq62E7c_p4].m4a (37.6s)
+2026-10-20 01:40:04,141 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-13_03_未知.m4a': Format not recognised.
+100%|██████████| 12/12 [00:18<00:00,  1.54s/it]
+[vocals] 69/136 2026-10-13_03_未知.m4a (19.8s)
+2026-10-20 01:40:23,933 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-13_03_未知_[BV18cpq62E7c_p3].m4a': Format not recognised.
+100%|██████████| 12/12 [00:18<00:00,  1.55s/it]
+[vocals] 70/136 2026-10-13_03_未知_[BV18cpq62E7c_p3].m4a (20.1s)
+2026-10-20 01:40:44,026 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-13_03_未知_[BV18cpq62E7c_p4].m4a': Format not recognised.
+100%|██████████| 15/15 [00:23<00:00,  1.54s/it]
+[vocals] 71/136 2026-10-13_03_未知_[BV18cpq62E7c_p4].m4a (24.7s)
+2026-10-20 01:41:08,707 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-13_04_未知.m4a': Format not recognised.
+100%|██████████| 18/18 [00:27<00:00,  1.54s/it]
+[vocals] 72/136 2026-10-13_04_未知.m4a (29.5s)
+2026-10-20 01:41:38,223 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-13_04_未知_[BV18cpq62E7c_p3].m4a': Format not recognised.
+100%|██████████| 20/20 [00:30<00:00,  1.54s/it]
+[vocals] 73/136 2026-10-13_04_未知_[BV18cpq62E7c_p3].m4a (32.7s)
+2026-10-20 01:42:10,908 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-14_01_未知.m4a': Format not recognised.
+100%|██████████| 11/11 [00:16<00:00,  1.54s/it]
+[vocals] 74/136 2026-10-14_01_未知.m4a (18.3s)
+2026-10-20 01:42:29,169 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-14_01_未知_[BV1vQpm6pEJc_p2].m4a': Format not recognised.
+100%|██████████| 23/23 [00:35<00:00,  1.56s/it]
+[vocals] 75/136 2026-10-14_01_未知_[BV1vQpm6pEJc_p2].m4a (38.3s)
+2026-10-20 01:43:07,427 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-14_01_未知_[BV1vQpm6pEJc_p3].m4a': Format not recognised.
+100%|██████████| 8/8 [00:12<00:00,  1.54s/it]
+[vocals] 76/136 2026-10-14_01_未知_[BV1vQpm6pEJc_p3].m4a (13.3s)
+2026-10-20 01:43:20,755 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-14_01_未知_[BV1vQpm6pEJc_p6].m4a': Format not recognised.
+100%|██████████| 24/24 [00:36<00:00,  1.54s/it]
+[vocals] 77/136 2026-10-14_01_未知_[BV1vQpm6pEJc_p6].m4a (39.5s)
+2026-10-20 01:44:00,284 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-14_02_未知.m4a': Format not recognised.
+100%|██████████| 23/23 [00:35<00:00,  1.54s/it]
+[vocals] 78/136 2026-10-14_02_未知.m4a (37.7s)
+2026-10-20 01:44:37,989 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-14_03_未知.m4a': Format not recognised.
+100%|██████████| 44/44 [01:07<00:00,  1.54s/it]
+[vocals] 79/136 2026-10-14_03_未知.m4a (71.7s)
+2026-10-20 01:45:49,648 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-14_04_未知.m4a': Format not recognised.
+100%|██████████| 22/22 [00:34<00:00,  1.55s/it]
+[vocals] 80/136 2026-10-14_04_未知.m4a (36.1s)
+2026-10-20 01:46:25,759 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-14_05_未知.m4a': Format not recognised.
+100%|██████████| 23/23 [00:35<00:00,  1.55s/it]
+[vocals] 81/136 2026-10-14_05_未知.m4a (38.0s)
+2026-10-20 01:47:03,783 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-14_06_未知.m4a': Format not recognised.
+100%|██████████| 18/18 [00:27<00:00,  1.54s/it]
+[vocals] 82/136 2026-10-14_06_未知.m4a (29.5s)
+2026-10-20 01:47:33,289 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-14_07_未知.m4a': Format not recognised.
+100%|██████████| 12/12 [00:18<00:00,  1.54s/it]
+[vocals] 83/136 2026-10-14_07_未知.m4a (19.8s)
+2026-10-20 01:47:53,082 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-16_01_未知.m4a': Format not recognised.
+100%|██████████| 18/18 [00:27<00:00,  1.54s/it]
+[vocals] 84/136 2026-10-16_01_未知.m4a (29.7s)
+2026-10-20 01:48:22,735 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-16_01_未知_[BV1A5Jt6KEeS_p2].m4a': Format not recognised.
+100%|██████████| 17/17 [00:26<00:00,  1.55s/it]
+[vocals] 85/136 2026-10-16_01_未知_[BV1A5Jt6KEeS_p2].m4a (28.2s)
+2026-10-20 01:48:50,922 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-16_01_未知_[BV1A5Jt6KEeS_p4].m4a': Format not recognised.
+100%|██████████| 9/9 [00:13<00:00,  1.54s/it]
+[vocals] 86/136 2026-10-16_01_未知_[BV1A5Jt6KEeS_p4].m4a (14.8s)
+2026-10-20 01:49:05,735 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-16_01_歌杂充电中~-2026年10月16日20时_p03_P3-_歌杂充电中~-10月16日22点02分.m4a': Format not recognised.
+100%|██████████| 17/17 [00:26<00:00,  1.54s/it]
+[vocals] 87/136 2026-10-16_01_歌杂充电中~-2026年10月16日20时_p03_P3-_歌杂充电中~-10月16日22点02分.m4a (27.8s)
+2026-10-20 01:49:33,494 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-16_02_未知.m4a': Format not recognised.
+100%|██████████| 16/16 [00:24<00:00,  1.54s/it]
+[vocals] 88/136 2026-10-16_02_未知.m4a (26.4s)
+2026-10-20 01:49:59,927 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-16_02_未知_[BV1A5Jt6KEeS_p2].m4a': Format not recognised.
+100%|██████████| 12/12 [00:18<00:00,  1.55s/it]
+[vocals] 89/136 2026-10-16_02_未知_[BV1A5Jt6KEeS_p2].m4a (20.3s)
+2026-10-20 01:50:20,208 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-16_02_未知_[BV1A5Jt6KEeS_p4].m4a': Format not recognised.
+100%|██████████| 19/19 [00:29<00:00,  1.54s/it]
+[vocals] 90/136 2026-10-16_02_未知_[BV1A5Jt6KEeS_p4].m4a (31.1s)
+2026-10-20 01:50:51,280 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-16_03_未知.m4a': Format not recognised.
+100%|██████████| 13/13 [00:20<00:00,  1.54s/it]
+[vocals] 91/136 2026-10-16_03_未知.m4a (21.5s)
+2026-10-20 01:51:12,827 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-16_03_未知_[BV1A5Jt6KEeS_p2].m4a': Format not recognised.
+100%|██████████| 16/16 [00:24<00:00,  1.54s/it]
+[vocals] 92/136 2026-10-16_03_未知_[BV1A5Jt6KEeS_p2].m4a (26.2s)
+2026-10-20 01:51:39,066 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-16_03_未知_[BV1A5Jt6KEeS_p4].m4a': Format not recognised.
+100%|██████████| 12/12 [00:18<00:00,  1.54s/it]
+[vocals] 93/136 2026-10-16_03_未知_[BV1A5Jt6KEeS_p4].m4a (19.9s)
+2026-10-20 01:51:58,930 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-16_04_未知.m4a': Format not recognised.
+100%|██████████| 12/12 [00:18<00:00,  1.54s/it]
+[vocals] 94/136 2026-10-16_04_未知.m4a (20.1s)
+2026-10-20 01:52:18,995 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-16_05_未知.m4a': Format not recognised.
+100%|██████████| 26/26 [00:40<00:00,  1.54s/it]
+[vocals] 95/136 2026-10-16_05_未知.m4a (42.6s)
+2026-10-20 01:53:01,562 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-17_01_未知.m4a': Format not recognised.
+100%|██████████| 18/18 [00:27<00:00,  1.54s/it]
+[vocals] 96/136 2026-10-17_01_未知.m4a (29.5s)
+2026-10-20 01:53:31,072 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-17_01_未知_[BV1kSJv6sEmB_p2].m4a': Format not recognised.
+100%|██████████| 9/9 [00:13<00:00,  1.55s/it]
+[vocals] 97/136 2026-10-17_01_未知_[BV1kSJv6sEmB_p2].m4a (14.9s)
+2026-10-20 01:53:45,974 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-17_01_未知_[BV1kSJv6sEmB_p3].m4a': Format not recognised.
+100%|██████████| 17/17 [00:26<00:00,  1.54s/it]
+[vocals] 98/136 2026-10-17_01_未知_[BV1kSJv6sEmB_p3].m4a (28.0s)
+2026-10-20 01:54:14,001 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-17_01_点歌回狂欢周末~！-2026年10月17日20时_p04_P4-_点歌回狂欢周末~！-10月17日22点58分.m4a': Format not recognised.
+100%|██████████| 17/17 [00:26<00:00,  1.54s/it]
+[vocals] 99/136 2026-10-17_01_点歌回狂欢周末~！-2026年10月17日20时_p04_P4-_点歌回狂欢周末~！-10月17日22点58分.m4a (27.8s)
+2026-10-20 01:54:41,836 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-17_02_未知.m4a': Format not recognised.
+100%|██████████| 25/25 [00:38<00:00,  1.54s/it]
+[vocals] 100/136 2026-10-17_02_未知.m4a (40.8s)
+2026-10-20 01:55:22,604 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-17_02_未知_[BV1kSJv6sEmB_p2].m4a': Format not recognised.
+100%|██████████| 14/14 [00:21<00:00,  1.54s/it]
+[vocals] 101/136 2026-10-17_02_未知_[BV1kSJv6sEmB_p2].m4a (23.0s)
+2026-10-20 01:55:45,641 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-17_02_未知_[BV1kSJv6sEmB_p3].m4a': Format not recognised.
+100%|██████████| 26/26 [00:40<00:00,  1.54s/it]
+[vocals] 102/136 2026-10-17_02_未知_[BV1kSJv6sEmB_p3].m4a (42.4s)
+2026-10-20 01:56:28,011 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-17_03_未知.m4a': Format not recognised.
+100%|██████████| 15/15 [00:23<00:00,  1.55s/it]
+[vocals] 103/136 2026-10-17_03_未知.m4a (24.9s)
+2026-10-20 01:56:52,935 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-17_03_未知_[BV1kSJv6sEmB_p2].m4a': Format not recognised.
+100%|██████████| 21/21 [00:32<00:00,  1.54s/it]
+[vocals] 104/136 2026-10-17_03_未知_[BV1kSJv6sEmB_p2].m4a (34.4s)
+2026-10-20 01:57:27,376 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-17_03_未知_[BV1kSJv6sEmB_p3].m4a': Format not recognised.
+100%|██████████| 18/18 [00:27<00:00,  1.54s/it]
+[vocals] 105/136 2026-10-17_03_未知_[BV1kSJv6sEmB_p3].m4a (29.6s)
+2026-10-20 01:57:56,997 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-17_04_未知.m4a': Format not recognised.
+100%|██████████| 19/19 [00:29<00:00,  1.54s/it]
+[vocals] 106/136 2026-10-17_04_未知.m4a (31.1s)
+2026-10-20 01:58:28,096 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-17_04_未知_[BV1kSJv6sEmB_p2].m4a': Format not recognised.
+100%|██████████| 22/22 [00:33<00:00,  1.54s/it]
+[vocals] 107/136 2026-10-17_04_未知_[BV1kSJv6sEmB_p2].m4a (36.1s)
+2026-10-20 01:59:04,192 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-17_04_未知_[BV1kSJv6sEmB_p3].m4a': Format not recognised.
+100%|██████████| 22/22 [00:33<00:00,  1.54s/it]
+[vocals] 108/136 2026-10-17_04_未知_[BV1kSJv6sEmB_p3].m4a (36.0s)
+2026-10-20 01:59:40,214 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-17_05_未知.m4a': Format not recognised.
+100%|██████████| 23/23 [00:35<00:00,  1.56s/it]
+[vocals] 109/136 2026-10-17_05_未知.m4a (38.3s)
+2026-10-20 02:00:18,489 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-17_05_未知_[BV1kSJv6sEmB_p2].m4a': Format not recognised.
+100%|██████████| 12/12 [00:18<00:00,  1.55s/it]
+[vocals] 110/136 2026-10-17_05_未知_[BV1kSJv6sEmB_p2].m4a (19.9s)
+2026-10-20 02:00:38,358 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-17_05_未知_[BV1kSJv6sEmB_p3].m4a': Format not recognised.
+100%|██████████| 15/15 [00:23<00:00,  1.55s/it]
+[vocals] 111/136 2026-10-17_05_未知_[BV1kSJv6sEmB_p3].m4a (24.8s)
+2026-10-20 02:01:03,187 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-17_06_未知.m4a': Format not recognised.
+100%|██████████| 13/13 [00:20<00:00,  1.54s/it]
+[vocals] 112/136 2026-10-17_06_未知.m4a (21.5s)
+2026-10-20 02:01:24,697 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-17_06_未知_[BV1kSJv6sEmB_p3].m4a': Format not recognised.
+100%|██████████| 16/16 [00:24<00:00,  1.54s/it]
+[vocals] 113/136 2026-10-17_06_未知_[BV1kSJv6sEmB_p3].m4a (26.3s)
+2026-10-20 02:01:50,972 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-17_07_未知.m4a': Format not recognised.
+100%|██████████| 31/31 [00:47<00:00,  1.54s/it]
+[vocals] 114/136 2026-10-17_07_未知.m4a (50.5s)
+2026-10-20 02:02:41,503 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-17_07_未知_[BV1kSJv6sEmB_p3].m4a': Format not recognised.
+100%|██████████| 19/19 [00:29<00:00,  1.55s/it]
+[vocals] 115/136 2026-10-17_07_未知_[BV1kSJv6sEmB_p3].m4a (31.3s)
+2026-10-20 02:03:12,772 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-17_08_未知.m4a': Format not recognised.
+100%|██████████| 16/16 [00:24<00:00,  1.54s/it]
+[vocals] 116/136 2026-10-17_08_未知.m4a (26.5s)
+2026-10-20 02:03:39,309 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-17_08_未知_[BV1kSJv6sEmB_p3].m4a': Format not recognised.
+100%|██████████| 21/21 [00:32<00:00,  1.54s/it]
+[vocals] 117/136 2026-10-17_08_未知_[BV1kSJv6sEmB_p3].m4a (34.7s)
+2026-10-20 02:04:13,965 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-18_01_未知.m4a': Format not recognised.
+100%|██████████| 25/25 [00:38<00:00,  1.55s/it]
+[vocals] 118/136 2026-10-18_01_未知.m4a (41.2s)
+2026-10-20 02:04:55,158 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-18_01_未知_[BV1sRnV6vE5w_p2].m4a': Format not recognised.
+100%|██████████| 7/7 [00:10<00:00,  1.54s/it]
+[vocals] 119/136 2026-10-18_01_未知_[BV1sRnV6vE5w_p2].m4a (11.6s)
+2026-10-20 02:05:06,773 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-18_01_未知_[BV1sRnV6vE5w_p3].m4a': Format not recognised.
+100%|██████████| 11/11 [00:16<00:00,  1.54s/it]
+[vocals] 120/136 2026-10-18_01_未知_[BV1sRnV6vE5w_p3].m4a (18.2s)
+2026-10-20 02:05:24,927 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-18_01_未知_[BV1sRnV6vE5w_p4].m4a': Format not recognised.
+100%|██████████| 23/23 [00:35<00:00,  1.55s/it]
+[vocals] 121/136 2026-10-18_01_未知_[BV1sRnV6vE5w_p4].m4a (37.8s)
+2026-10-20 02:06:02,690 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-18_02_未知.m4a': Format not recognised.
+100%|██████████| 21/21 [00:32<00:00,  1.54s/it]
+[vocals] 122/136 2026-10-18_02_未知.m4a (34.4s)
+2026-10-20 02:06:37,052 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-18_02_未知_[BV1sRnV6vE5w_p2].m4a': Format not recognised.
+100%|██████████| 33/33 [00:50<00:00,  1.54s/it]
+[vocals] 123/136 2026-10-18_02_未知_[BV1sRnV6vE5w_p2].m4a (53.6s)
+2026-10-20 02:07:30,681 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-18_02_未知_[BV1sRnV6vE5w_p3].m4a': Format not recognised.
+100%|██████████| 22/22 [00:33<00:00,  1.54s/it]
+[vocals] 124/136 2026-10-18_02_未知_[BV1sRnV6vE5w_p3].m4a (35.9s)
+2026-10-20 02:08:06,626 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-18_02_未知_[BV1sRnV6vE5w_p4].m4a': Format not recognised.
+100%|██████████| 20/20 [00:30<00:00,  1.54s/it]
+[vocals] 125/136 2026-10-18_02_未知_[BV1sRnV6vE5w_p4].m4a (32.8s)
+2026-10-20 02:08:39,470 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-18_03_未知.m4a': Format not recognised.
+100%|██████████| 19/19 [00:29<00:00,  1.54s/it]
+[vocals] 126/136 2026-10-18_03_未知.m4a (31.1s)
+2026-10-20 02:09:10,550 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-18_03_未知_[BV1sRnV6vE5w_p3].m4a': Format not recognised.
+100%|██████████| 24/24 [00:37<00:00,  1.55s/it]
+[vocals] 127/136 2026-10-18_03_未知_[BV1sRnV6vE5w_p3].m4a (39.4s)
+2026-10-20 02:09:49,951 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-18_03_未知_[BV1sRnV6vE5w_p4].m4a': Format not recognised.
+100%|██████████| 22/22 [00:33<00:00,  1.54s/it]
+[vocals] 128/136 2026-10-18_03_未知_[BV1sRnV6vE5w_p4].m4a (36.2s)
+2026-10-20 02:10:26,156 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-18_04_未知.m4a': Format not recognised.
+100%|██████████| 14/14 [00:21<00:00,  1.57s/it]
+[vocals] 129/136 2026-10-18_04_未知.m4a (23.3s)
+2026-10-20 02:10:49,502 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-18_04_未知_[BV1sRnV6vE5w_p3].m4a': Format not recognised.
+100%|██████████| 29/29 [00:44<00:00,  1.54s/it]
+[vocals] 130/136 2026-10-18_04_未知_[BV1sRnV6vE5w_p3].m4a (47.2s)
+2026-10-20 02:11:36,668 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-18_05_未知.m4a': Format not recognised.
+100%|██████████| 20/20 [00:30<00:00,  1.54s/it]
+[vocals] 131/136 2026-10-18_05_未知.m4a (32.7s)
+2026-10-20 02:12:09,360 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-18_05_未知_[BV1sRnV6vE5w_p3].m4a': Format not recognised.
+100%|██████████| 15/15 [00:23<00:00,  1.54s/it]
+[vocals] 132/136 2026-10-18_05_未知_[BV1sRnV6vE5w_p3].m4a (24.8s)
+2026-10-20 02:12:34,138 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-18_06_未知.m4a': Format not recognised.
+100%|██████████| 10/10 [00:15<00:00,  1.56s/it]
+[vocals] 133/136 2026-10-18_06_未知.m4a (16.7s)
+2026-10-20 02:12:50,878 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-18_07_未知.m4a': Format not recognised.
+100%|██████████| 34/34 [00:52<00:00,  1.54s/it]
+[vocals] 134/136 2026-10-18_07_未知.m4a (55.2s)
+2026-10-20 02:13:46,085 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-18_08_未知.m4a': Format not recognised.
+100%|██████████| 21/21 [00:32<00:00,  1.54s/it]
+[vocals] 135/136 2026-10-18_08_未知.m4a (34.4s)
+2026-10-20 02:14:20,482 - WARNING - common_separator - Could not read audio file info, defaulting to 16-bit output: Error opening '/root/autodl-tmp/speakers/pheebie/work/0_input/2026-10-18_09_未知.m4a': Format not recognised.
+100%|██████████| 13/13 [00:20<00:00,  1.54s/it]
+[vocals] 136/136 2026-10-18_09_未知.m4a (21.6s)
+[dereverb] dereverb_bs_roformer_anvuew_sdr_22.5050.ckpt: 0 done, 185 to process
+Failed to load libcublasLt.so.13: libcublasLt.so.13: cannot open shared object file: No such file or directory
+Failed to load libcublas.so.13: libcublas.so.13: cannot open shared object file: No such file or directory
+Failed to load libnvrtc.so.13: libnvrtc.so.13: cannot open shared object file: No such file or directory
+Failed to load libcufft.so.12: libcufft.so.12: cannot open shared object file: No such file or directory
+Failed to load libcudart.so.13: libcudart.so.13: cannot open shared object file: No such file or directory
+Please follow https://onnxruntime.ai/docs/install/#cuda-and-cudnn to install CUDA.
+100%|██████████| 34/34 [00:10<00:00,  3.31it/s]
+[dereverb] 1/185 2025-10-02_01_mua！誓见！！！！.wav (11.5s)
+100%|██████████| 36/36 [00:10<00:00,  3.32it/s]
+[dereverb] 2/185 2025-10-31_01_元气少女猫给你一jio！《下等马》下等猫翻唱！.wav (12.1s)
+100%|██████████| 35/35 [00:10<00:00,  3.32it/s]
+[dereverb] 3/185 2025-11-18_01_10万赞催更的「里表情人」完整版来啦！！！.wav (11.6s)
+100%|██████████| 32/32 [00:09<00:00,  3.32it/s]
+[dereverb] 4/185 2026-01-12_01_甜妹狂气地唱了Don't_Lose_Ur_Head！.wav (10.6s)
+100%|██████████| 52/52 [00:15<00:00,  3.32it/s]
+[dereverb] 5/185 2026-02-17_01_《吉祥话》新年为您送吉祥！甜帅萌御全都有.wav (17.5s)
+100%|██████████| 47/47 [00:14<00:00,  3.32it/s]
+[dereverb] 6/185 2026-02-28_01_人，上学上班辛苦了！宇宙无敌超元气翻唱《屑屑》！！.wav (15.2s)
+100%|██████████| 26/26 [00:07<00:00,  3.32it/s]
+[dereverb] 7/185 2026-03-07_01_《音乐之声》经典音乐剧唱段🎶My_Favourite_Things❤️🥺我心爱的事物.wav (8.8s)
+100%|██████████| 46/46 [00:13<00:00,  3.32it/s]
+[dereverb] 8/185 2026-03-14_01_劲爽怒音！原key高音甜美爆炸💥___プロポーズ_翻唱.wav (14.9s)
+100%|██████████| 45/45 [00:13<00:00,  3.32it/s]
+[dereverb] 9/185 2026-03-28_01_香甜清爽如气泡水般的女声🥂蜜月アン・ドゥ・トロワ_DATEKEN_feat.鏡音リン翻唱💖Un・Deux・Trois🍾.wav (14.6s)
+100%|██████████| 36/36 [00:10<00:00,  3.32it/s]
+[dereverb] 10/185 2026-05-01_01_音色暴击💥！清脆灵动的薄荷糖_翻唱！🧊.wav (11.7s)
+100%|██████████| 23/23 [00:06<00:00,  3.32it/s]
+[dereverb] 11/185 2026-05-24_01_表现力炸爆炸💥超带感病娇Loveit__(feat._LOLUET)翻唱❤️.wav (7.6s)
+100%|██████████| 36/36 [00:10<00:00,  3.28it/s]
+[dereverb] 12/185 2026-06-06_01_🦋_“你的心绪或许已存活千年”原KEY翻唱.wav (11.9s)
+100%|██████████| 54/54 [00:16<00:00,  3.30it/s]
+[dereverb] 13/185 2026-06-28_01_罗密欧与辛德瑞拉_ロミオとシンデレラ（弟之姉ver.）COVER.wav (18.0s)
+100%|██████████| 32/32 [00:09<00:00,  3.32it/s]
+[dereverb] 14/185 2026-09-01_01_⚠️绝对震撼头声尖叫！💥请在一天阳气最足的时候打开这个视频👻.wav (10.4s)
+100%|██████████| 38/38 [00:11<00:00,  3.32it/s]
+[dereverb] 15/185 2026-09-10_01_🩷泡泡🫧顶级阳角少女音翻唱撒娇神曲☀️吉他.ver.wav (12.4s)
+100%|██████████| 33/33 [00:09<00:00,  3.32it/s]
+[dereverb] 16/185 2026-09-30_01_未知.wav (10.8s)
+100%|██████████| 44/44 [00:13<00:00,  3.32it/s]
+[dereverb] 17/185 2026-09-30_01_水洼上的轮舞.wav (14.7s)
+100%|██████████| 24/24 [00:07<00:00,  3.32it/s]
+[dereverb] 18/185 2026-09-30_02_未知.wav (8.2s)
+100%|██████████| 42/42 [00:12<00:00,  3.24it/s]
+[dereverb] 19/185 2026-10-02_01_唱唱歌~~-2026年10月02日20时_p06_P6-_唱唱歌~~-10月03日01点01分.wav (14.0s)
+100%|██████████| 33/33 [00:09<00:00,  3.32it/s]
+[dereverb] 20/185 2026-10-02_01_未知.wav (10.9s)
+100%|██████████| 39/39 [00:11<00:00,  3.25it/s]
+[dereverb] 21/185 2026-10-02_01_未知_[BV1RmaU6jEXF_p2].wav (13.0s)
+100%|██████████| 27/27 [00:08<00:00,  3.29it/s]
+[dereverb] 22/185 2026-10-02_01_未知_[BV1RmaU6jEXF_p3].wav (9.0s)
+100%|██████████| 30/30 [00:09<00:00,  3.32it/s]
+[dereverb] 23/185 2026-10-02_01_未知_[BV1RmaU6jEXF_p4].wav (9.8s)
+100%|██████████| 41/41 [00:12<00:00,  3.32it/s]
+[dereverb] 24/185 2026-10-02_01_未知_[BV1RmaU6jEXF_p5].wav (13.3s)
+100%|██████████| 42/42 [00:12<00:00,  3.32it/s]
+[dereverb] 25/185 2026-10-02_02_未知.wav (13.7s)
+100%|██████████| 22/22 [00:06<00:00,  3.32it/s]
+[dereverb] 26/185 2026-10-02_02_未知_[BV1RmaU6jEXF_p2].wav (7.2s)
+100%|██████████| 49/49 [00:14<00:00,  3.32it/s]
+[dereverb] 27/185 2026-10-02_02_未知_[BV1RmaU6jEXF_p3].wav (15.9s)
+100%|██████████| 30/30 [00:09<00:00,  3.24it/s]
+[dereverb] 28/185 2026-10-02_02_未知_[BV1RmaU6jEXF_p4].wav (10.0s)
+100%|██████████| 39/39 [00:11<00:00,  3.30it/s]
+[dereverb] 29/185 2026-10-02_02_未知_[BV1RmaU6jEXF_p5].wav (12.9s)
+100%|██████████| 40/40 [00:12<00:00,  3.32it/s]
+[dereverb] 30/185 2026-10-02_03_未知.wav (13.2s)
+100%|██████████| 37/37 [00:11<00:00,  3.29it/s]
+[dereverb] 31/185 2026-10-02_03_未知_[BV1RmaU6jEXF_p3].wav (12.3s)
+100%|██████████| 26/26 [00:07<00:00,  3.25it/s]
+[dereverb] 32/185 2026-10-02_03_未知_[BV1RmaU6jEXF_p4].wav (8.7s)
+100%|██████████| 48/48 [00:14<00:00,  3.32it/s]
+[dereverb] 33/185 2026-10-02_03_未知_[BV1RmaU6jEXF_p5].wav (15.7s)
+100%|██████████| 46/46 [00:13<00:00,  3.32it/s]
+[dereverb] 34/185 2026-10-02_04_未知.wav (15.5s)
+100%|██████████| 111/111 [00:33<00:00,  3.29it/s]
+[dereverb] 35/185 2026-10-02_04_未知_[BV1RmaU6jEXF_p5].wav (36.8s)
+100%|██████████| 41/41 [00:12<00:00,  3.30it/s]
+[dereverb] 36/185 2026-10-02_05_未知.wav (13.7s)
+100%|██████████| 43/43 [00:13<00:00,  3.26it/s]
+[dereverb] 37/185 2026-10-02_06_未知.wav (14.2s)
+100%|██████████| 58/58 [00:17<00:00,  3.32it/s]
+[dereverb] 38/185 2026-10-02_07_未知.wav (19.2s)
+100%|██████████| 51/51 [00:15<00:00,  3.24it/s]
+[dereverb] 39/185 2026-10-03_01_未知.wav (17.2s)
+100%|██████████| 91/91 [00:27<00:00,  3.32it/s]
+[dereverb] 40/185 2026-10-03_01_未知_[BV1Q2Hv65Eft_p2].wav (29.9s)
+100%|██████████| 64/64 [00:19<00:00,  3.32it/s]
+[dereverb] 41/185 2026-10-03_02_未知.wav (21.0s)
+100%|██████████| 34/34 [00:10<00:00,  3.32it/s]
+[dereverb] 42/185 2026-10-03_02_未知_[BV1Q2Hv65Eft_p2].wav (11.1s)
+100%|██████████| 41/41 [00:12<00:00,  3.32it/s]
+[dereverb] 43/185 2026-10-03_03_未知.wav (13.4s)
+100%|██████████| 24/24 [00:07<00:00,  3.30it/s]
+[dereverb] 44/185 2026-10-03_03_未知_[BV1Q2Hv65Eft_p2].wav (8.0s)
+100%|██████████| 41/41 [00:12<00:00,  3.32it/s]
+[dereverb] 45/185 2026-10-03_04_未知.wav (13.3s)
+100%|██████████| 32/32 [00:09<00:00,  3.32it/s]
+[dereverb] 46/185 2026-10-03_04_未知_[BV1Q2Hv65Eft_p2].wav (10.4s)
+100%|██████████| 55/55 [00:16<00:00,  3.31it/s]
+[dereverb] 47/185 2026-10-03_05_未知.wav (18.1s)
+100%|██████████| 24/24 [00:07<00:00,  3.32it/s]
+[dereverb] 48/185 2026-10-03_05_未知_[BV1Q2Hv65Eft_p2].wav (7.9s)
+100%|██████████| 42/42 [00:12<00:00,  3.32it/s]
+[dereverb] 49/185 2026-10-03_06_未知.wav (13.7s)
+100%|██████████| 42/42 [00:12<00:00,  3.27it/s]
+[dereverb] 50/185 2026-10-03_06_未知_[BV1Q2Hv65Eft_p2].wav (14.1s)
+100%|██████████| 27/27 [00:08<00:00,  3.20it/s]
+[dereverb] 51/185 2026-10-03_07_未知.wav (9.1s)
+100%|██████████| 39/39 [00:12<00:00,  3.18it/s]
+[dereverb] 52/185 2026-10-03_07_未知_[BV1Q2Hv65Eft_p2].wav (13.4s)
+100%|██████████| 38/38 [00:11<00:00,  3.31it/s]
+[dereverb] 53/185 2026-10-03_08_未知.wav (12.4s)
+100%|██████████| 30/30 [00:09<00:00,  3.32it/s]
+[dereverb] 54/185 2026-10-05_01_唱唱歌~~-2026年10月05日20时_p03_P3-_唱唱歌~~-10月05日22点00分.wav (9.8s)
+100%|██████████| 32/32 [00:09<00:00,  3.31it/s]
+[dereverb] 55/185 2026-10-05_01_未知.wav (10.4s)
+100%|██████████| 42/42 [00:12<00:00,  3.30it/s]
+[dereverb] 56/185 2026-10-05_01_未知_[BV16YHx6wEpX_p2].wav (13.7s)
+100%|██████████| 31/31 [00:09<00:00,  3.32it/s]
+[dereverb] 57/185 2026-10-05_01_未知_[BV16YHx6wEpX_p7].wav (10.1s)
+100%|██████████| 44/44 [00:13<00:00,  3.32it/s]
+[dereverb] 58/185 2026-10-05_02_唱唱歌~~-2026年10月05日20时_p03_P3-_唱唱歌~~-10月05日22点00分.wav (14.3s)
+100%|██████████| 26/26 [00:07<00:00,  3.32it/s]
+[dereverb] 59/185 2026-10-05_02_未知.wav (8.6s)
+100%|██████████| 29/29 [00:08<00:00,  3.31it/s]
+[dereverb] 60/185 2026-10-05_02_未知_[BV16YHx6wEpX_p2].wav (9.5s)
+100%|██████████| 41/41 [00:12<00:00,  3.32it/s]
+[dereverb] 61/185 2026-10-05_03_未知.wav (13.9s)
+100%|██████████| 59/59 [00:18<00:00,  3.19it/s]
+[dereverb] 62/185 2026-10-05_03_未知_[BV16YHx6wEpX_p2].wav (20.4s)
+100%|██████████| 37/37 [00:11<00:00,  3.26it/s]
+[dereverb] 63/185 2026-10-05_04_未知.wav (12.3s)
+100%|██████████| 41/41 [00:12<00:00,  3.25it/s]
+[dereverb] 64/185 2026-10-05_05_未知.wav (13.6s)
+100%|██████████| 49/49 [00:14<00:00,  3.32it/s]
+[dereverb] 65/185 2026-10-05_06_未知.wav (15.9s)
+100%|██████████| 42/42 [00:12<00:00,  3.31it/s]
+[dereverb] 66/185 2026-10-08_01_👑迪士尼在逃公主驾到！🏰生命力爆棚！For_the_First_Time_in_Forever.wav (13.7s)
+100%|██████████| 37/37 [00:11<00:00,  3.32it/s]
+[dereverb] 67/185 2026-10-09_01_未知.wav (12.0s)
+100%|██████████| 50/50 [00:15<00:00,  3.32it/s]
+[dereverb] 68/185 2026-10-09_01_未知_[BV1upp46QEfz_p2].wav (16.2s)
+100%|██████████| 31/31 [00:09<00:00,  3.32it/s]
+[dereverb] 69/185 2026-10-09_02_未知.wav (10.3s)
+100%|██████████| 44/44 [00:13<00:00,  3.30it/s]
+[dereverb] 70/185 2026-10-09_02_未知_[BV1upp46QEfz_p2].wav (14.4s)
+100%|██████████| 46/46 [00:13<00:00,  3.32it/s]
+[dereverb] 71/185 2026-10-09_03_未知.wav (15.0s)
+100%|██████████| 46/46 [00:13<00:00,  3.32it/s]
+[dereverb] 72/185 2026-10-09_03_未知_[BV1upp46QEfz_p2].wav (15.0s)
+100%|██████████| 42/42 [00:12<00:00,  3.32it/s]
+[dereverb] 73/185 2026-10-09_04_未知.wav (13.7s)
+100%|██████████| 32/32 [00:09<00:00,  3.32it/s]
+[dereverb] 74/185 2026-10-09_04_未知_[BV1upp46QEfz_p2].wav (10.4s)
+100%|██████████| 46/46 [00:13<00:00,  3.32it/s]
+[dereverb] 75/185 2026-10-09_05_未知.wav (15.0s)
+100%|██████████| 54/54 [00:16<00:00,  3.32it/s]
+[dereverb] 76/185 2026-10-09_05_未知_[BV1upp46QEfz_p2].wav (17.8s)
+100%|██████████| 52/52 [00:15<00:00,  3.32it/s]
+[dereverb] 77/185 2026-10-09_06_未知.wav (17.2s)
+100%|██████████| 27/27 [00:08<00:00,  3.23it/s]
+[dereverb] 78/185 2026-10-09_06_未知_[BV1upp46QEfz_p2].wav (9.1s)
+100%|██████████| 51/51 [00:15<00:00,  3.32it/s]
+[dereverb] 79/185 2026-10-09_07_未知.wav (17.1s)
+100%|██████████| 28/28 [00:08<00:00,  3.25it/s]
+[dereverb] 80/185 2026-10-10_01_未知.wav (9.7s)
+100%|██████████| 65/65 [00:19<00:00,  3.30it/s]
+[dereverb] 81/185 2026-10-10_01_未知_[BV1Gmpu6rEP9_p6].wav (21.7s)
+100%|██████████| 27/27 [00:08<00:00,  3.32it/s]
+[dereverb] 82/185 2026-10-10_02_未知.wav (9.3s)
+100%|██████████| 37/37 [00:11<00:00,  3.32it/s]
+[dereverb] 83/185 2026-10-11_01_早！唱聊！！-2026年10月11日11时_p03_P3-_午！唱聊！！-10月11日13点40分.wav (12.1s)
+100%|██████████| 52/52 [00:15<00:00,  3.32it/s]
+[dereverb] 84/185 2026-10-11_01_未知.wav (17.4s)
+100%|██████████| 46/46 [00:14<00:00,  3.26it/s]
+[dereverb] 85/185 2026-10-11_01_未知_[BV11dpj6EE8u_p1].wav (15.2s)
+100%|██████████| 34/34 [00:10<00:00,  3.18it/s]
+[dereverb] 86/185 2026-10-11_01_未知_[BV11dpj6EE8u_p2].wav (11.5s)
+100%|██████████| 34/34 [00:10<00:00,  3.31it/s]
+[dereverb] 87/185 2026-10-11_01_未知_[BV1rDpJ6JEwu_p2].wav (11.1s)
+100%|██████████| 44/44 [00:13<00:00,  3.32it/s]
+[dereverb] 88/185 2026-10-11_01_未知_[BV1rDpJ6JEwu_p6].wav (14.5s)
+100%|██████████| 39/39 [00:11<00:00,  3.32it/s]
+[dereverb] 89/185 2026-10-11_02_早！唱聊！！-2026年10月11日11时_p03_P3-_午！唱聊！！-10月11日13点40分.wav (13.0s)
+100%|██████████| 39/39 [00:11<00:00,  3.32it/s]
+[dereverb] 90/185 2026-10-11_02_未知.wav (12.8s)
+100%|██████████| 52/52 [00:15<00:00,  3.26it/s]
+[dereverb] 91/185 2026-10-11_02_未知_[BV11dpj6EE8u_p1].wav (17.5s)
+100%|██████████| 42/42 [00:12<00:00,  3.32it/s]
+[dereverb] 92/185 2026-10-11_02_未知_[BV11dpj6EE8u_p2].wav (13.7s)
+100%|██████████| 60/60 [00:18<00:00,  3.32it/s]
+[dereverb] 93/185 2026-10-11_02_未知_[BV1rDpJ6JEwu_p2].wav (19.8s)
+100%|██████████| 28/28 [00:08<00:00,  3.32it/s]
+[dereverb] 94/185 2026-10-11_03_未知.wav (9.2s)
+100%|██████████| 27/27 [00:08<00:00,  3.30it/s]
+[dereverb] 95/185 2026-10-11_03_未知_[BV11dpj6EE8u_p1].wav (8.9s)
+100%|██████████| 37/37 [00:11<00:00,  3.32it/s]
+[dereverb] 96/185 2026-10-11_03_未知_[BV11dpj6EE8u_p2].wav (12.1s)
+100%|██████████| 33/33 [00:09<00:00,  3.32it/s]
+[dereverb] 97/185 2026-10-11_03_未知_[BV1rDpJ6JEwu_p2].wav (10.8s)
+100%|██████████| 39/39 [00:11<00:00,  3.31it/s]
+[dereverb] 98/185 2026-10-11_04_未知.wav (12.8s)
+100%|██████████| 31/31 [00:09<00:00,  3.32it/s]
+[dereverb] 99/185 2026-10-11_04_未知_[BV11dpj6EE8u_p1].wav (10.1s)
+100%|██████████| 49/49 [00:14<00:00,  3.29it/s]
+[dereverb] 100/185 2026-10-11_04_未知_[BV11dpj6EE8u_p2].wav (16.2s)
+100%|██████████| 48/48 [00:14<00:00,  3.27it/s]
+[dereverb] 101/185 2026-10-11_05_未知.wav (15.8s)
+100%|██████████| 52/52 [00:15<00:00,  3.32it/s]
+[dereverb] 102/185 2026-10-11_05_未知_[BV11dpj6EE8u_p2].wav (17.5s)
+100%|██████████| 35/35 [00:10<00:00,  3.32it/s]
+[dereverb] 103/185 2026-10-11_06_未知.wav (11.5s)
+100%|██████████| 35/35 [00:10<00:00,  3.26it/s]
+[dereverb] 104/185 2026-10-11_06_未知_[BV11dpj6EE8u_p2].wav (11.6s)
+100%|██████████| 39/39 [00:11<00:00,  3.28it/s]
+[dereverb] 105/185 2026-10-11_07_未知.wav (12.8s)
+100%|██████████| 26/26 [00:07<00:00,  3.32it/s]
+[dereverb] 106/185 2026-10-11_07_未知_[BV11dpj6EE8u_p2].wav (8.5s)
+100%|██████████| 41/41 [00:12<00:00,  3.32it/s]
+[dereverb] 107/185 2026-10-11_08_未知.wav (13.5s)
+100%|██████████| 67/67 [00:20<00:00,  3.32it/s]
+[dereverb] 108/185 2026-10-11_09_未知.wav (22.1s)
+100%|██████████| 44/44 [00:13<00:00,  3.32it/s]
+[dereverb] 109/185 2026-10-13_01_未知.wav (14.3s)
+100%|██████████| 40/40 [00:12<00:00,  3.32it/s]
+[dereverb] 110/185 2026-10-13_01_未知_[BV18cpq62E7c_p2].wav (13.3s)
+100%|██████████| 52/52 [00:15<00:00,  3.29it/s]
+[dereverb] 111/185 2026-10-13_01_未知_[BV18cpq62E7c_p3].wav (17.3s)
+100%|██████████| 26/26 [00:07<00:00,  3.29it/s]
+[dereverb] 112/185 2026-10-13_01_未知_[BV18cpq62E7c_p4].wav (8.6s)
+100%|██████████| 33/33 [00:09<00:00,  3.32it/s]
+[dereverb] 113/185 2026-10-13_01_歌！-2026年10月13日20时_p05_P5-_歌！-10月14日00点55分.wav (10.7s)
+100%|██████████| 48/48 [00:14<00:00,  3.33it/s]
+[dereverb] 114/185 2026-10-13_02_未知.wav (15.5s)
+100%|██████████| 44/44 [00:13<00:00,  3.32it/s]
+[dereverb] 115/185 2026-10-13_02_未知_[BV18cpq62E7c_p2].wav (14.4s)
+100%|██████████| 47/47 [00:14<00:00,  3.32it/s]
+[dereverb] 116/185 2026-10-13_02_未知_[BV18cpq62E7c_p3].wav (15.5s)
+100%|██████████| 49/49 [00:14<00:00,  3.28it/s]
+[dereverb] 117/185 2026-10-13_02_未知_[BV18cpq62E7c_p4].wav (16.2s)
+100%|██████████| 25/25 [00:07<00:00,  3.32it/s]
+[dereverb] 118/185 2026-10-13_03_未知.wav (8.3s)
+100%|██████████| 27/27 [00:08<00:00,  3.26it/s]
+[dereverb] 119/185 2026-10-13_03_未知_[BV18cpq62E7c_p3].wav (9.0s)
+100%|██████████| 34/34 [00:10<00:00,  3.16it/s]
+[dereverb] 120/185 2026-10-13_03_未知_[BV18cpq62E7c_p4].wav (11.6s)
+100%|██████████| 40/40 [00:12<00:00,  3.32it/s]
+[dereverb] 121/185 2026-10-13_04_未知.wav (13.4s)
+100%|██████████| 42/42 [00:12<00:00,  3.32it/s]
+[dereverb] 122/185 2026-10-13_04_未知_[BV18cpq62E7c_p3].wav (13.8s)
+100%|██████████| 25/25 [00:07<00:00,  3.23it/s]
+[dereverb] 123/185 2026-10-14_01_未知.wav (8.4s)
+100%|██████████| 51/51 [00:15<00:00,  3.32it/s]
+[dereverb] 124/185 2026-10-14_01_未知_[BV1vQpm6pEJc_p2].wav (16.9s)
+100%|██████████| 18/18 [00:05<00:00,  3.32it/s]
+[dereverb] 125/185 2026-10-14_01_未知_[BV1vQpm6pEJc_p3].wav (6.1s)
+100%|██████████| 52/52 [00:15<00:00,  3.33it/s]
+[dereverb] 126/185 2026-10-14_01_未知_[BV1vQpm6pEJc_p6].wav (17.3s)
+100%|██████████| 50/50 [00:15<00:00,  3.27it/s]
+[dereverb] 127/185 2026-10-14_02_未知.wav (16.7s)
+100%|██████████| 94/94 [00:28<00:00,  3.32it/s]
+[dereverb] 128/185 2026-10-14_03_未知.wav (31.1s)
+100%|██████████| 48/48 [00:14<00:00,  3.32it/s]
+[dereverb] 129/185 2026-10-14_04_未知.wav (15.6s)
+100%|██████████| 50/50 [00:15<00:00,  3.32it/s]
+[dereverb] 130/185 2026-10-14_05_未知.wav (16.4s)
+100%|██████████| 38/38 [00:11<00:00,  3.27it/s]
+[dereverb] 131/185 2026-10-14_06_未知.wav (12.5s)
+100%|██████████| 26/26 [00:07<00:00,  3.31it/s]
+[dereverb] 132/185 2026-10-14_07_未知.wav (9.0s)
+100%|██████████| 40/40 [00:12<00:00,  3.32it/s]
+[dereverb] 133/185 2026-10-16_01_未知.wav (13.2s)
+100%|██████████| 38/38 [00:11<00:00,  3.32it/s]
+[dereverb] 134/185 2026-10-16_01_未知_[BV1A5Jt6KEeS_p2].wav (12.4s)
+100%|██████████| 20/20 [00:06<00:00,  3.32it/s]
+[dereverb] 135/185 2026-10-16_01_未知_[BV1A5Jt6KEeS_p4].wav (6.6s)
+100%|██████████| 36/36 [00:11<00:00,  3.27it/s]
+[dereverb] 136/185 2026-10-16_01_歌杂充电中~-2026年10月16日20时_p03_P3-_歌杂充电中~-10月16日22点02分.wav (12.0s)
+100%|██████████| 36/36 [00:11<00:00,  3.19it/s]
+[dereverb] 137/185 2026-10-16_02_未知.wav (12.1s)
+100%|██████████| 26/26 [00:08<00:00,  3.23it/s]
+[dereverb] 138/185 2026-10-16_02_未知_[BV1A5Jt6KEeS_p2].wav (8.7s)
+100%|██████████| 41/41 [00:12<00:00,  3.32it/s]
+[dereverb] 139/185 2026-10-16_02_未知_[BV1A5Jt6KEeS_p4].wav (14.0s)
+100%|██████████| 28/28 [00:08<00:00,  3.32it/s]
+[dereverb] 140/185 2026-10-16_03_未知.wav (9.2s)
+100%|██████████| 34/34 [00:10<00:00,  3.32it/s]
+[dereverb] 141/185 2026-10-16_03_未知_[BV1A5Jt6KEeS_p2].wav (11.4s)
+100%|██████████| 27/27 [00:08<00:00,  3.22it/s]
+[dereverb] 142/185 2026-10-16_03_未知_[BV1A5Jt6KEeS_p4].wav (9.1s)
+100%|██████████| 26/26 [00:07<00:00,  3.32it/s]
+[dereverb] 143/185 2026-10-16_04_未知.wav (8.5s)
+100%|██████████| 56/56 [00:17<00:00,  3.25it/s]
+[dereverb] 144/185 2026-10-16_05_未知.wav (19.0s)
+100%|██████████| 40/40 [00:12<00:00,  3.32it/s]
+[dereverb] 145/185 2026-10-17_01_未知.wav (13.1s)
+100%|██████████| 19/19 [00:05<00:00,  3.32it/s]
+[dereverb] 146/185 2026-10-17_01_未知_[BV1kSJv6sEmB_p2].wav (6.3s)
+100%|██████████| 36/36 [00:10<00:00,  3.32it/s]
+[dereverb] 147/185 2026-10-17_01_未知_[BV1kSJv6sEmB_p3].wav (11.7s)
+100%|██████████| 36/36 [00:10<00:00,  3.32it/s]
+[dereverb] 148/185 2026-10-17_01_点歌回狂欢周末~！-2026年10月17日20时_p04_P4-_点歌回狂欢周末~！-10月17日22点58分.wav (11.8s)
+100%|██████████| 54/54 [00:16<00:00,  3.32it/s]
+[dereverb] 149/185 2026-10-17_02_未知.wav (17.9s)
+100%|██████████| 31/31 [00:09<00:00,  3.31it/s]
+[dereverb] 150/185 2026-10-17_02_未知_[BV1kSJv6sEmB_p2].wav (10.2s)
+100%|██████████| 56/56 [00:16<00:00,  3.32it/s]
+[dereverb] 151/185 2026-10-17_02_未知_[BV1kSJv6sEmB_p3].wav (18.5s)
+100%|██████████| 34/34 [00:10<00:00,  3.31it/s]
+[dereverb] 152/185 2026-10-17_03_未知.wav (11.1s)
+100%|██████████| 46/46 [00:13<00:00,  3.30it/s]
+[dereverb] 153/185 2026-10-17_03_未知_[BV1kSJv6sEmB_p2].wav (15.0s)
+100%|██████████| 39/39 [00:11<00:00,  3.32it/s]
+[dereverb] 154/185 2026-10-17_03_未知_[BV1kSJv6sEmB_p3].wav (12.7s)
+100%|██████████| 40/40 [00:12<00:00,  3.32it/s]
+[dereverb] 155/185 2026-10-17_04_未知.wav (13.2s)
+100%|██████████| 48/48 [00:14<00:00,  3.32it/s]
+[dereverb] 156/185 2026-10-17_04_未知_[BV1kSJv6sEmB_p2].wav (15.6s)
+100%|██████████| 48/48 [00:14<00:00,  3.27it/s]
+[dereverb] 157/185 2026-10-17_04_未知_[BV1kSJv6sEmB_p3].wav (16.3s)
+100%|██████████| 49/49 [00:14<00:00,  3.32it/s]
+[dereverb] 158/185 2026-10-17_05_未知.wav (15.9s)
+100%|██████████| 25/25 [00:07<00:00,  3.31it/s]
+[dereverb] 159/185 2026-10-17_05_未知_[BV1kSJv6sEmB_p2].wav (8.3s)
+100%|██████████| 33/33 [00:09<00:00,  3.31it/s]
+[dereverb] 160/185 2026-10-17_05_未知_[BV1kSJv6sEmB_p3].wav (10.8s)
+100%|██████████| 28/28 [00:08<00:00,  3.31it/s]
+[dereverb] 161/185 2026-10-17_06_未知.wav (9.2s)
+100%|██████████| 35/35 [00:10<00:00,  3.32it/s]
+[dereverb] 162/185 2026-10-17_06_未知_[BV1kSJv6sEmB_p3].wav (11.4s)
+100%|██████████| 68/68 [00:20<00:00,  3.32it/s]
+[dereverb] 163/185 2026-10-17_07_未知.wav (22.6s)
+100%|██████████| 42/42 [00:12<00:00,  3.26it/s]
+[dereverb] 164/185 2026-10-17_07_未知_[BV1kSJv6sEmB_p3].wav (13.9s)
+100%|██████████| 35/35 [00:10<00:00,  3.32it/s]
+[dereverb] 165/185 2026-10-17_08_未知.wav (11.4s)
+100%|██████████| 45/45 [00:13<00:00,  3.30it/s]
+[dereverb] 166/185 2026-10-17_08_未知_[BV1kSJv6sEmB_p3].wav (14.7s)
+100%|██████████| 53/53 [00:16<00:00,  3.28it/s]
+[dereverb] 167/185 2026-10-18_01_未知.wav (18.2s)
+100%|██████████| 16/16 [00:04<00:00,  3.32it/s]
+[dereverb] 168/185 2026-10-18_01_未知_[BV1sRnV6vE5w_p2].wav (5.3s)
+100%|██████████| 24/24 [00:07<00:00,  3.32it/s]
+[dereverb] 169/185 2026-10-18_01_未知_[BV1sRnV6vE5w_p3].wav (7.9s)
+100%|██████████| 51/51 [00:15<00:00,  3.32it/s]
+[dereverb] 170/185 2026-10-18_01_未知_[BV1sRnV6vE5w_p4].wav (17.1s)
+100%|██████████| 46/46 [00:13<00:00,  3.32it/s]
+[dereverb] 171/185 2026-10-18_02_未知.wav (14.9s)
+100%|██████████| 71/71 [00:21<00:00,  3.31it/s]
+[dereverb] 172/185 2026-10-18_02_未知_[BV1sRnV6vE5w_p2].wav (23.6s)
+100%|██████████| 48/48 [00:14<00:00,  3.27it/s]
+[dereverb] 173/185 2026-10-18_02_未知_[BV1sRnV6vE5w_p3].wav (15.9s)
+100%|██████████| 43/43 [00:13<00:00,  3.27it/s]
+[dereverb] 174/185 2026-10-18_02_未知_[BV1sRnV6vE5w_p4].wav (14.4s)
+100%|██████████| 42/42 [00:12<00:00,  3.31it/s]
+[dereverb] 175/185 2026-10-18_03_未知.wav (13.8s)
+100%|██████████| 51/51 [00:15<00:00,  3.32it/s]
+[dereverb] 176/185 2026-10-18_03_未知_[BV1sRnV6vE5w_p3].wav (16.9s)
+100%|██████████| 49/49 [00:14<00:00,  3.32it/s]
+[dereverb] 177/185 2026-10-18_03_未知_[BV1sRnV6vE5w_p4].wav (16.2s)
+100%|██████████| 30/30 [00:09<00:00,  3.32it/s]
+[dereverb] 178/185 2026-10-18_04_未知.wav (9.8s)
+100%|██████████| 62/62 [00:18<00:00,  3.32it/s]
+[dereverb] 179/185 2026-10-18_04_未知_[BV1sRnV6vE5w_p3].wav (20.5s)
+100%|██████████| 43/43 [00:12<00:00,  3.32it/s]
+[dereverb] 180/185 2026-10-18_05_未知.wav (14.0s)
+100%|██████████| 32/32 [00:09<00:00,  3.32it/s]
+[dereverb] 181/185 2026-10-18_05_未知_[BV1sRnV6vE5w_p3].wav (10.5s)
+100%|██████████| 22/22 [00:06<00:00,  3.31it/s]
+[dereverb] 182/185 2026-10-18_06_未知.wav (7.6s)
+100%|██████████| 73/73 [00:22<00:00,  3.32it/s]
+[dereverb] 183/185 2026-10-18_07_未知.wav (24.2s)
+100%|██████████| 46/46 [00:13<00:00,  3.32it/s]
+[dereverb] 184/185 2026-10-18_08_未知.wav (15.5s)
+100%|██████████| 29/29 [00:08<00:00,  3.32it/s]
+[dereverb] 185/185 2026-10-18_09_未知.wav (9.5s)
+[karaoke] karaoke_bs_roformer_anvuew.ckpt: 0 done, 185 to process
+Failed to load libcublasLt.so.13: libcublasLt.so.13: cannot open shared object file: No such file or directory
+Failed to load libcublas.so.13: libcublas.so.13: cannot open shared object file: No such file or directory
+Failed to load libnvrtc.so.13: libnvrtc.so.13: cannot open shared object file: No such file or directory
+Failed to load libcufft.so.12: libcufft.so.12: cannot open shared object file: No such file or directory
+Failed to load libcudart.so.13: libcudart.so.13: cannot open shared object file: No such file or directory
+Please follow https://onnxruntime.ai/docs/install/#cuda-and-cudnn to install CUDA.
+100%|██████████| 46/46 [00:21<00:00,  2.14it/s]
+[karaoke] 1/185 2025-10-02_01_mua！誓见！！！！.wav (23.0s)
+100%|██████████| 49/49 [00:22<00:00,  2.14it/s]
+[karaoke] 2/185 2025-10-31_01_元气少女猫给你一jio！《下等马》下等猫翻唱！.wav (24.1s)
+100%|██████████| 47/47 [00:21<00:00,  2.14it/s]
+[karaoke] 3/185 2025-11-18_01_10万赞催更的「里表情人」完整版来啦！！！.wav (23.3s)
+100%|██████████| 43/43 [00:20<00:00,  2.11it/s]
+[karaoke] 4/185 2026-01-12_01_甜妹狂气地唱了Don't_Lose_Ur_Head！.wav (21.3s)
+100%|██████████| 71/71 [00:33<00:00,  2.11it/s]
+[karaoke] 5/185 2026-02-17_01_《吉祥话》新年为您送吉祥！甜帅萌御全都有.wav (35.2s)
+100%|██████████| 64/64 [00:29<00:00,  2.14it/s]
+[karaoke] 6/185 2026-02-28_01_人，上学上班辛苦了！宇宙无敌超元气翻唱《屑屑》！！.wav (31.3s)
+100%|██████████| 34/34 [00:16<00:00,  2.12it/s]
+[karaoke] 7/185 2026-03-07_01_《音乐之声》经典音乐剧唱段🎶My_Favourite_Things❤️🥺我心爱的事物.wav (16.7s)
+100%|██████████| 62/62 [00:29<00:00,  2.14it/s]
+[karaoke] 8/185 2026-03-14_01_劲爽怒音！原key高音甜美爆炸💥___プロポーズ_翻唱.wav (30.4s)
+100%|██████████| 62/62 [00:28<00:00,  2.14it/s]
+[karaoke] 9/185 2026-03-28_01_香甜清爽如气泡水般的女声🥂蜜月アン・ドゥ・トロワ_DATEKEN_feat.鏡音リン翻唱💖Un・Deux・Trois🍾.wav (30.3s)
+100%|██████████| 48/48 [00:22<00:00,  2.14it/s]
+[karaoke] 10/185 2026-05-01_01_音色暴击💥！清脆灵动的薄荷糖_翻唱！🧊.wav (23.8s)
+100%|██████████| 31/31 [00:14<00:00,  2.14it/s]
+[karaoke] 11/185 2026-05-24_01_表现力炸爆炸💥超带感病娇Loveit__(feat._LOLUET)翻唱❤️.wav (15.2s)
+100%|██████████| 49/49 [00:22<00:00,  2.14it/s]
+[karaoke] 12/185 2026-06-06_01_🦋_“你的心绪或许已存活千年”原KEY翻唱.wav (24.0s)
+100%|██████████| 74/74 [00:34<00:00,  2.14it/s]
+[karaoke] 13/185 2026-06-28_01_罗密欧与辛德瑞拉_ロミオとシンデレラ（弟之姉ver.）COVER.wav (36.2s)
+100%|██████████| 43/43 [00:20<00:00,  2.14it/s]
+[karaoke] 14/185 2026-09-01_01_⚠️绝对震撼头声尖叫！💥请在一天阳气最足的时候打开这个视频👻.wav (21.4s)
+100%|██████████| 51/51 [00:23<00:00,  2.14it/s]
+[karaoke] 15/185 2026-09-10_01_🩷泡泡🫧顶级阳角少女音翻唱撒娇神曲☀️吉他.ver.wav (25.0s)
+100%|██████████| 44/44 [00:20<00:00,  2.14it/s]
+[karaoke] 16/185 2026-09-30_01_未知.wav (21.6s)
+100%|██████████| 59/59 [00:27<00:00,  2.14it/s]
+[karaoke] 17/185 2026-09-30_01_水洼上的轮舞.wav (29.0s)
+100%|██████████| 32/32 [00:14<00:00,  2.14it/s]
+[karaoke] 18/185 2026-09-30_02_未知.wav (15.9s)
+100%|██████████| 57/57 [00:26<00:00,  2.14it/s]
+[karaoke] 19/185 2026-10-02_01_唱唱歌~~-2026年10月02日20时_p06_P6-_唱唱歌~~-10月03日01点01分.wav (27.9s)
+100%|██████████| 44/44 [00:20<00:00,  2.14it/s]
+[karaoke] 20/185 2026-10-02_01_未知.wav (21.9s)
+100%|██████████| 53/53 [00:24<00:00,  2.14it/s]
+[karaoke] 21/185 2026-10-02_01_未知_[BV1RmaU6jEXF_p2].wav (26.0s)
+100%|██████████| 36/36 [00:16<00:00,  2.14it/s]
+[karaoke] 22/185 2026-10-02_01_未知_[BV1RmaU6jEXF_p3].wav (17.6s)
+100%|██████████| 40/40 [00:18<00:00,  2.14it/s]
+[karaoke] 23/185 2026-10-02_01_未知_[BV1RmaU6jEXF_p4].wav (19.6s)
+100%|██████████| 55/55 [00:25<00:00,  2.14it/s]
+[karaoke] 24/185 2026-10-02_01_未知_[BV1RmaU6jEXF_p5].wav (27.0s)
+100%|██████████| 57/57 [00:26<00:00,  2.13it/s]
+[karaoke] 25/185 2026-10-02_02_未知.wav (28.0s)
+100%|██████████| 29/29 [00:13<00:00,  2.14it/s]
+[karaoke] 26/185 2026-10-02_02_未知_[BV1RmaU6jEXF_p2].wav (14.5s)
+100%|██████████| 66/66 [00:30<00:00,  2.14it/s]
+[karaoke] 27/185 2026-10-02_02_未知_[BV1RmaU6jEXF_p3].wav (32.3s)
+100%|██████████| 40/40 [00:18<00:00,  2.13it/s]
+[karaoke] 28/185 2026-10-02_02_未知_[BV1RmaU6jEXF_p4].wav (19.5s)
+100%|██████████| 53/53 [00:24<00:00,  2.14it/s]
+[karaoke] 29/185 2026-10-02_02_未知_[BV1RmaU6jEXF_p5].wav (26.2s)
+100%|██████████| 55/55 [00:25<00:00,  2.13it/s]
+[karaoke] 30/185 2026-10-02_03_未知.wav (27.0s)
+100%|██████████| 49/49 [00:22<00:00,  2.14it/s]
+[karaoke] 31/185 2026-10-02_03_未知_[BV1RmaU6jEXF_p3].wav (24.1s)
+100%|██████████| 35/35 [00:16<00:00,  2.13it/s]
+[karaoke] 32/185 2026-10-02_03_未知_[BV1RmaU6jEXF_p4].wav (17.4s)
+100%|██████████| 65/65 [00:30<00:00,  2.13it/s]
+[karaoke] 33/185 2026-10-02_03_未知_[BV1RmaU6jEXF_p5].wav (31.9s)
+100%|██████████| 63/63 [00:29<00:00,  2.14it/s]
+[karaoke] 34/185 2026-10-02_04_未知.wav (30.9s)
+100%|██████████| 154/154 [01:12<00:00,  2.13it/s]
+[karaoke] 35/185 2026-10-02_04_未知_[BV1RmaU6jEXF_p5].wav (75.3s)
+100%|██████████| 56/56 [00:26<00:00,  2.14it/s]
+[karaoke] 36/185 2026-10-02_05_未知.wav (27.8s)
+100%|██████████| 59/59 [00:27<00:00,  2.12it/s]
+[karaoke] 37/185 2026-10-02_06_未知.wav (29.2s)
+100%|██████████| 79/79 [00:36<00:00,  2.14it/s]
+[karaoke] 38/185 2026-10-02_07_未知.wav (38.7s)
+100%|██████████| 69/69 [00:32<00:00,  2.14it/s]
+[karaoke] 39/185 2026-10-03_01_未知.wav (33.8s)
+100%|██████████| 125/125 [00:58<00:00,  2.14it/s]
+[karaoke] 40/185 2026-10-03_01_未知_[BV1Q2Hv65Eft_p2].wav (61.2s)
+100%|██████████| 88/88 [00:41<00:00,  2.14it/s]
+[karaoke] 41/185 2026-10-03_02_未知.wav (43.1s)
+100%|██████████| 45/45 [00:21<00:00,  2.14it/s]
+[karaoke] 42/185 2026-10-03_02_未知_[BV1Q2Hv65Eft_p2].wav (22.2s)
+100%|██████████| 56/56 [00:26<00:00,  2.13it/s]
+[karaoke] 43/185 2026-10-03_03_未知.wav (27.8s)
+100%|██████████| 32/32 [00:14<00:00,  2.14it/s]
+[karaoke] 44/185 2026-10-03_03_未知_[BV1Q2Hv65Eft_p2].wav (15.7s)
+100%|██████████| 55/55 [00:25<00:00,  2.14it/s]
+[karaoke] 45/185 2026-10-03_04_未知.wav (27.0s)
+100%|██████████| 43/43 [00:20<00:00,  2.14it/s]
+[karaoke] 46/185 2026-10-03_04_未知_[BV1Q2Hv65Eft_p2].wav (21.1s)
+100%|██████████| 76/76 [00:35<00:00,  2.13it/s]
+[karaoke] 47/185 2026-10-03_05_未知.wav (37.4s)
+100%|██████████| 31/31 [00:14<00:00,  2.13it/s]
+[karaoke] 48/185 2026-10-03_05_未知_[BV1Q2Hv65Eft_p2].wav (15.2s)
+100%|██████████| 58/58 [00:27<00:00,  2.14it/s]
+[karaoke] 49/185 2026-10-03_06_未知.wav (28.6s)
+100%|██████████| 58/58 [00:27<00:00,  2.14it/s]
+[karaoke] 50/185 2026-10-03_06_未知_[BV1Q2Hv65Eft_p2].wav (28.4s)
+100%|██████████| 36/36 [00:16<00:00,  2.13it/s]
+[karaoke] 51/185 2026-10-03_07_未知.wav (17.6s)
+100%|██████████| 53/53 [00:24<00:00,  2.13it/s]
+[karaoke] 52/185 2026-10-03_07_未知_[BV1Q2Hv65Eft_p2].wav (26.1s)
+100%|██████████| 52/52 [00:24<00:00,  2.14it/s]
+[karaoke] 53/185 2026-10-03_08_未知.wav (25.5s)
+100%|██████████| 40/40 [00:18<00:00,  2.14it/s]
+[karaoke] 54/185 2026-10-05_01_唱唱歌~~-2026年10月05日20时_p03_P3-_唱唱歌~~-10月05日22点00分.wav (19.9s)
+100%|██████████| 43/43 [00:20<00:00,  2.14it/s]
+[karaoke] 55/185 2026-10-05_01_未知.wav (20.9s)
+100%|██████████| 57/57 [00:27<00:00,  2.10it/s]
+[karaoke] 56/185 2026-10-05_01_未知_[BV16YHx6wEpX_p2].wav (28.6s)
+100%|██████████| 42/42 [00:19<00:00,  2.14it/s]
+[karaoke] 57/185 2026-10-05_01_未知_[BV16YHx6wEpX_p7].wav (20.8s)
+100%|██████████| 60/60 [00:28<00:00,  2.14it/s]
+[karaoke] 58/185 2026-10-05_02_唱唱歌~~-2026年10月05日20时_p03_P3-_唱唱歌~~-10月05日22点00分.wav (29.4s)
+100%|██████████| 34/34 [00:16<00:00,  2.12it/s]
+[karaoke] 59/185 2026-10-05_02_未知.wav (16.7s)
+100%|██████████| 38/38 [00:17<00:00,  2.14it/s]
+[karaoke] 60/185 2026-10-05_02_未知_[BV16YHx6wEpX_p2].wav (18.5s)
+100%|██████████| 56/56 [00:26<00:00,  2.14it/s]
+[karaoke] 61/185 2026-10-05_03_未知.wav (27.7s)
+100%|██████████| 80/80 [00:37<00:00,  2.14it/s]
+[karaoke] 62/185 2026-10-05_03_未知_[BV16YHx6wEpX_p2].wav (39.1s)
+100%|██████████| 49/49 [00:23<00:00,  2.10it/s]
+[karaoke] 63/185 2026-10-05_04_未知.wav (24.7s)
+100%|██████████| 56/56 [00:26<00:00,  2.14it/s]
+[karaoke] 64/185 2026-10-05_05_未知.wav (27.5s)
+100%|██████████| 66/66 [00:30<00:00,  2.14it/s]
+[karaoke] 65/185 2026-10-05_06_未知.wav (32.7s)
+100%|██████████| 57/57 [00:26<00:00,  2.14it/s]
+[karaoke] 66/185 2026-10-08_01_👑迪士尼在逃公主驾到！🏰生命力爆棚！For_the_First_Time_in_Forever.wav (28.0s)
+100%|██████████| 50/50 [00:23<00:00,  2.14it/s]
+[karaoke] 67/185 2026-10-09_01_未知.wav (24.6s)
+100%|██████████| 69/69 [00:32<00:00,  2.14it/s]
+[karaoke] 68/185 2026-10-09_01_未知_[BV1upp46QEfz_p2].wav (34.1s)
+100%|██████████| 42/42 [00:19<00:00,  2.12it/s]
+[karaoke] 69/185 2026-10-09_02_未知.wav (20.7s)
+100%|██████████| 59/59 [00:27<00:00,  2.14it/s]
+[karaoke] 70/185 2026-10-09_02_未知_[BV1upp46QEfz_p2].wav (28.9s)
+100%|██████████| 63/63 [00:29<00:00,  2.14it/s]
+[karaoke] 71/185 2026-10-09_03_未知.wav (30.8s)
+100%|██████████| 63/63 [00:29<00:00,  2.14it/s]
+[karaoke] 72/185 2026-10-09_03_未知_[BV1upp46QEfz_p2].wav (30.8s)
+100%|██████████| 57/57 [00:26<00:00,  2.14it/s]
+[karaoke] 73/185 2026-10-09_04_未知.wav (28.2s)
+100%|██████████| 42/42 [00:19<00:00,  2.13it/s]
+[karaoke] 74/185 2026-10-09_04_未知_[BV1upp46QEfz_p2].wav (20.7s)
+100%|██████████| 62/62 [00:28<00:00,  2.14it/s]
+[karaoke] 75/185 2026-10-09_05_未知.wav (30.4s)
+100%|██████████| 74/74 [00:34<00:00,  2.14it/s]
+[karaoke] 76/185 2026-10-09_05_未知_[BV1upp46QEfz_p2].wav (36.2s)
+100%|██████████| 71/71 [00:33<00:00,  2.14it/s]
+[karaoke] 77/185 2026-10-09_06_未知.wav (35.0s)
+100%|██████████| 36/36 [00:16<00:00,  2.14it/s]
+[karaoke] 78/185 2026-10-09_06_未知_[BV1upp46QEfz_p2].wav (17.5s)
+100%|██████████| 70/70 [00:32<00:00,  2.13it/s]
+[karaoke] 79/185 2026-10-09_07_未知.wav (34.3s)
+100%|██████████| 37/37 [00:17<00:00,  2.13it/s]
+[karaoke] 80/185 2026-10-10_01_未知.wav (18.2s)
+100%|██████████| 90/90 [00:42<00:00,  2.14it/s]
+[karaoke] 81/185 2026-10-10_01_未知_[BV1Gmpu6rEP9_p6].wav (44.1s)
+100%|██████████| 36/36 [00:17<00:00,  2.10it/s]
+[karaoke] 82/185 2026-10-10_02_未知.wav (17.9s)
+100%|██████████| 50/50 [00:23<00:00,  2.14it/s]
+[karaoke] 83/185 2026-10-11_01_早！唱聊！！-2026年10月11日11时_p03_P3-_午！唱聊！！-10月11日13点40分.wav (24.9s)
+100%|██████████| 71/71 [00:33<00:00,  2.13it/s]
+[karaoke] 84/185 2026-10-11_01_未知.wav (34.9s)
+100%|██████████| 62/62 [00:29<00:00,  2.14it/s]
+[karaoke] 85/185 2026-10-11_01_未知_[BV11dpj6EE8u_p1].wav (30.4s)
+100%|██████████| 46/46 [00:21<00:00,  2.14it/s]
+[karaoke] 86/185 2026-10-11_01_未知_[BV11dpj6EE8u_p2].wav (22.6s)
+100%|██████████| 45/45 [00:21<00:00,  2.14it/s]
+[karaoke] 87/185 2026-10-11_01_未知_[BV1rDpJ6JEwu_p2].wav (22.1s)
+100%|██████████| 60/60 [00:28<00:00,  2.14it/s]
+[karaoke] 88/185 2026-10-11_01_未知_[BV1rDpJ6JEwu_p6].wav (29.5s)
+100%|██████████| 53/53 [00:24<00:00,  2.14it/s]
+[karaoke] 89/185 2026-10-11_02_早！唱聊！！-2026年10月11日11时_p03_P3-_午！唱聊！！-10月11日13点40分.wav (26.3s)
+100%|██████████| 53/53 [00:24<00:00,  2.14it/s]
+[karaoke] 90/185 2026-10-11_02_未知.wav (26.0s)
+100%|██████████| 71/71 [00:33<00:00,  2.14it/s]
+[karaoke] 91/185 2026-10-11_02_未知_[BV11dpj6EE8u_p1].wav (34.7s)
+100%|██████████| 58/58 [00:27<00:00,  2.14it/s]
+[karaoke] 92/185 2026-10-11_02_未知_[BV11dpj6EE8u_p2].wav (28.5s)
+100%|██████████| 82/82 [00:38<00:00,  2.14it/s]
+[karaoke] 93/185 2026-10-11_02_未知_[BV1rDpJ6JEwu_p2].wav (40.1s)
+100%|██████████| 37/37 [00:17<00:00,  2.14it/s]
+[karaoke] 94/185 2026-10-11_03_未知.wav (18.0s)
+100%|██████████| 36/36 [00:16<00:00,  2.14it/s]
+[karaoke] 95/185 2026-10-11_03_未知_[BV11dpj6EE8u_p1].wav (17.6s)
+100%|██████████| 50/50 [00:23<00:00,  2.14it/s]
+[karaoke] 96/185 2026-10-11_03_未知_[BV11dpj6EE8u_p2].wav (24.6s)
+100%|██████████| 45/45 [00:21<00:00,  2.14it/s]
+[karaoke] 97/185 2026-10-11_03_未知_[BV1rDpJ6JEwu_p2].wav (22.2s)
+100%|██████████| 53/53 [00:24<00:00,  2.14it/s]
+[karaoke] 98/185 2026-10-11_04_未知.wav (26.0s)
+100%|██████████| 41/41 [00:19<00:00,  2.13it/s]
+[karaoke] 99/185 2026-10-11_04_未知_[BV11dpj6EE8u_p1].wav (20.2s)
+100%|██████████| 66/66 [00:30<00:00,  2.14it/s]
+[karaoke] 100/185 2026-10-11_04_未知_[BV11dpj6EE8u_p2].wav (32.7s)
+100%|██████████| 66/66 [00:30<00:00,  2.14it/s]
+[karaoke] 101/185 2026-10-11_05_未知.wav (32.3s)
+100%|██████████| 71/71 [00:33<00:00,  2.13it/s]
+[karaoke] 102/185 2026-10-11_05_未知_[BV11dpj6EE8u_p2].wav (34.9s)
+100%|██████████| 47/47 [00:21<00:00,  2.14it/s]
+[karaoke] 103/185 2026-10-11_06_未知.wav (23.3s)
+100%|██████████| 47/47 [00:22<00:00,  2.13it/s]
+[karaoke] 104/185 2026-10-11_06_未知_[BV11dpj6EE8u_p2].wav (23.2s)
+100%|██████████| 53/53 [00:24<00:00,  2.14it/s]
+[karaoke] 105/185 2026-10-11_07_未知.wav (26.3s)
+100%|██████████| 34/34 [00:16<00:00,  2.12it/s]
+[karaoke] 106/185 2026-10-11_07_未知_[BV11dpj6EE8u_p2].wav (16.8s)
+100%|██████████| 56/56 [00:26<00:00,  2.13it/s]
+[karaoke] 107/185 2026-10-11_08_未知.wav (27.7s)
+100%|██████████| 92/92 [00:43<00:00,  2.13it/s]
+[karaoke] 108/185 2026-10-11_09_未知.wav (45.2s)
+100%|██████████| 60/60 [00:28<00:00,  2.14it/s]
+[karaoke] 109/185 2026-10-13_01_未知.wav (29.4s)
+100%|██████████| 54/54 [00:25<00:00,  2.11it/s]
+[karaoke] 110/185 2026-10-13_01_未知_[BV18cpq62E7c_p2].wav (26.8s)
+100%|██████████| 71/71 [00:33<00:00,  2.14it/s]
+[karaoke] 111/185 2026-10-13_01_未知_[BV18cpq62E7c_p3].wav (35.3s)
+100%|██████████| 34/34 [00:15<00:00,  2.14it/s]
+[karaoke] 112/185 2026-10-13_01_未知_[BV18cpq62E7c_p4].wav (16.6s)
+100%|██████████| 45/45 [00:21<00:00,  2.14it/s]
+[karaoke] 113/185 2026-10-13_01_歌！-2026年10月13日20时_p05_P5-_歌！-10月14日00点55分.wav (22.4s)
+100%|██████████| 65/65 [00:30<00:00,  2.14it/s]
+[karaoke] 114/185 2026-10-13_02_未知.wav (31.8s)
+100%|██████████| 59/59 [00:27<00:00,  2.14it/s]
+[karaoke] 115/185 2026-10-13_02_未知_[BV18cpq62E7c_p2].wav (28.9s)
+100%|██████████| 64/64 [00:29<00:00,  2.14it/s]
+[karaoke] 116/185 2026-10-13_02_未知_[BV18cpq62E7c_p3].wav (31.4s)
+100%|██████████| 67/67 [00:31<00:00,  2.14it/s]
+[karaoke] 117/185 2026-10-13_02_未知_[BV18cpq62E7c_p4].wav (32.8s)
+100%|██████████| 34/34 [00:16<00:00,  2.11it/s]
+[karaoke] 118/185 2026-10-13_03_未知.wav (16.8s)
+100%|██████████| 36/36 [00:16<00:00,  2.14it/s]
+[karaoke] 119/185 2026-10-13_03_未知_[BV18cpq62E7c_p3].wav (17.6s)
+100%|██████████| 45/45 [00:21<00:00,  2.14it/s]
+[karaoke] 120/185 2026-10-13_03_未知_[BV18cpq62E7c_p4].wav (22.4s)
+100%|██████████| 54/54 [00:25<00:00,  2.14it/s]
+[karaoke] 121/185 2026-10-13_04_未知.wav (26.5s)
+100%|██████████| 58/58 [00:27<00:00,  2.14it/s]
+[karaoke] 122/185 2026-10-13_04_未知_[BV18cpq62E7c_p3].wav (28.7s)
+100%|██████████| 33/33 [00:15<00:00,  2.11it/s]
+[karaoke] 123/185 2026-10-14_01_未知.wav (16.3s)
+100%|██████████| 69/69 [00:32<00:00,  2.14it/s]
+[karaoke] 124/185 2026-10-14_01_未知_[BV1vQpm6pEJc_p2].wav (33.9s)
+100%|██████████| 23/23 [00:10<00:00,  2.14it/s]
+[karaoke] 125/185 2026-10-14_01_未知_[BV1vQpm6pEJc_p3].wav (11.6s)
+100%|██████████| 71/71 [00:33<00:00,  2.14it/s]
+[karaoke] 126/185 2026-10-14_01_未知_[BV1vQpm6pEJc_p6].wav (35.1s)
+100%|██████████| 69/69 [00:32<00:00,  2.14it/s]
+[karaoke] 127/185 2026-10-14_02_未知.wav (33.8s)
+100%|██████████| 130/130 [01:01<00:00,  2.13it/s]
+[karaoke] 128/185 2026-10-14_03_未知.wav (63.8s)
+100%|██████████| 65/65 [00:30<00:00,  2.12it/s]
+[karaoke] 129/185 2026-10-14_04_未知.wav (32.2s)
+100%|██████████| 68/68 [00:31<00:00,  2.14it/s]
+[karaoke] 130/185 2026-10-14_05_未知.wav (33.6s)
+100%|██████████| 52/52 [00:24<00:00,  2.14it/s]
+[karaoke] 131/185 2026-10-14_06_未知.wav (25.8s)
+100%|██████████| 34/34 [00:15<00:00,  2.13it/s]
+[karaoke] 132/185 2026-10-14_07_未知.wav (17.0s)
+100%|██████████| 54/54 [00:25<00:00,  2.14it/s]
+[karaoke] 133/185 2026-10-16_01_未知.wav (26.6s)
+100%|██████████| 51/51 [00:23<00:00,  2.14it/s]
+[karaoke] 134/185 2026-10-16_01_未知_[BV1A5Jt6KEeS_p2].wav (25.1s)
+100%|██████████| 26/26 [00:12<00:00,  2.14it/s]
+[karaoke] 135/185 2026-10-16_01_未知_[BV1A5Jt6KEeS_p4].wav (12.7s)
+100%|██████████| 49/49 [00:22<00:00,  2.14it/s]
+[karaoke] 136/185 2026-10-16_01_歌杂充电中~-2026年10月16日20时_p03_P3-_歌杂充电中~-10月16日22点02分.wav (24.1s)
+100%|██████████| 48/48 [00:22<00:00,  2.14it/s]
+[karaoke] 137/185 2026-10-16_02_未知.wav (23.6s)
+100%|██████████| 34/34 [00:15<00:00,  2.14it/s]
+[karaoke] 138/185 2026-10-16_02_未知_[BV1A5Jt6KEeS_p2].wav (16.8s)
+100%|██████████| 56/56 [00:26<00:00,  2.13it/s]
+[karaoke] 139/185 2026-10-16_02_未知_[BV1A5Jt6KEeS_p4].wav (27.7s)
+100%|██████████| 38/38 [00:18<00:00,  2.10it/s]
+[karaoke] 140/185 2026-10-16_03_未知.wav (19.0s)
+100%|██████████| 46/46 [00:21<00:00,  2.12it/s]
+[karaoke] 141/185 2026-10-16_03_未知_[BV1A5Jt6KEeS_p2].wav (22.8s)
+100%|██████████| 36/36 [00:16<00:00,  2.14it/s]
+[karaoke] 142/185 2026-10-16_03_未知_[BV1A5Jt6KEeS_p4].wav (17.6s)
+100%|██████████| 34/34 [00:15<00:00,  2.14it/s]
+[karaoke] 143/185 2026-10-16_04_未知.wav (16.8s)
+100%|██████████| 76/76 [00:35<00:00,  2.14it/s]
+[karaoke] 144/185 2026-10-16_05_未知.wav (37.2s)
+100%|██████████| 54/54 [00:25<00:00,  2.14it/s]
+[karaoke] 145/185 2026-10-17_01_未知.wav (26.5s)
+100%|██████████| 25/25 [00:11<00:00,  2.14it/s]
+[karaoke] 146/185 2026-10-17_01_未知_[BV1kSJv6sEmB_p2].wav (12.3s)
+100%|██████████| 49/49 [00:22<00:00,  2.14it/s]
+[karaoke] 147/185 2026-10-17_01_未知_[BV1kSJv6sEmB_p3].wav (24.0s)
+100%|██████████| 49/49 [00:22<00:00,  2.14it/s]
+[karaoke] 148/185 2026-10-17_01_点歌回狂欢周末~！-2026年10月17日20时_p04_P4-_点歌回狂欢周末~！-10月17日22点58分.wav (24.1s)
+100%|██████████| 73/73 [00:34<00:00,  2.14it/s]
+[karaoke] 149/185 2026-10-17_02_未知.wav (35.7s)
+100%|██████████| 41/41 [00:19<00:00,  2.14it/s]
+[karaoke] 150/185 2026-10-17_02_未知_[BV1kSJv6sEmB_p2].wav (20.1s)
+100%|██████████| 77/77 [00:36<00:00,  2.13it/s]
+[karaoke] 151/185 2026-10-17_02_未知_[BV1kSJv6sEmB_p3].wav (37.8s)
+100%|██████████| 45/45 [00:21<00:00,  2.14it/s]
+[karaoke] 152/185 2026-10-17_03_未知.wav (22.2s)
+100%|██████████| 63/63 [00:29<00:00,  2.14it/s]
+[karaoke] 153/185 2026-10-17_03_未知_[BV1kSJv6sEmB_p2].wav (30.9s)
+100%|██████████| 53/53 [00:24<00:00,  2.14it/s]
+[karaoke] 154/185 2026-10-17_03_未知_[BV1kSJv6sEmB_p3].wav (26.2s)
+100%|██████████| 55/55 [00:25<00:00,  2.13it/s]
+[karaoke] 155/185 2026-10-17_04_未知.wav (27.2s)
+100%|██████████| 65/65 [00:30<00:00,  2.14it/s]
+[karaoke] 156/185 2026-10-17_04_未知_[BV1kSJv6sEmB_p2].wav (31.8s)
+100%|██████████| 65/65 [00:30<00:00,  2.14it/s]
+[karaoke] 157/185 2026-10-17_04_未知_[BV1kSJv6sEmB_p3].wav (31.9s)
+100%|██████████| 67/67 [00:31<00:00,  2.13it/s]
+[karaoke] 158/185 2026-10-17_05_未知.wav (33.0s)
+100%|██████████| 34/34 [00:15<00:00,  2.14it/s]
+[karaoke] 159/185 2026-10-17_05_未知_[BV1kSJv6sEmB_p2].wav (16.6s)
+100%|██████████| 45/45 [00:21<00:00,  2.14it/s]
+[karaoke] 160/185 2026-10-17_05_未知_[BV1kSJv6sEmB_p3].wav (22.4s)
+100%|██████████| 37/37 [00:17<00:00,  2.14it/s]
+[karaoke] 161/185 2026-10-17_06_未知.wav (18.2s)
+100%|██████████| 47/47 [00:21<00:00,  2.14it/s]
+[karaoke] 162/185 2026-10-17_06_未知_[BV1kSJv6sEmB_p3].wav (23.1s)
+100%|██████████| 93/93 [00:43<00:00,  2.12it/s]
+[karaoke] 163/185 2026-10-17_07_未知.wav (46.1s)
+100%|██████████| 57/57 [00:26<00:00,  2.14it/s]
+[karaoke] 164/185 2026-10-17_07_未知_[BV1kSJv6sEmB_p3].wav (28.0s)
+100%|██████████| 47/47 [00:22<00:00,  2.14it/s]
+[karaoke] 165/185 2026-10-17_08_未知.wav (23.2s)
+100%|██████████| 62/62 [00:29<00:00,  2.12it/s]
+[karaoke] 166/185 2026-10-17_08_未知_[BV1kSJv6sEmB_p3].wav (30.8s)
+100%|██████████| 73/73 [00:34<00:00,  2.13it/s]
+[karaoke] 167/185 2026-10-18_01_未知.wav (36.1s)
+100%|██████████| 20/20 [00:09<00:00,  2.08it/s]
+[karaoke] 168/185 2026-10-18_01_未知_[BV1sRnV6vE5w_p2].wav (10.3s)
+100%|██████████| 31/31 [00:14<00:00,  2.13it/s]
+[karaoke] 169/185 2026-10-18_01_未知_[BV1sRnV6vE5w_p3].wav (15.2s)
+100%|██████████| 69/69 [00:32<00:00,  2.14it/s]
+[karaoke] 170/185 2026-10-18_01_未知_[BV1sRnV6vE5w_p4].wav (34.0s)
+100%|██████████| 63/63 [00:29<00:00,  2.13it/s]
+[karaoke] 171/185 2026-10-18_02_未知.wav (31.0s)
+100%|██████████| 98/98 [00:45<00:00,  2.14it/s]
+[karaoke] 172/185 2026-10-18_02_未知_[BV1sRnV6vE5w_p2].wav (48.2s)
+100%|██████████| 66/66 [00:30<00:00,  2.14it/s]
+[karaoke] 173/185 2026-10-18_02_未知_[BV1sRnV6vE5w_p3].wav (32.3s)
+100%|██████████| 58/58 [00:27<00:00,  2.14it/s]
+[karaoke] 174/185 2026-10-18_02_未知_[BV1sRnV6vE5w_p4].wav (28.4s)
+100%|██████████| 57/57 [00:26<00:00,  2.14it/s]
+[karaoke] 175/185 2026-10-18_03_未知.wav (27.9s)
+100%|██████████| 70/70 [00:32<00:00,  2.13it/s]
+[karaoke] 176/185 2026-10-18_03_未知_[BV1sRnV6vE5w_p3].wav (34.4s)
+100%|██████████| 66/66 [00:30<00:00,  2.14it/s]
+[karaoke] 177/185 2026-10-18_03_未知_[BV1sRnV6vE5w_p4].wav (32.6s)
+100%|██████████| 40/40 [00:18<00:00,  2.12it/s]
+[karaoke] 178/185 2026-10-18_04_未知.wav (19.8s)
+100%|██████████| 85/85 [00:39<00:00,  2.13it/s]
+[karaoke] 179/185 2026-10-18_04_未知_[BV1sRnV6vE5w_p3].wav (41.7s)
+100%|██████████| 58/58 [00:27<00:00,  2.14it/s]
+[karaoke] 180/185 2026-10-18_05_未知.wav (28.6s)
+100%|██████████| 43/43 [00:20<00:00,  2.11it/s]
+[karaoke] 181/185 2026-10-18_05_未知_[BV1sRnV6vE5w_p3].wav (21.4s)
+100%|██████████| 29/29 [00:13<00:00,  2.12it/s]
+[karaoke] 182/185 2026-10-18_06_未知.wav (14.4s)
+100%|██████████| 100/100 [00:46<00:00,  2.14it/s]
+[karaoke] 183/185 2026-10-18_07_未知.wav (48.8s)
+100%|██████████| 62/62 [00:29<00:00,  2.13it/s]
+[karaoke] 184/185 2026-10-18_08_未知.wav (30.4s)
+100%|██████████| 39/39 [00:18<00:00,  2.14it/s]
+[karaoke] 185/185 2026-10-18_09_未知.wav (19.0s)
+[denoise] denoise_mel_band_roformer_aufr33_aggr_sdr_27.9768.ckpt: 0 done, 185 to process
+Failed to load libcublasLt.so.13: libcublasLt.so.13: cannot open shared object file: No such file or directory
+Failed to load libcublas.so.13: libcublas.so.13: cannot open shared object file: No such file or directory
+Failed to load libnvrtc.so.13: libnvrtc.so.13: cannot open shared object file: No such file or directory
+Failed to load libcufft.so.12: libcufft.so.12: cannot open shared object file: No such file or directory
+Failed to load libcudart.so.13: libcudart.so.13: cannot open shared object file: No such file or directory
+Please follow https://onnxruntime.ai/docs/install/#cuda-and-cudnn to install CUDA.
+100%|██████████| 85/85 [00:15<00:00,  5.32it/s]
+[denoise] 1/185 2025-10-02_01_mua！誓见！！！！.wav (17.1s)
+100%|██████████| 91/91 [00:17<00:00,  5.32it/s]
+[denoise] 2/185 2025-10-31_01_元气少女猫给你一jio！《下等马》下等猫翻唱！.wav (18.0s)
+100%|██████████| 88/88 [00:16<00:00,  5.32it/s]
+[denoise] 3/185 2025-11-18_01_10万赞催更的「里表情人」完整版来啦！！！.wav (17.3s)
+100%|██████████| 80/80 [00:15<00:00,  5.27it/s]
+[denoise] 4/185 2026-01-12_01_甜妹狂气地唱了Don't_Lose_Ur_Head！.wav (15.9s)
+100%|██████████| 130/130 [00:24<00:00,  5.31it/s]
+[denoise] 5/185 2026-02-17_01_《吉祥话》新年为您送吉祥！甜帅萌御全都有.wav (25.5s)
+100%|██████████| 119/119 [00:22<00:00,  5.32it/s]
+[denoise] 6/185 2026-02-28_01_人，上学上班辛苦了！宇宙无敌超元气翻唱《屑屑》！！.wav (23.4s)
+100%|██████████| 65/65 [00:12<00:00,  5.29it/s]
+[denoise] 7/185 2026-03-07_01_《音乐之声》经典音乐剧唱段🎶My_Favourite_Things❤️🥺我心爱的事物.wav (13.0s)
+100%|██████████| 115/115 [00:21<00:00,  5.29it/s]
+[denoise] 8/185 2026-03-14_01_劲爽怒音！原key高音甜美爆炸💥___プロポーズ_翻唱.wav (22.8s)
+100%|██████████| 114/114 [00:21<00:00,  5.29it/s]
+[denoise] 9/185 2026-03-28_01_香甜清爽如气泡水般的女声🥂蜜月アン・ドゥ・トロワ_DATEKEN_feat.鏡音リン翻唱💖Un・Deux・Trois🍾.wav (22.5s)
+100%|██████████| 90/90 [00:16<00:00,  5.32it/s]
+[denoise] 10/185 2026-05-01_01_音色暴击💥！清脆灵动的薄荷糖_翻唱！🧊.wav (17.7s)
+100%|██████████| 58/58 [00:10<00:00,  5.31it/s]
+[denoise] 11/185 2026-05-24_01_表现力炸爆炸💥超带感病娇Loveit__(feat._LOLUET)翻唱❤️.wav (11.6s)
+100%|██████████| 91/91 [00:17<00:00,  5.31it/s]
+[denoise] 12/185 2026-06-06_01_🦋_“你的心绪或许已存活千年”原KEY翻唱.wav (17.9s)
+100%|██████████| 136/136 [00:25<00:00,  5.32it/s]
+[denoise] 13/185 2026-06-28_01_罗密欧与辛德瑞拉_ロミオとシンデレラ（弟之姉ver.）COVER.wav (26.6s)
+100%|██████████| 81/81 [00:15<00:00,  5.32it/s]
+[denoise] 14/185 2026-09-01_01_⚠️绝对震撼头声尖叫！💥请在一天阳气最足的时候打开这个视频👻.wav (16.0s)
+100%|██████████| 95/95 [00:17<00:00,  5.31it/s]
+[denoise] 15/185 2026-09-10_01_🩷泡泡🫧顶级阳角少女音翻唱撒娇神曲☀️吉他.ver.wav (18.8s)
+100%|██████████| 83/83 [00:15<00:00,  5.31it/s]
+[denoise] 16/185 2026-09-30_01_未知.wav (16.4s)
+100%|██████████| 109/109 [00:20<00:00,  5.27it/s]
+[denoise] 17/185 2026-09-30_01_水洼上的轮舞.wav (21.6s)
+100%|██████████| 61/61 [00:11<00:00,  5.31it/s]
+[denoise] 18/185 2026-09-30_02_未知.wav (12.1s)
+100%|██████████| 105/105 [00:19<00:00,  5.32it/s]
+[denoise] 19/185 2026-10-02_01_唱唱歌~~-2026年10月02日20时_p06_P6-_唱唱歌~~-10月03日01点01分.wav (20.6s)
+100%|██████████| 82/82 [00:15<00:00,  5.31it/s]
+[denoise] 20/185 2026-10-02_01_未知.wav (16.3s)
+100%|██████████| 98/98 [00:18<00:00,  5.28it/s]
+[denoise] 21/185 2026-10-02_01_未知_[BV1RmaU6jEXF_p2].wav (19.4s)
+100%|██████████| 68/68 [00:12<00:00,  5.31it/s]
+[denoise] 22/185 2026-10-02_01_未知_[BV1RmaU6jEXF_p3].wav (13.6s)
+100%|██████████| 75/75 [00:14<00:00,  5.28it/s]
+[denoise] 23/185 2026-10-02_01_未知_[BV1RmaU6jEXF_p4].wav (14.9s)
+100%|██████████| 103/103 [00:19<00:00,  5.32it/s]
+[denoise] 24/185 2026-10-02_01_未知_[BV1RmaU6jEXF_p5].wav (20.3s)
+100%|██████████| 106/106 [00:19<00:00,  5.32it/s]
+[denoise] 25/185 2026-10-02_02_未知.wav (20.8s)
+100%|██████████| 54/54 [00:10<00:00,  5.32it/s]
+[denoise] 26/185 2026-10-02_02_未知_[BV1RmaU6jEXF_p2].wav (10.7s)
+100%|██████████| 123/123 [00:23<00:00,  5.32it/s]
+[denoise] 27/185 2026-10-02_02_未知_[BV1RmaU6jEXF_p3].wav (24.1s)
+100%|██████████| 74/74 [00:13<00:00,  5.30it/s]
+[denoise] 28/185 2026-10-02_02_未知_[BV1RmaU6jEXF_p4].wav (14.6s)
+100%|██████████| 99/99 [00:18<00:00,  5.32it/s]
+[denoise] 29/185 2026-10-02_02_未知_[BV1RmaU6jEXF_p5].wav (19.6s)
+100%|██████████| 102/102 [00:19<00:00,  5.32it/s]
+[denoise] 30/185 2026-10-02_03_未知.wav (20.1s)
+100%|██████████| 92/92 [00:17<00:00,  5.32it/s]
+[denoise] 31/185 2026-10-02_03_未知_[BV1RmaU6jEXF_p3].wav (18.3s)
+100%|██████████| 66/66 [00:12<00:00,  5.32it/s]
+[denoise] 32/185 2026-10-02_03_未知_[BV1RmaU6jEXF_p4].wav (13.1s)
+100%|██████████| 120/120 [00:22<00:00,  5.31it/s]
+[denoise] 33/185 2026-10-02_03_未知_[BV1RmaU6jEXF_p5].wav (23.5s)
+100%|██████████| 116/116 [00:21<00:00,  5.28it/s]
+[denoise] 34/185 2026-10-02_04_未知.wav (23.0s)
+100%|██████████| 281/281 [00:53<00:00,  5.30it/s]
+[denoise] 35/185 2026-10-02_04_未知_[BV1RmaU6jEXF_p5].wav (55.1s)
+100%|██████████| 104/104 [00:19<00:00,  5.26it/s]
+[denoise] 36/185 2026-10-02_05_未知.wav (20.7s)
+100%|██████████| 109/109 [00:20<00:00,  5.31it/s]
+[denoise] 37/185 2026-10-02_06_未知.wav (21.4s)
+100%|██████████| 146/146 [00:27<00:00,  5.32it/s]
+[denoise] 38/185 2026-10-02_07_未知.wav (28.6s)
+100%|██████████| 128/128 [00:24<00:00,  5.29it/s]
+[denoise] 39/185 2026-10-03_01_未知.wav (25.2s)
+100%|██████████| 229/229 [00:43<00:00,  5.31it/s]
+[denoise] 40/185 2026-10-03_01_未知_[BV1Q2Hv65Eft_p2].wav (44.8s)
+100%|██████████| 162/162 [00:30<00:00,  5.31it/s]
+[denoise] 41/185 2026-10-03_02_未知.wav (31.8s)
+100%|██████████| 85/85 [00:16<00:00,  5.31it/s]
+[denoise] 42/185 2026-10-03_02_未知_[BV1Q2Hv65Eft_p2].wav (16.8s)
+100%|██████████| 104/104 [00:19<00:00,  5.30it/s]
+[denoise] 43/185 2026-10-03_03_未知.wav (20.5s)
+100%|██████████| 60/60 [00:11<00:00,  5.32it/s]
+[denoise] 44/185 2026-10-03_03_未知_[BV1Q2Hv65Eft_p2].wav (11.9s)
+100%|██████████| 103/103 [00:19<00:00,  5.32it/s]
+[denoise] 45/185 2026-10-03_04_未知.wav (20.3s)
+100%|██████████| 80/80 [00:15<00:00,  5.29it/s]
+[denoise] 46/185 2026-10-03_04_未知_[BV1Q2Hv65Eft_p2].wav (15.9s)
+100%|██████████| 139/139 [00:26<00:00,  5.31it/s]
+[denoise] 47/185 2026-10-03_05_未知.wav (27.2s)
+100%|██████████| 59/59 [00:11<00:00,  5.31it/s]
+[denoise] 48/185 2026-10-03_05_未知_[BV1Q2Hv65Eft_p2].wav (11.8s)
+100%|██████████| 107/107 [00:20<00:00,  5.31it/s]
+[denoise] 49/185 2026-10-03_06_未知.wav (21.1s)
+100%|██████████| 107/107 [00:20<00:00,  5.32it/s]
+[denoise] 50/185 2026-10-03_06_未知_[BV1Q2Hv65Eft_p2].wav (21.0s)
+100%|██████████| 68/68 [00:12<00:00,  5.31it/s]
+[denoise] 51/185 2026-10-03_07_未知.wav (13.5s)
+100%|██████████| 98/98 [00:18<00:00,  5.32it/s]
+[denoise] 52/185 2026-10-03_07_未知_[BV1Q2Hv65Eft_p2].wav (19.3s)
+100%|██████████| 96/96 [00:18<00:00,  5.32it/s]
+[denoise] 53/185 2026-10-03_08_未知.wav (18.9s)
+100%|██████████| 75/75 [00:14<00:00,  5.31it/s]
+[denoise] 54/185 2026-10-05_01_唱唱歌~~-2026年10月05日20时_p03_P3-_唱唱歌~~-10月05日22点00分.wav (14.8s)
+100%|██████████| 80/80 [00:15<00:00,  5.32it/s]
+[denoise] 55/185 2026-10-05_01_未知.wav (15.8s)
+100%|██████████| 106/106 [00:19<00:00,  5.31it/s]
+[denoise] 56/185 2026-10-05_01_未知_[BV16YHx6wEpX_p2].wav (20.9s)
+100%|██████████| 78/78 [00:14<00:00,  5.31it/s]
+[denoise] 57/185 2026-10-05_01_未知_[BV16YHx6wEpX_p7].wav (15.4s)
+100%|██████████| 112/112 [00:21<00:00,  5.32it/s]
+[denoise] 58/185 2026-10-05_02_唱唱歌~~-2026年10月05日20时_p03_P3-_唱唱歌~~-10月05日22点00分.wav (22.1s)
+100%|██████████| 65/65 [00:12<00:00,  5.32it/s]
+[denoise] 59/185 2026-10-05_02_未知.wav (13.0s)
+100%|██████████| 72/72 [00:13<00:00,  5.32it/s]
+[denoise] 60/185 2026-10-05_02_未知_[BV16YHx6wEpX_p2].wav (14.3s)
+100%|██████████| 104/104 [00:19<00:00,  5.24it/s]
+[denoise] 61/185 2026-10-05_03_未知.wav (20.7s)
+100%|██████████| 148/148 [00:27<00:00,  5.32it/s]
+[denoise] 62/185 2026-10-05_03_未知_[BV16YHx6wEpX_p2].wav (29.0s)
+100%|██████████| 92/92 [00:17<00:00,  5.25it/s]
+[denoise] 63/185 2026-10-05_04_未知.wav (18.5s)
+100%|██████████| 104/104 [00:19<00:00,  5.24it/s]
+[denoise] 64/185 2026-10-05_05_未知.wav (20.8s)
+100%|██████████| 122/122 [00:22<00:00,  5.31it/s]
+[denoise] 65/185 2026-10-05_06_未知.wav (23.9s)
+100%|██████████| 105/105 [00:19<00:00,  5.32it/s]
+[denoise] 66/185 2026-10-08_01_👑迪士尼在逃公主驾到！🏰生命力爆棚！For_the_First_Time_in_Forever.wav (20.7s)
+100%|██████████| 93/93 [00:17<00:00,  5.32it/s]
+[denoise] 67/185 2026-10-09_01_未知.wav (18.4s)
+100%|██████████| 127/127 [00:23<00:00,  5.30it/s]
+[denoise] 68/185 2026-10-09_01_未知_[BV1upp46QEfz_p2].wav (24.9s)
+100%|██████████| 79/79 [00:14<00:00,  5.30it/s]
+[denoise] 69/185 2026-10-09_02_未知.wav (15.7s)
+100%|██████████| 110/110 [00:20<00:00,  5.27it/s]
+[denoise] 70/185 2026-10-09_02_未知_[BV1upp46QEfz_p2].wav (21.8s)
+100%|██████████| 116/116 [00:21<00:00,  5.32it/s]
+[denoise] 71/185 2026-10-09_03_未知.wav (22.7s)
+100%|██████████| 116/116 [00:21<00:00,  5.31it/s]
+[denoise] 72/185 2026-10-09_03_未知_[BV1upp46QEfz_p2].wav (22.8s)
+100%|██████████| 106/106 [00:19<00:00,  5.30it/s]
+[denoise] 73/185 2026-10-09_04_未知.wav (21.0s)
+100%|██████████| 79/79 [00:15<00:00,  5.21it/s]
+[denoise] 74/185 2026-10-09_04_未知_[BV1upp46QEfz_p2].wav (16.1s)
+100%|██████████| 115/115 [00:21<00:00,  5.32it/s]
+[denoise] 75/185 2026-10-09_05_未知.wav (22.6s)
+100%|██████████| 136/136 [00:25<00:00,  5.31it/s]
+[denoise] 76/185 2026-10-09_05_未知_[BV1upp46QEfz_p2].wav (26.6s)
+100%|██████████| 130/130 [00:24<00:00,  5.32it/s]
+[denoise] 77/185 2026-10-09_06_未知.wav (25.5s)
+100%|██████████| 67/67 [00:12<00:00,  5.19it/s]
+[denoise] 78/185 2026-10-09_06_未知_[BV1upp46QEfz_p2].wav (13.6s)
+100%|██████████| 129/129 [00:24<00:00,  5.31it/s]
+[denoise] 79/185 2026-10-09_07_未知.wav (25.3s)
+100%|██████████| 70/70 [00:13<00:00,  5.29it/s]
+[denoise] 80/185 2026-10-10_01_未知.wav (13.9s)
+100%|██████████| 165/165 [00:31<00:00,  5.32it/s]
+[denoise] 81/185 2026-10-10_01_未知_[BV1Gmpu6rEP9_p6].wav (32.3s)
+100%|██████████| 67/67 [00:12<00:00,  5.24it/s]
+[denoise] 82/185 2026-10-10_02_未知.wav (13.5s)
+100%|██████████| 94/94 [00:17<00:00,  5.32it/s]
+[denoise] 83/185 2026-10-11_01_早！唱聊！！-2026年10月11日11时_p03_P3-_午！唱聊！！-10月11日13点40分.wav (18.5s)
+100%|██████████| 131/131 [00:24<00:00,  5.31it/s]
+[denoise] 84/185 2026-10-11_01_未知.wav (25.7s)
+100%|██████████| 115/115 [00:21<00:00,  5.32it/s]
+[denoise] 85/185 2026-10-11_01_未知_[BV11dpj6EE8u_p1].wav (22.6s)
+100%|██████████| 86/86 [00:16<00:00,  5.31it/s]
+[denoise] 86/185 2026-10-11_01_未知_[BV11dpj6EE8u_p2].wav (17.1s)
+100%|██████████| 84/84 [00:15<00:00,  5.32it/s]
+[denoise] 87/185 2026-10-11_01_未知_[BV1rDpJ6JEwu_p2].wav (16.6s)
+100%|██████████| 111/111 [00:20<00:00,  5.32it/s]
+[denoise] 88/185 2026-10-11_01_未知_[BV1rDpJ6JEwu_p6].wav (22.1s)
+100%|██████████| 99/99 [00:18<00:00,  5.28it/s]
+[denoise] 89/185 2026-10-11_02_早！唱聊！！-2026年10月11日11时_p03_P3-_午！唱聊！！-10月11日13点40分.wav (19.6s)
+100%|██████████| 98/98 [00:18<00:00,  5.32it/s]
+[denoise] 90/185 2026-10-11_02_未知.wav (19.2s)
+100%|██████████| 131/131 [00:24<00:00,  5.32it/s]
+[denoise] 91/185 2026-10-11_02_未知_[BV11dpj6EE8u_p1].wav (25.8s)
+100%|██████████| 107/107 [00:20<00:00,  5.31it/s]
+[denoise] 92/185 2026-10-11_02_未知_[BV11dpj6EE8u_p2].wav (21.1s)
+100%|██████████| 151/151 [00:28<00:00,  5.32it/s]
+[denoise] 93/185 2026-10-11_02_未知_[BV1rDpJ6JEwu_p2].wav (29.5s)
+100%|██████████| 70/70 [00:13<00:00,  5.31it/s]
+[denoise] 94/185 2026-10-11_03_未知.wav (13.8s)
+100%|██████████| 67/67 [00:12<00:00,  5.32it/s]
+[denoise] 95/185 2026-10-11_03_未知_[BV11dpj6EE8u_p1].wav (13.3s)
+100%|██████████| 92/92 [00:17<00:00,  5.32it/s]
+[denoise] 96/185 2026-10-11_03_未知_[BV11dpj6EE8u_p2].wav (18.1s)
+100%|██████████| 84/84 [00:15<00:00,  5.32it/s]
+[denoise] 97/185 2026-10-11_03_未知_[BV1rDpJ6JEwu_p2].wav (16.6s)
+100%|██████████| 98/98 [00:18<00:00,  5.29it/s]
+[denoise] 98/185 2026-10-11_04_未知.wav (19.6s)
+100%|██████████| 77/77 [00:14<00:00,  5.32it/s]
+[denoise] 99/185 2026-10-11_04_未知_[BV11dpj6EE8u_p1].wav (15.2s)
+100%|██████████| 122/122 [00:23<00:00,  5.30it/s]
+[denoise] 100/185 2026-10-11_04_未知_[BV11dpj6EE8u_p2].wav (24.0s)
+100%|██████████| 122/122 [00:22<00:00,  5.32it/s]
+[denoise] 101/185 2026-10-11_05_未知.wav (23.9s)
+100%|██████████| 132/132 [00:24<00:00,  5.32it/s]
+[denoise] 102/185 2026-10-11_05_未知_[BV11dpj6EE8u_p2].wav (25.9s)
+100%|██████████| 87/87 [00:16<00:00,  5.30it/s]
+[denoise] 103/185 2026-10-11_06_未知.wav (17.6s)
+100%|██████████| 87/87 [00:16<00:00,  5.32it/s]
+[denoise] 104/185 2026-10-11_06_未知_[BV11dpj6EE8u_p2].wav (17.1s)
+100%|██████████| 98/98 [00:18<00:00,  5.32it/s]
+[denoise] 105/185 2026-10-11_07_未知.wav (19.4s)
+100%|██████████| 64/64 [00:12<00:00,  5.32it/s]
+[denoise] 106/185 2026-10-11_07_未知_[BV11dpj6EE8u_p2].wav (12.8s)
+100%|██████████| 104/104 [00:19<00:00,  5.32it/s]
+[denoise] 107/185 2026-10-11_08_未知.wav (20.5s)
+100%|██████████| 169/169 [00:31<00:00,  5.30it/s]
+[denoise] 108/185 2026-10-11_09_未知.wav (33.3s)
+100%|██████████| 111/111 [00:20<00:00,  5.31it/s]
+[denoise] 109/185 2026-10-13_01_未知.wav (21.8s)
+100%|██████████| 100/100 [00:18<00:00,  5.31it/s]
+[denoise] 110/185 2026-10-13_01_未知_[BV18cpq62E7c_p2].wav (19.6s)
+100%|██████████| 131/131 [00:25<00:00,  5.22it/s]
+[denoise] 111/185 2026-10-13_01_未知_[BV18cpq62E7c_p3].wav (26.1s)
+100%|██████████| 64/64 [00:12<00:00,  5.32it/s]
+[denoise] 112/185 2026-10-13_01_未知_[BV18cpq62E7c_p4].wav (12.7s)
+100%|██████████| 84/84 [00:15<00:00,  5.29it/s]
+[denoise] 113/185 2026-10-13_01_歌！-2026年10月13日20时_p05_P5-_歌！-10月14日00点55分.wav (16.8s)
+100%|██████████| 121/121 [00:22<00:00,  5.32it/s]
+[denoise] 114/185 2026-10-13_02_未知.wav (23.7s)
+100%|██████████| 110/110 [00:20<00:00,  5.30it/s]
+[denoise] 115/185 2026-10-13_02_未知_[BV18cpq62E7c_p2].wav (21.7s)
+100%|██████████| 119/119 [00:22<00:00,  5.31it/s]
+[denoise] 116/185 2026-10-13_02_未知_[BV18cpq62E7c_p3].wav (23.4s)
+100%|██████████| 123/123 [00:23<00:00,  5.31it/s]
+[denoise] 117/185 2026-10-13_02_未知_[BV18cpq62E7c_p4].wav (24.1s)
+100%|██████████| 63/63 [00:11<00:00,  5.32it/s]
+[denoise] 118/185 2026-10-13_03_未知.wav (12.5s)
+100%|██████████| 68/68 [00:12<00:00,  5.31it/s]
+[denoise] 119/185 2026-10-13_03_未知_[BV18cpq62E7c_p3].wav (13.4s)
+100%|██████████| 84/84 [00:15<00:00,  5.32it/s]
+[denoise] 120/185 2026-10-13_03_未知_[BV18cpq62E7c_p4].wav (16.6s)
+100%|██████████| 100/100 [00:18<00:00,  5.29it/s]
+[denoise] 121/185 2026-10-13_04_未知.wav (19.7s)
+100%|██████████| 107/107 [00:20<00:00,  5.32it/s]
+[denoise] 122/185 2026-10-13_04_未知_[BV18cpq62E7c_p3].wav (21.1s)
+100%|██████████| 61/61 [00:11<00:00,  5.31it/s]
+[denoise] 123/185 2026-10-14_01_未知.wav (12.2s)
+100%|██████████| 128/128 [00:24<00:00,  5.31it/s]
+[denoise] 124/185 2026-10-14_01_未知_[BV1vQpm6pEJc_p2].wav (25.4s)
+100%|██████████| 44/44 [00:08<00:00,  5.32it/s]
+[denoise] 125/185 2026-10-14_01_未知_[BV1vQpm6pEJc_p3].wav (8.8s)
+100%|██████████| 131/131 [00:24<00:00,  5.31it/s]
+[denoise] 126/185 2026-10-14_01_未知_[BV1vQpm6pEJc_p6].wav (25.7s)
+100%|██████████| 127/127 [00:23<00:00,  5.32it/s]
+[denoise] 127/185 2026-10-14_02_未知.wav (24.9s)
+100%|██████████| 238/238 [00:44<00:00,  5.31it/s]
+[denoise] 128/185 2026-10-14_03_未知.wav (46.6s)
+100%|██████████| 120/120 [00:22<00:00,  5.29it/s]
+[denoise] 129/185 2026-10-14_04_未知.wav (23.6s)
+100%|██████████| 125/125 [00:23<00:00,  5.32it/s]
+[denoise] 130/185 2026-10-14_05_未知.wav (24.6s)
+100%|██████████| 96/96 [00:18<00:00,  5.31it/s]
+[denoise] 131/185 2026-10-14_06_未知.wav (19.0s)
+100%|██████████| 65/65 [00:12<00:00,  5.31it/s]
+[denoise] 132/185 2026-10-14_07_未知.wav (12.9s)
+100%|██████████| 101/101 [00:19<00:00,  5.31it/s]
+[denoise] 133/185 2026-10-16_01_未知.wav (19.8s)
+100%|██████████| 95/95 [00:17<00:00,  5.31it/s]
+[denoise] 134/185 2026-10-16_01_未知_[BV1A5Jt6KEeS_p2].wav (18.9s)
+100%|██████████| 49/49 [00:09<00:00,  5.17it/s]
+[denoise] 135/185 2026-10-16_01_未知_[BV1A5Jt6KEeS_p4].wav (10.1s)
+100%|██████████| 91/91 [00:17<00:00,  5.32it/s]
+[denoise] 136/185 2026-10-16_01_歌杂充电中~-2026年10月16日20时_p03_P3-_歌杂充电中~-10月16日22点02分.wav (17.9s)
+100%|██████████| 90/90 [00:16<00:00,  5.32it/s]
+[denoise] 137/185 2026-10-16_02_未知.wav (17.7s)
+100%|██████████| 65/65 [00:12<00:00,  5.31it/s]
+[denoise] 138/185 2026-10-16_02_未知_[BV1A5Jt6KEeS_p2].wav (12.9s)
+100%|██████████| 104/104 [00:19<00:00,  5.32it/s]
+[denoise] 139/185 2026-10-16_02_未知_[BV1A5Jt6KEeS_p4].wav (20.4s)
+100%|██████████| 71/71 [00:13<00:00,  5.31it/s]
+[denoise] 140/185 2026-10-16_03_未知.wav (14.0s)
+100%|██████████| 85/85 [00:15<00:00,  5.31it/s]
+[denoise] 141/185 2026-10-16_03_未知_[BV1A5Jt6KEeS_p2].wav (16.8s)
+100%|██████████| 68/68 [00:12<00:00,  5.25it/s]
+[denoise] 142/185 2026-10-16_03_未知_[BV1A5Jt6KEeS_p4].wav (13.9s)
+100%|██████████| 64/64 [00:12<00:00,  5.27it/s]
+[denoise] 143/185 2026-10-16_04_未知.wav (12.8s)
+100%|██████████| 140/140 [00:26<00:00,  5.31it/s]
+[denoise] 144/185 2026-10-16_05_未知.wav (27.4s)
+100%|██████████| 100/100 [00:18<00:00,  5.32it/s]
+[denoise] 145/185 2026-10-17_01_未知.wav (19.7s)
+100%|██████████| 48/48 [00:09<00:00,  5.31it/s]
+[denoise] 146/185 2026-10-17_01_未知_[BV1kSJv6sEmB_p2].wav (9.6s)
+100%|██████████| 91/91 [00:17<00:00,  5.30it/s]
+[denoise] 147/185 2026-10-17_01_未知_[BV1kSJv6sEmB_p3].wav (17.9s)
+100%|██████████| 91/91 [00:17<00:00,  5.31it/s]
+[denoise] 148/185 2026-10-17_01_点歌回狂欢周末~！-2026年10月17日20时_p04_P4-_点歌回狂欢周末~！-10月17日22点58分.wav (17.9s)
+100%|██████████| 135/135 [00:25<00:00,  5.31it/s]
+[denoise] 149/185 2026-10-17_02_未知.wav (26.6s)
+100%|██████████| 77/77 [00:14<00:00,  5.32it/s]
+[denoise] 150/185 2026-10-17_02_未知_[BV1kSJv6sEmB_p2].wav (15.2s)
+100%|██████████| 141/141 [00:26<00:00,  5.30it/s]
+[denoise] 151/185 2026-10-17_02_未知_[BV1kSJv6sEmB_p3].wav (27.8s)
+100%|██████████| 85/85 [00:16<00:00,  5.30it/s]
+[denoise] 152/185 2026-10-17_03_未知.wav (16.8s)
+100%|██████████| 117/117 [00:21<00:00,  5.32it/s]
+[denoise] 153/185 2026-10-17_03_未知_[BV1kSJv6sEmB_p2].wav (22.9s)
+100%|██████████| 99/99 [00:18<00:00,  5.32it/s]
+[denoise] 154/185 2026-10-17_03_未知_[BV1kSJv6sEmB_p3].wav (19.5s)
+100%|██████████| 101/101 [00:19<00:00,  5.31it/s]
+[denoise] 155/185 2026-10-17_04_未知.wav (19.9s)
+100%|██████████| 120/120 [00:22<00:00,  5.29it/s]
+[denoise] 156/185 2026-10-17_04_未知_[BV1kSJv6sEmB_p2].wav (23.6s)
+100%|██████████| 121/121 [00:22<00:00,  5.32it/s]
+[denoise] 157/185 2026-10-17_04_未知_[BV1kSJv6sEmB_p3].wav (23.7s)
+100%|██████████| 123/123 [00:23<00:00,  5.32it/s]
+[denoise] 158/185 2026-10-17_05_未知.wav (24.1s)
+100%|██████████| 64/64 [00:12<00:00,  5.32it/s]
+[denoise] 159/185 2026-10-17_05_未知_[BV1kSJv6sEmB_p2].wav (12.7s)
+100%|██████████| 83/83 [00:15<00:00,  5.30it/s]
+[denoise] 160/185 2026-10-17_05_未知_[BV1kSJv6sEmB_p3].wav (16.5s)
+100%|██████████| 69/69 [00:12<00:00,  5.32it/s]
+[denoise] 161/185 2026-10-17_06_未知.wav (13.6s)
+100%|██████████| 87/87 [00:16<00:00,  5.31it/s]
+[denoise] 162/185 2026-10-17_06_未知_[BV1kSJv6sEmB_p3].wav (17.1s)
+100%|██████████| 171/171 [00:32<00:00,  5.30it/s]
+[denoise] 163/185 2026-10-17_07_未知.wav (33.5s)
+100%|██████████| 106/106 [00:20<00:00,  5.29it/s]
+[denoise] 164/185 2026-10-17_07_未知_[BV1kSJv6sEmB_p3].wav (21.0s)
+100%|██████████| 88/88 [00:16<00:00,  5.30it/s]
+[denoise] 165/185 2026-10-17_08_未知.wav (17.5s)
+100%|██████████| 114/114 [00:21<00:00,  5.31it/s]
+[denoise] 166/185 2026-10-17_08_未知_[BV1kSJv6sEmB_p3].wav (22.6s)
+100%|██████████| 135/135 [00:25<00:00,  5.31it/s]
+[denoise] 167/185 2026-10-18_01_未知.wav (26.5s)
+100%|██████████| 39/39 [00:07<00:00,  5.25it/s]
+[denoise] 168/185 2026-10-18_01_未知_[BV1sRnV6vE5w_p2].wav (7.9s)
+100%|██████████| 59/59 [00:11<00:00,  5.27it/s]
+[denoise] 169/185 2026-10-18_01_未知_[BV1sRnV6vE5w_p3].wav (11.8s)
+100%|██████████| 128/128 [00:24<00:00,  5.32it/s]
+[denoise] 170/185 2026-10-18_01_未知_[BV1sRnV6vE5w_p4].wav (25.3s)
+100%|██████████| 116/116 [00:21<00:00,  5.32it/s]
+[denoise] 171/185 2026-10-18_02_未知.wav (22.8s)
+100%|██████████| 180/180 [00:33<00:00,  5.31it/s]
+[denoise] 172/185 2026-10-18_02_未知_[BV1sRnV6vE5w_p2].wav (35.2s)
+100%|██████████| 121/121 [00:22<00:00,  5.30it/s]
+[denoise] 173/185 2026-10-18_02_未知_[BV1sRnV6vE5w_p3].wav (23.8s)
+100%|██████████| 108/108 [00:20<00:00,  5.30it/s]
+[denoise] 174/185 2026-10-18_02_未知_[BV1sRnV6vE5w_p4].wav (21.3s)
+100%|██████████| 106/106 [00:19<00:00,  5.31it/s]
+[denoise] 175/185 2026-10-18_03_未知.wav (20.8s)
+100%|██████████| 129/129 [00:24<00:00,  5.32it/s]
+[denoise] 176/185 2026-10-18_03_未知_[BV1sRnV6vE5w_p3].wav (25.2s)
+100%|██████████| 123/123 [00:23<00:00,  5.32it/s]
+[denoise] 177/185 2026-10-18_03_未知_[BV1sRnV6vE5w_p4].wav (24.0s)
+100%|██████████| 74/74 [00:14<00:00,  5.26it/s]
+[denoise] 178/185 2026-10-18_04_未知.wav (14.8s)
+100%|██████████| 156/156 [00:29<00:00,  5.29it/s]
+[denoise] 179/185 2026-10-18_04_未知_[BV1sRnV6vE5w_p3].wav (30.6s)
+100%|██████████| 107/107 [00:20<00:00,  5.28it/s]
+[denoise] 180/185 2026-10-18_05_未知.wav (21.3s)
+100%|██████████| 80/80 [00:15<00:00,  5.21it/s]
+[denoise] 181/185 2026-10-18_05_未知_[BV1sRnV6vE5w_p3].wav (16.1s)
+100%|██████████| 55/55 [00:10<00:00,  5.32it/s]
+[denoise] 182/185 2026-10-18_06_未知.wav (11.0s)
+100%|██████████| 184/184 [00:34<00:00,  5.31it/s]
+[denoise] 183/185 2026-10-18_07_未知.wav (36.2s)
+100%|██████████| 115/115 [00:21<00:00,  5.29it/s]
+[denoise] 184/185 2026-10-18_08_未知.wav (22.7s)
+100%|██████████| 73/73 [00:13<00:00,  5.32it/s]
+[denoise] 185/185 2026-10-18_09_未知.wav (14.4s)
+=== 2026-10-20 05:22:24 exit 0

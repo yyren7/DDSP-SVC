@@ -1,0 +1,5 @@
+=== 2026-10-21 08:33:45 start clips at 307dbee
+speaker: pheebie (/root/autodl-tmp/speakers/pheebie)
+pheebie: 7 of 151 songs left out whole (under 50% kept): 2026-10-02_01_未知_[BV1RmaU6jEXF_p4], 2026-10-03_04_未知, 2026-10-03_07_未知_[BV1Q2Hv65Eft_p2], 2026-10-10_02_未知, 2026-10-13_04_未知_[BV18cpq62E7c_p3], 2026-10-16_03_未知_[BV1A5Jt6KEeS_p4], 2026-10-18_04_未知
+pheebie clean: 2113 training clips, 5.53 h from 2831 of 3865 lines; 12 validation clips from the held-out songs ['2026-02-28_01_人，上学上班辛苦了！宇宙无敌超元气翻唱《屑屑》！！', '2026-10-05_02_唱唱歌~~-2026年10月05日20时_p03_P3-_唱唱歌~~-10月05日22点00分', '2026-10-05_02_未知_[BV16YHx6wEpX_p2]', '2026-10-16_02_未知']
+=== 2026-10-21 08:35:28 exit 0

@@ -1,0 +1,4 @@
+=== 2026-10-22 03:09:10 start clips at 71bcb31
+speaker: hanamaru_hareru (/root/autodl-tmp/speakers/hanamaru_hareru)
+hanamaru_hareru all: 2593 training clips, 7.15 h from 3514 of 3514 lines; 12 validation clips from the held-out songs ['0103_Winter_Story', '0314_届かない恋', '0711_U&I', '0711_翼をください']
+=== 2026-10-22 03:11:09 exit 0

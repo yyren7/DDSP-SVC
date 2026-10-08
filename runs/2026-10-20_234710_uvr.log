@@ -1,0 +1,88 @@
+=== 2026-10-20 23:47:10 start uvr at dda1504
+speaker: pheebie (/root/autodl-tmp/speakers/pheebie)
+Failed to load libcublasLt.so.13: libcublasLt.so.13: cannot open shared object file: No such file or directory
+Failed to load libcublas.so.13: libcublas.so.13: cannot open shared object file: No such file or directory
+Failed to load libnvrtc.so.13: libnvrtc.so.13: cannot open shared object file: No such file or directory
+Failed to load libcufft.so.12: libcufft.so.12: cannot open shared object file: No such file or directory
+Failed to load libcudart.so.13: libcudart.so.13: cannot open shared object file: No such file or directory
+Please follow https://onnxruntime.ai/docs/install/#cuda-and-cudnn to install CUDA.
+== bs_leap_xe_voc.ckpt
+== karaoke_bs_roformer_anvuew.ckpt
+== bs_roformer_karaoke_frazer_becruily.ckpt
+== bs_karaoke_gabox_IS.ckpt
+== dereverb_bs_roformer_anvuew_sdr_22.5050.ckpt
+all UVR models ready
+185 input files
+removing 2_dereverb, a stage folder of an older stage order
+removing 3_karaoke, a stage folder of an older stage order
+[vocals] bs_leap_xe_voc.ckpt: 185 done, 0 to process
+[karaoke] karaoke_bs_roformer_anvuew.ckpt+bs_roformer_karaoke_frazer_becruily.ckpt+bs_karaoke_gabox_IS.ckpt: 0 done, 185 to process
+Failed to load libcublasLt.so.13: libcublasLt.so.13: cannot open shared object file: No such file or directory
+Failed to load libcublas.so.13: libcublas.so.13: cannot open shared object file: No such file or directory
+Failed to load libnvrtc.so.13: libnvrtc.so.13: cannot open shared object file: No such file or directory
+Failed to load libcufft.so.12: libcufft.so.12: cannot open shared object file: No such file or directory
+Failed to load libcudart.so.13: libcudart.so.13: cannot open shared object file: No such file or directory
+Please follow https://onnxruntime.ai/docs/install/#cuda-and-cudnn to install CUDA.
+Failed to load libcublasLt.so.13: libcublasLt.so.13: cannot open shared object file: No such file or directory
+Failed to load libcublas.so.13: libcublas.so.13: cannot open shared object file: No such file or directory
+Failed to load libnvrtc.so.13: libnvrtc.so.13: cannot open shared object file: No such file or directory
+Failed to load libcufft.so.12: libcufft.so.12: cannot open shared object file: No such file or directory
+Failed to load libcudart.so.13: libcudart.so.13: cannot open shared object file: No such file or directory
+Please follow https://onnxruntime.ai/docs/install/#cuda-and-cudnn to install CUDA.
+Failed to load libcublasLt.so.13: libcublasLt.so.13: cannot open shared object file: No such file or directory
+Failed to load libcublas.so.13: libcublas.so.13: cannot open shared object file: No such file or directory
+Failed to load libnvrtc.so.13: libnvrtc.so.13: cannot open shared object file: No such file or directory
+Failed to load libcufft.so.12: libcufft.so.12: cannot open shared object file: No such file or directory
+Failed to load libcudart.so.13: libcudart.so.13: cannot open shared object file: No such file or directory
+Please follow https://onnxruntime.ai/docs/install/#cuda-and-cudnn to install CUDA.
+100%|██████████| 46/46 [00:22<00:00,  2.01it/s]
+100%|██████████| 28/28 [00:24<00:00,  1.15it/s]
+100%|██████████| 24/24 [00:11<00:00,  2.10it/s]
+[karaoke] 1/185 2025-10-02_01_mua！誓见！！！！.wav (66.1s)
+100%|██████████| 49/49 [00:23<00:00,  2.06it/s]
+100%|██████████| 30/30 [00:25<00:00,  1.16it/s]
+100%|██████████| 25/25 [00:11<00:00,  2.12it/s]
+[karaoke] 2/185 2025-10-31_01_元气少女猫给你一jio！《下等马》下等猫翻唱！.wav (67.1s)
+100%|██████████| 47/47 [00:22<00:00,  2.14it/s]
+100%|██████████| 29/29 [00:24<00:00,  1.16it/s]
+100%|██████████| 24/24 [00:11<00:00,  2.13it/s]
+[karaoke] 3/185 2025-11-18_01_10万赞催更的「里表情人」完整版来啦！！！.wav (63.9s)
+100%|██████████| 43/43 [00:20<00:00,  2.13it/s]
+100%|██████████| 26/26 [00:22<00:00,  1.16it/s]
+100%|██████████| 22/22 [00:10<00:00,  2.13it/s]
+[karaoke] 4/185 2026-01-12_01_甜妹狂气地唱了Don't_Lose_Ur_Head！.wav (58.0s)
+100%|██████████| 71/71 [00:33<00:00,  2.13it/s]
+100%|██████████| 43/43 [00:36<00:00,  1.16it/s]
+100%|██████████| 36/36 [00:16<00:00,  2.13it/s]
+[karaoke] 5/185 2026-02-17_01_《吉祥话》新年为您送吉祥！甜帅萌御全都有.wav (94.8s)
+100%|██████████| 64/64 [00:29<00:00,  2.14it/s]
+100%|██████████| 39/39 [00:33<00:00,  1.16it/s]
+100%|██████████| 33/33 [00:15<00:00,  2.13it/s]
+[karaoke] 6/185 2026-02-28_01_人，上学上班辛苦了！宇宙无敌超元气翻唱《屑屑》！！.wav (86.3s)
+100%|██████████| 34/34 [00:15<00:00,  2.14it/s]
+100%|██████████| 21/21 [00:18<00:00,  1.17it/s]
+100%|██████████| 18/18 [00:08<00:00,  2.14it/s]
+[karaoke] 7/185 2026-03-07_01_《音乐之声》经典音乐剧唱段🎶My_Favourite_Things❤️🥺我心爱的事物.wav (46.9s)
+100%|██████████| 62/62 [00:29<00:00,  2.14it/s]
+100%|██████████| 38/38 [00:32<00:00,  1.17it/s]
+100%|██████████| 32/32 [00:14<00:00,  2.13it/s]
+[karaoke] 8/185 2026-03-14_01_劲爽怒音！原key高音甜美爆炸💥___プロポーズ_翻唱.wav (83.7s)
+100%|██████████| 62/62 [00:29<00:00,  2.10it/s]
+100%|██████████| 38/38 [00:32<00:00,  1.15it/s]
+100%|██████████| 32/32 [00:15<00:00,  2.10it/s]
+[karaoke] 9/185 2026-03-28_01_香甜清爽如气泡水般的女声🥂蜜月アン・ドゥ・トロワ_DATEKEN_feat.鏡音リン翻唱💖Un・Deux・Trois🍾.wav (85.9s)
+100%|██████████| 48/48 [00:22<00:00,  2.13it/s]
+100%|██████████| 29/29 [00:24<00:00,  1.16it/s]
+100%|██████████| 25/25 [00:11<00:00,  2.13it/s]
+[karaoke] 10/185 2026-05-01_01_音色暴击💥！清脆灵动的薄荷糖_翻唱！🧊.wav (65.0s)
+100%|██████████| 31/31 [00:14<00:00,  2.14it/s]
+100%|██████████| 18/18 [00:15<00:00,  1.16it/s]
+100%|██████████| 16/16 [00:07<00:00,  2.14it/s]
+[karaoke] 11/185 2026-05-24_01_表现力炸爆炸💥超带感病娇Loveit__(feat._LOLUET)翻唱❤️.wav (41.7s)
+100%|██████████| 49/49 [00:22<00:00,  2.14it/s]
+100%|██████████| 30/30 [00:25<00:00,  1.16it/s]
+100%|██████████| 25/25 [00:11<00:00,  2.13it/s]
+[karaoke] 12/185 2026-06-06_01_🦋_“你的心绪或许已存活千年”原KEY翻唱.wav (66.2s)
+100%|██████████| 74/74 [00:34<00:00,  2.14it/s]
+100%|██████████| 45/45 [00:38<00:00,  1.16it/s]
+ 71%|███████   | 27/38 [00:12<00:05,  2.13it/s]

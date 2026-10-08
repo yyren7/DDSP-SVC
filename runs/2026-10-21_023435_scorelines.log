@@ -1,0 +1,31 @@
+=== 2026-10-21 02:34:35 start scorelines at 6395fc7
+speaker: pheebie (/root/autodl-tmp/speakers/pheebie)
+Using cache found in /root/autodl-tmp/.cache/torch/hub/South-Twilight_SingMOS_v1.1.2
+ESPnet is not installed, cannot use espnet_hubert upstream
+/root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages/torch/nn/utils/weight_norm.py:144: FutureWarning: `torch.nn.utils.weight_norm` is deprecated in favor of `torch.nn.utils.parametrizations.weight_norm`.
+  WeightNorm.apply(module, name, dim)
+Loading weights: 100%|██████████| 266/266 [00:00<00:00, 25122.38it/s]
+models loaded in 13 s on cuda
+/root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages/torch/nn/functional.py:6044: UserWarning: Support for mismatched key_padding_mask and attn_mask is deprecated. Use same type for both instead.
+  warnings.warn(
+pheebie: 10/151 songs, 85 s
+pheebie: 20/151 songs, 182 s
+pheebie: 30/151 songs, 323 s
+pheebie: 40/151 songs, 421 s
+pheebie: 50/151 songs, 519 s
+pheebie: 60/151 songs, 625 s
+pheebie: 70/151 songs, 733 s
+pheebie: 80/151 songs, 843 s
+pheebie: 90/151 songs, 944 s
+pheebie: 100/151 songs, 1032 s
+pheebie: 110/151 songs, 1145 s
+pheebie: 120/151 songs, 1238 s
+pheebie: 130/151 songs, 1326 s
+pheebie: 140/151 songs, 1426 s
+pheebie: 150/151 songs, 1539 s
+pheebie: 3865 lines scored in 1547 s, centroid from 2030 lines; singmos 111 s, audiobox 40 s, wavlm 80 s, rmvpe 146 s, dnsmos wait 1053 s
+pheebie: 50/151 songs, 46 s
+pheebie: 100/151 songs, 89 s
+pheebie: 150/151 songs, 131 s
+pheebie: 3865 lines tagged in 132 s
+=== 2026-10-21 03:02:59 exit 0

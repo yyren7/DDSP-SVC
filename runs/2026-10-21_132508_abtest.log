@@ -1,0 +1,34 @@
+=== 2026-10-21 13:25:08 start abtest at e0d62e3
+speaker: pheebie (/root/autodl-tmp/speakers/pheebie)
+/root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages/pyworld/__init__.py:13: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+ [Encoder Model] Content Vec
+ [Loading] pretrain/contentvec/pytorch_model.bin
+pheebie: 24 clips prepared in 7 s
+ [DDSP Model] Combtooth Subtractive Synthesiser
+/root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages/torch/nn/utils/weight_norm.py:144: FutureWarning: `torch.nn.utils.weight_norm` is deprecated in favor of `torch.nn.utils.parametrizations.weight_norm`.
+  WeightNorm.apply(module, name, dim)
+ [Loading] /root/autodl-tmp/speakers/pheebie/exp_all/model_40000.pt
+| Load HifiGAN:  pretrain/nsf_hifigan/model
+Removing weight norm...
+pheebie all: 24 clips converted with model_40000.pt in 5 s
+ [DDSP Model] Combtooth Subtractive Synthesiser
+ [Loading] /root/autodl-tmp/speakers/pheebie/exp_clean/model_40000.pt
+| Load HifiGAN:  pretrain/nsf_hifigan/model
+Removing weight norm...
+pheebie clean: 24 clips converted with model_40000.pt in 4 s
+Using cache found in /root/autodl-tmp/.cache/torch/hub/South-Twilight_SingMOS_v1.1.2
+ESPnet is not installed, cannot use espnet_hubert upstream
+/root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages/torch/nn/utils/weight_norm.py:144: FutureWarning: `torch.nn.utils.weight_norm` is deprecated in favor of `torch.nn.utils.parametrizations.weight_norm`.
+  WeightNorm.apply(module, name, dim)
+Loading weights: 100%|██████████| 266/266 [00:00<00:00, 24450.15it/s]
+models loaded in 13 s on cuda
+/root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages/torch/nn/functional.py:6044: UserWarning: Support for mismatched key_padding_mask and attn_mask is deprecated. Use same type for both instead.
+  warnings.warn(
+pheebie _source  her clips (12): singmos 4.011, aes_pq 7.634, aes_ce 5.510, dns_ovrl 2.759, spk_cos 0.912
+pheebie _source  others    (12): singmos 4.266, aes_pq 7.779, aes_ce 6.218, dns_ovrl 2.868, spk_cos 0.870
+pheebie all      her clips (12): singmos 3.765, aes_pq 7.613, aes_ce 5.435, dns_ovrl 2.760, spk_cos 0.931, f0_rmse_cents 28.952
+pheebie all      others    (12): singmos 3.873, aes_pq 7.838, aes_ce 6.147, dns_ovrl 2.930, spk_cos 0.928, f0_rmse_cents 24.853
+pheebie clean    her clips (12): singmos 3.795, aes_pq 7.553, aes_ce 5.469, dns_ovrl 2.726, spk_cos 0.906, f0_rmse_cents 27.239
+pheebie clean    others    (12): singmos 3.991, aes_pq 7.803, aes_ce 6.047, dns_ovrl 2.889, spk_cos 0.933, f0_rmse_cents 27.120
+=== 2026-10-21 13:26:24 exit 0

@@ -1,0 +1,12 @@
+=== 2026-10-20 20:14:11 start features at dc3e342
+speaker: pheebie (/root/autodl-tmp/speakers/pheebie)
+config: configs/reflow.yaml -> /root/autodl-tmp/speakers/pheebie/reflow_all.yaml
+Traceback (most recent call last):
+  File "/root/autodl-tmp/DDSP-SVC/preprocess.py", line 12, in <module>
+    from ddsp.vocoder import F0_Extractor, Volume_Extractor, Units_Encoder
+  File "/root/autodl-tmp/DDSP-SVC/ddsp/vocoder.py", line 6, in <module>
+    import pyworld as pw
+  File "/root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages/pyworld/__init__.py", line 13, in <module>
+    import pkg_resources
+ModuleNotFoundError: No module named 'pkg_resources'
+=== 2026-10-20 20:14:13 exit 1
