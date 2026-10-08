@@ -1,0 +1,249 @@
+=== 2026-10-20 00:18:58 start compare at 734f5e0
+speaker: pheebie (/root/autodl-tmp/speakers/pheebie)
+libgomp: Invalid value for environment variable OMP_NUM_THREADS
+libgomp: Invalid value for environment variable OMP_NUM_THREADS
+Failed to load libcublasLt.so.13: libcublasLt.so.13: cannot open shared object file: No such file or directory
+Failed to load libcublas.so.13: libcublas.so.13: cannot open shared object file: No such file or directory
+Failed to load libnvrtc.so.13: libnvrtc.so.13: cannot open shared object file: No such file or directory
+Failed to load libcufft.so.12: libcufft.so.12: cannot open shared object file: No such file or directory
+Failed to load libcudart.so.13: libcudart.so.13: cannot open shared object file: No such file or directory
+Please follow https://onnxruntime.ai/docs/install/#cuda-and-cudnn to install CUDA.
+== bs_leap_xe_voc.ckpt
+== dereverb_bs_roformer_anvuew_sdr_22.5050.ckpt
+== karaoke_bs_roformer_anvuew.ckpt
+== denoise_mel_band_roformer_aufr33_sdr_27.9959.ckpt
+all UVR models ready
+libgomp: Invalid value for environment variable OMP_NUM_THREADS
+libgomp: Invalid value for environment variable OMP_NUM_THREADS
+excerpt 1 2026-01-31 01 👑世界第一公主殿下！❤️ワールドイズマイン👑文艺复兴一下！.wav
+libgomp: Invalid value for environment variable OMP_NUM_THREADS
+excerpt 2 2026-06-06 01 🦋 “你的心绪或许已存活千年”原KEY翻唱.wav
+libgomp: Invalid value for environment variable OMP_NUM_THREADS
+excerpt 3 2026-10-11 01 未知 [BV1rDpJ6JEwu_p6].wav
+libgomp: Invalid value for environment variable OMP_NUM_THREADS
+excerpt 4 2026-10-03 06 未知.wav
+libgomp: Invalid value for environment variable OMP_NUM_THREADS
+excerpt 5 2026-10-11 03 未知 [BV11dpj6EE8u_p2].wav
+libgomp: Invalid value for environment variable OMP_NUM_THREADS
+excerpt 6 2026-10-17 08 未知.wav
+== A 原来的四步（FV4→去和声→去混响→去噪）
+[vocals] mel_band_roformer_vocals_fv4_gabox.ckpt: 0 done, 6 to process
+libgomp: Invalid value for environment variable OMP_NUM_THREADS
+Failed to load libcublasLt.so.13: libcublasLt.so.13: cannot open shared object file: No such file or directory
+Failed to load libcublas.so.13: libcublas.so.13: cannot open shared object file: No such file or directory
+Failed to load libnvrtc.so.13: libnvrtc.so.13: cannot open shared object file: No such file or directory
+Failed to load libcufft.so.12: libcufft.so.12: cannot open shared object file: No such file or directory
+Failed to load libcudart.so.13: libcudart.so.13: cannot open shared object file: No such file or directory
+Please follow https://onnxruntime.ai/docs/install/#cuda-and-cudnn to install CUDA.
+100%|██████████| 4/4 [00:01<00:00,  3.08it/s]
+[vocals] 1/6 1 2026-01-31 01 👑世界第一公主殿下！❤️ワールドイズマイン👑文艺复兴一下！.wav (2.5s)
+100%|██████████| 4/4 [00:01<00:00,  3.62it/s]
+[vocals] 2/6 2 2026-06-06 01 🦋 “你的心绪或许已存活千年”原KEY翻唱.wav (1.5s)
+100%|██████████| 4/4 [00:01<00:00,  3.59it/s]
+[vocals] 3/6 3 2026-10-11 01 未知 [BV1rDpJ6JEwu_p6].wav (1.8s)
+100%|██████████| 4/4 [00:01<00:00,  3.71it/s]
+[vocals] 4/6 4 2026-10-03 06 未知.wav (1.6s)
+100%|██████████| 4/4 [00:01<00:00,  3.36it/s]
+[vocals] 5/6 5 2026-10-11 03 未知 [BV11dpj6EE8u_p2].wav (1.6s)
+100%|██████████| 4/4 [00:01<00:00,  3.11it/s]
+[vocals] 6/6 6 2026-10-17 08 未知.wav (1.8s)
+[karaoke] mel_band_roformer_karaoke_aufr33_viperx_sdr_10.1956.ckpt: 0 done, 6 to process
+libgomp: Invalid value for environment variable OMP_NUM_THREADS
+Failed to load libcublasLt.so.13: libcublasLt.so.13: cannot open shared object file: No such file or directory
+Failed to load libcublas.so.13: libcublas.so.13: cannot open shared object file: No such file or directory
+Failed to load libnvrtc.so.13: libnvrtc.so.13: cannot open shared object file: No such file or directory
+Failed to load libcufft.so.12: libcufft.so.12: cannot open shared object file: No such file or directory
+Failed to load libcudart.so.13: libcudart.so.13: cannot open shared object file: No such file or directory
+Please follow https://onnxruntime.ai/docs/install/#cuda-and-cudnn to install CUDA.
+100%|██████████| 18/18 [00:03<00:00,  5.21it/s]
+[karaoke] 1/6 1 2026-01-31 01 👑世界第一公主殿下！❤️ワールドイズマイン👑文艺复兴一下！.wav (3.9s)
+100%|██████████| 17/17 [00:03<00:00,  5.27it/s]
+[karaoke] 2/6 2 2026-06-06 01 🦋 “你的心绪或许已存活千年”原KEY翻唱.wav (3.7s)
+100%|██████████| 17/17 [00:03<00:00,  5.26it/s]
+[karaoke] 3/6 3 2026-10-11 01 未知 [BV1rDpJ6JEwu_p6].wav (3.6s)
+100%|██████████| 17/17 [00:03<00:00,  5.28it/s]
+[karaoke] 4/6 4 2026-10-03 06 未知.wav (3.7s)
+100%|██████████| 17/17 [00:03<00:00,  5.21it/s]
+[karaoke] 5/6 5 2026-10-11 03 未知 [BV11dpj6EE8u_p2].wav (3.8s)
+100%|██████████| 17/17 [00:03<00:00,  5.15it/s]
+[karaoke] 6/6 6 2026-10-17 08 未知.wav (3.7s)
+[dereverb] UVR-DeEcho-DeReverb.pth: 0 done, 6 to process
+libgomp: Invalid value for environment variable OMP_NUM_THREADS
+Failed to load libcublasLt.so.13: libcublasLt.so.13: cannot open shared object file: No such file or directory
+Failed to load libcublas.so.13: libcublas.so.13: cannot open shared object file: No such file or directory
+Failed to load libnvrtc.so.13: libnvrtc.so.13: cannot open shared object file: No such file or directory
+Failed to load libcufft.so.12: libcufft.so.12: cannot open shared object file: No such file or directory
+Failed to load libcudart.so.13: libcudart.so.13: cannot open shared object file: No such file or directory
+Please follow https://onnxruntime.ai/docs/install/#cuda-and-cudnn to install CUDA.
+100%|██████████| 4/4 [00:00<00:00, 22.60it/s]
+100%|██████████| 10/10 [00:00<00:00, 221920.85it/s]
+100%|██████████| 10/10 [00:00<00:00, 11.58it/s]
+[dereverb] 1/6 1 2026-01-31 01 👑世界第一公主殿下！❤️ワールドイズマイン👑文艺复兴一下！.wav (4.7s)
+100%|██████████| 4/4 [00:00<00:00, 23.07it/s]
+100%|██████████| 10/10 [00:00<00:00, 260515.78it/s]
+100%|██████████| 10/10 [00:00<00:00, 39.19it/s]
+[dereverb] 2/6 2 2026-06-06 01 🦋 “你的心绪或许已存活千年”原KEY翻唱.wav (3.1s)
+100%|██████████| 4/4 [00:00<00:00, 23.07it/s]
+100%|██████████| 10/10 [00:00<00:00, 272357.40it/s]
+100%|██████████| 10/10 [00:00<00:00, 39.20it/s]
+[dereverb] 3/6 3 2026-10-11 01 未知 [BV1rDpJ6JEwu_p6].wav (3.1s)
+100%|██████████| 4/4 [00:00<00:00, 22.88it/s]
+100%|██████████| 10/10 [00:00<00:00, 238312.73it/s]
+100%|██████████| 10/10 [00:00<00:00, 38.83it/s]
+[dereverb] 4/6 4 2026-10-03 06 未知.wav (3.1s)
+100%|██████████| 4/4 [00:00<00:00, 23.06it/s]
+100%|██████████| 10/10 [00:00<00:00, 265462.28it/s]
+100%|██████████| 10/10 [00:00<00:00, 39.21it/s]
+[dereverb] 5/6 5 2026-10-11 03 未知 [BV11dpj6EE8u_p2].wav (3.1s)
+100%|██████████| 4/4 [00:00<00:00, 23.21it/s]
+100%|██████████| 10/10 [00:00<00:00, 272357.40it/s]
+100%|██████████| 10/10 [00:00<00:00, 39.14it/s]
+[dereverb] 6/6 6 2026-10-17 08 未知.wav (3.1s)
+[denoise] denoise_mel_band_roformer_aufr33_sdr_27.9959.ckpt: 0 done, 6 to process
+libgomp: Invalid value for environment variable OMP_NUM_THREADS
+Failed to load libcublasLt.so.13: libcublasLt.so.13: cannot open shared object file: No such file or directory
+Failed to load libcublas.so.13: libcublas.so.13: cannot open shared object file: No such file or directory
+Failed to load libnvrtc.so.13: libnvrtc.so.13: cannot open shared object file: No such file or directory
+Failed to load libcufft.so.12: libcufft.so.12: cannot open shared object file: No such file or directory
+Failed to load libcudart.so.13: libcudart.so.13: cannot open shared object file: No such file or directory
+Please follow https://onnxruntime.ai/docs/install/#cuda-and-cudnn to install CUDA.
+100%|██████████| 17/17 [00:03<00:00,  5.14it/s]
+[denoise] 1/6 1 2026-01-31 01 👑世界第一公主殿下！❤️ワールドイズマイン👑文艺复兴一下！.wav (4.0s)
+100%|██████████| 17/17 [00:03<00:00,  5.01it/s]
+[denoise] 2/6 2 2026-06-06 01 🦋 “你的心绪或许已存活千年”原KEY翻唱.wav (3.8s)
+100%|██████████| 17/17 [00:03<00:00,  5.24it/s]
+[denoise] 3/6 3 2026-10-11 01 未知 [BV1rDpJ6JEwu_p6].wav (3.7s)
+100%|██████████| 17/17 [00:03<00:00,  5.19it/s]
+[denoise] 4/6 4 2026-10-03 06 未知.wav (3.7s)
+100%|██████████| 17/17 [00:03<00:00,  5.23it/s]
+[denoise] 5/6 5 2026-10-11 03 未知 [BV11dpj6EE8u_p2].wav (3.7s)
+100%|██████████| 17/17 [00:03<00:00,  5.20it/s]
+[denoise] 6/6 6 2026-10-17 08 未知.wav (3.7s)
+== B 新的四步（Leap Xe→去混响→去和声→去噪）
+[vocals] bs_leap_xe_voc.ckpt: 0 done, 6 to process
+libgomp: Invalid value for environment variable OMP_NUM_THREADS
+Failed to load libcublasLt.so.13: libcublasLt.so.13: cannot open shared object file: No such file or directory
+Failed to load libcublas.so.13: libcublas.so.13: cannot open shared object file: No such file or directory
+Failed to load libnvrtc.so.13: libnvrtc.so.13: cannot open shared object file: No such file or directory
+Failed to load libcufft.so.12: libcufft.so.12: cannot open shared object file: No such file or directory
+Failed to load libcudart.so.13: libcudart.so.13: cannot open shared object file: No such file or directory
+Please follow https://onnxruntime.ai/docs/install/#cuda-and-cudnn to install CUDA.
+100%|██████████| 3/3 [00:04<00:00,  1.57s/it]
+[vocals] 1/6 1 2026-01-31 01 👑世界第一公主殿下！❤️ワールドイズマイン👑文艺复兴一下！.wav (5.2s)
+100%|██████████| 3/3 [00:04<00:00,  1.58s/it]
+[vocals] 2/6 2 2026-06-06 01 🦋 “你的心绪或许已存活千年”原KEY翻唱.wav (5.4s)
+100%|██████████| 3/3 [00:04<00:00,  1.64s/it]
+[vocals] 3/6 3 2026-10-11 01 未知 [BV1rDpJ6JEwu_p6].wav (5.6s)
+100%|██████████| 3/3 [00:05<00:00,  1.67s/it]
+[vocals] 4/6 4 2026-10-03 06 未知.wav (5.6s)
+100%|██████████| 3/3 [00:04<00:00,  1.64s/it]
+[vocals] 5/6 5 2026-10-11 03 未知 [BV11dpj6EE8u_p2].wav (5.4s)
+100%|██████████| 3/3 [00:04<00:00,  1.58s/it]
+[vocals] 6/6 6 2026-10-17 08 未知.wav (5.2s)
+[dereverb] dereverb_bs_roformer_anvuew_sdr_22.5050.ckpt: 0 done, 6 to process
+libgomp: Invalid value for environment variable OMP_NUM_THREADS
+Failed to load libcublasLt.so.13: libcublasLt.so.13: cannot open shared object file: No such file or directory
+Failed to load libcublas.so.13: libcublas.so.13: cannot open shared object file: No such file or directory
+Failed to load libnvrtc.so.13: libnvrtc.so.13: cannot open shared object file: No such file or directory
+Failed to load libcufft.so.12: libcufft.so.12: cannot open shared object file: No such file or directory
+Failed to load libcudart.so.13: libcudart.so.13: cannot open shared object file: No such file or directory
+Please follow https://onnxruntime.ai/docs/install/#cuda-and-cudnn to install CUDA.
+100%|██████████| 7/7 [00:02<00:00,  3.27it/s]
+[dereverb] 1/6 1 2026-01-31 01 👑世界第一公主殿下！❤️ワールドイズマイン👑文艺复兴一下！.wav (2.5s)
+100%|██████████| 7/7 [00:02<00:00,  3.10it/s]
+[dereverb] 2/6 2 2026-06-06 01 🦋 “你的心绪或许已存活千年”原KEY翻唱.wav (2.7s)
+100%|██████████| 7/7 [00:02<00:00,  3.27it/s]
+[dereverb] 3/6 3 2026-10-11 01 未知 [BV1rDpJ6JEwu_p6].wav (2.6s)
+100%|██████████| 7/7 [00:02<00:00,  3.16it/s]
+[dereverb] 4/6 4 2026-10-03 06 未知.wav (2.6s)
+100%|██████████| 7/7 [00:02<00:00,  3.08it/s]
+[dereverb] 5/6 5 2026-10-11 03 未知 [BV11dpj6EE8u_p2].wav (3.0s)
+100%|██████████| 7/7 [00:02<00:00,  2.77it/s]
+[dereverb] 6/6 6 2026-10-17 08 未知.wav (2.9s)
+[karaoke] karaoke_bs_roformer_anvuew.ckpt: 0 done, 6 to process
+libgomp: Invalid value for environment variable OMP_NUM_THREADS
+Failed to load libcublasLt.so.13: libcublasLt.so.13: cannot open shared object file: No such file or directory
+Failed to load libcublas.so.13: libcublas.so.13: cannot open shared object file: No such file or directory
+Failed to load libnvrtc.so.13: libnvrtc.so.13: cannot open shared object file: No such file or directory
+Failed to load libcufft.so.12: libcufft.so.12: cannot open shared object file: No such file or directory
+Failed to load libcudart.so.13: libcudart.so.13: cannot open shared object file: No such file or directory
+Please follow https://onnxruntime.ai/docs/install/#cuda-and-cudnn to install CUDA.
+100%|██████████| 9/9 [00:04<00:00,  2.09it/s]
+[karaoke] 1/6 1 2026-01-31 01 👑世界第一公主殿下！❤️ワールドイズマイン👑文艺复兴一下！.wav (4.8s)
+100%|██████████| 9/9 [00:04<00:00,  2.12it/s]
+[karaoke] 2/6 2 2026-06-06 01 🦋 “你的心绪或许已存活千年”原KEY翻唱.wav (4.7s)
+100%|██████████| 9/9 [00:04<00:00,  2.10it/s]
+[karaoke] 3/6 3 2026-10-11 01 未知 [BV1rDpJ6JEwu_p6].wav (4.8s)
+100%|██████████| 9/9 [00:04<00:00,  2.12it/s]
+[karaoke] 4/6 4 2026-10-03 06 未知.wav (4.7s)
+100%|██████████| 9/9 [00:04<00:00,  2.11it/s]
+[karaoke] 5/6 5 2026-10-11 03 未知 [BV11dpj6EE8u_p2].wav (5.2s)
+100%|██████████| 9/9 [00:04<00:00,  2.08it/s]
+[karaoke] 6/6 6 2026-10-17 08 未知.wav (4.8s)
+[denoise] denoise_mel_band_roformer_aufr33_sdr_27.9959.ckpt: 0 done, 6 to process
+libgomp: Invalid value for environment variable OMP_NUM_THREADS
+Failed to load libcublasLt.so.13: libcublasLt.so.13: cannot open shared object file: No such file or directory
+Failed to load libcublas.so.13: libcublas.so.13: cannot open shared object file: No such file or directory
+Failed to load libnvrtc.so.13: libnvrtc.so.13: cannot open shared object file: No such file or directory
+Failed to load libcufft.so.12: libcufft.so.12: cannot open shared object file: No such file or directory
+Failed to load libcudart.so.13: libcudart.so.13: cannot open shared object file: No such file or directory
+Please follow https://onnxruntime.ai/docs/install/#cuda-and-cudnn to install CUDA.
+100%|██████████| 18/18 [00:03<00:00,  5.13it/s]
+[denoise] 1/6 1 2026-01-31 01 👑世界第一公主殿下！❤️ワールドイズマイン👑文艺复兴一下！.wav (4.6s)
+100%|██████████| 17/17 [00:03<00:00,  5.22it/s]
+[denoise] 2/6 2 2026-06-06 01 🦋 “你的心绪或许已存活千年”原KEY翻唱.wav (3.7s)
+100%|██████████| 17/17 [00:03<00:00,  5.22it/s]
+[denoise] 3/6 3 2026-10-11 01 未知 [BV1rDpJ6JEwu_p6].wav (3.7s)
+100%|██████████| 17/17 [00:03<00:00,  5.11it/s]
+[denoise] 4/6 4 2026-10-03 06 未知.wav (3.7s)
+100%|██████████| 17/17 [00:03<00:00,  5.13it/s]
+[denoise] 5/6 5 2026-10-11 03 未知 [BV11dpj6EE8u_p2].wav (3.7s)
+100%|██████████| 17/17 [00:03<00:00,  5.16it/s]
+[denoise] 6/6 6 2026-10-17 08 未知.wav (3.7s)
+== C 新的三步（B 去掉去噪）
+[vocals] bs_leap_xe_voc.ckpt: 6 done, 0 to process
+[dereverb] dereverb_bs_roformer_anvuew_sdr_22.5050.ckpt: 6 done, 0 to process
+[karaoke] karaoke_bs_roformer_anvuew.ckpt: 6 done, 0 to process
+== D 两步（直接在原曲上去和声→去混响）
+[karaoke] karaoke_bs_roformer_anvuew.ckpt: 0 done, 6 to process
+libgomp: Invalid value for environment variable OMP_NUM_THREADS
+Failed to load libcublasLt.so.13: libcublasLt.so.13: cannot open shared object file: No such file or directory
+Failed to load libcublas.so.13: libcublas.so.13: cannot open shared object file: No such file or directory
+Failed to load libnvrtc.so.13: libnvrtc.so.13: cannot open shared object file: No such file or directory
+Failed to load libcufft.so.12: libcufft.so.12: cannot open shared object file: No such file or directory
+Failed to load libcudart.so.13: libcudart.so.13: cannot open shared object file: No such file or directory
+Please follow https://onnxruntime.ai/docs/install/#cuda-and-cudnn to install CUDA.
+100%|██████████| 9/9 [00:04<00:00,  2.08it/s]
+[karaoke] 1/6 1 2026-01-31 01 👑世界第一公主殿下！❤️ワールドイズマイン👑文艺复兴一下！.wav (5.1s)
+100%|██████████| 9/9 [00:04<00:00,  2.11it/s]
+[karaoke] 2/6 2 2026-06-06 01 🦋 “你的心绪或许已存活千年”原KEY翻唱.wav (4.7s)
+100%|██████████| 9/9 [00:04<00:00,  2.10it/s]
+[karaoke] 3/6 3 2026-10-11 01 未知 [BV1rDpJ6JEwu_p6].wav (4.7s)
+100%|██████████| 9/9 [00:04<00:00,  2.06it/s]
+[karaoke] 4/6 4 2026-10-03 06 未知.wav (4.9s)
+100%|██████████| 9/9 [00:04<00:00,  1.97it/s]
+[karaoke] 5/6 5 2026-10-11 03 未知 [BV11dpj6EE8u_p2].wav (5.0s)
+100%|██████████| 9/9 [00:04<00:00,  2.05it/s]
+[karaoke] 6/6 6 2026-10-17 08 未知.wav (4.8s)
+[dereverb] dereverb_bs_roformer_anvuew_sdr_22.5050.ckpt: 0 done, 6 to process
+libgomp: Invalid value for environment variable OMP_NUM_THREADS
+Failed to load libcublasLt.so.13: libcublasLt.so.13: cannot open shared object file: No such file or directory
+Failed to load libcublas.so.13: libcublas.so.13: cannot open shared object file: No such file or directory
+Failed to load libnvrtc.so.13: libnvrtc.so.13: cannot open shared object file: No such file or directory
+Failed to load libcufft.so.12: libcufft.so.12: cannot open shared object file: No such file or directory
+Failed to load libcudart.so.13: libcudart.so.13: cannot open shared object file: No such file or directory
+Please follow https://onnxruntime.ai/docs/install/#cuda-and-cudnn to install CUDA.
+100%|██████████| 7/7 [00:02<00:00,  3.18it/s]
+[dereverb] 1/6 1 2026-01-31 01 👑世界第一公主殿下！❤️ワールドイズマイン👑文艺复兴一下！.wav (2.7s)
+100%|██████████| 7/7 [00:02<00:00,  3.23it/s]
+[dereverb] 2/6 2 2026-06-06 01 🦋 “你的心绪或许已存活千年”原KEY翻唱.wav (2.6s)
+100%|██████████| 7/7 [00:02<00:00,  3.29it/s]
+[dereverb] 3/6 3 2026-10-11 01 未知 [BV1rDpJ6JEwu_p6].wav (2.6s)
+100%|██████████| 7/7 [00:02<00:00,  3.24it/s]
+[dereverb] 4/6 4 2026-10-03 06 未知.wav (2.6s)
+100%|██████████| 7/7 [00:02<00:00,  3.09it/s]
+[dereverb] 5/6 5 2026-10-11 03 未知 [BV11dpj6EE8u_p2].wav (2.8s)
+100%|██████████| 7/7 [00:02<00:00,  2.82it/s]
+[dereverb] 6/6 6 2026-10-17 08 未知.wav (2.9s)
+6 excerpts x 4 versions in /root/autodl-tmp/speakers/pheebie/compare
+=== 2026-10-20 00:23:05 exit 0

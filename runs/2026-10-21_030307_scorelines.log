@@ -1,0 +1,27 @@
+=== 2026-10-21 03:03:07 start scorelines at 6395fc7
+speaker: sakura_shunka (/root/autodl-tmp/speakers/sakura_shunka)
+Using cache found in /root/autodl-tmp/.cache/torch/hub/South-Twilight_SingMOS_v1.1.2
+ESPnet is not installed, cannot use espnet_hubert upstream
+/root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages/torch/nn/utils/weight_norm.py:144: FutureWarning: `torch.nn.utils.weight_norm` is deprecated in favor of `torch.nn.utils.parametrizations.weight_norm`.
+  WeightNorm.apply(module, name, dim)
+Loading weights: 100%|██████████| 266/266 [00:00<00:00, 23704.18it/s]
+models loaded in 12 s on cuda
+/root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages/torch/nn/functional.py:6044: UserWarning: Support for mismatched key_padding_mask and attn_mask is deprecated. Use same type for both instead.
+  warnings.warn(
+sakura_shunka: 10/125 songs, 106 s
+sakura_shunka: 20/125 songs, 216 s
+sakura_shunka: 30/125 songs, 312 s
+sakura_shunka: 40/125 songs, 421 s
+sakura_shunka: 50/125 songs, 519 s
+sakura_shunka: 60/125 songs, 631 s
+sakura_shunka: 70/125 songs, 727 s
+sakura_shunka: 80/125 songs, 831 s
+sakura_shunka: 90/125 songs, 918 s
+sakura_shunka: 100/125 songs, 1025 s
+sakura_shunka: 110/125 songs, 1114 s
+sakura_shunka: 120/125 songs, 1207 s
+sakura_shunka: 3138 lines scored in 1260 s, centroid from 1416 lines; singmos 93 s, audiobox 36 s, wavlm 63 s, rmvpe 125 s, dnsmos wait 825 s
+sakura_shunka: 50/125 songs, 58 s
+sakura_shunka: 100/125 songs, 109 s
+sakura_shunka: 3138 lines tagged in 134 s
+=== 2026-10-21 03:26:46 exit 0
