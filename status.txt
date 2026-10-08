@@ -1,0 +1,14 @@
+time:     2026-10-09 17:58:47 CST
+code:     526912c AutoDL: robust model downloads, prefetch UVR models, diagnosable shutdown
+plan:     JOB=setup RUN_ID=4
+job:      setup not running; === 2026-10-09 17:28:43 exit 1
+review:   port 6008 (key is in .autodl/review_key, not published)
+
+
+/dev/md0         50G   29G   22G  57% /root/autodl-tmp
+
+0 files  raw_songs
+0 files  data/train/audio
+0 files  data/val/audio
+0 files  test_songs
+shutdown: idle for 30 min at 2026-10-09 17:58:50 CST

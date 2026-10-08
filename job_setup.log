@@ -1,0 +1,400 @@
+Requirement already satisfied: typing-extensions>=4.10.0 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from torch<3,>=2.3->audio-separator[gpu]) (4.16.0)
+Requirement already satisfied: sympy>=1.13.3 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from torch<3,>=2.3->audio-separator[gpu]) (1.14.0)
+Requirement already satisfied: networkx>=2.5.1 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from torch<3,>=2.3->audio-separator[gpu]) (3.6.1)
+Requirement already satisfied: jinja2 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from torch<3,>=2.3->audio-separator[gpu]) (3.1.6)
+Requirement already satisfied: fsspec>=0.8.5 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from torch<3,>=2.3->audio-separator[gpu]) (2026.9.0)
+Requirement already satisfied: nvidia-cuda-nvrtc-cu12==12.8.93 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from torch<3,>=2.3->audio-separator[gpu]) (12.8.93)
+Requirement already satisfied: nvidia-cuda-runtime-cu12==12.8.90 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from torch<3,>=2.3->audio-separator[gpu]) (12.8.90)
+Requirement already satisfied: nvidia-cuda-cupti-cu12==12.8.90 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from torch<3,>=2.3->audio-separator[gpu]) (12.8.90)
+Requirement already satisfied: nvidia-cudnn-cu12==9.10.2.21 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from torch<3,>=2.3->audio-separator[gpu]) (9.10.2.21)
+Requirement already satisfied: nvidia-cublas-cu12==12.8.4.1 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from torch<3,>=2.3->audio-separator[gpu]) (12.8.4.1)
+Requirement already satisfied: nvidia-cufft-cu12==11.3.3.83 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from torch<3,>=2.3->audio-separator[gpu]) (11.3.3.83)
+Requirement already satisfied: nvidia-curand-cu12==10.3.9.90 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from torch<3,>=2.3->audio-separator[gpu]) (10.3.9.90)
+Requirement already satisfied: nvidia-cusolver-cu12==11.7.3.90 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from torch<3,>=2.3->audio-separator[gpu]) (11.7.3.90)
+Requirement already satisfied: nvidia-cusparse-cu12==12.5.8.93 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from torch<3,>=2.3->audio-separator[gpu]) (12.5.8.93)
+Requirement already satisfied: nvidia-cusparselt-cu12==0.7.1 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from torch<3,>=2.3->audio-separator[gpu]) (0.7.1)
+Requirement already satisfied: nvidia-nccl-cu12==2.27.5 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from torch<3,>=2.3->audio-separator[gpu]) (2.27.5)
+Requirement already satisfied: nvidia-nvshmem-cu12==3.3.20 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from torch<3,>=2.3->audio-separator[gpu]) (3.3.20)
+Requirement already satisfied: nvidia-nvtx-cu12==12.8.90 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from torch<3,>=2.3->audio-separator[gpu]) (12.8.90)
+Requirement already satisfied: nvidia-nvjitlink-cu12==12.8.93 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from torch<3,>=2.3->audio-separator[gpu]) (12.8.93)
+Requirement already satisfied: nvidia-cufile-cu12==1.13.1.3 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from torch<3,>=2.3->audio-separator[gpu]) (1.13.1.3)
+Requirement already satisfied: triton==3.5.1 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from torch<3,>=2.3->audio-separator[gpu]) (3.5.1)
+Requirement already satisfied: pycparser in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from cffi>=1.0.0->samplerate==0.1.0->audio-separator[gpu]) (3.0)
+Requirement already satisfied: Cython in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from diffq>=0.2->audio-separator[gpu]) (3.3.0)
+Requirement already satisfied: audioread>=2.1.9 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from librosa>=0.10->audio-separator[gpu]) (3.1.0)
+Requirement already satisfied: numba>=0.51.0 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from librosa>=0.10->audio-separator[gpu]) (0.68.0)
+Requirement already satisfied: scikit-learn>=1.1.0 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from librosa>=0.10->audio-separator[gpu]) (1.9.1)
+Requirement already satisfied: joblib>=1.0 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from librosa>=0.10->audio-separator[gpu]) (1.6.0)
+Requirement already satisfied: decorator>=4.3.0 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from librosa>=0.10->audio-separator[gpu]) (5.3.1)
+Requirement already satisfied: pooch>=1.1 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from librosa>=0.10->audio-separator[gpu]) (1.9.0)
+Requirement already satisfied: soxr>=0.3.2 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from librosa>=0.10->audio-separator[gpu]) (1.1.0)
+Requirement already satisfied: lazy_loader>=0.1 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from librosa>=0.10->audio-separator[gpu]) (0.6)
+Requirement already satisfied: msgpack>=1.0 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from librosa>=0.10->audio-separator[gpu]) (1.2.3)
+Requirement already satisfied: cloudpickle>=3.0 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from joblib>=1.0->librosa>=0.10->audio-separator[gpu]) (3.1.2)
+Requirement already satisfied: llvmlite<0.51,>=0.50.0dev0 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from numba>=0.51.0->librosa>=0.10->audio-separator[gpu]) (0.50.0)
+Requirement already satisfied: torchvision>=0.9.0 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from onnx2torch-py313>=1.6->audio-separator[gpu]) (0.24.1)
+Requirement already satisfied: flatbuffers in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from onnxruntime-gpu>=1.17->audio-separator[gpu]) (25.12.19)
+Requirement already satisfied: protobuf>=4.25.8 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from onnxruntime-gpu>=1.17->audio-separator[gpu]) (7.36.2)
+Requirement already satisfied: platformdirs>=2.5.0 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from pooch>=1.1->librosa>=0.10->audio-separator[gpu]) (4.12.4)
+Requirement already satisfied: charset_normalizer<4,>=2 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from requests>=2->audio-separator[gpu]) (3.5.2)
+Requirement already satisfied: idna<4,>=2.5 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from requests>=2->audio-separator[gpu]) (3.20)
+Requirement already satisfied: urllib3<3,>=1.26 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from requests>=2->audio-separator[gpu]) (2.8.0)
+Requirement already satisfied: certifi>=2023.5.7 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from requests>=2->audio-separator[gpu]) (2026.7.22)
+Requirement already satisfied: narwhals>=2.0.1 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from scikit-learn>=1.1.0->librosa>=0.10->audio-separator[gpu]) (2.26.0)
+Requirement already satisfied: threadpoolctl>=3.5.0 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from scikit-learn>=1.1.0->librosa>=0.10->audio-separator[gpu]) (3.7.0)
+Requirement already satisfied: mpmath<1.4,>=1.1.0 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from sympy>=1.13.3->torch<3,>=2.3->audio-separator[gpu]) (1.3.0)
+Requirement already satisfied: pillow!=8.3.*,>=5.3.0 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from torchvision>=0.9.0->onnx2torch-py313>=1.6->audio-separator[gpu]) (12.3.0)
+Requirement already satisfied: MarkupSafe>=2.0 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from jinja2->torch<3,>=2.3->audio-separator[gpu]) (3.0.4)
+Requirement already satisfied: absl-py in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from ml_collections->audio-separator[gpu]) (2.5.0)
+Requirement already satisfied: ml_dtypes>=0.5.4 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from onnx-weekly->audio-separator[gpu]) (0.6.0)
+WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.
+uvr env: torch 2.9.1+cu128 cuda False ort ['TensorrtExecutionProvider', 'CUDAExecutionProvider', 'CPUExecutionProvider']
+== [1] direct https://hf-mirror.com/lengyue233/content-vec-best/resolve/main/pytorch_model.bin
+ok: pretrain/contentvec/pytorch_model.bin
+== [1] direct https://github.com/openvpi/vocoders/releases/download/pc-nsf-hifigan-44.1k-hop512-128bin-2025.02/pc_nsf_hifigan_44.1k_hop512_128bin_2025.02.zip
+ok: /root/autodl-tmp/DDSP-SVC/.autodl/nsf_hifigan.zip
+Archive:  /root/autodl-tmp/DDSP-SVC/.autodl/nsf_hifigan.zip
+  inflating: pretrain/nsf_hifigan/config.json  
+  inflating: pretrain/nsf_hifigan/model.ckpt  
+== [1] direct https://github.com/yxlllc/RMVPE/releases/download/230917/rmvpe.zip
+curl: (92) HTTP/2 stream 0 was not closed cleanly: PROTOCOL_ERROR (err 1)
+== [1] turbo https://github.com/yxlllc/RMVPE/releases/download/230917/rmvpe.zip
+curl: (28) SSL connection timeout
+curl: (28) SSL connection timeout
+== [2] direct https://github.com/yxlllc/RMVPE/releases/download/230917/rmvpe.zip
+=== 2026-10-09 17:24:38 start setup at 526912c
+Looking in indexes: http://mirrors.aliyun.com/pypi/simple
+Requirement already satisfied: torch in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (2.9.1)
+Requirement already satisfied: torchaudio in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (2.9.1)
+Requirement already satisfied: filelock in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from torch) (4.0.12)
+Requirement already satisfied: typing-extensions>=4.10.0 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from torch) (4.16.0)
+Requirement already satisfied: sympy>=1.13.3 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from torch) (1.14.0)
+Requirement already satisfied: networkx>=2.5.1 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from torch) (3.6.1)
+Requirement already satisfied: jinja2 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from torch) (3.1.6)
+Requirement already satisfied: fsspec>=0.8.5 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from torch) (2026.9.0)
+Requirement already satisfied: nvidia-cuda-nvrtc-cu12==12.8.93 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from torch) (12.8.93)
+Requirement already satisfied: nvidia-cuda-runtime-cu12==12.8.90 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from torch) (12.8.90)
+Requirement already satisfied: nvidia-cuda-cupti-cu12==12.8.90 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from torch) (12.8.90)
+Requirement already satisfied: nvidia-cudnn-cu12==9.10.2.21 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from torch) (9.10.2.21)
+Requirement already satisfied: nvidia-cublas-cu12==12.8.4.1 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from torch) (12.8.4.1)
+Requirement already satisfied: nvidia-cufft-cu12==11.3.3.83 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from torch) (11.3.3.83)
+Requirement already satisfied: nvidia-curand-cu12==10.3.9.90 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from torch) (10.3.9.90)
+Requirement already satisfied: nvidia-cusolver-cu12==11.7.3.90 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from torch) (11.7.3.90)
+Requirement already satisfied: nvidia-cusparse-cu12==12.5.8.93 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from torch) (12.5.8.93)
+Requirement already satisfied: nvidia-cusparselt-cu12==0.7.1 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from torch) (0.7.1)
+Requirement already satisfied: nvidia-nccl-cu12==2.27.5 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from torch) (2.27.5)
+Requirement already satisfied: nvidia-nvshmem-cu12==3.3.20 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from torch) (3.3.20)
+Requirement already satisfied: nvidia-nvtx-cu12==12.8.90 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from torch) (12.8.90)
+Requirement already satisfied: nvidia-nvjitlink-cu12==12.8.93 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from torch) (12.8.93)
+Requirement already satisfied: nvidia-cufile-cu12==1.13.1.3 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from torch) (1.13.1.3)
+Requirement already satisfied: triton==3.5.1 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from torch) (3.5.1)
+Requirement already satisfied: mpmath<1.4,>=1.1.0 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from sympy>=1.13.3->torch) (1.3.0)
+Requirement already satisfied: MarkupSafe>=2.0 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from jinja2->torch) (3.0.4)
+WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.
+Looking in indexes: http://mirrors.aliyun.com/pypi/simple
+Ignoring triton-windows: markers 'sys_platform == "win32"' don't match your environment
+Requirement already satisfied: FreeSimpleGUI in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from -r requirements.txt (line 1)) (5.3.0.post1)
+Requirement already satisfied: librosa in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from -r requirements.txt (line 2)) (0.11.0)
+Requirement already satisfied: matplotlib in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from -r requirements.txt (line 3)) (3.11.2)
+Requirement already satisfied: numpy==1.26.4 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from -r requirements.txt (line 4)) (1.26.4)
+Requirement already satisfied: praat-parselmouth in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from -r requirements.txt (line 5)) (0.4.7)
+Requirement already satisfied: pyworld in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from -r requirements.txt (line 6)) (0.3.5)
+Requirement already satisfied: PyYAML in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from -r requirements.txt (line 7)) (6.0.3)
+Requirement already satisfied: resampy in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from -r requirements.txt (line 8)) (0.4.3)
+Requirement already satisfied: scikit_learn in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from -r requirements.txt (line 9)) (1.9.1)
+Requirement already satisfied: scipy in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from -r requirements.txt (line 10)) (1.17.1)
+Requirement already satisfied: sounddevice in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from -r requirements.txt (line 11)) (0.5.6)
+Requirement already satisfied: soundfile in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from -r requirements.txt (line 12)) (0.14.0)
+Requirement already satisfied: tensorboard in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from -r requirements.txt (line 13)) (2.21.0)
+Requirement already satisfied: torchcrepe in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from -r requirements.txt (line 14)) (0.0.24)
+Requirement already satisfied: torchfcpe in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from -r requirements.txt (line 15)) (0.0.4)
+Requirement already satisfied: tqdm in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from -r requirements.txt (line 16)) (4.70.1)
+Requirement already satisfied: transformers in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from -r requirements.txt (line 17)) (5.19.0)
+Requirement already satisfied: audioread>=2.1.9 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from librosa->-r requirements.txt (line 2)) (3.1.0)
+Requirement already satisfied: numba>=0.51.0 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from librosa->-r requirements.txt (line 2)) (0.68.0)
+Requirement already satisfied: joblib>=1.0 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from librosa->-r requirements.txt (line 2)) (1.6.0)
+Requirement already satisfied: decorator>=4.3.0 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from librosa->-r requirements.txt (line 2)) (5.3.1)
+Requirement already satisfied: pooch>=1.1 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from librosa->-r requirements.txt (line 2)) (1.9.0)
+Requirement already satisfied: soxr>=0.3.2 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from librosa->-r requirements.txt (line 2)) (1.1.0)
+Requirement already satisfied: typing_extensions>=4.1.1 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from librosa->-r requirements.txt (line 2)) (4.16.0)
+Requirement already satisfied: lazy_loader>=0.1 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from librosa->-r requirements.txt (line 2)) (0.6)
+Requirement already satisfied: msgpack>=1.0 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from librosa->-r requirements.txt (line 2)) (1.2.3)
+Requirement already satisfied: contourpy>=1.0.1 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from matplotlib->-r requirements.txt (line 3)) (1.3.3)
+Requirement already satisfied: cycler>=0.10 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from matplotlib->-r requirements.txt (line 3)) (0.12.1)
+Requirement already satisfied: fonttools>=4.28.2 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from matplotlib->-r requirements.txt (line 3)) (4.66.1)
+Requirement already satisfied: kiwisolver>=1.3.1 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from matplotlib->-r requirements.txt (line 3)) (1.5.1)
+Requirement already satisfied: packaging>=20.0 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from matplotlib->-r requirements.txt (line 3)) (26.3)
+Requirement already satisfied: pillow>=9 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from matplotlib->-r requirements.txt (line 3)) (12.3.0)
+Requirement already satisfied: pyparsing>=3 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from matplotlib->-r requirements.txt (line 3)) (3.3.3)
+Requirement already satisfied: python-dateutil>=2.7 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from matplotlib->-r requirements.txt (line 3)) (2.9.0.post0)
+Requirement already satisfied: narwhals>=2.0.1 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from scikit_learn->-r requirements.txt (line 9)) (2.26.0)
+Requirement already satisfied: threadpoolctl>=3.5.0 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from scikit_learn->-r requirements.txt (line 9)) (3.7.0)
+Requirement already satisfied: cffi in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from sounddevice->-r requirements.txt (line 11)) (2.1.1)
+Requirement already satisfied: absl-py>=0.4 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from tensorboard->-r requirements.txt (line 13)) (2.5.0)
+Requirement already satisfied: grpcio<2.0,>=1.74.0 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from tensorboard->-r requirements.txt (line 13)) (1.84.0)
+Requirement already satisfied: markdown>=2.6.8 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from tensorboard->-r requirements.txt (line 13)) (3.11)
+Requirement already satisfied: protobuf<8.0.0,>=6.31.1 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from tensorboard->-r requirements.txt (line 13)) (7.36.2)
+Requirement already satisfied: setuptools>=41.0.0 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from tensorboard->-r requirements.txt (line 13)) (83.0.0)
+Requirement already satisfied: tensorboard-data-server<0.8.0,>=0.7.0 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from tensorboard->-r requirements.txt (line 13)) (0.7.2)
+Requirement already satisfied: werkzeug>=1.0.1 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from tensorboard->-r requirements.txt (line 13)) (3.1.9)
+Requirement already satisfied: torch in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from torchcrepe->-r requirements.txt (line 14)) (2.9.1)
+Requirement already satisfied: torchaudio in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from torchcrepe->-r requirements.txt (line 14)) (2.9.1)
+Requirement already satisfied: einops in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from torchfcpe->-r requirements.txt (line 15)) (0.8.2)
+Requirement already satisfied: local-attention in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from torchfcpe->-r requirements.txt (line 15)) (1.11.2)
+Requirement already satisfied: huggingface-hub<3.0,>=1.31.0 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from transformers->-r requirements.txt (line 17)) (1.33.0)
+Requirement already satisfied: regex>=2025.10.22 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from transformers->-r requirements.txt (line 17)) (2026.9.29)
+Requirement already satisfied: tokenizers<0.24.0,>=0.23.1 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from transformers->-r requirements.txt (line 17)) (0.23.2)
+Requirement already satisfied: typer in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from transformers->-r requirements.txt (line 17)) (0.27.3)
+Requirement already satisfied: safetensors>=0.8.0 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from transformers->-r requirements.txt (line 17)) (0.8.0)
+Requirement already satisfied: click<9.0.0,>=8.4.2 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from huggingface-hub<3.0,>=1.31.0->transformers->-r requirements.txt (line 17)) (8.5.0)
+Requirement already satisfied: filelock>=3.10.0 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from huggingface-hub<3.0,>=1.31.0->transformers->-r requirements.txt (line 17)) (4.0.12)
+Requirement already satisfied: fsspec>=2023.5.0 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from huggingface-hub<3.0,>=1.31.0->transformers->-r requirements.txt (line 17)) (2026.9.0)
+Requirement already satisfied: hf-xet<2.0.0,>=1.6.0 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from huggingface-hub<3.0,>=1.31.0->transformers->-r requirements.txt (line 17)) (1.7.0)
+Requirement already satisfied: httpx<1,>=0.23.0 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from huggingface-hub<3.0,>=1.31.0->transformers->-r requirements.txt (line 17)) (0.28.1)
+Requirement already satisfied: anyio in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from httpx<1,>=0.23.0->huggingface-hub<3.0,>=1.31.0->transformers->-r requirements.txt (line 17)) (4.15.1)
+Requirement already satisfied: certifi in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from httpx<1,>=0.23.0->huggingface-hub<3.0,>=1.31.0->transformers->-r requirements.txt (line 17)) (2026.7.22)
+Requirement already satisfied: httpcore==1.* in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from httpx<1,>=0.23.0->huggingface-hub<3.0,>=1.31.0->transformers->-r requirements.txt (line 17)) (1.0.9)
+Requirement already satisfied: idna in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from httpx<1,>=0.23.0->huggingface-hub<3.0,>=1.31.0->transformers->-r requirements.txt (line 17)) (3.20)
+Requirement already satisfied: h11>=0.16 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from httpcore==1.*->httpx<1,>=0.23.0->huggingface-hub<3.0,>=1.31.0->transformers->-r requirements.txt (line 17)) (0.16.0)
+Requirement already satisfied: pycparser in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from cffi->sounddevice->-r requirements.txt (line 11)) (3.0)
+Requirement already satisfied: cloudpickle>=3.0 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from joblib>=1.0->librosa->-r requirements.txt (line 2)) (3.1.2)
+Requirement already satisfied: llvmlite<0.51,>=0.50.0dev0 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from numba>=0.51.0->librosa->-r requirements.txt (line 2)) (0.50.0)
+Requirement already satisfied: platformdirs>=2.5.0 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from pooch>=1.1->librosa->-r requirements.txt (line 2)) (4.12.4)
+Requirement already satisfied: requests>=2.19.0 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from pooch>=1.1->librosa->-r requirements.txt (line 2)) (2.34.2)
+Requirement already satisfied: six>=1.5 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from python-dateutil>=2.7->matplotlib->-r requirements.txt (line 3)) (1.17.0)
+Requirement already satisfied: charset_normalizer<4,>=2 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from requests>=2.19.0->pooch>=1.1->librosa->-r requirements.txt (line 2)) (3.5.2)
+Requirement already satisfied: urllib3<3,>=1.26 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from requests>=2.19.0->pooch>=1.1->librosa->-r requirements.txt (line 2)) (2.8.0)
+Requirement already satisfied: markupsafe>=2.1.1 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from werkzeug>=1.0.1->tensorboard->-r requirements.txt (line 13)) (3.0.4)
+Requirement already satisfied: hyper-connections>=0.1.8 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from local-attention->torchfcpe->-r requirements.txt (line 15)) (0.4.11)
+Requirement already satisfied: torch-einops-utils>=0.0.20 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from hyper-connections>=0.1.8->local-attention->torchfcpe->-r requirements.txt (line 15)) (0.1.36)
+Requirement already satisfied: sympy>=1.13.3 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from torch->torchcrepe->-r requirements.txt (line 14)) (1.14.0)
+Requirement already satisfied: networkx>=2.5.1 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from torch->torchcrepe->-r requirements.txt (line 14)) (3.6.1)
+Requirement already satisfied: jinja2 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from torch->torchcrepe->-r requirements.txt (line 14)) (3.1.6)
+Requirement already satisfied: nvidia-cuda-nvrtc-cu12==12.8.93 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from torch->torchcrepe->-r requirements.txt (line 14)) (12.8.93)
+Requirement already satisfied: nvidia-cuda-runtime-cu12==12.8.90 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from torch->torchcrepe->-r requirements.txt (line 14)) (12.8.90)
+Requirement already satisfied: nvidia-cuda-cupti-cu12==12.8.90 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from torch->torchcrepe->-r requirements.txt (line 14)) (12.8.90)
+Requirement already satisfied: nvidia-cudnn-cu12==9.10.2.21 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from torch->torchcrepe->-r requirements.txt (line 14)) (9.10.2.21)
+Requirement already satisfied: nvidia-cublas-cu12==12.8.4.1 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from torch->torchcrepe->-r requirements.txt (line 14)) (12.8.4.1)
+Requirement already satisfied: nvidia-cufft-cu12==11.3.3.83 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from torch->torchcrepe->-r requirements.txt (line 14)) (11.3.3.83)
+Requirement already satisfied: nvidia-curand-cu12==10.3.9.90 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from torch->torchcrepe->-r requirements.txt (line 14)) (10.3.9.90)
+Requirement already satisfied: nvidia-cusolver-cu12==11.7.3.90 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from torch->torchcrepe->-r requirements.txt (line 14)) (11.7.3.90)
+Requirement already satisfied: nvidia-cusparse-cu12==12.5.8.93 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from torch->torchcrepe->-r requirements.txt (line 14)) (12.5.8.93)
+Requirement already satisfied: nvidia-cusparselt-cu12==0.7.1 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from torch->torchcrepe->-r requirements.txt (line 14)) (0.7.1)
+Requirement already satisfied: nvidia-nccl-cu12==2.27.5 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from torch->torchcrepe->-r requirements.txt (line 14)) (2.27.5)
+Requirement already satisfied: nvidia-nvshmem-cu12==3.3.20 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from torch->torchcrepe->-r requirements.txt (line 14)) (3.3.20)
+Requirement already satisfied: nvidia-nvtx-cu12==12.8.90 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from torch->torchcrepe->-r requirements.txt (line 14)) (12.8.90)
+Requirement already satisfied: nvidia-nvjitlink-cu12==12.8.93 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from torch->torchcrepe->-r requirements.txt (line 14)) (12.8.93)
+Requirement already satisfied: nvidia-cufile-cu12==1.13.1.3 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from torch->torchcrepe->-r requirements.txt (line 14)) (1.13.1.3)
+Requirement already satisfied: triton==3.5.1 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from torch->torchcrepe->-r requirements.txt (line 14)) (3.5.1)
+Requirement already satisfied: mpmath<1.4,>=1.1.0 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from sympy>=1.13.3->torch->torchcrepe->-r requirements.txt (line 14)) (1.3.0)
+Requirement already satisfied: shellingham>=1.3.0 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from typer->transformers->-r requirements.txt (line 17)) (1.5.4)
+Requirement already satisfied: rich>=13.8.0 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from typer->transformers->-r requirements.txt (line 17)) (15.0.0)
+Requirement already satisfied: annotated-doc>=0.0.2 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from typer->transformers->-r requirements.txt (line 17)) (0.0.5)
+Requirement already satisfied: markdown-it-py>=2.2.0 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from rich>=13.8.0->typer->transformers->-r requirements.txt (line 17)) (4.2.0)
+Requirement already satisfied: pygments<3.0.0,>=2.13.0 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from rich>=13.8.0->typer->transformers->-r requirements.txt (line 17)) (2.21.0)
+Requirement already satisfied: mdurl~=0.1 in /root/autodl-tmp/conda_envs/ddsp/lib/python3.11/site-packages (from markdown-it-py>=2.2.0->rich>=13.8.0->typer->transformers->-r requirements.txt (line 17)) (0.1.2)
+WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.
+ddsp env: torch 2.9.1+cu128 cuda False
+Looking in indexes: http://mirrors.aliyun.com/pypi/simple
+Requirement already satisfied: torch in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (2.9.1)
+Requirement already satisfied: torchaudio in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (2.9.1)
+Requirement already satisfied: torchvision in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (0.24.1)
+Requirement already satisfied: filelock in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from torch) (4.0.12)
+Requirement already satisfied: typing-extensions>=4.10.0 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from torch) (4.16.0)
+Requirement already satisfied: sympy>=1.13.3 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from torch) (1.14.0)
+Requirement already satisfied: networkx>=2.5.1 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from torch) (3.6.1)
+Requirement already satisfied: jinja2 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from torch) (3.1.6)
+Requirement already satisfied: fsspec>=0.8.5 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from torch) (2026.9.0)
+Requirement already satisfied: nvidia-cuda-nvrtc-cu12==12.8.93 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from torch) (12.8.93)
+Requirement already satisfied: nvidia-cuda-runtime-cu12==12.8.90 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from torch) (12.8.90)
+Requirement already satisfied: nvidia-cuda-cupti-cu12==12.8.90 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from torch) (12.8.90)
+Requirement already satisfied: nvidia-cudnn-cu12==9.10.2.21 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from torch) (9.10.2.21)
+Requirement already satisfied: nvidia-cublas-cu12==12.8.4.1 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from torch) (12.8.4.1)
+Requirement already satisfied: nvidia-cufft-cu12==11.3.3.83 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from torch) (11.3.3.83)
+Requirement already satisfied: nvidia-curand-cu12==10.3.9.90 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from torch) (10.3.9.90)
+Requirement already satisfied: nvidia-cusolver-cu12==11.7.3.90 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from torch) (11.7.3.90)
+Requirement already satisfied: nvidia-cusparse-cu12==12.5.8.93 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from torch) (12.5.8.93)
+Requirement already satisfied: nvidia-cusparselt-cu12==0.7.1 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from torch) (0.7.1)
+Requirement already satisfied: nvidia-nccl-cu12==2.27.5 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from torch) (2.27.5)
+Requirement already satisfied: nvidia-nvshmem-cu12==3.3.20 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from torch) (3.3.20)
+Requirement already satisfied: nvidia-nvtx-cu12==12.8.90 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from torch) (12.8.90)
+Requirement already satisfied: nvidia-nvjitlink-cu12==12.8.93 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from torch) (12.8.93)
+Requirement already satisfied: nvidia-cufile-cu12==1.13.1.3 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from torch) (1.13.1.3)
+Requirement already satisfied: triton==3.5.1 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from torch) (3.5.1)
+Requirement already satisfied: numpy in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from torchvision) (2.4.6)
+Requirement already satisfied: pillow!=8.3.*,>=5.3.0 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from torchvision) (12.3.0)
+Requirement already satisfied: mpmath<1.4,>=1.1.0 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from sympy>=1.13.3->torch) (1.3.0)
+Requirement already satisfied: MarkupSafe>=2.0 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from jinja2->torch) (3.0.4)
+WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.
+Looking in indexes: http://mirrors.aliyun.com/pypi/simple
+Requirement already satisfied: audio-separator[gpu] in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (0.47.0)
+Requirement already satisfied: beartype<0.19.0,>=0.18.5 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from audio-separator[gpu]) (0.18.5)
+Requirement already satisfied: diffq>=0.2 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from audio-separator[gpu]) (0.2.4)
+Requirement already satisfied: einops>=0.7 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from audio-separator[gpu]) (0.8.2)
+Requirement already satisfied: julius>=0.2 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from audio-separator[gpu]) (0.2.8)
+Requirement already satisfied: librosa>=0.10 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from audio-separator[gpu]) (0.11.0)
+Requirement already satisfied: ml_collections in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from audio-separator[gpu]) (1.1.0)
+Requirement already satisfied: numpy>=2 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from audio-separator[gpu]) (2.4.6)
+Requirement already satisfied: onnx-weekly in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from audio-separator[gpu]) (1.24.0.dev20261005)
+Requirement already satisfied: onnx2torch-py313>=1.6 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from audio-separator[gpu]) (1.6.0)
+Requirement already satisfied: onnxruntime-gpu>=1.17 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from audio-separator[gpu]) (1.30.0)
+Requirement already satisfied: packaging in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from audio-separator[gpu]) (26.3)
+Requirement already satisfied: pydub>=0.25 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from audio-separator[gpu]) (0.25.1)
+Requirement already satisfied: pyyaml in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from audio-separator[gpu]) (6.0.3)
+Requirement already satisfied: requests>=2 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from audio-separator[gpu]) (2.34.2)
+Requirement already satisfied: resampy>=0.4 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from audio-separator[gpu]) (0.4.3)
+Requirement already satisfied: rotary-embedding-torch<0.7.0,>=0.6.1 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from audio-separator[gpu]) (0.6.5)
+Requirement already satisfied: samplerate==0.1.0 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from audio-separator[gpu]) (0.1.0)
+Requirement already satisfied: scipy<2.0.0,>=1.13.0 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from audio-separator[gpu]) (1.17.1)
+Requirement already satisfied: six>=1.16 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from audio-separator[gpu]) (1.17.0)
+Requirement already satisfied: soundfile>=0.12 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from audio-separator[gpu]) (0.14.0)
+Requirement already satisfied: torch<3,>=2.3 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from audio-separator[gpu]) (2.9.1)
+Requirement already satisfied: tqdm in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from audio-separator[gpu]) (4.70.1)
+Requirement already satisfied: cffi>=1.0.0 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from samplerate==0.1.0->audio-separator[gpu]) (2.1.1)
+Requirement already satisfied: filelock in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from torch<3,>=2.3->audio-separator[gpu]) (4.0.12)
+Requirement already satisfied: typing-extensions>=4.10.0 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from torch<3,>=2.3->audio-separator[gpu]) (4.16.0)
+Requirement already satisfied: sympy>=1.13.3 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from torch<3,>=2.3->audio-separator[gpu]) (1.14.0)
+Requirement already satisfied: networkx>=2.5.1 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from torch<3,>=2.3->audio-separator[gpu]) (3.6.1)
+Requirement already satisfied: jinja2 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from torch<3,>=2.3->audio-separator[gpu]) (3.1.6)
+Requirement already satisfied: fsspec>=0.8.5 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from torch<3,>=2.3->audio-separator[gpu]) (2026.9.0)
+Requirement already satisfied: nvidia-cuda-nvrtc-cu12==12.8.93 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from torch<3,>=2.3->audio-separator[gpu]) (12.8.93)
+Requirement already satisfied: nvidia-cuda-runtime-cu12==12.8.90 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from torch<3,>=2.3->audio-separator[gpu]) (12.8.90)
+Requirement already satisfied: nvidia-cuda-cupti-cu12==12.8.90 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from torch<3,>=2.3->audio-separator[gpu]) (12.8.90)
+Requirement already satisfied: nvidia-cudnn-cu12==9.10.2.21 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from torch<3,>=2.3->audio-separator[gpu]) (9.10.2.21)
+Requirement already satisfied: nvidia-cublas-cu12==12.8.4.1 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from torch<3,>=2.3->audio-separator[gpu]) (12.8.4.1)
+Requirement already satisfied: nvidia-cufft-cu12==11.3.3.83 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from torch<3,>=2.3->audio-separator[gpu]) (11.3.3.83)
+Requirement already satisfied: nvidia-curand-cu12==10.3.9.90 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from torch<3,>=2.3->audio-separator[gpu]) (10.3.9.90)
+Requirement already satisfied: nvidia-cusolver-cu12==11.7.3.90 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from torch<3,>=2.3->audio-separator[gpu]) (11.7.3.90)
+Requirement already satisfied: nvidia-cusparse-cu12==12.5.8.93 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from torch<3,>=2.3->audio-separator[gpu]) (12.5.8.93)
+Requirement already satisfied: nvidia-cusparselt-cu12==0.7.1 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from torch<3,>=2.3->audio-separator[gpu]) (0.7.1)
+Requirement already satisfied: nvidia-nccl-cu12==2.27.5 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from torch<3,>=2.3->audio-separator[gpu]) (2.27.5)
+Requirement already satisfied: nvidia-nvshmem-cu12==3.3.20 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from torch<3,>=2.3->audio-separator[gpu]) (3.3.20)
+Requirement already satisfied: nvidia-nvtx-cu12==12.8.90 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from torch<3,>=2.3->audio-separator[gpu]) (12.8.90)
+Requirement already satisfied: nvidia-nvjitlink-cu12==12.8.93 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from torch<3,>=2.3->audio-separator[gpu]) (12.8.93)
+Requirement already satisfied: nvidia-cufile-cu12==1.13.1.3 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from torch<3,>=2.3->audio-separator[gpu]) (1.13.1.3)
+Requirement already satisfied: triton==3.5.1 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from torch<3,>=2.3->audio-separator[gpu]) (3.5.1)
+Requirement already satisfied: pycparser in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from cffi>=1.0.0->samplerate==0.1.0->audio-separator[gpu]) (3.0)
+Requirement already satisfied: Cython in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from diffq>=0.2->audio-separator[gpu]) (3.3.0)
+Requirement already satisfied: audioread>=2.1.9 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from librosa>=0.10->audio-separator[gpu]) (3.1.0)
+Requirement already satisfied: numba>=0.51.0 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from librosa>=0.10->audio-separator[gpu]) (0.68.0)
+Requirement already satisfied: scikit-learn>=1.1.0 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from librosa>=0.10->audio-separator[gpu]) (1.9.1)
+Requirement already satisfied: joblib>=1.0 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from librosa>=0.10->audio-separator[gpu]) (1.6.0)
+Requirement already satisfied: decorator>=4.3.0 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from librosa>=0.10->audio-separator[gpu]) (5.3.1)
+Requirement already satisfied: pooch>=1.1 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from librosa>=0.10->audio-separator[gpu]) (1.9.0)
+Requirement already satisfied: soxr>=0.3.2 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from librosa>=0.10->audio-separator[gpu]) (1.1.0)
+Requirement already satisfied: lazy_loader>=0.1 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from librosa>=0.10->audio-separator[gpu]) (0.6)
+Requirement already satisfied: msgpack>=1.0 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from librosa>=0.10->audio-separator[gpu]) (1.2.3)
+Requirement already satisfied: cloudpickle>=3.0 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from joblib>=1.0->librosa>=0.10->audio-separator[gpu]) (3.1.2)
+Requirement already satisfied: llvmlite<0.51,>=0.50.0dev0 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from numba>=0.51.0->librosa>=0.10->audio-separator[gpu]) (0.50.0)
+Requirement already satisfied: torchvision>=0.9.0 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from onnx2torch-py313>=1.6->audio-separator[gpu]) (0.24.1)
+Requirement already satisfied: flatbuffers in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from onnxruntime-gpu>=1.17->audio-separator[gpu]) (25.12.19)
+Requirement already satisfied: protobuf>=4.25.8 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from onnxruntime-gpu>=1.17->audio-separator[gpu]) (7.36.2)
+Requirement already satisfied: platformdirs>=2.5.0 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from pooch>=1.1->librosa>=0.10->audio-separator[gpu]) (4.12.4)
+Requirement already satisfied: charset_normalizer<4,>=2 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from requests>=2->audio-separator[gpu]) (3.5.2)
+Requirement already satisfied: idna<4,>=2.5 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from requests>=2->audio-separator[gpu]) (3.20)
+Requirement already satisfied: urllib3<3,>=1.26 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from requests>=2->audio-separator[gpu]) (2.8.0)
+Requirement already satisfied: certifi>=2023.5.7 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from requests>=2->audio-separator[gpu]) (2026.7.22)
+Requirement already satisfied: narwhals>=2.0.1 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from scikit-learn>=1.1.0->librosa>=0.10->audio-separator[gpu]) (2.26.0)
+Requirement already satisfied: threadpoolctl>=3.5.0 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from scikit-learn>=1.1.0->librosa>=0.10->audio-separator[gpu]) (3.7.0)
+Requirement already satisfied: mpmath<1.4,>=1.1.0 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from sympy>=1.13.3->torch<3,>=2.3->audio-separator[gpu]) (1.3.0)
+Requirement already satisfied: pillow!=8.3.*,>=5.3.0 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from torchvision>=0.9.0->onnx2torch-py313>=1.6->audio-separator[gpu]) (12.3.0)
+Requirement already satisfied: MarkupSafe>=2.0 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from jinja2->torch<3,>=2.3->audio-separator[gpu]) (3.0.4)
+Requirement already satisfied: absl-py in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from ml_collections->audio-separator[gpu]) (2.5.0)
+Requirement already satisfied: ml_dtypes>=0.5.4 in /root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages (from onnx-weekly->audio-separator[gpu]) (0.6.0)
+WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.
+uvr env: torch 2.9.1+cu128 cuda False ort ['TensorrtExecutionProvider', 'CUDAExecutionProvider', 'CPUExecutionProvider']
+exists: pretrain/contentvec/pytorch_model.bin
+== [1] UVR models via direct
+2026-10-09 17:25:06,744 - ERROR - separator - FFmpeg is not installed. Please install FFmpeg to use this package.
+Traceback (most recent call last):
+  File "/root/autodl-tmp/DDSP-SVC/tools/autodl/fetch_uvr_models.py", line 36, in <module>
+    main()
+  File "/root/autodl-tmp/DDSP-SVC/tools/autodl/fetch_uvr_models.py", line 28, in main
+    separator = Separator(model_file_dir=args.model_dir, output_dir=args.model_dir, log_level=30)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages/audio_separator/separator/separator.py", line 281, in __init__
+    self.setup_accelerated_inferencing_device()
+  File "/root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages/audio_separator/separator/separator.py", line 360, in setup_accelerated_inferencing_device
+    self.check_ffmpeg_installed()
+  File "/root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages/audio_separator/separator/separator.py", line 405, in check_ffmpeg_installed
+    ffmpeg_version_output = subprocess.check_output(["ffmpeg", "-version"], text=True)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/autodl-tmp/conda_envs/uvr/lib/python3.11/subprocess.py", line 466, in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/autodl-tmp/conda_envs/uvr/lib/python3.11/subprocess.py", line 548, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/autodl-tmp/conda_envs/uvr/lib/python3.11/subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "/root/autodl-tmp/conda_envs/uvr/lib/python3.11/subprocess.py", line 1955, in _execute_child
+    raise child_exception_type(errno_num, err_msg, err_filename)
+FileNotFoundError: [Errno 2] No such file or directory: 'ffmpeg'
+== [1] UVR models via turbo
+2026-10-09 17:25:21,851 - ERROR - separator - FFmpeg is not installed. Please install FFmpeg to use this package.
+Traceback (most recent call last):
+  File "/root/autodl-tmp/DDSP-SVC/tools/autodl/fetch_uvr_models.py", line 36, in <module>
+    main()
+  File "/root/autodl-tmp/DDSP-SVC/tools/autodl/fetch_uvr_models.py", line 28, in main
+    separator = Separator(model_file_dir=args.model_dir, output_dir=args.model_dir, log_level=30)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages/audio_separator/separator/separator.py", line 281, in __init__
+    self.setup_accelerated_inferencing_device()
+  File "/root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages/audio_separator/separator/separator.py", line 360, in setup_accelerated_inferencing_device
+    self.check_ffmpeg_installed()
+  File "/root/autodl-tmp/conda_envs/uvr/lib/python3.11/site-packages/audio_separator/separator/separator.py", line 405, in check_ffmpeg_installed
+    ffmpeg_version_output = subprocess.check_output(["ffmpeg", "-version"], text=True)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/autodl-tmp/conda_envs/uvr/lib/python3.11/subprocess.py", line 466, in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/autodl-tmp/conda_envs/uvr/lib/python3.11/subprocess.py", line 548, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/autodl-tmp/conda_envs/uvr/lib/python3.11/subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "/root/autodl-tmp/conda_envs/uvr/lib/python3.11/subprocess.py", line 1955, in _execute_child
+    raise child_exception_type(errno_num, err_msg, err_filename)
+FileNotFoundError: [Errno 2] No such file or directory: 'ffmpeg'
+== [2] UVR models via direct
+Failed to load libcublasLt.so.13: libcublasLt.so.13: cannot open shared object file: No such file or directory
+Failed to load libcublas.so.13: libcublas.so.13: cannot open shared object file: No such file or directory
+Failed to load libnvrtc.so.13: libnvrtc.so.13: cannot open shared object file: No such file or directory
+Failed to load libcufft.so.12: libcufft.so.12: cannot open shared object file: No such file or directory
+Failed to load libcudart.so.13: libcudart.so.13: cannot open shared object file: No such file or directory
+Please follow https://onnxruntime.ai/docs/install/#cuda-and-cudnn to install CUDA.
+== mel_band_roformer_vocals_fv4_gabox.ckpt
+  0%|          | 0.00/3.54k [00:00<?, ?iB/s]
+28.3kiB [00:00, 34.3MiB/s]                  
+  0%|          | 0.00/968 [00:00<?, ?iB/s]
+100%|██████████| 968/968 [00:00<00:00, 2.68MiB/s]
+tools/autodl/setup.sh: line 11:  8086 Killed                  env -u http_proxy -u https_proxy -u HTTP_PROXY -u HTTPS_PROXY -u all_proxy -u ALL_PROXY "$@"
+== [2] UVR models via turbo
+Failed to load libcublasLt.so.13: libcublasLt.so.13: cannot open shared object file: No such file or directory
+Failed to load libcublas.so.13: libcublas.so.13: cannot open shared object file: No such file or directory
+Failed to load libnvrtc.so.13: libnvrtc.so.13: cannot open shared object file: No such file or directory
+Failed to load libcufft.so.12: libcufft.so.12: cannot open shared object file: No such file or directory
+Failed to load libcudart.so.13: libcudart.so.13: cannot open shared object file: No such file or directory
+Please follow https://onnxruntime.ai/docs/install/#cuda-and-cudnn to install CUDA.
+== mel_band_roformer_vocals_fv4_gabox.ckpt
+tools/autodl/setup.sh: line 17:  8192 Killed                  "$@"
+== [3] UVR models via direct
+Failed to load libcublasLt.so.13: libcublasLt.so.13: cannot open shared object file: No such file or directory
+Failed to load libcublas.so.13: libcublas.so.13: cannot open shared object file: No such file or directory
+Failed to load libnvrtc.so.13: libnvrtc.so.13: cannot open shared object file: No such file or directory
+Failed to load libcufft.so.12: libcufft.so.12: cannot open shared object file: No such file or directory
+Failed to load libcudart.so.13: libcudart.so.13: cannot open shared object file: No such file or directory
+Please follow https://onnxruntime.ai/docs/install/#cuda-and-cudnn to install CUDA.
+== mel_band_roformer_vocals_fv4_gabox.ckpt
+tools/autodl/setup.sh: line 11:  8603 Killed                  env -u http_proxy -u https_proxy -u HTTP_PROXY -u HTTPS_PROXY -u all_proxy -u ALL_PROXY "$@"
+== [3] UVR models via turbo
+Failed to load libcublasLt.so.13: libcublasLt.so.13: cannot open shared object file: No such file or directory
+Failed to load libcublas.so.13: libcublas.so.13: cannot open shared object file: No such file or directory
+Failed to load libnvrtc.so.13: libnvrtc.so.13: cannot open shared object file: No such file or directory
+Failed to load libcufft.so.12: libcufft.so.12: cannot open shared object file: No such file or directory
+Failed to load libcudart.so.13: libcudart.so.13: cannot open shared object file: No such file or directory
+Please follow https://onnxruntime.ai/docs/install/#cuda-and-cudnn to install CUDA.
+== mel_band_roformer_vocals_fv4_gabox.ckpt
+tools/autodl/setup.sh: line 17:  8615 Killed                  "$@"
+FAILED: UVR models
+=== 2026-10-09 17:28:43 exit 1
