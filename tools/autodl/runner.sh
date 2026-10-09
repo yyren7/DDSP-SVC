@@ -110,11 +110,32 @@ publish() {
     local exp; exp=$(grep -E '^\s*expdir:' "$CONFIG" | head -1 | awk '{print $2}')
     [ -f "$exp/log_info.txt" ] && tail -n 200 "$exp/log_info.txt" > "$PUB/train_log_info.txt"
     [ -f "$STATE_DIR/feedback.jsonl" ] && cp "$STATE_DIR/feedback.jsonl" "$PUB/feedback.jsonl"
+    [ -f "$STATE_DIR/shutdown.log" ] && tail -n 80 "$STATE_DIR/shutdown.log" > "$PUB/shutdown.log"
     # One squashed commit, force-pushed, so the log branch never grows.
     git -C "$PUB" add -A
     git -C "$PUB" -c user.name=autodl-runner -c user.email=runner@autodl commit -q --amend -m "status $(date '+%F %T')" 2>/dev/null \
         || git -C "$PUB" -c user.name=autodl-runner -c user.email=runner@autodl commit -q -m "status $(date '+%F %T')"
     net git -C "$PUB" push -q -f "$PUSH_URL" "HEAD:refs/heads/$LOG_BRANCH" 2>&1 | sed "s#$PUSH_URL#<repo>#" | tail -2
+}
+
+# AutoDL's `shutdown` works from an interactive terminal, so it may be an alias or function from
+# .bashrc that a plain script does not see. Try an interactive shell first, record what `shutdown`
+# resolves to and what it printed, and give it two minutes to take the machine down.
+power_off() {
+    local log="$STATE_DIR/shutdown.log"
+    {
+        echo "=== $(date '+%F %T') shutdown attempt"
+        echo "-- type -a shutdown (script):"; type -a shutdown 2>&1
+        echo "-- type -a shutdown (interactive):"; bash -ic 'type -a shutdown' 2>&1
+    } >> "$log"
+    if [ -n "${SHUTDOWN_CMD:-}" ]; then
+        $SHUTDOWN_CMD >> "$log" 2>&1
+    else
+        echo "-- bash -ic shutdown:" >> "$log"
+        bash -ic 'shutdown' >> "$log" 2>&1 || { echo "-- shutdown:" >> "$log"; shutdown >> "$log" 2>&1; }
+    fi
+    echo "-- exit $?" >> "$log"
+    sleep "${SHUTDOWN_WAIT:-120}"
 }
 
 # Ctrl+C stops the runner and its jobs.
@@ -171,9 +192,11 @@ while true; do
             echo "shutdown: idle for $limit min at $(date '+%F %T %Z')" >> "$PUB/status.txt"
             git -C "$PUB" add -A && git -C "$PUB" -c user.name=autodl-runner -c user.email=runner@autodl commit -q --amend -m "shutdown $(date '+%F %T')"
             net git -C "$PUB" push -q -f "$PUSH_URL" "HEAD:refs/heads/$LOG_BRANCH" 2>&1 | sed "s#$PUSH_URL#<repo>#" | tail -2
-            stop_group "$REVIEW_PID"
-            ${SHUTDOWN_CMD:-shutdown}
-            exit 0
+            power_off
+            # Still here, so the shutdown did not take effect: report it and try again next window.
+            echo "$(date '+%F %T') shutdown did not take effect, see .autodl/shutdown.log"
+            echo "shutdown FAILED at $(date '+%F %T %Z'), see shutdown.log" >> "$STATE_DIR/shutdown.log"
+            IDLE_SINCE=$(date +%s)
         fi
     fi
     sleep "$INTERVAL"

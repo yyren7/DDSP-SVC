@@ -5,9 +5,6 @@ set -euo pipefail
 source "$(dirname "${BASH_SOURCE[0]}")/config.sh"
 cd "$REPO_DIR"
 
-# Model downloads (HuggingFace / GitHub releases) go through AutoDL's academic proxy.
-[ -f /etc/network_turbo ] && source /etc/network_turbo >/dev/null 2>&1 || true
-
 JOB="$1"
 expdir() { grep -E '^\s*expdir:' "$CONFIG" | head -1 | awk '{print $2}'; }
 
