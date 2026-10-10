@@ -25,6 +25,7 @@ REVIEW_KEY_FILE="$STATE_DIR/review_key"
 
 PUB="$STATE_DIR/publish"
 JOB_PID=""; JOB_KEY=""; JOB_NAME=""; JOB_IDX=0; REVIEW_PID=""
+RESUME=1   # first loop pass after a (re)start: rerun a job that did not finish cleanly
 IDLE_SINCE=$(date +%s)
 
 plan_value() {  # key -> value from plan.txt (plain KEY=VALUE lines, never executed)
@@ -61,6 +62,9 @@ start_job() {
     save_job_state
 }
 
+# An empty JOB_PID must never reach `kill -0`: `kill -0 0` checks our own process group and succeeds.
+job_running() { [ -n "$JOB_PID" ] && kill -0 "$JOB_PID" 2>/dev/null; }
+
 # Remember the running job so a restarted runner adopts it instead of starting a second copy.
 save_job_state() { echo "$JOB_PID|$JOB_KEY|$JOB_NAME|$JOB_IDX" > "$STATE_DIR/job.state"; }
 load_job_state() {
@@ -91,7 +95,7 @@ publish() {
         echo "time:     $(date '+%F %T %Z')"
         echo "code:     $(git rev-parse --short HEAD) $(git log -1 --format=%s)"
         echo "plan:     JOB=$(plan_value JOB) RUN_ID=$(plan_value RUN_ID)"
-        if [ -n "$JOB_PID" ] && kill -0 "$JOB_PID" 2>/dev/null; then
+        if job_running; then
             echo "job:      $JOB_NAME running (pid $JOB_PID)"
         else
             echo "job:      ${JOB_NAME:-none} not running; $(grep '=== .* exit' "$STATE_DIR/job_${JOB_NAME:-none}.log" 2>/dev/null | tail -1)"
@@ -169,21 +173,27 @@ while true; do
             echo "$(date '+%F %T') starting job ${chain[0]}"
             start_job "${chain[0]}"
         fi
-    elif [ -n "$JOB_NAME" ] && ! kill -0 "${JOB_PID:-0}" 2>/dev/null; then
+    elif [ -n "$JOB_NAME" ] && ! job_running; then
         # Current job finished: move on to the next one in the chain if it succeeded.
         rc="$(job_exit_code "$JOB_NAME")"
         if [ "$rc" = "0" ] && [ $((JOB_IDX + 1)) -lt "${#chain[@]}" ]; then
             JOB_IDX=$((JOB_IDX + 1))
             echo "$(date '+%F %T') $JOB_NAME done, starting job ${chain[$JOB_IDX]}"
             start_job "${chain[$JOB_IDX]}"
+        elif [ "$rc" != "0" ] && [ -n "$RESUME" ]; then
+            # Right after (re)start: a job that failed or was cut off by a shutdown runs again, so
+            # booting with a GPU resumes uvr/training without touching plan.txt.
+            echo "$(date '+%F %T') resuming $JOB_NAME (last run: $([ -n "$rc" ] && echo "exit $rc" || echo interrupted))"
+            start_job "$JOB_NAME"
         fi
     fi
+    RESUME=""
 
     kill -0 "$REVIEW_PID" 2>/dev/null || start_review
     publish
 
     # Nothing running for IDLE_SHUTDOWN_MIN minutes -> power off so the instance stops billing.
-    if [ -n "$JOB_PID" ] && kill -0 "$JOB_PID" 2>/dev/null; then
+    if job_running; then
         IDLE_SINCE=$(date +%s)
     else
         limit="$(plan_value IDLE_SHUTDOWN_MIN)"; limit="${limit:-30}"

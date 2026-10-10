@@ -55,6 +55,13 @@ conda activate "$ENV_ROOT/uvr"
 pip_install torch torchaudio torchvision
 pip_install "audio-separator[gpu]"
 python -c "import torch, onnxruntime as ort; print('uvr env: torch', torch.__version__, 'cuda', torch.cuda.is_available(), 'ort', ort.get_available_providers())"
+# audio-separator refuses to start without an ffmpeg binary, which the AutoDL image lacks.
+if ! command -v ffmpeg >/dev/null; then
+    echo "== installing ffmpeg"
+    (apt-get update -qq && DEBIAN_FRONTEND=noninteractive apt-get install -y -qq ffmpeg) \
+        || conda install -y -p "$ENV_ROOT/uvr" -c conda-forge ffmpeg
+fi
+ffmpeg -version | head -1
 conda deactivate
 
 download() {  # dest min_bytes url... -> try every url, direct then proxy, a few rounds
@@ -80,7 +87,7 @@ HF_FILE=lengyue233/content-vec-best/resolve/main/pytorch_model.bin
 download pretrain/contentvec/pytorch_model.bin 300000000 \
     "https://hf-mirror.com/$HF_FILE" "https://huggingface.co/$HF_FILE"
 
-if [ ! -s pretrain/nsf_hifigan/model ]; then
+if [ "$(stat -c %s pretrain/nsf_hifigan/model 2>/dev/null || echo 0)" -lt 50000000 ]; then
     download "$STATE_DIR/nsf_hifigan.zip" 50000000 \
         https://github.com/openvpi/vocoders/releases/download/pc-nsf-hifigan-44.1k-hop512-128bin-2025.02/pc_nsf_hifigan_44.1k_hop512_128bin_2025.02.zip
     unzip -o -j "$STATE_DIR/nsf_hifigan.zip" '*/model.ckpt' '*/config.json' -d pretrain/nsf_hifigan
@@ -88,7 +95,7 @@ if [ ! -s pretrain/nsf_hifigan/model ]; then
     rm -f "$STATE_DIR/nsf_hifigan.zip"
 fi
 
-if [ ! -s pretrain/rmvpe/model.pt ]; then
+if [ "$(stat -c %s pretrain/rmvpe/model.pt 2>/dev/null || echo 0)" -lt 300000000 ]; then
     download "$STATE_DIR/rmvpe.zip" 300000000 https://github.com/yxlllc/RMVPE/releases/download/230917/rmvpe.zip
     unzip -o "$STATE_DIR/rmvpe.zip" model.pt -d pretrain/rmvpe
     rm -f "$STATE_DIR/rmvpe.zip"
@@ -108,6 +115,10 @@ for round in 1 2 3; do
 done
 conda deactivate
 [ -n "$uvr_ok" ] || { echo "FAILED: UVR models"; exit 1; }
+
+# Everything is installed; the download caches only take space on the data disk now.
+conda clean -y --all >/dev/null 2>&1 || true
+rm -rf "$PIP_CACHE_DIR"
 
 nvidia-smi --query-gpu=name,driver_version,memory.total --format=csv,noheader || true
 df -h / "$DATA_ROOT" | tail -2

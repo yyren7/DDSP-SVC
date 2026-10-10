@@ -1,8 +1,9 @@
 # Which job runner.sh should run. Changing JOB or bumping RUN_ID (re)starts it.
 # Jobs: setup | uvr | features | train | infer | idle
 # A comma separated chain runs in order and stops at the first failure, e.g. JOB=uvr,features,train
-JOB=setup
-RUN_ID=3
+# After a reboot the runner resumes a job that failed or was interrupted.
+JOB=setup,uvr
+RUN_ID=5
 
 # Optional settings passed to the jobs
 UVR_ARGS=
