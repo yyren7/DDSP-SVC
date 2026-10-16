@@ -11,7 +11,8 @@ expdir() { grep -E '^\s*expdir:' "$CONFIG" | head -1 | awk '{print $2}'; }
 # Separation, feature extraction, training and inference crawl on CPU, so fail fast when the
 # instance was started without a GPU (AutoDL "no-card mode"). ALLOW_CPU=1 overrides.
 require_gpu() {
-    nvidia-smi -L >/dev/null 2>&1 && return 0
+    # no-card mode keeps an nvidia-smi that exits 0 but lists nothing, so look for an actual GPU
+    nvidia-smi -L 2>/dev/null | grep -q '^GPU ' && return 0
     [ "${ALLOW_CPU:-0}" = 1 ] && { echo "no GPU, running on CPU (ALLOW_CPU=1)"; return 0; }
     echo "no GPU found: this instance runs in no-card mode. Restart it with a GPU; the runner resumes this job."
     exit 3
