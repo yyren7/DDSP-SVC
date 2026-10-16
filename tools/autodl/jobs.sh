@@ -7,6 +7,24 @@ cd "$REPO_DIR"
 
 JOB="$1"
 expdir() { grep -E '^\s*expdir:' "$CONFIG" | head -1 | awk '{print $2}'; }
+noproxy() { env -u http_proxy -u https_proxy -u HTTP_PROXY -u HTTPS_PROXY -u all_proxy -u ALL_PROXY "$@"; }
+
+fetch() {  # dest md5 url... -> download unless dest already has that md5; each url direct, then via AutoDL's academic proxy
+    local dest="$1" md5="$2"; shift 2
+    [ -f "$dest" ] && [ "$(md5sum < "$dest" | cut -d' ' -f1)" = "$md5" ] && return 0
+    for url in "$@"; do
+        for mode in direct turbo; do
+            echo "== fetching $(basename "$dest") ($mode) from $url"
+            if [ "$mode" = direct ]; then
+                noproxy curl -fL --connect-timeout 20 --speed-limit 200000 --speed-time 60 -sS -o "$dest.part" "$url"
+            else
+                [ -f /etc/network_turbo ] && (source /etc/network_turbo >/dev/null 2>&1
+                    curl -fL --connect-timeout 20 --speed-limit 200000 --speed-time 60 -sS -o "$dest.part" "$url")
+            fi && [ "$(md5sum < "$dest.part" | cut -d' ' -f1)" = "$md5" ] && { mv "$dest.part" "$dest"; return 0; }
+        done
+    done
+    rm -f "$dest.part"; echo "FAILED to fetch $(basename "$dest")"; return 1
+}
 
 # Separation, feature extraction, training and inference crawl on CPU, so fail fast when the
 # instance was started without a GPU (AutoDL "no-card mode"). ALLOW_CPU=1 overrides.
@@ -49,6 +67,24 @@ download)
     n=$(find "$dest" -maxdepth 1 -type f ! -name '_*' | wc -l)
     echo "$n audio files in $dest ($(du -sh "$dest" | cut -f1))"
     [ "$n" -gt 0 ]
+    ;;
+songsplit)
+    # Song-stream recordings in $DATA_ROOT/$DL_DIR -> one file per song in $DATA_ROOT/$SONG_DIR,
+    # without the talk between songs. Also runs on CPU, only slower; see tools/split_songs.py.
+    [ -n "${DL_DIR:-}" ] && [ -n "${SONG_DIR:-}" ] || { echo "set DL_DIR and SONG_DIR in plan.txt"; exit 2; }
+    conda activate "$ENV_ROOT/uvr"
+    python -c "import panns_inference" 2>/dev/null \
+        || noproxy python -m pip install -q -c "$TORCH_CONSTRAINTS" panns-inference
+    mkdir -p pretrain/panns
+    fetch pretrain/panns/class_labels_indices.csv 68c0b5c199d6cc789852b144cc3ab500 \
+        https://raw.githubusercontent.com/qiuqiangkong/audioset_tagging_cnn/master/metadata/class_labels_indices.csv
+    # the md5 is the one zenodo lists for the official file; the HuggingFace copy is much faster from AutoDL
+    fetch pretrain/panns/Cnn14_DecisionLevelMax.pth 70539c43c18b6a289b3199c503a82c5a \
+        'https://hf-mirror.com/niobures/PANNs/resolve/main/models/checkpoints/Cnn14_DecisionLevelMax_mAP%3D0.385.pth' \
+        'https://zenodo.org/records/3987831/files/Cnn14_DecisionLevelMax_mAP%3D0.385.pth?download=1'
+    # shellcheck disable=SC2086
+    python tools/split_songs.py -i "$DATA_ROOT/$DL_DIR" -o "$DATA_ROOT/$SONG_DIR" \
+        --model-dir pretrain/panns ${SPLIT_ARGS:-}
     ;;
 uvr)
     # Raw songs -> separated, de-harmonised, de-reverbed, denoised, sliced clips in data/
