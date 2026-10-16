@@ -23,6 +23,32 @@ case "$JOB" in
 setup)
     bash tools/autodl/setup.sh
     ;;
+download)
+    # Audio of every video in a Bilibili space whose title matches DL_MATCH, into $DATA_ROOT/$DL_DIR.
+    # Kept outside the repo as cold storage; copy the songs you want into raw_songs/ yourself.
+    # Resumable: finished videos are listed in _archive.txt and skipped on the next run.
+    [ -n "${DL_URL:-}" ] && [ -n "${DL_DIR:-}" ] || { echo "set DL_URL and DL_DIR in plan.txt"; exit 2; }
+    conda activate "$ENV_ROOT/uvr"
+    env -u http_proxy -u https_proxy -u HTTP_PROXY -u HTTPS_PROXY python -m pip install -q -U yt-dlp
+    dest="$DATA_ROOT/$DL_DIR"; mkdir -p "$dest"
+    cookies=(); [ -f "$STATE_DIR/bilibili_cookies.txt" ] && cookies=(--cookies "$STATE_DIR/bilibili_cookies.txt")
+    # Bilibili is reached directly from AutoDL; the academic proxy would only slow it down.
+    ytdlp() { env -u http_proxy -u https_proxy -u HTTP_PROXY -u HTTPS_PROXY yt-dlp "${cookies[@]}" \
+        --sleep-requests 1 --retries 10 --fragment-retries 10 "$@"; }
+    echo "== listing $DL_URL"
+    ytdlp --flat-playlist --print "%(id)s	%(duration)s	%(title)s" "$DL_URL" > "$dest/_all_videos.tsv"
+    echo "$(wc -l < "$dest/_all_videos.tsv") videos, $(grep -cE "${DL_MATCH:-.}" "$dest/_all_videos.tsv" || true) matching '${DL_MATCH:-}'"
+    echo "== downloading audio"
+    # Multi-part videos (分P) come down as one file per part. The original audio stream is kept
+    # without re-encoding.
+    ytdlp --yes-playlist --ignore-errors --no-overwrites --sleep-interval 2 --max-sleep-interval 5 \
+        --match-filter "title~='${DL_MATCH:-.}'" -f 'bestaudio/best' -x \
+        --download-archive "$dest/_archive.txt" \
+        -o "$dest/%(upload_date)s %(title).120B [%(id)s].%(ext)s" "$DL_URL" || true
+    n=$(find "$dest" -maxdepth 1 -type f ! -name '_*' | wc -l)
+    echo "$n audio files in $dest ($(du -sh "$dest" | cut -f1))"
+    [ "$n" -gt 0 ]
+    ;;
 uvr)
     # Raw songs -> separated, de-harmonised, de-reverbed, denoised, sliced clips in data/
     conda activate "$ENV_ROOT/uvr"

@@ -57,6 +57,7 @@ start_job() {
     echo "=== $(date '+%F %T') start $job at $(git rev-parse --short HEAD)" >> "$log"
     UVR_ARGS="$(plan_value UVR_ARGS)" KEY="$(plan_value KEY)" SPK_ID="$(plan_value SPK_ID)" \
     WORKERS="$(plan_value WORKERS)" \
+    DL_URL="$(plan_value DL_URL)" DL_MATCH="$(plan_value DL_MATCH)" DL_DIR="$(plan_value DL_DIR)" \
         setsid bash -c "bash tools/autodl/jobs.sh $job >> '$log' 2>&1; rc=\$?; echo \"=== \$(date '+%F %T') exit \$rc\" >> '$log'" &
     JOB_PID=$!; JOB_NAME="$job"
     save_job_state
