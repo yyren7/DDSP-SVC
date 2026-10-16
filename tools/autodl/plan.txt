@@ -3,7 +3,7 @@
 # A comma separated chain runs in order and stops at the first failure, e.g. JOB=uvr,features,train
 # After a reboot the runner resumes a job that failed or was interrupted.
 JOB=songsplit
-RUN_ID=8
+RUN_ID=9
 
 # Optional settings passed to the jobs
 # download: Bilibili space -> audio of the videos whose title matches DL_MATCH (regex), into /root/autodl-tmp/$DL_DIR
