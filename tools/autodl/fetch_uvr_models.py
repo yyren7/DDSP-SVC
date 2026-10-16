@@ -1,7 +1,8 @@
 """
 Download the UVR models used by tools/prepare_dataset.py (model files, yaml configs and UVR's
 model-data json files) into --model-dir, so the uvr job never needs the network.
-Loading each model once through audio-separator makes it fetch exactly what it needs.
+audio-separator's own download step fetches exactly what each model needs. The weights are never
+loaded, so this fits in the 2 GB memory limit of a no-GPU instance.
 """
 import argparse
 import importlib.util
@@ -28,7 +29,14 @@ def main():
     separator = Separator(model_file_dir=args.model_dir, output_dir=args.model_dir, log_level=30)
     for model in args.models or default_models():
         print(f'== {model}', flush=True)
-        separator.load_model(model_filename=model)
+        _, _, _, model_path, yaml_config = separator.download_model_files(model)
+        # what load_model reads before the weights: the yaml config, or UVR's model-data json
+        if model_path.lower().endswith('.yaml'):
+            yaml_config = model_path
+        if yaml_config is not None:
+            separator.load_model_data_from_yaml(yaml_config)
+        else:
+            separator.load_model_data_using_hash(model_path)
     print('all UVR models ready', flush=True)
 
 
