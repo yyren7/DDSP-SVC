@@ -40,9 +40,10 @@ download)
     echo "$(wc -l < "$dest/_all_videos.tsv") videos, $(grep -cE "${DL_MATCH:-.}" "$dest/_all_videos.tsv" || true) matching '${DL_MATCH:-}'"
     echo "== downloading audio"
     # Multi-part videos (分P) come down as one file per part. The original audio stream is kept
-    # without re-encoding.
+    # without re-encoding. The info json keeps the comments, where fans post song timestamps (道标).
     ytdlp --yes-playlist --ignore-errors --no-overwrites --sleep-interval 2 --max-sleep-interval 5 \
         --match-filter "title~='${DL_MATCH:-.}'" -f 'bestaudio/best' -x \
+        --write-info-json --write-comments \
         --download-archive "$dest/_archive.txt" \
         -o "$dest/%(upload_date)s %(title).120B [%(id)s].%(ext)s" "$DL_URL" || true
     n=$(find "$dest" -maxdepth 1 -type f ! -name '_*' | wc -l)

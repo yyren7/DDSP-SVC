@@ -3,12 +3,12 @@
 # A comma separated chain runs in order and stops at the first failure, e.g. JOB=uvr,features,train
 # After a reboot the runner resumes a job that failed or was interrupted.
 JOB=download
-RUN_ID=6
+RUN_ID=7
 
 # Optional settings passed to the jobs
 # download: Bilibili space -> audio of the videos whose title matches DL_MATCH (regex), into /root/autodl-tmp/$DL_DIR
 DL_URL=https://space.bilibili.com/516780319/video
-DL_MATCH=歌回
+DL_MATCH=佐仓旬夏】.*歌回
 DL_DIR=sakura_shunka_raw_songs
 UVR_ARGS=
 WORKERS=4
