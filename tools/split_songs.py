@@ -249,6 +249,15 @@ def stream_date(path, info):
     return f'{d[:4]}-{d[4:6]}-{d[6:]}' if len(d) == 8 else path.stem[:20]
 
 
+def title_name(title):
+    """Song name from the title of a single-song video: the part in 『』 when there is one, otherwise
+    the title without its 【tags】 ("只要是爱就会褪色，是吗？『偏爱』【佐仓旬夏】" -> "偏爱")."""
+    m = re.search(r'『([^』]+)』', title)
+    if m:
+        return m.group(1).strip()
+    return re.sub(r'\s+', ' ', re.sub(r'【[^】]*】|\[[^\]]*\]', ' ', title)).strip(' -~～')
+
+
 def safe(name):
     return re.sub(r'[\\/:*?"<>|\x00-\x1f]', '_', name).strip(' .')[:80]
 
@@ -285,6 +294,8 @@ def main():
     p.add_argument('--extend', type=int, default=30, help='widen songs by up to this many seconds of intro / outro')
     p.add_argument('--pad', type=int, default=1, help='seconds added on both ends')
     p.add_argument('--min-song', type=int, default=60, help='drop songs shorter than this (s)')
+    p.add_argument('--single-max', type=int, default=900,
+                   help='recordings up to this long (s) are single songs or clips, named after the video title')
     a = p.parse_args()
 
     out = Path(a.output)
@@ -297,7 +308,7 @@ def main():
         files = [f for f in files if a.only in f.name]
     print(f'{len(files)} recordings', flush=True)
 
-    model = None
+    model, taken = None, set()
     for f in files:
         info_path = f.with_name(f.stem + '.info.json')
         info = json.loads(info_path.read_text(encoding='utf-8')) if info_path.exists() else {}
@@ -321,11 +332,16 @@ def main():
         markers = best_markers(info)
         segs = find_songs(probs, labels, markers, a)
         names = name_segments(segs, markers)
+        single = not markers and len(probs) <= a.single_max and info.get('title')
         date = stream_date(f, info)
         songs = []
         for k, ((s, e), j) in enumerate(zip(segs, names), 1):
-            name = markers[j][1] if j is not None else ''
-            songs.append({'file': f'{date} {k:02d} {safe(name) or "未知"}{f.suffix}',
+            name = markers[j][1] if j is not None else title_name(info['title']) if single else ''
+            file = f'{date} {k:02d} {safe(name) or "未知"}'
+            if file in taken:  # e.g. two clips uploaded the same day
+                file += f' [{info.get("id") or f.stem[-12:]}]'
+            taken.add(file)
+            songs.append({'file': file + f.suffix,
                           'start': s, 'end': e, 'name': name, 'marker': markers[j][0] if j is not None else None})
         sung = sum(x['end'] - x['start'] for x in songs)
         print(f'   {len(songs)} songs, {sung / 60:.0f} of {len(probs) / 60:.0f} min, '

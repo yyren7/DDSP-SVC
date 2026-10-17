@@ -43,9 +43,11 @@ setup)
     ;;
 download)
     # Audio of every video in a Bilibili space whose title matches DL_MATCH, into $DATA_ROOT/$DL_DIR.
+    # DL_URL may also be a list file in the repo with one video URL per line (e.g. tools/autodl/lists/).
     # Kept outside the repo as cold storage; copy the songs you want into raw_songs/ yourself.
     # Resumable: finished videos are listed in _archive.txt and skipped on the next run.
     [ -n "${DL_URL:-}" ] && [ -n "${DL_DIR:-}" ] || { echo "set DL_URL and DL_DIR in plan.txt"; exit 2; }
+    if [ -f "$DL_URL" ]; then src=(--batch-file "$DL_URL"); else src=("$DL_URL"); fi
     conda activate "$ENV_ROOT/uvr"
     env -u http_proxy -u https_proxy -u HTTP_PROXY -u HTTPS_PROXY python -m pip install -q -U yt-dlp
     dest="$DATA_ROOT/$DL_DIR"; mkdir -p "$dest"
@@ -53,9 +55,13 @@ download)
     # Bilibili is reached directly from AutoDL; the academic proxy would only slow it down.
     ytdlp() { env -u http_proxy -u https_proxy -u HTTP_PROXY -u HTTPS_PROXY yt-dlp "${cookies[@]}" \
         --sleep-requests 1 --retries 10 --fragment-retries 10 "$@"; }
-    echo "== listing $DL_URL"
-    ytdlp --flat-playlist --print "%(id)s	%(duration)s	%(title)s" "$DL_URL" > "$dest/_all_videos.tsv"
-    echo "$(wc -l < "$dest/_all_videos.tsv") videos, $(grep -cP "${DL_MATCH:-.}" "$dest/_all_videos.tsv" || true) matching '${DL_MATCH:-}'"
+    if [ -f "$DL_URL" ]; then
+        echo "== $(grep -c '^http' "$DL_URL") videos listed in $DL_URL"
+    else
+        echo "== listing $DL_URL"
+        ytdlp --flat-playlist --print "%(id)s	%(duration)s	%(title)s" "$DL_URL" > "$dest/_all_videos.tsv"
+        echo "$(wc -l < "$dest/_all_videos.tsv") videos, $(grep -cP "${DL_MATCH:-.}" "$dest/_all_videos.tsv" || true) matching '${DL_MATCH:-}'"
+    fi
     echo "== downloading audio"
     # Multi-part videos (分P) come down as one file per part. The original audio stream is kept
     # without re-encoding. The info json keeps the comments, where fans post song timestamps (道标).
@@ -63,7 +69,7 @@ download)
         --match-filter "title~='${DL_MATCH:-.}'" -f 'bestaudio/best' -x \
         --write-info-json --write-comments \
         --download-archive "$dest/_archive.txt" \
-        -o "$dest/%(upload_date)s %(title).120B [%(id)s].%(ext)s" "$DL_URL" || true
+        -o "$dest/%(upload_date)s %(title).120B [%(id)s].%(ext)s" "${src[@]}" || true
     n=$(find "$dest" -maxdepth 1 -type f ! -name '_*' | wc -l)
     echo "$n audio files in $dest ($(du -sh "$dest" | cut -f1))"
     [ "$n" -gt 0 ]

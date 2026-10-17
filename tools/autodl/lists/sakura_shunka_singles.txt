@@ -1,0 +1,63 @@
+# Solo songs of 佐仓旬夏 outside the song-stream recordings: her own uploads (stream song clips,
+# covers) and fans' song clips. Duets with 佐仓铃 are left out. One URL per line for yt-dlp's
+# --batch-file; comment lines start with #.
+
+# 佐仓旬夏Official, https://space.bilibili.com/642588972
+# 【歌回剪辑】渡月橋 〜君 想ふ〜 (2020-09-03)
+https://www.bilibili.com/video/BV1Gv4111729
+# 【歌回剪辑】地球をあげる (2020-09-03)
+https://www.bilibili.com/video/BV1V54y1v7df
+# 【歌回剪辑】日不落 (2020-09-06)
+https://www.bilibili.com/video/BV1pK4y1a7EN
+# 【歌回剪辑】小幸运 (2020-09-06)
+https://www.bilibili.com/video/BV1fz4y1o7G7
+# 温柔巫女也能唱出啥霸炫狂拽的echo吗 【歌回剪辑】 (2020-09-09)
+https://www.bilibili.com/video/BV17y4y1y75V
+# 【歌回剪辑】Tell Your World (2020-09-16)
+https://www.bilibili.com/video/BV12D4y1d78X
+# 【巫女美声】晓之车 (2020-09-23)
+https://www.bilibili.com/video/BV1sy4y1k7sd
+# 【旬夏】カタオモイ（单相思）【初投稿】 (2020-10-01)
+https://www.bilibili.com/video/BV1mp4y1a7yx
+# 【歌回剪辑】for フルーツバスケット (2020-10-16)
+https://www.bilibili.com/video/BV1mA41177SF
+# 【夏夏歌】画心 (2020-10-21)
+https://www.bilibili.com/video/BV1Kr4y1w7dF
+# 【夏夏歌】フリージア（希望之花） (2020-11-04)
+https://www.bilibili.com/video/BV1H54y1r7Cg
+# 【夏夏歌】偏爱 (2020-11-07)
+https://www.bilibili.com/video/BV1Zz4y1C73x
+# 【夏夏歌】Weight of the World (2020-11-16)
+https://www.bilibili.com/video/BV18V411a7xw
+# 【夏夏歌】学猫叫 (2020-11-27)
+https://www.bilibili.com/video/BV1Xy4y1675B
+# 【夏夏歌】好想你 (2020-12-04)
+https://www.bilibili.com/video/BV1Cy4y1S7L5
+# 【夏夏歌】星与你消失之日 (2020-12-11)
+https://www.bilibili.com/video/BV1ra411F7e7
+# 【夏夏歌】团子大家族 (2020-12-21)
+https://www.bilibili.com/video/BV1164y1f7DZ
+
+# 花乃七_Hanano (song clips of many VTubers), https://space.bilibili.com/11691053, tagged 【佐仓旬夏】
+# 『偏爱』 (2025-10-08)
+https://www.bilibili.com/video/BV1GExizTEsb
+# 『勇气』 (2025-10-09)
+https://www.bilibili.com/video/BV1aExizTEnX
+# 『挥着翅膀的女孩』 (2025-10-09)
+https://www.bilibili.com/video/BV1gHxizNE2t
+# 『童话』 (2025-10-09)
+https://www.bilibili.com/video/BV1YjxizBEEv
+# 『宁夏』 (2025-10-09)
+https://www.bilibili.com/video/BV1VjxizBExM
+# 『后来』 (2025-10-10)
+https://www.bilibili.com/video/BV13HxizNELX
+# 『今天你要嫁给我』 (2025-10-10)
+https://www.bilibili.com/video/BV1hJxiziE6A
+# 对，我是大家的公主 (2025-10-11, 25 s)
+https://www.bilibili.com/video/BV1aJxiziEe8
+# 不会挑伴奏的小朋友乐开了花~ (2025-10-11)
+https://www.bilibili.com/video/BV13JxiziErt
+
+# 丨灰非灰丨, fan clip
+# 【佐仓旬夏】11.13后会无期 (2020-11-15)
+https://www.bilibili.com/video/BV1vy4y1z7gu

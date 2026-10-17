@@ -60,7 +60,7 @@ AutoDL 控制台 → 实例的「自定义服务」→ 打开 6008 端口对应�
 | JOB | 内容 |
 |---|---|
 | `setup` | 建 conda 环境（ddsp、uvr），下载 ContentVec、NSF-HiFiGAN、RMVPE |
-| `download` | 按 `DL_URL` 下载 B 站空间里标题匹配 `DL_MATCH` 的视频音频，存到数据盘的 `DL_DIR`（仓库外的冷存储）。需要登录时把 cookies 放到 `.autodl/bilibili_cookies.txt` |
+| `download` | 按 `DL_URL` 下载 B 站空间里标题匹配 `DL_MATCH` 的视频音频（`DL_URL` 也可以是仓库里的链接清单，比如 `tools/autodl/lists/` 下的文件），存到数据盘的 `DL_DIR`（仓库外的冷存储）。需要登录时把 cookies 放到 `.autodl/bilibili_cookies.txt` |
 | `songsplit` | 把 `DL_DIR` 里的歌回录像按歌曲切开，去掉聊天，每首歌一个文件存到 `SONG_DIR`。歌名取自评论里的道标；切分结果列在 `SONG_DIR/_songs.tsv`。参数用 `SPLIT_ARGS` 调整（见 `python tools/split_songs.py -h`） |
 | `uvr` | `raw_songs/` 依次分离人声、去和声、去混响、去噪，再切片，输出到 `data/` |
 | `features` | DDSP-SVC 特征预处理（`preprocess.py`） |
