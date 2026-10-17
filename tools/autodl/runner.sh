@@ -3,7 +3,8 @@
 #   - pulls $BRANCH every $INTERVAL seconds
 #   - starts / restarts the jobs named in tools/autodl/plan.txt when JOB or RUN_ID changes;
 #     JOB may be a comma separated chain (e.g. uvr,features,train), run in order until one fails
-#   - shuts the instance down after IDLE_SHUTDOWN_MIN minutes with nothing running (stops billing)
+#   - shuts the instance down after IDLE_SHUTDOWN_MIN minutes with no job running and nobody using the
+#     review page (stops billing)
 #   - keeps the review web page running (restarted after every code update)
 #   - publishes status, log tails and review feedback to the $LOG_BRANCH branch
 # Usage (inside tmux):  bash tools/autodl/runner.sh
@@ -79,12 +80,18 @@ load_job_state() {
     fi
 }
 
+# python3 is not on PATH when the runner is started over plain ssh; conda's base python always exists.
+PYTHON3="$(command -v python3 || echo "$CONDA_BASE/bin/python3")"
+
 start_review() {
     stop_group "$REVIEW_PID"
-    REVIEW_KEY="$(cat "$REVIEW_KEY_FILE")" setsid python3 tools/autodl/review_server.py --port "$REVIEW_PORT" \
+    REVIEW_KEY="$(cat "$REVIEW_KEY_FILE")" setsid "$PYTHON3" tools/autodl/review_server.py --port "$REVIEW_PORT" \
         >> "$STATE_DIR/review_server.log" 2>&1 &
     REVIEW_PID=$!
 }
+
+# The review server logs every request, so a fresh log means someone is listening right now.
+review_active() { [ -n "$(find "$STATE_DIR/review_server.log" -mmin -2 2>/dev/null)" ]; }
 
 tail_clean() {  # file lines: turn progress-bar carriage returns into lines, keep the end
     [ -f "$1" ] && tr '\r' '\n' < "$1" | grep -v '^\s*$' | tail -n "$2"
@@ -150,7 +157,7 @@ trap cleanup INT
 
 echo "runner started; review key: $(cat "$REVIEW_KEY_FILE")"
 load_job_state
-pkill -f "^python3 tools/autodl/review_server.py --port $REVIEW_PORT" 2>/dev/null
+pkill -f "python3 tools/autodl/review_server.py --port $REVIEW_PORT" 2>/dev/null
 start_review
 while true; do
     if net git fetch -q origin "$BRANCH" 2>/dev/null && [ "$(git rev-parse HEAD)" != "$(git rev-parse FETCH_HEAD)" ]; then
@@ -194,8 +201,9 @@ while true; do
     kill -0 "$REVIEW_PID" 2>/dev/null || start_review
     publish
 
-    # Nothing running for IDLE_SHUTDOWN_MIN minutes -> power off so the instance stops billing.
-    if job_running; then
+    # Nothing running and nobody listening for IDLE_SHUTDOWN_MIN minutes -> power off so the instance
+    # stops billing.
+    if job_running || review_active; then
         IDLE_SINCE=$(date +%s)
     else
         limit="$(plan_value IDLE_SHUTDOWN_MIN)"; limit="${limit:-30}"

@@ -55,7 +55,7 @@ download)
         --sleep-requests 1 --retries 10 --fragment-retries 10 "$@"; }
     echo "== listing $DL_URL"
     ytdlp --flat-playlist --print "%(id)s	%(duration)s	%(title)s" "$DL_URL" > "$dest/_all_videos.tsv"
-    echo "$(wc -l < "$dest/_all_videos.tsv") videos, $(grep -cE "${DL_MATCH:-.}" "$dest/_all_videos.tsv" || true) matching '${DL_MATCH:-}'"
+    echo "$(wc -l < "$dest/_all_videos.tsv") videos, $(grep -cP "${DL_MATCH:-.}" "$dest/_all_videos.tsv" || true) matching '${DL_MATCH:-}'"
     echo "== downloading audio"
     # Multi-part videos (分P) come down as one file per part. The original audio stream is kept
     # without re-encoding. The info json keeps the comments, where fans post song timestamps (道标).

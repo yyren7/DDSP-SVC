@@ -1,6 +1,7 @@
 """
 Review page for listening to every pipeline stage in the browser (audio streams, nothing is stored locally)
 and leaving feedback. Feedback goes to .autodl/feedback.jsonl, which runner.sh publishes to GitHub.
+Songs cut from song-stream recordings (songsplit job, SONG_DIR in plan.txt) are listed per recording.
 
 Standard library only. Started by runner.sh; open it through AutoDL's "custom service" link.
 """
@@ -16,7 +17,9 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent.parent
+ROOT = REPO.parent  # the data disk: the repo, and the song folders kept outside it
 STATE = REPO / '.autodl'
+PLAN = REPO / 'tools' / 'autodl' / 'plan.txt'
 AUDIO_EXTS = {'.wav', '.flac', '.mp3', '.m4a', '.ogg', '.opus'}
 MIME = {'.wav': 'audio/wav', '.flac': 'audio/flac', '.mp3': 'audio/mpeg', '.m4a': 'audio/mp4',
         '.ogg': 'audio/ogg', '.opus': 'audio/ogg'}
@@ -73,6 +76,44 @@ def esc(s):
     return html.escape(str(s), quote=True)
 
 
+def plan_value(key):
+    """KEY=VALUE from plan.txt, read the way runner.sh reads it."""
+    try:
+        lines = PLAN.read_text(encoding='utf-8').splitlines()
+    except OSError:
+        return ''
+    values = [line.split('=', 1)[1] for line in lines if line.startswith(key + '=')]
+    return re.sub(r'\s*#.*$', '', values[-1]).strip('"') if values else ''
+
+
+def songs_dir():
+    name = plan_value('SONG_DIR')
+    return ROOT / name if name else None
+
+
+def song_groups():
+    """{recording title: [(file, label)]} for the songs folder, using its _songs.tsv when present."""
+    folder = songs_dir()
+    if not folder:
+        return {}
+    meta = {}
+    tsv = folder / '_songs.tsv'
+    if tsv.exists():
+        for line in tsv.read_text(encoding='utf-8').splitlines()[1:]:
+            cols = line.split('\t')
+            if len(cols) >= 4:
+                meta[cols[0]] = cols
+    groups = {}
+    for f in audio_files(folder):
+        cols = meta.get(f.name)
+        if cols:  # source "20201206 【...】「歌回」冬季恋曲「2020-12-05」 [BV...].m4a" -> the title alone
+            title = re.sub(r'^\d{8} |\s*\[[^\]]*\]$', '', Path(cols[1]).stem)
+            groups.setdefault(title, []).append((f, f'{f.stem}　原录像 {cols[2]}–{cols[3]}'))
+        else:
+            groups.setdefault(f.name[:10], []).append((f, f.stem))
+    return dict(sorted(groups.items(), key=lambda g: g[1][0][0].name))
+
+
 class Handler(BaseHTTPRequestHandler):
     server_version = 'review/1.0'
 
@@ -105,7 +146,7 @@ class Handler(BaseHTTPRequestHandler):
         self.wfile.write(data)
 
     def player(self, f, label=None):
-        rel = f.relative_to(REPO).as_posix()
+        rel = f.relative_to(ROOT).as_posix()
         fid = 'fb' + str(abs(hash(rel)))
         return (f'<div class="card"><div class="name">{esc(label or f.name)}</div>'
                 f'<audio controls preload="none" src="file?p={urllib.parse.quote(rel)}"></audio>'
@@ -127,6 +168,8 @@ class Handler(BaseHTTPRequestHandler):
             return self.page_stage(q.get('s', [''])[0], int(q.get('page', ['1'])[0] or 1))
         if route == 'song':
             return self.page_song(q.get('n', [''])[0])
+        if route == 'songs':
+            return self.page_songs(q.get('g', [''])[0])
         return self.page_index()
 
     def do_POST(self):
@@ -152,6 +195,12 @@ class Handler(BaseHTTPRequestHandler):
                  '<textarea id="fbgen" placeholder="例如：去混响太狠，声音发闷；第 3 首切片有伴奏残留"></textarea>'
                  '<div class="row"><button onclick="fb(\'fbgen\',\'general\')">提交</button>'
                  '<span id="fbgen_ok" class="ok"></span></div></div>']
+        groups = song_groups()
+        if groups:
+            parts.append(f'<h2>歌回切歌（{sum(map(len, groups.values()))} 首）</h2><div class="card">')
+            parts.append('<br>'.join(f'<a href="songs?g={urllib.parse.quote(title)}">{esc(title)}</a> '
+                                     f'<span class="muted">{len(songs)} 首</span>' for title, songs in groups.items()))
+            parts.append('</div>')
         songs = audio_files(STAGE_DIR['vocals'])
         if songs:
             parts.append('<h2>按歌曲对比各阶段</h2><div class="card">')
@@ -196,9 +245,19 @@ class Handler(BaseHTTPRequestHandler):
             body += [self.player(f) for f in slices[:PAGE_SIZE]]
         self.send_html(''.join(body))
 
+    def page_songs(self, title):
+        songs = song_groups().get(title)
+        if not songs:
+            return self.send_html('not found', 404)
+        body = [f'<p><a href="./">← 返回</a></p><h1>{esc(title)}</h1>',
+                f'<p class="muted">{len(songs)} 首，时间是这首歌在原录像里的位置</p>']
+        body += [self.player(f, label) for f, label in songs]
+        self.send_html(''.join(body))
+
     def serve_file(self, rel):
-        path = (REPO / rel).resolve()
-        allowed = any(os.path.commonpath([path, d.resolve()]) == str(d.resolve()) for d in STAGE_DIR.values())
+        path = (ROOT / rel).resolve()
+        dirs = list(STAGE_DIR.values()) + [d for d in [songs_dir()] if d]
+        allowed = any(os.path.commonpath([path, d.resolve()]) == str(d.resolve()) for d in dirs)
         if not allowed or not path.is_file() or path.suffix.lower() not in AUDIO_EXTS:
             return self.send_html('not found', 404)
         size = path.stat().st_size
