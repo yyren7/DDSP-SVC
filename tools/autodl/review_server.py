@@ -118,7 +118,8 @@ class Handler(BaseHTTPRequestHandler):
     server_version = 'review/1.0'
 
     def log_message(self, fmt, *args):
-        print('%s %s' % (time.strftime('%F %T'), fmt % args), flush=True)
+        # the access key arrives as ?key=...; keep it out of this log, which runner.sh publishes
+        print('%s %s' % (time.strftime('%F %T'), re.sub(r'key=[^&\s"]*', 'key=***', fmt % args)), flush=True)
 
     # ---------- auth ----------
     def authorized(self, query):
