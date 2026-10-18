@@ -91,11 +91,8 @@ def songs_dir():
     return ROOT / name if name else None
 
 
-def song_groups():
-    """{recording title: [(file, label)]} for the songs folder, using its _songs.tsv when present."""
-    folder = songs_dir()
-    if not folder:
-        return {}
+def song_meta(folder):
+    """{file: [file, source, start, end, name]} from the songs folder's _songs.tsv."""
     meta = {}
     tsv = folder / '_songs.tsv'
     if tsv.exists():
@@ -103,6 +100,31 @@ def song_groups():
             cols = line.split('\t')
             if len(cols) >= 4:
                 meta[cols[0]] = cols
+    return meta
+
+
+def check_list():
+    """[(file, label)] picked for a spot check: _check.tsv in the songs folder, "file<TAB>reason" per line."""
+    folder = songs_dir()
+    tsv = folder / '_check.tsv' if folder else None
+    if not tsv or not tsv.exists():
+        return []
+    meta, out = song_meta(folder), []
+    for line in tsv.read_text(encoding='utf-8').splitlines():
+        cols = line.split('\t')
+        f = folder / cols[0]
+        if f.is_file():
+            where = f'　原录像 {meta[f.name][2]}–{meta[f.name][3]}' if f.name in meta else ''
+            out.append((f, f'{f.stem}{where}　（{cols[1] if len(cols) > 1 else "抽查"}）'))
+    return out
+
+
+def song_groups():
+    """{recording title: [(file, label)]} for the songs folder, using its _songs.tsv when present."""
+    folder = songs_dir()
+    if not folder:
+        return {}
+    meta = song_meta(folder)
     groups = {}
     for f in audio_files(folder):
         cols = meta.get(f.name)
@@ -171,6 +193,8 @@ class Handler(BaseHTTPRequestHandler):
             return self.page_song(q.get('n', [''])[0])
         if route == 'songs':
             return self.page_songs(q.get('g', [''])[0])
+        if route == 'check':
+            return self.page_check()
         return self.page_index()
 
     def do_POST(self):
@@ -196,6 +220,10 @@ class Handler(BaseHTTPRequestHandler):
                  '<textarea id="fbgen" placeholder="例如：去混响太狠，声音发闷；第 3 首切片有伴奏残留"></textarea>'
                  '<div class="row"><button onclick="fb(\'fbgen\',\'general\')">提交</button>'
                  '<span id="fbgen_ok" class="ok"></span></div></div>']
+        check = check_list()
+        if check:
+            parts.append(f'<h2>待抽查（{len(check)} 首）</h2><div class="card row"><a class="name" href="check">'
+                         '逐首试听</a><span class="muted">切歌结果里需要人工确认的歌，每首写明了原因</span></div>')
         groups = song_groups()
         if groups:
             parts.append(f'<h2>歌回切歌（{sum(map(len, groups.values()))} 首）</h2><div class="card">')
@@ -253,6 +281,14 @@ class Handler(BaseHTTPRequestHandler):
         body = [f'<p><a href="./">← 返回</a></p><h1>{esc(title)}</h1>',
                 f'<p class="muted">{len(songs)} 首，时间是这首歌在原录像里的位置</p>']
         body += [self.player(f, label) for f, label in songs]
+        self.send_html(''.join(body))
+
+    def page_check(self):
+        check = check_list()
+        body = ['<p><a href="./">← 返回</a></p><h1>待抽查</h1>',
+                f'<p class="muted">{len(check)} 首。听完在每首下面写结论，例如“完整一首”“只有半首”“不是她在唱”。'
+                '反馈会同步给 Claude。</p>']
+        body += [self.player(f, label) for f, label in check]
         self.send_html(''.join(body))
 
     def serve_file(self, rel):
