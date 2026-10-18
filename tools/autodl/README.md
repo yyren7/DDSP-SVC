@@ -4,7 +4,7 @@
 
 AutoDL 上常驻一个 runner 脚本，通过 GitHub 和 Claude 交换代码与日志：
 
-- **runner**：每分钟拉一次代码，按 `tools/autodl/plan.txt` 启动或重启任务，并把状态、日志尾部和你的试听反馈推到 `autodl-logs` 分支。
+- **runner**：每分钟拉一次代码，按 `tools/autodl/plan.txt` 启动或重启任务，并把状态、日志和你的试听反馈推到 `autodl-logs` 分支。
 - **Claude**：读 `autodl-logs` 分支上的日志，修好代码后推到 `master` 分支，runner 会自动拉取。
 - **试听网页**：runner 同时在 6008 端口开一个网页。你可以在浏览器里在线听各阶段的音频（边下边播，不占本地硬盘），并直接写反馈。
 
@@ -118,6 +118,6 @@ bash tools/autodl/runner.sh
 
 - runner 每次拉代码都会用 GitHub 上的版本覆盖仓库里被 git 跟踪的文件。想改配置（比如 `configs/reflow.yaml`）请告诉 Claude，不要直接在 AutoDL 上改。音频、数据、模型和实验目录不受影响。
 - TensorBoard 可以照常用 6006 端口：`tensorboard --logdir /root/autodl-tmp/speakers --port 6006`，所有人的训练曲线都能看到。
-- 想自己看日志：`tail -f .autodl/job_<任务名>.log`。
+- 日志：任务每运行一次单独记一个文件 `.autodl/runs/<开始时间>_<任务名>.log`，`.autodl/job_<任务名>.log` 指向这个任务最近一次运行的日志。想自己看：`tail -F .autodl/job_<任务名>.log`。实例上从新到旧保留 2G 日志，每个任务最近一次运行的日志总会保留。`autodl-logs` 分支上有最近 60 次运行的日志：进度条只留最后一帧，超过 2000 行的只留开头 300 行和最后 1700 行。runner 自己的输出在分支上的 `runner.log`。
 - 系统盘只有约 30G，所以 conda 环境（`/root/autodl-tmp/conda_envs/`）、pip/conda/HuggingFace 缓存（`/root/autodl-tmp/.cache/`）都放在数据盘上。两个环境里的 torch 都锁定为 2.9.1（见 `torch-constraints.txt`），防止依赖把它换成另一套 CUDA 版本。
 - runner 访问 GitHub 时先直连，失败再走学术加速，因为学术加速访问 GitHub 有时会返回 503。

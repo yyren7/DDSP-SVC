@@ -26,6 +26,16 @@ REVIEW_KEY_FILE="$STATE_DIR/review_key"
 [ -s "$REVIEW_KEY_FILE" ] || (umask 077; head -c 12 /dev/urandom | od -An -tx1 | tr -d ' \n' > "$REVIEW_KEY_FILE")
 
 PUB="$STATE_DIR/publish"
+# Every job run gets its own log, .autodl/runs/<start time>_<job>.log, and job_<job>.log links to the
+# job's latest run. The newest runs are kept up to LOG_KEEP_MB in all (the latest run of every job is
+# always kept). The log branch gets the newest LOG_PUBLISH_RUNS runs; a run longer than
+# LOG_HEAD + LOG_TAIL lines is published as its first LOG_HEAD and last LOG_TAIL lines.
+RUNS_DIR="$STATE_DIR/runs"
+LOG_KEEP_MB="${LOG_KEEP_MB:-2048}"
+LOG_PUBLISH_RUNS="${LOG_PUBLISH_RUNS:-60}"
+LOG_HEAD="${LOG_HEAD:-300}"
+LOG_TAIL="${LOG_TAIL:-1700}"
+mkdir -p "$RUNS_DIR"
 JOB_PID=""; JOB_KEY=""; JOB_NAME=""; JOB_IDX=0; REVIEW_PID=""
 RESUME=1   # first loop pass after a (re)start: rerun a job that did not finish cleanly
 IDLE_SINCE=$(date +%s)
@@ -51,8 +61,11 @@ job_exit_code() {  # job -> exit code of its last finished run, empty while it h
 }
 
 start_job() {
-    local job="$1" log="$STATE_DIR/job_$1.log"
-    echo "=== $(date '+%F %T') start $job at $(git rev-parse --short HEAD)" >> "$log"
+    local job="$1" now log
+    now="$(date '+%F %T')"; log="${now/ /_}"; log="$RUNS_DIR/${log//:/}_$job.log"
+    split_job_log "$job"
+    ln -sfn "runs/$(basename "$log")" "$STATE_DIR/job_$job.log"
+    echo "=== $now start $job at $(git rev-parse --short HEAD)" >> "$log"
     # The speaker is fixed when the job starts, so editing plan.txt never moves a running job's files.
     SPEAKER="$(plan_value SPEAKER)" \
     UVR_ARGS="$(plan_value UVR_ARGS)" KEY="$(plan_value KEY)" SPK_ID="$(plan_value SPK_ID)" \
@@ -106,8 +119,65 @@ fi
 EOF
 mv "$AUTOSTART.tmp" "$AUTOSTART" 2>/dev/null || echo "could not install $AUTOSTART"
 
-tail_clean() {  # file lines: turn progress-bar carriage returns into lines, keep the end
-    [ -f "$1" ] && tr '\r' '\n' < "$1" | grep -v '^\s*$' | tail -n "$2"
+# Until 2026-10-18 every run of a job was appended to one job_<job>.log; split such a file into runs/.
+# Not while the job is running, because it still writes to that file.
+split_job_log() {  # job
+    local log="$STATE_DIR/job_$1.log" last
+    [ -f "$log" ] && [ ! -L "$log" ] || return 0
+    job_running && [ "$1" = "$JOB_NAME" ] && return 0
+    last="$(awk -v dir="$RUNS_DIR" -v job="$1" '
+        /^=== [0-9-]+ [0-9:]+ start / { t = $3; gsub(/:/, "", t); if (out) close(out); out = dir "/" $2 "_" t "_" job ".log" }
+        !out { out = dir "/0000-00-00_000000_" job ".log" }
+        { print > out }
+        END { print out }' "$log")"
+    [ -n "$last" ] && rm -f "$log" && ln -s "runs/$(basename "$last")" "$log"
+}
+
+# Delete the oldest runs beyond LOG_KEEP_MB, except a run that is still some job's latest.
+prune_runs() {
+    find "$RUNS_DIR" -maxdepth 1 -name '*.log' -printf '%f %s\n' | sort -r |
+        awk -v max=$((LOG_KEEP_MB << 20)) '{ total += $2 } total > max { print $1 }' |
+        while read -r f; do
+            [ "$(readlink "$STATE_DIR/job_${f#*_*_}")" = "runs/$f" ] || rm -f "$RUNS_DIR/$f"
+        done
+}
+
+# The log branch is public, so the review key and the GitHub token are masked in everything published,
+# and so is every key the runner ever printed at startup (the console log outlives a new key).
+sed_escape() { printf '%s' "$1" | sed 's/[]\/$*.^[]/\\&/g'; }
+REDACT="s/$(sed_escape "$(cat "$REVIEW_KEY_FILE")")/***/g; s/$(sed_escape "$(cat "$TOKEN_FILE")")/***/g"
+REDACT="$REDACT; s/\(review key: \)[^ ]*/\1***/g"
+
+# A log as a terminal shows it: a progress bar redrawn with \r keeps only its last frame.
+render() { awk '{ sub(/\r+$/, ""); n = split($0, p, "\r"); if (p[n] ~ /[^ \t]/) print p[n] }' | sed "$REDACT"; }
+
+publish_log() {  # log, published copy
+    local size n tmp="$STATE_DIR/render.tmp"
+    size=$(stat -L -c %s "$1")
+    if [ "$size" -gt $((8 << 20)) ]; then
+        # A long training run: render only its two ends instead of the whole file every minute.
+        { head -c $((1 << 20)) "$1" | render | head -n "$LOG_HEAD"
+          echo "... $((size >> 20)) MB in all, the middle is left out ..."
+          tail -c $((4 << 20)) "$1" | tail -n +2 | render | tail -n "$LOG_TAIL"; } > "$2"
+        return 0
+    fi
+    render < "$1" > "$tmp"
+    n=$(wc -l < "$tmp")
+    if [ "$n" -gt $((LOG_HEAD + LOG_TAIL)) ]; then
+        { head -n "$LOG_HEAD" "$tmp"; echo "... $((n - LOG_HEAD - LOG_TAIL)) lines left out ..."
+          tail -n "$LOG_TAIL" "$tmp"; } > "$2"
+        rm -f "$tmp"
+    else
+        mv "$tmp" "$2"
+    fi
+}
+
+# Logs only grow, so a log is rendered again only when it is another file (inode) or got longer.
+declare -A PUBLISHED   # published copy -> "inode size" of the log it was rendered from
+publish_changed() {  # log, published copy
+    local sig; sig="$(stat -L -c '%i %s' "$1" 2>/dev/null)" || return 0
+    [ "${PUBLISHED[$2]:-}" = "$sig" ] && [ -f "$2" ] && return 0
+    publish_log "$1" "$2" && PUBLISHED[$2]="$sig"
 }
 
 publish() {
@@ -126,6 +196,7 @@ publish() {
             echo "job:      ${JOB_NAME:-none} not running; $(grep '=== .* exit' "$STATE_DIR/job_${JOB_NAME:-none}.log" 2>/dev/null | tail -1)"
         fi
         echo "review:   port $REVIEW_PORT (key is in .autodl/review_key, not published)"
+        echo "logs:     job_<job>.log latest run of each job, runs/ last $LOG_PUBLISH_RUNS runs, runner.log runner console"
         echo "mode:     $(has_gpu && echo "GPU, idle shutdown after $(plan_value IDLE_SHUTDOWN_MIN) min" \
                                    || echo "no GPU, idle shutdown after $(plan_value IDLE_SHUTDOWN_MIN_NOGPU) min")"
         echo; nvidia-smi --query-gpu=name,utilization.gpu,memory.used,memory.total,temperature.gpu --format=csv 2>/dev/null
@@ -135,22 +206,36 @@ publish() {
             [ -n "$SPK_DIR" ] && [ -d "$d" ] && echo "$(find "$d" -type f | wc -l) files  ${d#$SPEAKERS_DIR/}"
         done
     } > "$PUB/status.txt" 2>&1
-    for f in "$STATE_DIR"/job_*.log; do
-        [ -f "$f" ] && tail_clean "$f" 400 > "$PUB/$(basename "$f")"
+    local l f keep
+    for l in "$STATE_DIR"/job_*.log; do
+        [ -L "$l" ] || { l="${l##*/job_}"; split_job_log "${l%.log}"; }
     done
-    tail_clean "$STATE_DIR/review_server.log" 100 > "$PUB/review_server.log"
+    prune_runs
+    mkdir -p "$PUB/runs"
+    keep="$(ls "$RUNS_DIR" | sort | tail -n "$LOG_PUBLISH_RUNS")"
+    for f in $keep; do publish_changed "$RUNS_DIR/$f" "$PUB/runs/$f"; done
+    for f in $(ls "$PUB/runs"); do grep -qxF "$f" <<< "$keep" || rm -f "$PUB/runs/$f"; done
+    for l in "$STATE_DIR"/job_*.log; do
+        [ -e "$l" ] && publish_changed "$l" "$PUB/$(basename "$l")"
+    done
+    [ -f "$STATE_DIR/runner_console.log" ] && tail -n 3000 "$STATE_DIR/runner_console.log" | render | tail -n 500 > "$PUB/runner.log"
+    tail -n 3000 "$STATE_DIR/review_server.log" 2>/dev/null | render | tail -n 300 > "$PUB/review_server.log"
     if [ -f "$EXP_DIR/log_info.txt" ]; then
         tail -n 200 "$EXP_DIR/log_info.txt" > "$PUB/train_log_info.txt"
     else
         rm -f "$PUB/train_log_info.txt"  # do not show another speaker's training log
     fi
     [ -f "$STATE_DIR/feedback.jsonl" ] && cp "$STATE_DIR/feedback.jsonl" "$PUB/feedback.jsonl"
-    [ -f "$STATE_DIR/shutdown.log" ] && tail -n 80 "$STATE_DIR/shutdown.log" > "$PUB/shutdown.log"
+    [ -f "$STATE_DIR/shutdown.log" ] && tail -n 200 "$STATE_DIR/shutdown.log" | render > "$PUB/shutdown.log"
     # One squashed commit, force-pushed, so the log branch never grows.
     git -C "$PUB" add -A
     git -C "$PUB" -c user.name=autodl-runner -c user.email=runner@autodl commit -q --amend -m "status $(date '+%F %T')" 2>/dev/null \
         || git -C "$PUB" -c user.name=autodl-runner -c user.email=runner@autodl commit -q -m "status $(date '+%F %T')"
     net git -C "$PUB" push -q -f "$PUSH_URL" "HEAD:refs/heads/$LOG_BRANCH" 2>&1 | sed "s#$PUSH_URL#<repo>#" | tail -2
+    # Every amend leaves the replaced commit behind; drop those once they pile up.
+    if [ "$(git -C "$PUB" count-objects | cut -d' ' -f1)" -gt 3000 ]; then
+        git -C "$PUB" reflog expire --expire=now --all && git -C "$PUB" gc -q --prune=now
+    fi
 }
 
 # AutoDL's `shutdown` works from an interactive terminal, so it may be an alias or function from
