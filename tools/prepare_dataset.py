@@ -172,7 +172,13 @@ def split_stage(clips, args):
         dst, other = (val_dir, train_dir) if c in val else (train_dir, val_dir)
         shutil.copy2(c, dst / c.name)
         (other / c.name).unlink(missing_ok=True)  # a re-run may move a clip between the two sets
-    print(f'[split] {len(clips) - n_val} clips -> {train_dir}, {n_val} clips -> {val_dir}')
+    # clips of songs taken out of the input since an earlier run
+    names = {c.name for c in clips}
+    stale = [f for d in (train_dir, val_dir) for f in list_audio(d) if f.name not in names]
+    for f in stale:
+        f.unlink()
+    print(f'[split] {len(clips) - n_val} clips -> {train_dir}, {n_val} clips -> {val_dir}'
+          + (f', removed {len(stale)} clips of songs no longer in the input' if stale else ''))
 
 
 def main():
@@ -189,15 +195,22 @@ def main():
     # Give every input a unique, space-free name so later stages can key on file stems.
     staged = work / '0_input'
     staged.mkdir(parents=True, exist_ok=True)
+    files = []
     for f, name in unique_names(raw).items():
         dst = staged / f'{name}{f.suffix.lower()}'
-        if dst.exists():
-            continue
-        if os.stat(f).st_dev == os.stat(staged).st_dev:
-            os.link(f, dst)  # hard link: no extra disk space for large song collections
-        else:
-            shutil.copy2(f, dst)
-    files = list_audio(staged)
+        if not dst.exists():
+            if os.stat(f).st_dev == os.stat(staged).st_dev:
+                os.link(f, dst)  # hard link: no extra disk space for large song collections
+            else:
+                shutil.copy2(f, dst)
+        files.append(dst)
+    # Inputs staged by an earlier run but no longer in the input folder must not be processed again.
+    stale = [f for f in list_audio(staged) if f not in set(files)]
+    for f in stale:
+        f.unlink()
+    if stale:
+        print(f'removed {len(stale)} staged inputs that are no longer in {args.input}')
+    files = sorted(files)
     print(f'{len(files)} input files')
 
     for idx, step in enumerate(UVR_STEPS, 1):
@@ -210,7 +223,11 @@ def main():
     if 'slice' in steps:
         slice_stage(files, clips_dir, args)
     if 'split' in steps:
-        clips = list_audio(clips_dir) if 'slice' in steps or clips_dir.exists() else files
+        if 'slice' in steps or clips_dir.exists():
+            stems = {f.stem for f in files}  # only clips cut from this run's inputs
+            clips = [c for c in list_audio(clips_dir) if c.stem.rsplit('_', 1)[0] in stems]
+        else:
+            clips = files
         split_stage(clips, args)
 
 
