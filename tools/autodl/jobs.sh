@@ -80,7 +80,9 @@ download)
     echo "== downloading audio"
     # Multi-part videos (分P) come down as one file per part. The original audio stream is kept
     # without re-encoding. The info json keeps the comments, where fans post song timestamps (道标).
-    ytdlp --yes-playlist --ignore-errors --no-overwrites --sleep-interval 2 --max-sleep-interval 5 \
+    # DL_MAX caps how many new videos one run fetches (a space lists the newest first)
+    limit=(); [ -n "${DL_MAX:-}" ] && limit=(--max-downloads "$DL_MAX")
+    ytdlp --yes-playlist --ignore-errors --no-overwrites --sleep-interval 2 --max-sleep-interval 5 "${limit[@]}" \
         --match-filter "title~='${DL_MATCH:-.}'" -f 'bestaudio/best' -x \
         --write-info-json --write-comments \
         --download-archive "$dest/_archive.txt" \

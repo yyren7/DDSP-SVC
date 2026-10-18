@@ -13,8 +13,11 @@ SPEAKER=sakura_shunka
 # download: Bilibili space -> audio of the videos whose title matches DL_MATCH (Python regex), into downloads/;
 # DL_URL may also be a list file of video URLs. The song-stream recordings came from
 # DL_URL=https://space.bilibili.com/516780319/video with DL_MATCH=佐仓旬夏】「(?!联动)[^」]*歌回
+# Pheebie (菲比Pheebie, space 3546961967843490): her streams are recorded by 夜半汽笛い (space 356626415)
+# as "【菲比Pheebie】【...】title-date"; the singing ones say 歌回/歌杂/唱. DL_MAX caps new videos per run.
 DL_URL=tools/autodl/lists/sakura_shunka_singles.txt
 DL_MATCH=
+DL_MAX=
 # songsplit: recordings in downloads/ -> one file per song in songs/ (see tools/split_songs.py -h)
 SPLIT_ARGS=
 UVR_ARGS=
