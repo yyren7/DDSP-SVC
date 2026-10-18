@@ -10,3 +10,6 @@ test_songs/
 preprocess_work_test/
 infer_out/
 .autodl/
+
+# local credentials (GitHub token)
+env.json
