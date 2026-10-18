@@ -76,9 +76,9 @@ AutoDL 控制台 → 实例的「自定义服务」→ 打开 6008 端口对应�
 
 ## 自动关机
 
-没有任务在跑、试听网页也没人用的状态持续 `IDLE_SHUTDOWN_MIN` 分钟（默认 30）后，runner 会在日志分支记一笔，然后执行 `shutdown` 关机，停止计费。设为 `0` 表示不自动关机。
+没有任务在跑、试听网页也没人用的状态持续一段时间后：有卡模式 `IDLE_SHUTDOWN_MIN` 分钟（默认 30），无卡模式 `IDLE_SHUTDOWN_MIN_NOGPU` 分钟（默认 1440，即 24 小时），runner 会在日志分支记一笔，然后执行 `shutdown` 关机，停止计费。设为 `0` 表示不自动关机。
 
-重新开机后，在 JupyterLab 终端执行：
+runner 会把自己写进 `/etc/profile.d/zz-ddsp-runner.sh`，之后每次开机自动启动，不用再手动执行。如果没有自动启动，在 JupyterLab 终端执行：
 
 ```bash
 cd /root/autodl-tmp/DDSP-SVC && tmux new -s runner

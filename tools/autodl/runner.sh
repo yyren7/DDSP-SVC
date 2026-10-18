@@ -3,8 +3,9 @@
 #   - pulls $BRANCH every $INTERVAL seconds
 #   - starts / restarts the jobs named in tools/autodl/plan.txt when JOB or RUN_ID changes;
 #     JOB may be a comma separated chain (e.g. uvr,features,train), run in order until one fails
-#   - shuts the instance down after IDLE_SHUTDOWN_MIN minutes with no job running and nobody using the
-#     review page (stops billing)
+#   - shuts the instance down after IDLE_SHUTDOWN_MIN minutes (with a GPU) or IDLE_SHUTDOWN_MIN_NOGPU
+#     minutes (no-GPU mode) with no job running and nobody using the review page (stops billing)
+#   - starts itself again after every power-on (see AUTOSTART below)
 #   - keeps the review web page running (restarted after every code update)
 #   - publishes status, log tails and review feedback to the $LOG_BRANCH branch
 # Usage (inside tmux):  bash tools/autodl/runner.sh
@@ -93,6 +94,21 @@ start_review() {
 # The review server logs every request, so a fresh log means someone is listening right now.
 review_active() { [ -n "$(find "$STATE_DIR/review_server.log" -mmin -2 2>/dev/null)" ]; }
 
+# No-GPU mode keeps an nvidia-smi that lists nothing, so look for an actual GPU.
+has_gpu() { nvidia-smi -L 2>/dev/null | grep -q '^GPU '; }
+
+# AutoDL's boot script (PID 1) sources /etc/profile, and /etc/profile.d lives on the system disk, so
+# this snippet brings the runner back after every power-on. In login shells it does nothing while
+# the runner is up.
+AUTOSTART=/etc/profile.d/zz-ddsp-runner.sh
+cat > "$AUTOSTART.tmp" <<EOF
+# Written by $REPO_DIR/tools/autodl/runner.sh: start the runner when AutoDL boots the instance.
+if [ -f "$REPO_DIR/tools/autodl/runner.sh" ] && command -v tmux >/dev/null 2>&1 && ! tmux has-session -t runner 2>/dev/null; then
+    (cd "$REPO_DIR" && tmux new -d -s runner "bash tools/autodl/runner.sh 2>&1 | tee -a .autodl/runner_console.log")
+fi
+EOF
+mv "$AUTOSTART.tmp" "$AUTOSTART" 2>/dev/null || echo "could not install $AUTOSTART"
+
 tail_clean() {  # file lines: turn progress-bar carriage returns into lines, keep the end
     [ -f "$1" ] && tr '\r' '\n' < "$1" | grep -v '^\s*$' | tail -n "$2"
 }
@@ -110,6 +126,8 @@ publish() {
             echo "job:      ${JOB_NAME:-none} not running; $(grep '=== .* exit' "$STATE_DIR/job_${JOB_NAME:-none}.log" 2>/dev/null | tail -1)"
         fi
         echo "review:   port $REVIEW_PORT (key is in .autodl/review_key, not published)"
+        echo "mode:     $(has_gpu && echo "GPU, idle shutdown after $(plan_value IDLE_SHUTDOWN_MIN) min" \
+                                   || echo "no GPU, idle shutdown after $(plan_value IDLE_SHUTDOWN_MIN_NOGPU) min")"
         echo; nvidia-smi --query-gpu=name,utilization.gpu,memory.used,memory.total,temperature.gpu --format=csv 2>/dev/null
         echo; df -h "$REPO_DIR" 2>/dev/null | tail -1
         echo; for d in "$RAW_DIR" "$WORK_DIR"/* data/train/audio data/val/audio "$TEST_DIR" "$INFER_DIR"/*; do
@@ -206,7 +224,11 @@ while true; do
     if job_running || review_active; then
         IDLE_SINCE=$(date +%s)
     else
-        limit="$(plan_value IDLE_SHUTDOWN_MIN)"; limit="${limit:-30}"
+        if has_gpu; then
+            limit="$(plan_value IDLE_SHUTDOWN_MIN)"; limit="${limit:-30}"
+        else  # no-GPU mode costs little; keep it up for listening and small jobs
+            limit="$(plan_value IDLE_SHUTDOWN_MIN_NOGPU)"; limit="${limit:-1440}"
+        fi
         if [ "$limit" -gt 0 ] 2>/dev/null && [ $(( $(date +%s) - IDLE_SINCE )) -ge $((limit * 60)) ]; then
             echo "$(date '+%F %T') idle for $limit min, shutting down"
             echo "shutdown: idle for $limit min at $(date '+%F %T %Z')" >> "$PUB/status.txt"
