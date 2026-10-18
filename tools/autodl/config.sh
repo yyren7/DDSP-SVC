@@ -1,6 +1,6 @@
 # Shared settings for the AutoDL scripts. Sourced by runner.sh, setup.sh and jobs/*.sh.
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
-BRANCH="${BRANCH:-claude/amazing-sagan-49ux44}"
+BRANCH="${BRANCH:-master}"
 LOG_BRANCH="${LOG_BRANCH:-autodl-logs}"
 GITHUB_REPO="${GITHUB_REPO:-yyren7/DDSP-SVC}"
 

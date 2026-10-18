@@ -5,7 +5,7 @@
 AutoDL 上常驻一个 runner 脚本，通过 GitHub 和 Claude 交换代码与日志：
 
 - **runner**：每分钟拉一次代码，按 `tools/autodl/plan.txt` 启动或重启任务，并把状态、日志尾部和你的试听反馈推到 `autodl-logs` 分支。
-- **Claude**：读 `autodl-logs` 分支上的日志，修好代码后推到 `claude/amazing-sagan-49ux44` 分支，runner 会自动拉取。
+- **Claude**：读 `autodl-logs` 分支上的日志，修好代码后推到 `master` 分支，runner 会自动拉取。
 - **试听网页**：runner 同时在 6008 端口开一个网页。你可以在浏览器里在线听各阶段的音频（边下边播，不占本地硬盘），并直接写反馈。
 
 ## 第一次使用（只做一次）
@@ -28,7 +28,7 @@ GitHub → Settings → Developer settings → Fine-grained tokens → Generate 
 ```bash
 source /etc/network_turbo            # 开启 AutoDL 学术加速，访问 GitHub、HuggingFace
 cd /root/autodl-tmp                  # 数据盘，空间大
-git clone -b claude/amazing-sagan-49ux44 https://github.com/yyren7/DDSP-SVC.git
+git clone -b master https://github.com/yyren7/DDSP-SVC.git
 cd DDSP-SVC
 tmux new -s runner                   # 用 tmux 运行，关掉网页终端也不会中断
 GITHUB_TOKEN=粘贴你的token bash tools/autodl/runner.sh
