@@ -18,7 +18,11 @@ SPEAKER=pheebie
 DL_URL=https://space.bilibili.com/356626415/video
 DL_MATCH=^【菲比Pheebie】(?!.*联动).*(歌回|歌杂|唱)
 DL_MAX=20
-# songsplit: recordings in downloads/ -> one file per song in songs/ (see tools/split_songs.py -h)
+# DL_FILTER: more yt-dlp --match-filter conditions. Her own covers and PVs: DL_URL=https://space.bilibili.com/3546961967843490/video
+# with DL_MATCH empty and DL_FILTER=duration>=120 & duration<=480 (drops teasers, intros, model showcases)
+DL_FILTER=
+# songsplit: recordings in downloads/ -> one file per song in songs/ (see tools/split_songs.py -h).
+# Per-speaker settings live in tools/autodl/split/<speaker>.args; SPLIT_ARGS is added after them.
 SPLIT_ARGS=
 UVR_ARGS=
 WORKERS=4

@@ -1,0 +1,2 @@
+# Settings for tools/split_songs.py when SPEAKER=sakura_shunka (see python tools/split_songs.py -h).
+# The script's defaults were tuned on her 6 recordings with song timestamps (61 songs), so nothing here.

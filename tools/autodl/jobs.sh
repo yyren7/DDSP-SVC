@@ -83,7 +83,7 @@ download)
     # DL_MAX caps how many new videos one run fetches (a space lists the newest first)
     limit=(); [ -n "${DL_MAX:-}" ] && limit=(--max-downloads "$DL_MAX")
     ytdlp --yes-playlist --ignore-errors --no-overwrites --sleep-interval 2 --max-sleep-interval 5 "${limit[@]}" \
-        --match-filter "title~='${DL_MATCH:-.}'" -f 'bestaudio/best' -x \
+        --match-filter "title~='${DL_MATCH:-.}'${DL_FILTER:+ & $DL_FILTER}" -f 'bestaudio/best' -x \
         --write-info-json --write-comments \
         --download-archive "$dest/_archive.txt" \
         -o "$dest/%(upload_date)s %(title).120B [%(id)s].%(ext)s" "${src[@]}" || true
@@ -104,9 +104,14 @@ songsplit)
     fetch pretrain/panns/Cnn14_DecisionLevelMax.pth 70539c43c18b6a289b3199c503a82c5a \
         'https://hf-mirror.com/niobures/PANNs/resolve/main/models/checkpoints/Cnn14_DecisionLevelMax_mAP%3D0.385.pth' \
         'https://zenodo.org/records/3987831/files/Cnn14_DecisionLevelMax_mAP%3D0.385.pth?download=1'
+    # Each speaker sings and talks differently: tools/autodl/split/<speaker>.args holds the settings
+    # tuned for them (comments allowed), SPLIT_ARGS in plan.txt comes after it for experiments.
+    args_file="tools/autodl/split/$SPEAKER.args"
+    spk_args="$([ -f "$args_file" ] && sed 's/#.*$//' "$args_file" | tr '\n' ' ' | sed 's/^ *//; s/ *$//' || true)"
+    echo "split settings: ${spk_args:-(defaults)} ${SPLIT_ARGS:-}"
     # shellcheck disable=SC2086
     python tools/split_songs.py -i "$DL_DIR" -o "$SONG_DIR" \
-        --model-dir pretrain/panns ${SPLIT_ARGS:-}
+        --model-dir pretrain/panns $spk_args ${SPLIT_ARGS:-}
     ;;
 uvr)
     # Raw songs -> separated, de-harmonised, de-reverbed, denoised, sliced clips in data/
