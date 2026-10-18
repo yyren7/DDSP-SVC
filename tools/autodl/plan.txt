@@ -15,7 +15,8 @@ SPEAKER=pheebie
 # DL_URL=https://space.bilibili.com/516780319/video with DL_MATCH=佐仓旬夏】「(?!联动)[^」]*歌回
 # Pheebie (菲比Pheebie, space 3546961967843490): her streams are recorded by 夜半汽笛い (space 356626415)
 # as "【菲比Pheebie】【...】title-date"; the singing ones say 歌回/歌杂/唱. DL_MAX caps new videos per run.
-# First batch (RUN_ID=15): DL_MATCH=^【菲比Pheebie】(?!.*联动).*(歌回|歌杂|唱) with DL_MAX=20
+# First batch (RUN_ID=15): DL_MATCH=^【菲比Pheebie】(?!.*联动).*(歌回|歌杂|唱) with DL_MAX=20; it missed streams
+# titled 歌！, so next time use DL_MATCH=^【菲比Pheebie】(?!.*联动).*(歌|唱)
 DL_URL=https://space.bilibili.com/3546961967843490/video
 DL_MATCH=
 DL_MAX=
