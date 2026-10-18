@@ -2,12 +2,12 @@
 # Jobs: setup | download | songsplit | uvr | features | train | infer | migrate | idle
 # A comma separated chain runs in order and stops at the first failure, e.g. JOB=uvr,features,train
 # After a reboot the runner resumes a job that failed or was interrupted.
-JOB=migrate
-RUN_ID=14
+JOB=download
+RUN_ID=15
 
 # Whose data the jobs work on: everything lives in /root/autodl-tmp/speakers/$SPEAKER/
 # (downloads, songs, raw_songs, work, data, exp, test_songs, infer_out), one model per speaker.
-SPEAKER=sakura_shunka
+SPEAKER=pheebie
 
 # Optional settings passed to the jobs
 # download: Bilibili space -> audio of the videos whose title matches DL_MATCH (Python regex), into downloads/;
@@ -15,9 +15,9 @@ SPEAKER=sakura_shunka
 # DL_URL=https://space.bilibili.com/516780319/video with DL_MATCH=佐仓旬夏】「(?!联动)[^」]*歌回
 # Pheebie (菲比Pheebie, space 3546961967843490): her streams are recorded by 夜半汽笛い (space 356626415)
 # as "【菲比Pheebie】【...】title-date"; the singing ones say 歌回/歌杂/唱. DL_MAX caps new videos per run.
-DL_URL=tools/autodl/lists/sakura_shunka_singles.txt
-DL_MATCH=
-DL_MAX=
+DL_URL=https://space.bilibili.com/356626415/video
+DL_MATCH=^【菲比Pheebie】(?!.*联动).*(歌回|歌杂|唱)
+DL_MAX=20
 # songsplit: recordings in downloads/ -> one file per song in songs/ (see tools/split_songs.py -h)
 SPLIT_ARGS=
 UVR_ARGS=
