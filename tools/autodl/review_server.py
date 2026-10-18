@@ -3,13 +3,17 @@ Review page for listening to every pipeline stage in the browser (audio streams,
 and leaving feedback. Feedback goes to .autodl/feedback.jsonl, which runner.sh publishes to GitHub.
 Songs cut from song-stream recordings (songsplit job, SONG_DIR in plan.txt) are listed per recording.
 
-Standard library only. Started by runner.sh; open it through AutoDL's "custom service" link.
+Standard library only (plus ffmpeg for the Opus fallback). Started by runner.sh; open it through
+AutoDL's "custom service" link, or where that is not offered, an ssh tunnel to the port.
 """
 import argparse
+import hashlib
 import html
 import json
 import os
 import re
+import subprocess
+import threading
 import time
 import urllib.parse
 from http import cookies
@@ -62,7 +66,18 @@ async function fb(id, target){
     body:JSON.stringify({target:target,text:t})});
   if(r.ok){box.value='';document.getElementById(id+'_ok').textContent='已提交 ✓';}
 }
+// Browsers without an AAC decoder (VS Code's built-in browser, for one) get an Opus copy instead.
+document.addEventListener('DOMContentLoaded', () => {
+  const aac = document.createElement('audio').canPlayType('audio/mp4; codecs="mp4a.40.2"');
+  for (const a of document.querySelectorAll('audio')) {
+    const opus = () => { if (a.src.includes('fmt=ogg')) return false; a.src += '&fmt=ogg'; a.load(); return true; };
+    if (!aac && /\\.(m4a|mp4|aac)$/i.test(decodeURIComponent(a.src))) opus();
+    a.addEventListener('error', () => { if (opus()) a.play().catch(() => {}); });
+  }
+});
 """
+OPUS_FROM = {'.m4a', '.mp4', '.aac'}
+_transcode_locks = {}
 
 
 def audio_files(folder, recursive=False):
@@ -186,7 +201,7 @@ class Handler(BaseHTTPRequestHandler):
                                   '密钥在 runner 的输出里。</p>', 403)
         route = url.path.rstrip('/').split('/')[-1]
         if route == 'file':
-            return self.serve_file(q.get('p', [''])[0])
+            return self.serve_file(q.get('p', [''])[0], q.get('fmt', [''])[0])
         if route == 'stage':
             return self.page_stage(q.get('s', [''])[0], int(q.get('page', ['1'])[0] or 1))
         if route == 'song':
@@ -291,12 +306,16 @@ class Handler(BaseHTTPRequestHandler):
         body += [self.player(f, label) for f, label in check]
         self.send_html(''.join(body))
 
-    def serve_file(self, rel):
+    def serve_file(self, rel, fmt=''):
         path = (ROOT / rel).resolve()
         dirs = list(STAGE_DIR.values()) + [d for d in [songs_dir()] if d]
         allowed = any(os.path.commonpath([path, d.resolve()]) == str(d.resolve()) for d in dirs)
         if not allowed or not path.is_file() or path.suffix.lower() not in AUDIO_EXTS:
             return self.send_html('not found', 404)
+        if fmt == 'ogg' and path.suffix.lower() in OPUS_FROM:
+            path = opus_copy(path)
+            if not path:
+                return self.send_html('transcoding failed', 500)
         size = path.stat().st_size
         start, end = 0, size - 1
         m = re.match(r'bytes=(\d*)-(\d*)', self.headers.get('Range', ''))
@@ -331,6 +350,25 @@ class Handler(BaseHTTPRequestHandler):
                     remaining -= len(buf)
             except (BrokenPipeError, ConnectionResetError):
                 pass
+
+
+def opus_copy(src):
+    """Opus version of an AAC file, made once and kept in .autodl/opus (None if ffmpeg fails)."""
+    st = src.stat()
+    key = hashlib.sha1(f'{src}|{st.st_size}|{st.st_mtime_ns}'.encode()).hexdigest()
+    dst = STATE / 'opus' / f'{key}.ogg'
+    with _transcode_locks.setdefault(key, threading.Lock()):  # range requests arrive in parallel
+        if not dst.exists():
+            dst.parent.mkdir(parents=True, exist_ok=True)
+            tmp = dst.with_suffix('.part.ogg')
+            r = subprocess.run(['ffmpeg', '-nostdin', '-loglevel', 'error', '-y', '-i', str(src), '-vn',
+                                '-c:a', 'libopus', '-b:a', '96k', str(tmp)], capture_output=True)
+            if r.returncode != 0:
+                print('opus transcoding failed:', r.stderr.decode(errors='replace')[-300:], flush=True)
+                tmp.unlink(missing_ok=True)
+                return None
+            tmp.replace(dst)
+    return dst
 
 
 def main():
