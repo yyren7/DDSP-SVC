@@ -2,8 +2,8 @@
 # Jobs: setup | download | songsplit | uvr | features | train | infer | idle
 # A comma separated chain runs in order and stops at the first failure, e.g. JOB=uvr,features,train
 # After a reboot the runner resumes a job that failed or was interrupted.
-JOB=download,songsplit
-RUN_ID=11
+JOB=uvr
+RUN_ID=12
 
 # Optional settings passed to the jobs
 # download: Bilibili space -> audio of the videos whose title matches DL_MATCH (Python regex), into /root/autodl-tmp/$DL_DIR;
