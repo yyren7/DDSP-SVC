@@ -1,0 +1,23 @@
+{
+	// Training and preprocessing run on AutoDL; the Codespace only edits code.
+	// Naming an image here also stops Codespaces' Oryx step from installing
+	// requirements.txt (GPU torch + CUDA, ~5 GB) on creation.
+	"name": "DDSP-SVC (edit only)",
+	"image": "mcr.microsoft.com/devcontainers/python:3.12",
+	"features": {
+		"ghcr.io/devcontainers/features/github-cli:1": {}
+	},
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"anthropic.claude-code",
+				"ms-python.python"
+			],
+			"settings": {
+				"editor.fontSize": 12,
+				"terminal.integrated.fontSize": 12,
+				"chat.fontSize": 11
+			}
+		}
+	}
+}
