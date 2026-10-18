@@ -1,19 +1,21 @@
-# Which job runner.sh should run. Changing JOB or bumping RUN_ID (re)starts it.
-# Jobs: setup | download | songsplit | uvr | features | train | infer | idle
+# Which job runner.sh should run. Changing JOB, SPEAKER or bumping RUN_ID (re)starts it.
+# Jobs: setup | download | songsplit | uvr | features | train | infer | migrate | idle
 # A comma separated chain runs in order and stops at the first failure, e.g. JOB=uvr,features,train
 # After a reboot the runner resumes a job that failed or was interrupted.
-JOB=uvr
-RUN_ID=13
+JOB=migrate
+RUN_ID=14
+
+# Whose data the jobs work on: everything lives in /root/autodl-tmp/speakers/$SPEAKER/
+# (downloads, songs, raw_songs, work, data, exp, test_songs, infer_out), one model per speaker.
+SPEAKER=sakura_shunka
 
 # Optional settings passed to the jobs
-# download: Bilibili space -> audio of the videos whose title matches DL_MATCH (Python regex), into /root/autodl-tmp/$DL_DIR;
+# download: Bilibili space -> audio of the videos whose title matches DL_MATCH (Python regex), into downloads/;
 # DL_URL may also be a list file of video URLs. The song-stream recordings came from
 # DL_URL=https://space.bilibili.com/516780319/video with DL_MATCH=佐仓旬夏】「(?!联动)[^」]*歌回
 DL_URL=tools/autodl/lists/sakura_shunka_singles.txt
 DL_MATCH=
-DL_DIR=sakura_shunka_raw_songs
-# songsplit: recordings in DL_DIR -> one file per song in /root/autodl-tmp/$SONG_DIR (see tools/split_songs.py -h)
-SONG_DIR=sakura_shunka_songs
+# songsplit: recordings in downloads/ -> one file per song in songs/ (see tools/split_songs.py -h)
 SPLIT_ARGS=
 UVR_ARGS=
 WORKERS=4

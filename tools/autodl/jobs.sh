@@ -1,12 +1,12 @@
 #!/bin/bash
-# Predefined jobs started by runner.sh: setup | uvr | features | train | infer
-# Extra arguments come from tools/autodl/plan.txt (UVR_ARGS, KEY, SPK_ID, WORKERS).
+# Predefined jobs started by runner.sh: setup | download | songsplit | uvr | features | train | infer | migrate
+# Every job except setup works on the folders of SPEAKER (speakers/<name>/, see config.sh).
+# Extra arguments come from tools/autodl/plan.txt (UVR_ARGS, KEY, SPK_ID, WORKERS, ...).
 set -euo pipefail
 source "$(dirname "${BASH_SOURCE[0]}")/config.sh"
 cd "$REPO_DIR"
 
 JOB="$1"
-expdir() { grep -E '^\s*expdir:' "$CONFIG" | head -1 | awk '{print $2}'; }
 noproxy() { env -u http_proxy -u https_proxy -u HTTP_PROXY -u HTTPS_PROXY -u all_proxy -u ALL_PROXY "$@"; }
 
 fetch() {  # dest md5 url... -> download unless dest already has that md5; each url direct, then via AutoDL's academic proxy
@@ -37,20 +37,35 @@ require_gpu() {
 }
 case "$JOB" in uvr|features|train|infer) require_gpu ;; esac
 
+if [ "$JOB" != setup ] && [ -z "$SPK_DIR" ]; then
+    echo "set SPEAKER in plan.txt (letters, digits, _ and - only), e.g. SPEAKER=sakura_shunka"; exit 2
+fi
+echo "speaker: $SPEAKER ($SPK_DIR)"
+
+# BASE_CONFIG (or configs/speakers/<speaker>.yaml) with this speaker's data and experiment folders.
+write_config() {
+    local base="$BASE_CONFIG"
+    [ -f "configs/speakers/$SPEAKER.yaml" ] && base="configs/speakers/$SPEAKER.yaml"
+    sed -E "s#^(\s*train_path:).*#\1 $DATA_DIR/train#; s#^(\s*valid_path:).*#\1 $DATA_DIR/val#; s#^(\s*expdir:).*#\1 $EXP_DIR#" \
+        "$base" > "$SPK_CONFIG"
+    echo "config: $base -> $SPK_CONFIG"
+}
+case "$JOB" in features|train|infer) write_config ;; esac
+
 case "$JOB" in
 setup)
     bash tools/autodl/setup.sh
     ;;
 download)
-    # Audio of every video in a Bilibili space whose title matches DL_MATCH, into $DATA_ROOT/$DL_DIR.
+    # Audio of every video in a Bilibili space whose title matches DL_MATCH, into the speaker's downloads/.
     # DL_URL may also be a list file in the repo with one video URL per line (e.g. tools/autodl/lists/).
-    # Kept outside the repo as cold storage; copy the songs you want into raw_songs/ yourself.
+    # Cold storage; songsplit turns song-stream recordings into songs/, copy the songs you want into raw_songs/.
     # Resumable: finished videos are listed in _archive.txt and skipped on the next run.
-    [ -n "${DL_URL:-}" ] && [ -n "${DL_DIR:-}" ] || { echo "set DL_URL and DL_DIR in plan.txt"; exit 2; }
+    [ -n "${DL_URL:-}" ] || { echo "set DL_URL in plan.txt"; exit 2; }
     if [ -f "$DL_URL" ]; then src=(--batch-file "$DL_URL"); else src=("$DL_URL"); fi
     conda activate "$ENV_ROOT/uvr"
     env -u http_proxy -u https_proxy -u HTTP_PROXY -u HTTPS_PROXY python -m pip install -q -U yt-dlp
-    dest="$DATA_ROOT/$DL_DIR"; mkdir -p "$dest"
+    dest="$DL_DIR"; mkdir -p "$dest"
     cookies=(); [ -f "$STATE_DIR/bilibili_cookies.txt" ] && cookies=(--cookies "$STATE_DIR/bilibili_cookies.txt")
     # Bilibili is reached directly from AutoDL; the academic proxy would only slow it down.
     ytdlp() { env -u http_proxy -u https_proxy -u HTTP_PROXY -u HTTPS_PROXY yt-dlp "${cookies[@]}" \
@@ -75,9 +90,8 @@ download)
     [ "$n" -gt 0 ]
     ;;
 songsplit)
-    # Song-stream recordings in $DATA_ROOT/$DL_DIR -> one file per song in $DATA_ROOT/$SONG_DIR,
-    # without the talk between songs. Also runs on CPU, only slower; see tools/split_songs.py.
-    [ -n "${DL_DIR:-}" ] && [ -n "${SONG_DIR:-}" ] || { echo "set DL_DIR and SONG_DIR in plan.txt"; exit 2; }
+    # Song-stream recordings in downloads/ -> one file per song in songs/, without the talk between
+    # songs. Also runs on CPU, only slower; see tools/split_songs.py.
     conda activate "$ENV_ROOT/uvr"
     python -c "import panns_inference" 2>/dev/null \
         || noproxy python -m pip install -q -c "$TORCH_CONSTRAINTS" panns-inference
@@ -89,29 +103,29 @@ songsplit)
         'https://hf-mirror.com/niobures/PANNs/resolve/main/models/checkpoints/Cnn14_DecisionLevelMax_mAP%3D0.385.pth' \
         'https://zenodo.org/records/3987831/files/Cnn14_DecisionLevelMax_mAP%3D0.385.pth?download=1'
     # shellcheck disable=SC2086
-    python tools/split_songs.py -i "$DATA_ROOT/$DL_DIR" -o "$DATA_ROOT/$SONG_DIR" \
+    python tools/split_songs.py -i "$DL_DIR" -o "$SONG_DIR" \
         --model-dir pretrain/panns ${SPLIT_ARGS:-}
     ;;
 uvr)
     # Raw songs -> separated, de-harmonised, de-reverbed, denoised, sliced clips in data/
     conda activate "$ENV_ROOT/uvr"
     # shellcheck disable=SC2086
-    python tools/prepare_dataset.py -i "$RAW_DIR" -o data -w "$WORK_DIR" \
+    python tools/prepare_dataset.py -i "$RAW_DIR" -o "$DATA_DIR" -w "$WORK_DIR" \
         --model-dir "$UVR_MODEL_DIR" ${UVR_ARGS:-}
     ;;
 features)
     conda activate "$ENV_ROOT/ddsp"
-    python preprocess.py -c "$CONFIG" -j "${WORKERS:-4}"
+    python preprocess.py -c "$SPK_CONFIG" -j "${WORKERS:-4}"
     ;;
 train)
     conda activate "$ENV_ROOT/ddsp"
     export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
-    python train_reflow.py -c "$CONFIG"
+    python train_reflow.py -c "$SPK_CONFIG"
     ;;
 infer)
     # Convert every song in test_songs/ with the newest checkpoint.
-    ckpt=$(ls -t "$(expdir)"/model_*.pt 2>/dev/null | grep -v 'model_0.pt' | head -1 || true)
-    [ -n "$ckpt" ] || { echo "no checkpoint in $(expdir) yet"; exit 1; }
+    ckpt=$(ls -t "$EXP_DIR"/model_*.pt 2>/dev/null | grep -v 'model_0.pt' | head -1 || true)
+    [ -n "$ckpt" ] || { echo "no checkpoint in $EXP_DIR yet"; exit 1; }
     echo "checkpoint: $ckpt"
     conda activate "$ENV_ROOT/uvr"
     # shellcheck disable=SC2086
@@ -128,6 +142,56 @@ infer)
             -k "${KEY:-0}" -id "${SPK_ID:-1}"
     done
     echo "results in $out"
+    ;;
+migrate)
+    # One-off move from the single-speaker layout (until 2026-10-18) to speakers/<name>/:
+    #   <data disk>/<name>_raw_songs, <name>_songs  -> speakers/<name>/downloads, songs
+    #   raw_songs, preprocess_work, data, exp, ... in the repo  -> speakers/$SPEAKER/...
+    # Nothing is overwritten: a target that already holds files stops the job. Safe to run again.
+    move() {  # src dst
+        [ -e "$1" ] || return 0
+        if [ -d "$2" ] && [ -n "$(ls -A "$2")" ]; then
+            echo "STOP: both $1 and $2 hold files, merge them by hand"; exit 1
+        fi
+        # -T renames onto an empty target folder in one step (the runner creates raw_songs/ and
+        # test_songs/ for the speaker meanwhile) instead of moving src inside it
+        mkdir -p "$(dirname "$2")"
+        mv -T "$1" "$2" && echo "moved $1 -> $2"
+    }
+    move_contents() {  # src dst: everything in src but the .gitignore files the repo tracks there
+        [ -d "$1" ] || return 0
+        [ -n "$(find "$1" -mindepth 1 -maxdepth 1 ! -name .gitignore -print -quit)" ] || return 0
+        mkdir -p "$2"
+        while IFS= read -r -d '' f; do
+            if [ -e "$2/$(basename "$f")" ]; then echo "STOP: $2/$(basename "$f") exists already"; exit 1; fi
+            mv "$f" "$2/"
+        done < <(find "$1" -mindepth 1 -maxdepth 1 ! -name .gitignore -print0)
+        echo "moved the contents of $1 -> $2"
+    }
+    shopt -s nullglob
+    for d in "$DATA_ROOT"/*_raw_songs; do
+        n="$(basename "$d" _raw_songs)"; move "$d" "$SPEAKERS_DIR/$n/downloads"
+    done
+    for d in "$DATA_ROOT"/*_songs; do
+        n="$(basename "$d" _songs)"; move "$d" "$SPEAKERS_DIR/$n/songs"
+    done
+    move raw_songs "$RAW_DIR"
+    move test_songs "$TEST_DIR"
+    move preprocess_work "$WORK_DIR"
+    move preprocess_work_test "$TEST_WORK_DIR"
+    move infer_out "$INFER_DIR"
+    for split in train val; do
+        for f in data/$split/*; do  # features from preprocess.py (units/, f0/, ...) when it has run
+            [ "$(basename "$f")" = audio ] || move "$f" "$DATA_DIR/$split/$(basename "$f")"
+        done
+        move_contents "data/$split/audio" "$DATA_DIR/$split/audio"
+    done
+    move_contents exp/reflow-test "$EXP_DIR"
+    rmdir exp/reflow-test 2>/dev/null || true
+    echo "== speakers"
+    for s in "$SPEAKERS_DIR"/*/; do
+        echo "$(basename "$s"): $(for d in "$s"*/; do echo -n "$(basename "$d")($(find "$d" -type f | wc -l)) "; done)"
+    done
     ;;
 *)
     echo "unknown job: $JOB"; exit 2

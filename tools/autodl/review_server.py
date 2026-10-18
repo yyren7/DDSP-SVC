@@ -1,7 +1,9 @@
 """
 Review page for listening to every pipeline stage in the browser (audio streams, nothing is stored locally)
 and leaving feedback. Feedback goes to .autodl/feedback.jsonl, which runner.sh publishes to GitHub.
-Songs cut from song-stream recordings (songsplit job, SONG_DIR in plan.txt) are listed per recording.
+Each speaker's folders (speakers/<name>/) have their own page; it opens on SPEAKER from plan.txt and
+?spk=<name> switches to another one. Songs cut from song-stream recordings (songsplit job, songs/)
+are listed per recording.
 
 Standard library only (plus ffmpeg for the Opus fallback). Started by runner.sh; open it through
 AutoDL's "custom service" link, or where that is not offered, an ssh tunnel to the port.
@@ -21,7 +23,8 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent.parent
-ROOT = REPO.parent  # the data disk: the repo, and the song folders kept outside it
+ROOT = REPO.parent  # the data disk: the repo, and the speaker folders kept outside it
+SPEAKERS = ROOT / 'speakers'
 STATE = REPO / '.autodl'
 PLAN = REPO / 'tools' / 'autodl' / 'plan.txt'
 AUDIO_EXTS = {'.wav', '.flac', '.mp3', '.m4a', '.ogg', '.opus'}
@@ -29,23 +32,23 @@ MIME = {'.wav': 'audio/wav', '.flac': 'audio/flac', '.mp3': 'audio/mpeg', '.m4a'
         '.ogg': 'audio/ogg', '.opus': 'audio/ogg'}
 PAGE_SIZE = 40
 
-# Stages shown on the page, in pipeline order.
+# Stages shown on the page, in pipeline order, as folders inside speakers/<name>/ (see config.sh).
 STAGES = [
     ('raw', '原始歌曲', 'raw_songs'),
-    ('vocals', '1 分离人声', 'preprocess_work/1_vocals'),
-    ('karaoke', '2 去和声', 'preprocess_work/2_karaoke'),
-    ('dereverb', '3 去混响', 'preprocess_work/3_dereverb'),
-    ('denoise', '4 去噪', 'preprocess_work/4_denoise'),
-    ('slices', '5 切片', 'preprocess_work/5_slices'),
+    ('vocals', '1 分离人声', 'work/1_vocals'),
+    ('karaoke', '2 去和声', 'work/2_karaoke'),
+    ('dereverb', '3 去混响', 'work/3_dereverb'),
+    ('denoise', '4 去噪', 'work/4_denoise'),
+    ('slices', '5 切片', 'work/5_slices'),
     ('train', '训练集', 'data/train/audio'),
     ('val', '验证集', 'data/val/audio'),
     ('test', '测试歌曲', 'test_songs'),
-    ('test_dry', '测试歌曲干声', 'preprocess_work_test/4_denoise'),
+    ('test_dry', '测试歌曲干声', 'work_test/4_denoise'),
     ('infer', '转换结果', 'infer_out'),
 ]
 SONG_STAGES = ['raw', 'vocals', 'karaoke', 'dereverb', 'denoise']
-STAGE_DIR = {k: REPO / d for k, _, d in STAGES}
 STAGE_NAME = {k: n for k, n, _ in STAGES}
+SPEAKER_RE = re.compile(r'[A-Za-z0-9_-]+')
 
 CSS = """
 body{font:15px/1.5 -apple-system,'PingFang SC','Microsoft YaHei',sans-serif;margin:0 auto;max-width:960px;
@@ -101,9 +104,16 @@ def plan_value(key):
     return re.sub(r'\s*#.*$', '', values[-1]).strip('"') if values else ''
 
 
-def songs_dir():
-    name = plan_value('SONG_DIR')
-    return ROOT / name if name else None
+def speakers():
+    return sorted(d.name for d in SPEAKERS.iterdir() if d.is_dir()) if SPEAKERS.is_dir() else []
+
+
+def stage_dir(spk, key):
+    return SPEAKERS / spk / dict((k, d) for k, _, d in STAGES)[key]
+
+
+def songs_dir(spk):
+    return SPEAKERS / spk / 'songs'
 
 
 def song_meta(folder):
@@ -118,11 +128,11 @@ def song_meta(folder):
     return meta
 
 
-def check_list():
+def check_list(spk):
     """[(file, label)] picked for a spot check: _check.tsv in the songs folder, "file<TAB>reason" per line."""
-    folder = songs_dir()
-    tsv = folder / '_check.tsv' if folder else None
-    if not tsv or not tsv.exists():
+    folder = songs_dir(spk)
+    tsv = folder / '_check.tsv'
+    if not tsv.exists():
         return []
     meta, out = song_meta(folder), []
     for line in tsv.read_text(encoding='utf-8').splitlines():
@@ -134,11 +144,9 @@ def check_list():
     return out
 
 
-def song_groups():
+def song_groups(spk):
     """{recording title: [(file, label)]} for the songs folder, using its _songs.tsv when present."""
-    folder = songs_dir()
-    if not folder:
-        return {}
+    folder = songs_dir(spk)
     meta = song_meta(folder)
     groups = {}
     for f in audio_files(folder):
@@ -164,10 +172,23 @@ class Handler(BaseHTTPRequestHandler):
         if not key:
             return True
         if query.get('key', [''])[0] == key:
-            self.set_cookie = f'review_key={key}; Path=/; Max-Age=2592000; SameSite=Lax'
+            self.cookies_out.append(f'review_key={key}; Path=/; Max-Age=2592000; SameSite=Lax')
             return True
         c = cookies.SimpleCookie(self.headers.get('Cookie', ''))
         return 'review_key' in c and c['review_key'].value == key
+
+    def pick_speaker(self, query):
+        """?spk=<name> (remembered in a cookie), else the remembered one, else SPEAKER from plan.txt."""
+        known = speakers()
+        want = query.get('spk', [''])[0]
+        if want in known:
+            self.cookies_out.append(f'review_spk={want}; Path=/; Max-Age=2592000; SameSite=Lax')
+            return want
+        c = cookies.SimpleCookie(self.headers.get('Cookie', ''))
+        if 'review_spk' in c and c['review_spk'].value in known:
+            return c['review_spk'].value
+        plan = plan_value('SPEAKER')
+        return plan if SPEAKER_RE.fullmatch(plan or '') else (known[0] if known else '')
 
     # ---------- helpers ----------
     def send_html(self, body, status=200):
@@ -178,8 +199,8 @@ class Handler(BaseHTTPRequestHandler):
         self.send_response(status)
         self.send_header('Content-Type', 'text/html; charset=utf-8')
         self.send_header('Content-Length', str(len(data)))
-        if getattr(self, 'set_cookie', None):
-            self.send_header('Set-Cookie', self.set_cookie)
+        for c in self.cookies_out:
+            self.send_header('Set-Cookie', c)
         self.end_headers()
         self.wfile.write(data)
 
@@ -196,10 +217,12 @@ class Handler(BaseHTTPRequestHandler):
     def do_GET(self):
         url = urllib.parse.urlparse(self.path)
         q = urllib.parse.parse_qs(url.query)
+        self.cookies_out = []
         if not self.authorized(q):
             return self.send_html('<h1>需要访问密钥</h1><p>在网址后面加上 <code>?key=密钥</code>，'
                                   '密钥在 runner 的输出里。</p>', 403)
         route = url.path.rstrip('/').split('/')[-1]
+        self.spk = self.pick_speaker(q)
         if route == 'file':
             return self.serve_file(q.get('p', [''])[0], q.get('fmt', [''])[0])
         if route == 'stage':
@@ -213,13 +236,14 @@ class Handler(BaseHTTPRequestHandler):
         return self.page_index()
 
     def do_POST(self):
+        self.cookies_out = []
         if not self.authorized({}):
             return self.send_html('forbidden', 403)
         length = int(self.headers.get('Content-Length', 0))
         try:
             data = json.loads(self.rfile.read(min(length, 100000)))
-            entry = {'time': time.strftime('%F %T'), 'target': str(data.get('target', ''))[:300],
-                     'text': str(data.get('text', ''))[:5000]}
+            entry = {'time': time.strftime('%F %T'), 'speaker': self.pick_speaker({}),
+                     'target': str(data.get('target', ''))[:300], 'text': str(data.get('text', ''))[:5000]}
         except (ValueError, AttributeError):
             return self.send_html('bad request', 400)
         STATE.mkdir(exist_ok=True)
@@ -230,22 +254,29 @@ class Handler(BaseHTTPRequestHandler):
 
     def page_index(self):
         status = (STATE / 'publish' / 'status.txt')
-        parts = ['<h1>DDSP-SVC 试听与反馈</h1>',
+        spk, plan = self.spk, plan_value('SPEAKER')
+        switch = ' · '.join((f'<b>{esc(s)}</b>' if s == spk else f'<a href="./?spk={urllib.parse.quote(s)}">{esc(s)}</a>')
+                            + (' <span class="muted">（plan.txt 当前）</span>' if s == plan else '')
+                            for s in speakers())
+        parts = [f'<h1>DDSP-SVC 试听与反馈：{esc(spk or "（还没有说话人）")}</h1>',
+                 f'<div class="card row"><span class="muted">说话人</span> {switch or "无"}</div>',
                  '<div class="card"><b>总体反馈</b>（会同步给 Claude）'
                  '<textarea id="fbgen" placeholder="例如：去混响太狠，声音发闷；第 3 首切片有伴奏残留"></textarea>'
                  '<div class="row"><button onclick="fb(\'fbgen\',\'general\')">提交</button>'
                  '<span id="fbgen_ok" class="ok"></span></div></div>']
-        check = check_list()
+        if not spk:
+            return self.send_html(''.join(parts))
+        check = check_list(spk)
         if check:
             parts.append(f'<h2>待抽查（{len(check)} 首）</h2><div class="card row"><a class="name" href="check">'
                          '逐首试听</a><span class="muted">切歌结果里需要人工确认的歌，每首写明了原因</span></div>')
-        groups = song_groups()
+        groups = song_groups(spk)
         if groups:
             parts.append(f'<h2>歌回切歌（{sum(map(len, groups.values()))} 首）</h2><div class="card">')
             parts.append('<br>'.join(f'<a href="songs?g={urllib.parse.quote(title)}">{esc(title)}</a> '
                                      f'<span class="muted">{len(songs)} 首</span>' for title, songs in groups.items()))
             parts.append('</div>')
-        songs = audio_files(STAGE_DIR['vocals'])
+        songs = audio_files(stage_dir(spk, 'vocals'))
         if songs:
             parts.append('<h2>按歌曲对比各阶段</h2><div class="card">')
             parts.append(' · '.join(f'<a href="song?n={urllib.parse.quote(f.stem)}">{esc(f.stem)}</a>'
@@ -253,7 +284,7 @@ class Handler(BaseHTTPRequestHandler):
             parts.append('</div>')
         parts.append('<h2>按阶段浏览</h2>')
         for key, name, _ in STAGES:
-            n = len(audio_files(STAGE_DIR[key], recursive=True))
+            n = len(audio_files(stage_dir(spk, key), recursive=True))
             if n:
                 parts.append(f'<div class="card row"><a class="name" href="stage?s={key}">{esc(name)}</a>'
                              f'<span class="muted">{n} 个文件</span></div>')
@@ -262,9 +293,10 @@ class Handler(BaseHTTPRequestHandler):
         self.send_html(''.join(parts))
 
     def page_stage(self, key, page):
-        if key not in STAGE_DIR:
+        if key not in STAGE_NAME or not self.spk:
             return self.send_html('unknown stage', 404)
-        files = audio_files(STAGE_DIR[key], recursive=True)
+        folder = stage_dir(self.spk, key)
+        files = audio_files(folder, recursive=True)
         pages = max(1, (len(files) + PAGE_SIZE - 1) // PAGE_SIZE)
         page = min(max(1, page), pages)
         chunk = files[(page - 1) * PAGE_SIZE: page * PAGE_SIZE]
@@ -272,25 +304,27 @@ class Handler(BaseHTTPRequestHandler):
                        for p in range(1, pages + 1))
         body = [f'<p><a href="./">← 返回</a></p><h1>{esc(STAGE_NAME[key])}</h1>',
                 f'<p class="muted">{len(files)} 个文件，第 {page}/{pages} 页　{nav}</p>']
-        body += [self.player(f, f.relative_to(STAGE_DIR[key]).as_posix()) for f in chunk]
+        body += [self.player(f, f.relative_to(folder).as_posix()) for f in chunk]
         body.append(f'<p>{nav}</p>')
         self.send_html(''.join(body))
 
     def page_song(self, stem):
+        if not self.spk:
+            return self.send_html('not found', 404)
         body = [f'<p><a href="./">← 返回</a></p><h1>{esc(stem)}</h1>']
         for key in SONG_STAGES:
-            match = [f for f in audio_files(STAGE_DIR[key]) if f.stem == stem or
+            match = [f for f in audio_files(stage_dir(self.spk, key)) if f.stem == stem or
                      re.sub(r'\s+', '_', f.stem) == stem]
             if match:
                 body.append(f'<h2>{esc(STAGE_NAME[key])}</h2>' + self.player(match[0]))
-        slices = [f for f in audio_files(STAGE_DIR['slices']) if f.stem.rsplit('_', 1)[0] == stem]
+        slices = [f for f in audio_files(stage_dir(self.spk, 'slices')) if f.stem.rsplit('_', 1)[0] == stem]
         if slices:
             body.append(f'<h2>{esc(STAGE_NAME["slices"])}（{len(slices)} 段）</h2>')
             body += [self.player(f) for f in slices[:PAGE_SIZE]]
         self.send_html(''.join(body))
 
     def page_songs(self, title):
-        songs = song_groups().get(title)
+        songs = song_groups(self.spk).get(title) if self.spk else None
         if not songs:
             return self.send_html('not found', 404)
         body = [f'<p><a href="./">← 返回</a></p><h1>{esc(title)}</h1>',
@@ -299,7 +333,7 @@ class Handler(BaseHTTPRequestHandler):
         self.send_html(''.join(body))
 
     def page_check(self):
-        check = check_list()
+        check = check_list(self.spk) if self.spk else []
         body = ['<p><a href="./">← 返回</a></p><h1>待抽查</h1>',
                 f'<p class="muted">{len(check)} 首。听完在每首下面写结论，例如“完整一首”“只有半首”“不是她在唱”。'
                 '反馈会同步给 Claude。</p>']
@@ -308,7 +342,8 @@ class Handler(BaseHTTPRequestHandler):
 
     def serve_file(self, rel, fmt=''):
         path = (ROOT / rel).resolve()
-        dirs = list(STAGE_DIR.values()) + [d for d in [songs_dir()] if d]
+        # any speaker's audio folders, so a page opened before switching speakers keeps playing
+        dirs = [d for s in speakers() for d in [stage_dir(s, k) for k in STAGE_NAME] + [songs_dir(s)]]
         allowed = any(os.path.commonpath([path, d.resolve()]) == str(d.resolve()) for d in dirs)
         if not allowed or not path.is_file() or path.suffix.lower() not in AUDIO_EXTS:
             return self.send_html('not found', 404)

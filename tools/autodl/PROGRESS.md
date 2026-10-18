@@ -1,6 +1,6 @@
 # 项目进展
 
-最后更新：2026-10-17
+最后更新：2026-10-18
 
 本文记录在 AutoDL 上为 DDSP-SVC 准备训练数据的进展。runner、任务和试听网页的用法见 [README.md](README.md)。
 
@@ -12,15 +12,20 @@
 | 佐仓旬夏歌回录像（`download`） | 完成：13 场，30.7 小时 |
 | 佐仓旬夏单曲（`download`） | 完成：27 个视频 |
 | 切歌（`songsplit`） | 完成：去掉聊天，每首一个文件，共 191 首、12.8 小时 |
-| 人声分离（`uvr`）、特征提取、训练 | 未开始 |
+| 人声分离（`uvr`） | 试跑了 10 首：211 段切片，训练集 201 段、验证集 10 段 |
+| 按说话人分目录（`migrate`） | 2026-10-18 推送，等 runner 执行 |
+| 特征提取、训练 | 未开始 |
 
 ## 数据
 
+每个说话人一个目录，一人一个模型，目录结构见 [README.md](README.md#多个说话人)。2026-10-18 之前的位置写在括号里，`migrate` 任务负责搬过去。
+
 | 数据 | 位置（AutoDL 数据盘） | 内容 |
 |---|---|---|
-| 佐仓旬夏歌曲 | `/root/autodl-tmp/sakura_shunka_songs/` | 191 首，每首一个 m4a；切分清单 `_songs.tsv`，逐秒分类缓存 `_probs/` |
-| 佐仓旬夏原始音频 | `/root/autodl-tmp/sakura_shunka_raw_songs/` | 13 场歌回录像和 27 个单曲视频的原始音频，约 4.2G；附视频信息和评论（`.info.json`） |
-| 花丸晴琉歌曲（冷存储） | `/root/autodl-tmp/hanamaru_hareru_raw_songs/` | 949 首 mp3，60.1 小时，527 个不同歌名；暂不使用 |
+| 佐仓旬夏歌曲 | `/root/autodl-tmp/speakers/sakura_shunka/songs/`（原 `sakura_shunka_songs/`） | 191 首，每首一个 m4a；切分清单 `_songs.tsv`，逐秒分类缓存 `_probs/` |
+| 佐仓旬夏原始音频 | `/root/autodl-tmp/speakers/sakura_shunka/downloads/`（原 `sakura_shunka_raw_songs/`） | 13 场歌回录像和 27 个单曲视频的原始音频，约 4.2G；附视频信息和评论（`.info.json`） |
+| 佐仓旬夏 uvr 试跑 | `/root/autodl-tmp/speakers/sakura_shunka/{raw_songs,work,data}/`（原仓库里的 `raw_songs/`、`preprocess_work/`、`data/`） | 10 首歌的各阶段结果和切片 |
+| 花丸晴琉歌曲（冷存储） | `/root/autodl-tmp/speakers/hanamaru_hareru/downloads/`（原 `hanamaru_hareru_raw_songs/`） | 949 首 mp3，60.1 小时，527 个不同歌名；暂不使用 |
 
 音频都是 B 站的原始音轨（AAC，44.1 kHz，约 315 kbps），下载和切分时没有重新编码。
 
@@ -122,9 +127,11 @@ runner 在 6008 端口开了试听网页，从 AutoDL 控制台的“自定义�
 
 ## 下一步
 
-1. 在试听网页上抽查切歌结果，确认没问题后删除原始音频（`sakura_shunka_raw_songs`）。
-2. 决定重复的演唱要不要去重。
-3. 把歌曲放进 `raw_songs/`，有卡开机，运行 `uvr,features,train`。
+1. 确认 `migrate` 跑完，数据都在 `speakers/` 下。
+2. 在试听网页上抽查切歌结果，确认没问题后删除原始音频（`speakers/sakura_shunka/downloads/`）。
+3. 决定重复的演唱要不要去重。
+4. 把歌曲放进 `speakers/sakura_shunka/raw_songs/`，有卡开机，运行 `uvr,features,train`。
+5. `6.3` 分支里调过的参数（`t_start: 0.1`、`batch_size: 64`、`gamma: 0.95`）存在 tag `archive/6.3`。要用的话写进 `configs/speakers/sakura_shunka.yaml`。
 
 ## 提交记录（2026-10-17）
 

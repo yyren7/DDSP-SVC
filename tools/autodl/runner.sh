@@ -1,7 +1,7 @@
 #!/bin/bash
 # Keeps AutoDL in sync with GitHub so jobs can be fixed while they run.
 #   - pulls $BRANCH every $INTERVAL seconds
-#   - starts / restarts the jobs named in tools/autodl/plan.txt when JOB or RUN_ID changes;
+#   - starts / restarts the jobs named in tools/autodl/plan.txt when JOB, RUN_ID or SPEAKER changes;
 #     JOB may be a comma separated chain (e.g. uvr,features,train), run in order until one fails
 #   - shuts the instance down after IDLE_SHUTDOWN_MIN minutes (with a GPU) or IDLE_SHUTDOWN_MIN_NOGPU
 #     minutes (no-GPU mode) with no job running and nobody using the review page (stops billing)
@@ -30,10 +30,6 @@ JOB_PID=""; JOB_KEY=""; JOB_NAME=""; JOB_IDX=0; REVIEW_PID=""
 RESUME=1   # first loop pass after a (re)start: rerun a job that did not finish cleanly
 IDLE_SINCE=$(date +%s)
 
-plan_value() {  # key -> value from plan.txt (plain KEY=VALUE lines, never executed)
-    grep -E "^$1=" tools/autodl/plan.txt 2>/dev/null | tail -1 | cut -d= -f2- | sed 's/[[:space:]]*#.*$//; s/^"//; s/"$//'
-}
-
 stop_group() {  # pid
     [ -n "$1" ] && kill -0 "$1" 2>/dev/null || return 0
     kill -TERM -- "-$1" 2>/dev/null
@@ -57,10 +53,11 @@ job_exit_code() {  # job -> exit code of its last finished run, empty while it h
 start_job() {
     local job="$1" log="$STATE_DIR/job_$1.log"
     echo "=== $(date '+%F %T') start $job at $(git rev-parse --short HEAD)" >> "$log"
+    # The speaker is fixed when the job starts, so editing plan.txt never moves a running job's files.
+    SPEAKER="$(plan_value SPEAKER)" \
     UVR_ARGS="$(plan_value UVR_ARGS)" KEY="$(plan_value KEY)" SPK_ID="$(plan_value SPK_ID)" \
     WORKERS="$(plan_value WORKERS)" \
-    DL_URL="$(plan_value DL_URL)" DL_MATCH="$(plan_value DL_MATCH)" DL_DIR="$(plan_value DL_DIR)" \
-    SONG_DIR="$(plan_value SONG_DIR)" SPLIT_ARGS="$(plan_value SPLIT_ARGS)" \
+    DL_URL="$(plan_value DL_URL)" DL_MATCH="$(plan_value DL_MATCH)" SPLIT_ARGS="$(plan_value SPLIT_ARGS)" \
         setsid bash -c "bash tools/autodl/jobs.sh $job >> '$log' 2>&1; rc=\$?; echo \"=== \$(date '+%F %T') exit \$rc\" >> '$log'" &
     JOB_PID=$!; JOB_NAME="$job"
     save_job_state
@@ -116,10 +113,13 @@ tail_clean() {  # file lines: turn progress-bar carriage returns into lines, kee
 publish() {
     mkdir -p "$PUB"
     [ -d "$PUB/.git" ] || git -C "$PUB" init -q
+    # a new SPEAKER gets the folders you upload into right away
+    use_speaker "$(plan_value SPEAKER)" && mkdir -p "$RAW_DIR" "$TEST_DIR"
     {
         echo "time:     $(date '+%F %T %Z')"
         echo "code:     $(git rev-parse --short HEAD) $(git log -1 --format=%s)"
-        echo "plan:     JOB=$(plan_value JOB) RUN_ID=$(plan_value RUN_ID)"
+        echo "plan:     JOB=$(plan_value JOB) RUN_ID=$(plan_value RUN_ID) SPEAKER=${SPEAKER:-(missing or invalid)}"
+        echo "speakers: $(cd "$SPEAKERS_DIR" 2>/dev/null && ls -d -- */ 2>/dev/null | tr -d / | xargs)"
         if job_running; then
             echo "job:      $JOB_NAME running (pid $JOB_PID)"
         else
@@ -130,16 +130,20 @@ publish() {
                                    || echo "no GPU, idle shutdown after $(plan_value IDLE_SHUTDOWN_MIN_NOGPU) min")"
         echo; nvidia-smi --query-gpu=name,utilization.gpu,memory.used,memory.total,temperature.gpu --format=csv 2>/dev/null
         echo; df -h "$REPO_DIR" 2>/dev/null | tail -1
-        echo; for d in "$RAW_DIR" "$WORK_DIR"/* data/train/audio data/val/audio "$TEST_DIR" "$INFER_DIR"/*; do
-            [ -d "$d" ] && echo "$(find "$d" -type f -not -name '.gitignore' | wc -l) files  ${d#$REPO_DIR/}"
+        echo; for d in "$DL_DIR" "$SONG_DIR" "$RAW_DIR" "$WORK_DIR"/* "$DATA_DIR"/train/audio "$DATA_DIR"/val/audio \
+                       "$TEST_DIR" "$INFER_DIR"/*; do
+            [ -n "$SPK_DIR" ] && [ -d "$d" ] && echo "$(find "$d" -type f | wc -l) files  ${d#$SPEAKERS_DIR/}"
         done
     } > "$PUB/status.txt" 2>&1
     for f in "$STATE_DIR"/job_*.log; do
         [ -f "$f" ] && tail_clean "$f" 400 > "$PUB/$(basename "$f")"
     done
     tail_clean "$STATE_DIR/review_server.log" 100 > "$PUB/review_server.log"
-    local exp; exp=$(grep -E '^\s*expdir:' "$CONFIG" | head -1 | awk '{print $2}')
-    [ -f "$exp/log_info.txt" ] && tail -n 200 "$exp/log_info.txt" > "$PUB/train_log_info.txt"
+    if [ -f "$EXP_DIR/log_info.txt" ]; then
+        tail -n 200 "$EXP_DIR/log_info.txt" > "$PUB/train_log_info.txt"
+    else
+        rm -f "$PUB/train_log_info.txt"  # do not show another speaker's training log
+    fi
     [ -f "$STATE_DIR/feedback.jsonl" ] && cp "$STATE_DIR/feedback.jsonl" "$PUB/feedback.jsonl"
     [ -f "$STATE_DIR/shutdown.log" ] && tail -n 80 "$STATE_DIR/shutdown.log" > "$PUB/shutdown.log"
     # One squashed commit, force-pushed, so the log branch never grows.
@@ -190,7 +194,7 @@ while true; do
         start_review
     fi
 
-    want_chain="$(plan_value JOB)"; want_key="$want_chain:$(plan_value RUN_ID)"
+    want_chain="$(plan_value JOB)"; want_key="$want_chain:$(plan_value RUN_ID):$(plan_value SPEAKER)"
     IFS=',' read -r -a chain <<< "${want_chain// /}"
     if [ "$want_key" != "$JOB_KEY" ]; then
         # New plan: stop whatever runs and start the chain from the beginning.
