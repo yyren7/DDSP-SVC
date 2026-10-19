@@ -1,9 +1,10 @@
 # Which job runner.sh should run. Changing JOB, SPEAKER or bumping RUN_ID (re)starts it.
 # Jobs: setup | download | songsplit | uvr | compare | features | train | infer | migrate | idle
-# A comma separated chain runs in order and stops at the first failure, e.g. JOB=uvr,features,train
+# A comma separated chain runs in order and stops at the first failure, e.g. JOB=uvr,features,train;
+# job@speaker runs a job for another speaker than SPEAKER, e.g. JOB=uvr,uvr@sakura_shunka
 # After a reboot the runner resumes a job that failed or was interrupted.
-JOB=uvr
-RUN_ID=29
+JOB=uvr,uvr@sakura_shunka
+RUN_ID=30
 
 # Whose data the jobs work on: everything lives in /root/autodl-tmp/speakers/$SPEAKER/
 # (downloads, songs, raw_songs, work, data, exp, test_songs, infer_out), one model per speaker.
@@ -27,7 +28,7 @@ DL_FILTER=
 # songsplit: recordings in downloads/ -> one file per song in songs/ (see tools/split_songs.py -h).
 # Per-speaker settings live in tools/autodl/split/<speaker>.args; SPLIT_ARGS is added after them.
 SPLIT_ARGS=
-UVR_ARGS=
+UVR_ARGS=--steps vocals,dereverb,karaoke,denoise
 WORKERS=4
 KEY=0
 SPK_ID=1
