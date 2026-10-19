@@ -1,5 +1,5 @@
 # Settings for tools/split_songs.py when SPEAKER=pheebie (see python tools/split_songs.py -h).
 # Otherwise the defaults tuned for sakura_shunka.
-# Songs under 2 minutes are dropped (decided after the spot check on 2026-10-19): among them were the
-# start of each stream, halves of songs split across two parts of a recording, and short bits in chat.
+# Songs under 2 minutes are dropped (decided after the spot check on 2026-10-19), such as the start of
+# each stream and short bits in chat. A song cut in two where a recording's parts meet counts as a whole.
 --min-song 120

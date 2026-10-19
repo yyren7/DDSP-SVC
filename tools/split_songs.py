@@ -236,7 +236,29 @@ def find_songs(probs, labels, markers, a):
         while seg[1] < ceil and seg[1] - e0 < a.extend and bg[seg[1]]:
             seg[1] += 1
         seg[0], seg[1] = max(floor, seg[0] - a.pad), min(ceil, seg[1] + a.pad)
-    return [(int(s), int(e)) for s, e in split if e - s >= a.min_song]
+    return [(int(s), int(e)) for s, e in split]  # keep_songs drops the short ones
+
+
+def keep_songs(found, a):
+    """Drop songs shorter than --min-song from every recording's segments. Bilibili splits a long recording
+    into parts (分P, ids "BV..._p1", "BV..._p2"), which can cut a song in two: when the singing runs to the
+    last second of one part and from the first second of the next, the two pieces count as one song."""
+    parts = {}
+    for i, r in enumerate(found):
+        m = re.fullmatch(r'(.+)_p(\d+)', r['info'].get('id') or '')
+        if m:
+            parts[m[1], int(m[2])] = i
+    other = [[0] * len(r['segs']) for r in found]  # seconds of the same song in the neighbouring part
+    for (video, part), i in parts.items():
+        j = parts.get((video, part + 1))
+        if j is None or not found[i]['segs'] or not found[j]['segs']:
+            continue
+        (s1, e1), (s2, e2) = found[i]['segs'][-1], found[j]['segs'][0]
+        if e1 == found[i]['n'] and s2 == 0:
+            other[i][-1] += e2 - s2
+            other[j][0] += e1 - s1
+    for r, extra in zip(found, other):
+        r['segs'] = [(s, e) for (s, e), x in zip(r['segs'], extra) if e - s + x >= a.min_song]
 
 
 # ---------------------------------------------------------------- files
@@ -308,7 +330,9 @@ def main():
     p.add_argument('--cache', default=None, help='per-second probabilities (default: <output>/_probs)')
     p.add_argument('--device', default=None, help='cuda or cpu (default: cuda when available)')
     p.add_argument('--batch', type=int, default=None, help='10 s windows per model call (default 16 on GPU, 1 on CPU)')
-    p.add_argument('--only', default=None, help='only recordings whose file name contains this')
+    p.add_argument('--only', default=None,
+                   help='only recordings whose file name contains this (a song cut in two where the parts '
+                        'of a recording meet is only kept whole when both parts are in the run)')
     p.add_argument('--limit', type=int, default=None, help='only the first LIMIT seconds of each recording (tests)')
     p.add_argument('--dry-run', action='store_true', help='print the songs, cut nothing')
     p.add_argument('--smooth', type=int, default=5, help='moving average over this many seconds')
@@ -335,17 +359,15 @@ def main():
         files = [f for f in files if a.only in f.name]
     print(f'{len(files)} recordings', flush=True)
 
-    model, taken, made = None, set(), set()
-    check_tsv = out / '_check.tsv'
-    check = [line.partition('\t') for line in check_tsv.read_text(encoding='utf-8').splitlines()] \
-        if check_tsv.exists() else None
-    moved = {}  # songs renamed or dropped by this run: old file -> new file or None
+    # 1) find the songs in every recording, analysing the ones not seen before; whether a short piece at the
+    #    start or end of a part stays depends on the neighbouring part
+    model, found = None, []
     for f in files:
         info_path = f.with_name(f.stem + '.info.json')
         info = json.loads(info_path.read_text(encoding='utf-8')) if info_path.exists() else {}
         npz = cache / (f.stem + (f'.{a.limit}s' if a.limit else '') + '.npz')
-        print(f'== {f.name}', flush=True)
         if not npz.exists():
+            print(f'== analysing {f.name}', flush=True)
             if model is None:
                 import torch
                 device = a.device or ('cuda' if torch.cuda.is_available() else 'cpu')
@@ -359,11 +381,22 @@ def main():
             np.savez_compressed(npz, probs=probs, labels=np.array(labels))
         data = np.load(npz)
         probs, labels = data['probs'].astype(np.float32), [str(x) for x in data['labels']]
-
         markers = best_markers(info)
-        segs = find_songs(probs, labels, markers, a)
+        found.append({'file': f, 'info': info, 'n': len(probs), 'markers': markers,
+                      'segs': find_songs(probs, labels, markers, a)})
+    keep_songs(found, a)
+
+    # 2) name and cut them
+    taken, made = set(), set()
+    check_tsv = out / '_check.tsv'
+    check = [line.partition('\t') for line in check_tsv.read_text(encoding='utf-8').splitlines()] \
+        if check_tsv.exists() else None
+    moved = {}  # songs renamed or dropped by this run: old file -> new file or None
+    for r in found:
+        f, info, markers, segs = r['file'], r['info'], r['markers'], r['segs']
+        print(f'== {f.name}', flush=True)
         names = name_segments(segs, markers)
-        single = not markers and len(probs) <= a.single_max and info.get('title')
+        single = not markers and r['n'] <= a.single_max and info.get('title')
         date = stream_date(f, info)
         songs = []
         for k, ((s, e), j) in enumerate(zip(segs, names), 1):
@@ -375,7 +408,7 @@ def main():
             songs.append({'file': file + f.suffix,
                           'start': s, 'end': e, 'name': name, 'marker': markers[j][0] if j is not None else None})
         sung = sum(x['end'] - x['start'] for x in songs)
-        print(f'   {len(songs)} songs, {sung / 60:.0f} of {len(probs) / 60:.0f} min, '
+        print(f'   {len(songs)} songs, {sung / 60:.0f} of {r["n"] / 60:.0f} min, '
               f'{sum(x["marker"] is not None for x in songs)} named from {len(markers)} timestamps', flush=True)
         for x in songs:
             mark = f'  (道标 {mmss(x["marker"])})' if x['marker'] is not None else ''
