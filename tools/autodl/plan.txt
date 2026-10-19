@@ -2,8 +2,8 @@
 # Jobs: setup | download | songsplit | uvr | features | train | infer | migrate | idle
 # A comma separated chain runs in order and stops at the first failure, e.g. JOB=uvr,features,train
 # After a reboot the runner resumes a job that failed or was interrupted.
-JOB=uvr
-RUN_ID=21
+JOB=songsplit
+RUN_ID=22
 
 # Whose data the jobs work on: everything lives in /root/autodl-tmp/speakers/$SPEAKER/
 # (downloads, songs, raw_songs, work, data, exp, test_songs, infer_out), one model per speaker.

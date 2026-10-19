@@ -31,6 +31,7 @@ SING = ['Singing', 'Female singing', 'Male singing', 'Child singing', 'Choir', '
 SPEECH = ['Speech', 'Female speech, woman speaking', 'Male speech, man speaking', 'Conversation',
           'Narration, monologue']
 MUSIC = ['Music']
+CLEAR_TALK = 0.3  # speech probability of a second in which someone clearly talks (for --max-talk)
 
 
 # ---------------------------------------------------------------- per-second class probabilities
@@ -362,6 +363,9 @@ def main():
     p.add_argument('--extend', type=int, default=30, help='widen songs by up to this many seconds of intro / outro')
     p.add_argument('--pad', type=int, default=1, help='seconds added on both ends')
     p.add_argument('--min-song', type=int, default=60, help='drop songs shorter than this (s)')
+    p.add_argument('--max-talk', type=float, default=0.05,
+                   help='drop songs in which someone clearly talks in more than this share of the seconds '
+                        '(chat over the backing track or between songs is no use for training)')
     p.add_argument('--single-max', type=int, default=900,
                    help='recordings up to this long (s) are single songs or clips, named after the video title')
     a = p.parse_args()
@@ -399,8 +403,12 @@ def main():
         data = np.load(npz)
         probs, labels = data['probs'].astype(np.float32), [str(x) for x in data['labels']]
         markers = best_markers(info)
+        talking = curves(probs, labels, 1)[1] > CLEAR_TALK
+        segs = find_songs(probs, labels, markers, a)
+        talky = [(s, e) for s, e in segs if talking[s:e].mean() > a.max_talk]
         found.append({'file': f, 'info': info, 'n': len(probs), 'markers': markers,
-                      'segs': find_songs(probs, labels, markers, a)})
+                      'segs': [x for x in segs if x not in talky],
+                      'talky': sum(e - s >= a.min_song for s, e in talky)})
     keep_songs(found, a)
 
     # 2) name and cut them
@@ -426,7 +434,8 @@ def main():
                           'start': s, 'end': e, 'name': name, 'marker': markers[j][0] if j is not None else None})
         sung = sum(x['end'] - x['start'] for x in songs)
         print(f'   {len(songs)} songs, {sung / 60:.0f} of {r["n"] / 60:.0f} min, '
-              f'{sum(x["marker"] is not None for x in songs)} named from {len(markers)} timestamps', flush=True)
+              f'{sum(x["marker"] is not None for x in songs)} named from {len(markers)} timestamps'
+              + (f', {r["talky"]} left out for talk' if r['talky'] else ''), flush=True)
         for x in songs:
             mark = f'  (道标 {mmss(x["marker"])})' if x['marker'] is not None else ''
             print(f'   {mmss(x["start"]):>7} - {mmss(x["end"]):>7}  {x["file"]}{mark}', flush=True)
