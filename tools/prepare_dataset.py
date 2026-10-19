@@ -5,7 +5,7 @@ Pipeline (each stage loads its model once and processes every file):
     1. vocals   : separate vocals from accompaniment
     2. dereverb : remove reverb and echo
     3. karaoke  : keep lead vocal, remove backing vocals / harmonies
-    4. denoise  : remove residual noise
+    4. denoise  : remove residual noise (only with --steps ...,denoise)
     5. slice    : cut on silence, resample to mono, drop clips that are too short
     6. split    : write clips to <out>/train/audio and pick a few for <out>/val/audio
 
@@ -45,6 +45,8 @@ AUDIO_EXTS = {'.wav', '.flac', '.mp3', '.m4a', '.ogg', '.opus', '.aac', '.wma'}
 # told apart from the backing vocals.
 UVR_STEPS = ['vocals', 'dereverb', 'karaoke', 'denoise']
 ALL_STEPS = UVR_STEPS + ['slice', 'split']
+# Denoise is left out unless asked for: decided by ear on the 2026-10-19 comparison (compare job).
+DEFAULT_STEPS = [s for s in ALL_STEPS if s != 'denoise']
 
 # The best models that can be downloaded, as of 2026-10-19 (MVSEP's own models score higher but only
 # run on mvsep.com):
@@ -108,8 +110,8 @@ def parse_args():
     p.add_argument('-i', '--input', required=True, help='folder with raw songs / vocals (searched recursively)')
     p.add_argument('-o', '--output', default='data', help='DDSP-SVC data folder (train/ and val/ are created inside)')
     p.add_argument('-w', '--work', default='preprocess_work', help='folder for intermediate results')
-    p.add_argument('--steps', default=','.join(ALL_STEPS),
-                   help=f'comma separated subset of: {",".join(ALL_STEPS)}')
+    p.add_argument('--steps', default=','.join(DEFAULT_STEPS),
+                   help=f'comma separated subset of: {",".join(ALL_STEPS)} (default: all but denoise)')
     p.add_argument('--model-dir', default='pretrain/uvr', help='where UVR models are downloaded to')
     for step in UVR_STEPS:
         p.add_argument(f'--{step}-model', default=DEFAULT_MODELS[step], help=f'UVR model for the {step} stage')
