@@ -14,6 +14,12 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from prepare_dataset import DEFAULT_MODELS, EXTRA_MODELS, extra_yaml, register_extra_models  # noqa: E402
 
 HF_HOSTS = ['https://hf-mirror.com', 'https://huggingface.co']
+# Weights audio-separator lists but downloads from GitHub, which AutoDL reaches at ~100 KB/s: taken from
+# a Hugging Face copy instead (audio-separator then only fetches the small yaml).
+HF_COPIES = {
+    'denoise_mel_band_roformer_aufr33_aggr_sdr_27.9768.ckpt':
+        ('Politrees/UVR_resources', 'models/Roformer/MelBand/denoise_mel_band_roformer_aufr33_aggr_sdr_27.9768.ckpt'),
+}
 
 
 def download(url, dest):
@@ -29,9 +35,14 @@ def download(url, dest):
     print(f'   {dest.name}: {dest.stat().st_size / 1e6:.0f} MB from {url}', flush=True)
 
 
-def fetch_extra(model, model_dir):
-    repo, ckpt, yaml = EXTRA_MODELS[model]
-    for src, name in ((ckpt, model), (yaml, extra_yaml(model))):
+def fetch_from_hf(model, model_dir):
+    if model in EXTRA_MODELS:
+        repo, ckpt, yaml = EXTRA_MODELS[model]
+        files = [(ckpt, model), (yaml, extra_yaml(model))]
+    else:
+        repo, ckpt = HF_COPIES[model]
+        files = [(ckpt, model)]
+    for src, name in files:
         dest = model_dir / name
         if dest.exists():
             continue
@@ -61,8 +72,8 @@ def main():
     separator = Separator(model_file_dir=str(model_dir), output_dir=str(model_dir), log_level=30)
     for model in args.models or list(DEFAULT_MODELS.values()):
         print(f'== {model}', flush=True)
-        if model in EXTRA_MODELS:
-            fetch_extra(model, model_dir)
+        if model in EXTRA_MODELS or model in HF_COPIES:
+            fetch_from_hf(model, model_dir)
         _, _, _, model_path, yaml_config = separator.download_model_files(model)
         # what load_model reads before the weights: the yaml config, or UVR's model-data json
         if model_path.lower().endswith('.yaml'):

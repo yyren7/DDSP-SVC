@@ -5,7 +5,7 @@ Pipeline (each stage loads its model once and processes every file):
     1. vocals   : separate vocals from accompaniment
     2. dereverb : remove reverb and echo
     3. karaoke  : keep lead vocal, remove backing vocals / harmonies
-    4. denoise  : remove residual noise (only with --steps ...,denoise)
+    4. denoise  : remove residual noise
     5. slice    : cut on silence, resample to mono, drop clips that are too short
     6. split    : write clips to <out>/train/audio and pick a few for <out>/val/audio
 
@@ -45,21 +45,18 @@ AUDIO_EXTS = {'.wav', '.flac', '.mp3', '.m4a', '.ogg', '.opus', '.aac', '.wma'}
 # told apart from the backing vocals.
 UVR_STEPS = ['vocals', 'dereverb', 'karaoke', 'denoise']
 ALL_STEPS = UVR_STEPS + ['slice', 'split']
-# Denoise is left out unless asked for: decided by ear on the 2026-10-19 comparison (compare job).
-DEFAULT_STEPS = [s for s in ALL_STEPS if s != 'denoise']
 
 # The best models that can be downloaded, as of 2026-10-19 (MVSEP's own models score higher but only
 # run on mvsep.com):
 #   vocals   BS-Roformer Leap Xe by unwa: vocals SDR 11.79 on the MVSEP Multisong leaderboard
 #   dereverb BS-Roformer by anvuew: best but MVSEP's own on MVSEP's vocal dereverb validation
 #   karaoke  BS-Roformer Karaoke by anvuew: lead SDR 10.23 on MVSEP's lead/back leaderboard
-#   denoise  Mel-Roformer by aufr33 (the guide recommends its aggressive version, but that one comes
-#            from GitHub, at ~100 KB/s from AutoDL)
+#   denoise  Mel-Roformer by aufr33, aggressive (SDR 27.98, the regular one 27.99): what the guide recommends
 DEFAULT_MODELS = {
     'vocals': 'bs_leap_xe_voc.ckpt',
     'dereverb': 'dereverb_bs_roformer_anvuew_sdr_22.5050.ckpt',
     'karaoke': 'karaoke_bs_roformer_anvuew.ckpt',
-    'denoise': 'denoise_mel_band_roformer_aufr33_sdr_27.9959.ckpt',
+    'denoise': 'denoise_mel_band_roformer_aufr33_aggr_sdr_27.9768.ckpt',
 }
 
 # Models audio-separator does not list, published on Hugging Face as a checkpoint and a yaml for
@@ -110,8 +107,8 @@ def parse_args():
     p.add_argument('-i', '--input', required=True, help='folder with raw songs / vocals (searched recursively)')
     p.add_argument('-o', '--output', default='data', help='DDSP-SVC data folder (train/ and val/ are created inside)')
     p.add_argument('-w', '--work', default='preprocess_work', help='folder for intermediate results')
-    p.add_argument('--steps', default=','.join(DEFAULT_STEPS),
-                   help=f'comma separated subset of: {",".join(ALL_STEPS)} (default: all but denoise)')
+    p.add_argument('--steps', default=','.join(ALL_STEPS),
+                   help=f'comma separated subset of: {",".join(ALL_STEPS)}')
     p.add_argument('--model-dir', default='pretrain/uvr', help='where UVR models are downloaded to')
     for step in UVR_STEPS:
         p.add_argument(f'--{step}-model', default=DEFAULT_MODELS[step], help=f'UVR model for the {step} stage')

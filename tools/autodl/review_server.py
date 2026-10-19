@@ -43,7 +43,7 @@ STAGES = [
     ('train', '训练集', 'data/train/audio'),
     ('val', '验证集', 'data/val/audio'),
     ('test', '测试歌曲', 'test_songs'),
-    ('test_dry', '测试歌曲干声', 'work_test/3_karaoke'),
+    ('test_dry', '测试歌曲干声', 'work_test/4_denoise'),
     ('infer', '转换结果', 'infer_out'),
 ]
 SONG_STAGES = ['raw', 'vocals', 'dereverb', 'karaoke', 'denoise']
