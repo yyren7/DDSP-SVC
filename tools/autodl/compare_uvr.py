@@ -25,7 +25,7 @@ OLD = [('vocals', 'mel_band_roformer_vocals_fv4_gabox.ckpt'),
 NEW = [('vocals', 'bs_leap_xe_voc.ckpt'),
        ('dereverb', 'dereverb_bs_roformer_anvuew_sdr_22.5050.ckpt'),
        ('karaoke', 'karaoke_bs_roformer_anvuew.ckpt'),
-       ('denoise', 'denoise_mel_band_roformer_aufr33_aggr_sdr_27.9768.ckpt')]
+       ('denoise', 'denoise_mel_band_roformer_aufr33_sdr_27.9959.ckpt')]
 VERSIONS = {
     'A 原来的四步（FV4→去和声→去混响→去噪）': OLD,
     'B 新的四步（Leap Xe→去混响→去和声→去噪）': NEW,

@@ -51,12 +51,13 @@ ALL_STEPS = UVR_STEPS + ['slice', 'split']
 #   vocals   BS-Roformer Leap Xe by unwa: vocals SDR 11.79 on the MVSEP Multisong leaderboard
 #   dereverb BS-Roformer by anvuew: best but MVSEP's own on MVSEP's vocal dereverb validation
 #   karaoke  BS-Roformer Karaoke by anvuew: lead SDR 10.23 on MVSEP's lead/back leaderboard
-#   denoise  Mel-Roformer by aufr33, aggressive: what the AI Hub RVC dataset guide recommends
+#   denoise  Mel-Roformer by aufr33 (the guide recommends its aggressive version, but that one comes
+#            from GitHub, at ~100 KB/s from AutoDL)
 DEFAULT_MODELS = {
     'vocals': 'bs_leap_xe_voc.ckpt',
     'dereverb': 'dereverb_bs_roformer_anvuew_sdr_22.5050.ckpt',
     'karaoke': 'karaoke_bs_roformer_anvuew.ckpt',
-    'denoise': 'denoise_mel_band_roformer_aufr33_aggr_sdr_27.9768.ckpt',
+    'denoise': 'denoise_mel_band_roformer_aufr33_sdr_27.9959.ckpt',
 }
 
 # Models audio-separator does not list, published on Hugging Face as a checkpoint and a yaml for
