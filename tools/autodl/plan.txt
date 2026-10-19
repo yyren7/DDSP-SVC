@@ -3,7 +3,7 @@
 # A comma separated chain runs in order and stops at the first failure, e.g. JOB=uvr,features,train
 # After a reboot the runner resumes a job that failed or was interrupted.
 JOB=download,songsplit
-RUN_ID=16
+RUN_ID=17
 
 # Whose data the jobs work on: everything lives in /root/autodl-tmp/speakers/$SPEAKER/
 # (downloads, songs, raw_songs, work, data, exp, test_songs, infer_out), one model per speaker.
@@ -16,13 +16,14 @@ SPEAKER=pheebie
 # Pheebie (菲比Pheebie, space 3546961967843490): her streams are recorded by 夜半汽笛い (space 356626415)
 # as "【菲比Pheebie】【...】title-date"; the singing ones say 歌回/歌杂/唱. DL_MAX caps new videos per run.
 # First batch (RUN_ID=15): DL_MATCH=^【菲比Pheebie】(?!.*联动).*(歌回|歌杂|唱) with DL_MAX=20; it missed streams
-# titled 歌！, so next time use DL_MATCH=^【菲比Pheebie】(?!.*联动).*(歌|唱)
-DL_URL=https://space.bilibili.com/3546961967843490/video
-DL_MATCH=
-DL_MAX=
+# titled 歌！. Second batch (RUN_ID=17): the next 40 parts (about 8 streams) with the broader rule below;
+# _archive.txt skips the parts already downloaded, so each run continues with older streams.
+DL_URL=https://space.bilibili.com/356626415/video
+DL_MATCH=^【菲比Pheebie】(?!.*联动).*(歌|唱)
+DL_MAX=40
 # DL_FILTER: more yt-dlp --match-filter conditions. Her own covers and PVs: DL_URL=https://space.bilibili.com/3546961967843490/video
 # with DL_MATCH empty and DL_FILTER=duration>=120 & duration<=480 (drops teasers, intros, model showcases)
-DL_FILTER=duration>=120 & duration<=480
+DL_FILTER=
 # songsplit: recordings in downloads/ -> one file per song in songs/ (see tools/split_songs.py -h).
 # Per-speaker settings live in tools/autodl/split/<speaker>.args; SPLIT_ARGS is added after them.
 SPLIT_ARGS=
