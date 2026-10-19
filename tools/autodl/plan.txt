@@ -3,11 +3,11 @@
 # A comma separated chain runs in order and stops at the first failure, e.g. JOB=uvr,features,train
 # After a reboot the runner resumes a job that failed or was interrupted.
 JOB=songsplit
-RUN_ID=22
+RUN_ID=23
 
 # Whose data the jobs work on: everything lives in /root/autodl-tmp/speakers/$SPEAKER/
 # (downloads, songs, raw_songs, work, data, exp, test_songs, infer_out), one model per speaker.
-SPEAKER=pheebie
+SPEAKER=sakura_shunka
 
 # Optional settings passed to the jobs
 # download: Bilibili space -> audio of the videos whose title matches DL_MATCH (Python regex), into downloads/;
