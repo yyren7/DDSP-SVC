@@ -1,5 +1,5 @@
 #!/bin/bash
-# Predefined jobs started by runner.sh: setup | download | songsplit | uvr | features | train | infer | migrate
+# Predefined jobs started by runner.sh: setup | download | songsplit | uvr | compare | features | train | infer | migrate
 # Every job except setup works on the folders of SPEAKER (speakers/<name>/, see config.sh).
 # Extra arguments come from tools/autodl/plan.txt (UVR_ARGS, KEY, SPK_ID, WORKERS, ...).
 set -euo pipefail
@@ -26,6 +26,12 @@ fetch() {  # dest md5 url... -> download unless dest already has that md5; each 
     rm -f "$dest.part"; echo "FAILED to fetch $(basename "$dest")"; return 1
 }
 
+fetch_models() {  # UVR models of prepare_dataset.py: Hugging Face via hf-mirror.com, GitHub direct, then via the proxy
+    noproxy python tools/autodl/fetch_uvr_models.py --model-dir "$UVR_MODEL_DIR" "$@" && return 0
+    [ -f /etc/network_turbo ] && (source /etc/network_turbo >/dev/null 2>&1
+        python tools/autodl/fetch_uvr_models.py --model-dir "$UVR_MODEL_DIR" "$@")
+}
+
 # Separation, feature extraction, training and inference crawl on CPU, so fail fast when the
 # instance was started without a GPU (AutoDL "no-card mode"). ALLOW_CPU=1 overrides.
 require_gpu() {
@@ -35,7 +41,7 @@ require_gpu() {
     echo "no GPU found: this instance runs in no-card mode. Restart it with a GPU; the runner resumes this job."
     exit 3
 }
-case "$JOB" in uvr|features|train|infer) require_gpu ;; esac
+case "$JOB" in uvr|compare|features|train|infer) require_gpu ;; esac
 
 if [ "$JOB" != setup ] && [ -z "$SPK_DIR" ]; then
     echo "set SPEAKER in plan.txt (letters, digits, _ and - only), e.g. SPEAKER=sakura_shunka"; exit 2
@@ -114,11 +120,18 @@ songsplit)
         --model-dir pretrain/panns $spk_args ${SPLIT_ARGS:-}
     ;;
 uvr)
-    # Raw songs -> separated, de-harmonised, de-reverbed, denoised, sliced clips in data/
+    # Raw songs -> separated, de-reverbed, de-harmonised, denoised, sliced clips in data/
     conda activate "$ENV_ROOT/uvr"
+    fetch_models
     # shellcheck disable=SC2086
     python tools/prepare_dataset.py -i "$RAW_DIR" -o "$DATA_DIR" -w "$WORK_DIR" \
         --model-dir "$UVR_MODEL_DIR" ${UVR_ARGS:-}
+    ;;
+compare)
+    # 40 s excerpts of a few songs through several UVR model chains, side by side on the review page
+    conda activate "$ENV_ROOT/uvr"
+    fetch_models
+    python tools/autodl/compare_uvr.py --speaker-dir "$SPK_DIR" --model-dir "$UVR_MODEL_DIR"
     ;;
 features)
     conda activate "$ENV_ROOT/ddsp"
@@ -137,7 +150,7 @@ infer)
     conda activate "$ENV_ROOT/uvr"
     # shellcheck disable=SC2086
     python tools/prepare_dataset.py -i "$TEST_DIR" -w "$TEST_WORK_DIR" --model-dir "$UVR_MODEL_DIR" \
-        --steps vocals,karaoke,dereverb,denoise ${UVR_ARGS:-}
+        --steps vocals,dereverb,karaoke,denoise ${UVR_ARGS:-}
     conda deactivate
     conda activate "$ENV_ROOT/ddsp"
     out="$INFER_DIR/$(basename "$ckpt" .pt)_key${KEY:-0}"

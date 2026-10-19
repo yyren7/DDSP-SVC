@@ -36,8 +36,8 @@ PAGE_SIZE = 40
 STAGES = [
     ('raw', '原始歌曲', 'raw_songs'),
     ('vocals', '1 分离人声', 'work/1_vocals'),
-    ('karaoke', '2 去和声', 'work/2_karaoke'),
-    ('dereverb', '3 去混响', 'work/3_dereverb'),
+    ('dereverb', '2 去混响', 'work/2_dereverb'),
+    ('karaoke', '3 去和声', 'work/3_karaoke'),
     ('denoise', '4 去噪', 'work/4_denoise'),
     ('slices', '5 切片', 'work/5_slices'),
     ('train', '训练集', 'data/train/audio'),
@@ -46,7 +46,7 @@ STAGES = [
     ('test_dry', '测试歌曲干声', 'work_test/4_denoise'),
     ('infer', '转换结果', 'infer_out'),
 ]
-SONG_STAGES = ['raw', 'vocals', 'karaoke', 'dereverb', 'denoise']
+SONG_STAGES = ['raw', 'vocals', 'dereverb', 'karaoke', 'denoise']
 STAGE_NAME = {k: n for k, n, _ in STAGES}
 SPEAKER_RE = re.compile(r'[A-Za-z0-9_-]+')
 
@@ -114,6 +114,21 @@ def stage_dir(spk, key):
 
 def songs_dir(spk):
     return SPEAKERS / spk / 'songs'
+
+
+def compare_dir(spk):
+    return SPEAKERS / spk / 'compare'
+
+
+def compare_sets(spk):
+    """{excerpt: [(file, version)]} from compare/<version>/<excerpt>.wav, versions in folder order."""
+    out = {}
+    root = compare_dir(spk)
+    if root.is_dir():
+        for version in sorted(d for d in root.iterdir() if d.is_dir() and not d.name.startswith('_')):
+            for f in audio_files(version):
+                out.setdefault(f.stem, []).append((f, version.name))
+    return dict(sorted(out.items()))
 
 
 def song_meta(folder):
@@ -233,6 +248,8 @@ class Handler(BaseHTTPRequestHandler):
             return self.page_songs(q.get('g', [''])[0])
         if route == 'check':
             return self.page_check()
+        if route == 'compare':
+            return self.page_compare()
         return self.page_index()
 
     def do_POST(self):
@@ -266,6 +283,10 @@ class Handler(BaseHTTPRequestHandler):
                  '<span id="fbgen_ok" class="ok"></span></div></div>']
         if not spk:
             return self.send_html(''.join(parts))
+        sets = compare_sets(spk)
+        if sets:
+            parts.append(f'<h2>模型对比（{len(sets)} 段）</h2><div class="card row"><a class="name" href="compare">'
+                         '逐段试听</a><span class="muted">同一段歌用不同的模型和步骤去伴奏，选出最好的做法</span></div>')
         check = check_list(spk)
         if check:
             parts.append(f'<h2>待抽查（{len(check)} 首）</h2><div class="card row"><a class="name" href="check">'
@@ -340,10 +361,20 @@ class Handler(BaseHTTPRequestHandler):
         body += [self.player(f, label) for f, label in check]
         self.send_html(''.join(body))
 
+    def page_compare(self):
+        sets = compare_sets(self.spk) if self.spk else {}
+        body = ['<p><a href="./">← 返回</a></p><h1>模型对比</h1>',
+                '<p class="muted">每段歌都用几种做法去伴奏。听完在下面写哪个版本最好、哪个有问题'
+                '（伴奏残留、和声没去干净、声音发闷、有杂音或电音），反馈会同步给 Claude。</p>']
+        for name, items in sets.items():
+            body.append(f'<h2>{esc(name)}</h2>')
+            body += [self.player(f, version) for f, version in items]
+        self.send_html(''.join(body))
+
     def serve_file(self, rel, fmt=''):
         path = (ROOT / rel).resolve()
         # any speaker's audio folders, so a page opened before switching speakers keeps playing
-        dirs = [d for s in speakers() for d in [stage_dir(s, k) for k in STAGE_NAME] + [songs_dir(s)]]
+        dirs = [d for s in speakers() for d in [stage_dir(s, k) for k in STAGE_NAME] + [songs_dir(s), compare_dir(s)]]
         allowed = any(os.path.commonpath([path, d.resolve()]) == str(d.resolve()) for d in dirs)
         if not allowed or not path.is_file() or path.suffix.lower() not in AUDIO_EXTS:
             return self.send_html('not found', 404)

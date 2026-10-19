@@ -1,9 +1,9 @@
 # Which job runner.sh should run. Changing JOB, SPEAKER or bumping RUN_ID (re)starts it.
-# Jobs: setup | download | songsplit | uvr | features | train | infer | migrate | idle
+# Jobs: setup | download | songsplit | uvr | compare | features | train | infer | migrate | idle
 # A comma separated chain runs in order and stops at the first failure, e.g. JOB=uvr,features,train
 # After a reboot the runner resumes a job that failed or was interrupted.
-JOB=idle
-RUN_ID=25
+JOB=compare
+RUN_ID=26
 
 # Whose data the jobs work on: everything lives in /root/autodl-tmp/speakers/$SPEAKER/
 # (downloads, songs, raw_songs, work, data, exp, test_songs, infer_out), one model per speaker.

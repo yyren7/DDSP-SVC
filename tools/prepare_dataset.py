@@ -3,14 +3,15 @@ One-click dataset preparation for DDSP-SVC, built on UVR5 models via python-audi
 
 Pipeline (each stage loads its model once and processes every file):
     1. vocals   : separate vocals from accompaniment
-    2. karaoke  : keep lead vocal, remove backing vocals / harmonies
-    3. dereverb : remove reverb and echo
+    2. dereverb : remove reverb and echo
+    3. karaoke  : keep lead vocal, remove backing vocals / harmonies
     4. denoise  : remove residual noise
     5. slice    : cut on silence, resample to mono, drop clips that are too short
     6. split    : write clips to <out>/train/audio and pick a few for <out>/val/audio
 
 Every stage writes to its own folder under --work and skips files that are already done,
-so an interrupted run can be resumed by running the same command again.
+so an interrupted run can be resumed by running the same command again. A stage records the
+models that made its files (_models.txt); when they change, the stage starts over.
 
 Example:
     python tools/prepare_dataset.py -i raw_songs -o data
@@ -40,15 +41,55 @@ from slicer import Slicer  # noqa: E402
 
 AUDIO_EXTS = {'.wav', '.flac', '.mp3', '.m4a', '.ogg', '.opus', '.aac', '.wma'}
 
-UVR_STEPS = ['vocals', 'karaoke', 'dereverb', 'denoise']
+# Order as in the AI Hub RVC dataset guide (2026-03): reverb is removed before the lead vocal is
+# told apart from the backing vocals.
+UVR_STEPS = ['vocals', 'dereverb', 'karaoke', 'denoise']
 ALL_STEPS = UVR_STEPS + ['slice', 'split']
 
+# The best models that can be downloaded, as of 2026-10-19 (MVSEP's own models score higher but only
+# run on mvsep.com):
+#   vocals   BS-Roformer Leap Xe by unwa: vocals SDR 11.79 on the MVSEP Multisong leaderboard
+#   dereverb BS-Roformer by anvuew: best but MVSEP's own on MVSEP's vocal dereverb validation
+#   karaoke  BS-Roformer Karaoke by anvuew: lead SDR 10.23 on MVSEP's lead/back leaderboard
+#   denoise  Mel-Roformer by aufr33, aggressive: what the AI Hub RVC dataset guide recommends
 DEFAULT_MODELS = {
-    'vocals': 'mel_band_roformer_vocals_fv4_gabox.ckpt',
-    'karaoke': 'mel_band_roformer_karaoke_aufr33_viperx_sdr_10.1956.ckpt',
-    'dereverb': 'UVR-DeEcho-DeReverb.pth',
-    'denoise': 'denoise_mel_band_roformer_aufr33_sdr_27.9959.ckpt',
+    'vocals': 'bs_leap_xe_voc.ckpt',
+    'dereverb': 'dereverb_bs_roformer_anvuew_sdr_22.5050.ckpt',
+    'karaoke': 'karaoke_bs_roformer_anvuew.ckpt',
+    'denoise': 'denoise_mel_band_roformer_aufr33_aggr_sdr_27.9768.ckpt',
 }
+
+# Models audio-separator does not list, published on Hugging Face as a checkpoint and a yaml for
+# ZFTurbo's Music-Source-Separation-Training, whose Roformer configs audio-separator reads too.
+# filename -> (repo, checkpoint, yaml); fetch_uvr_models.py downloads them, the yaml as <stem>.yaml.
+EXTRA_MODELS = {
+    'bs_leap_xe_voc.ckpt': ('pcunwa/BS-Roformer-Leap', 'Xe/bs_leap_xe_voc.ckpt', 'Xe/leap_xe_config_voc.yaml'),
+    'dereverb_bs_roformer_anvuew_sdr_22.5050.ckpt':
+        ('anvuew/dereverb_bs_roformer', 'dereverb_bs_roformer_anvuew_sdr_22.5050.ckpt', 'config.yaml'),
+    'karaoke_bs_roformer_anvuew.ckpt':
+        ('anvuew/karaoke_bs_roformer', 'karaoke_bs_roformer_anvuew.ckpt', 'karaoke_bs_roformer_anvuew.yaml'),
+}
+
+
+def extra_yaml(model):
+    return Path(model).stem + '.yaml'
+
+
+def register_extra_models(separator_cls):
+    """Add EXTRA_MODELS to audio-separator's list of models, so load_model() takes them (from --model-dir)."""
+    listed = separator_cls.list_supported_model_files
+    if getattr(listed, 'with_extra_models', False):
+        return
+
+    def with_extra(self):
+        models = listed(self)
+        for model, (repo, _, _) in EXTRA_MODELS.items():
+            models.setdefault('MDXC', {})[f'{model} ({repo})'] = {
+                'filename': model, 'scores': {}, 'stems': [], 'target_stem': None,
+                'download_files': [model, extra_yaml(model)]}
+        return models
+    with_extra.with_extra_models = True
+    separator_cls.list_supported_model_files = with_extra
 
 # Stem names (lower case) that hold the part we want to keep after each UVR stage.
 KEEP_STEMS = {
@@ -100,10 +141,21 @@ def unique_names(files):
     return names
 
 
-def run_uvr_stage(step, model, files, out_dir, args):
-    from audio_separator.separator import Separator
-
+def fresh_stage(out_dir, made_by):
+    """Create out_dir for files made by `made_by` (models and settings); empty it when another set made them."""
+    stamp = out_dir / '_models.txt'
+    if out_dir.exists() and (not stamp.exists() or stamp.read_text(encoding='utf-8') != made_by):
+        print(f'{out_dir.name}: made by other models or settings, starting it over')
+        shutil.rmtree(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
+    stamp.write_text(made_by, encoding='utf-8')
+
+
+def run_uvr_stage(step, model, files, out_dir, args, made_by):
+    from audio_separator.separator import Separator
+    register_extra_models(Separator)
+
+    fresh_stage(out_dir, made_by)
     tmp_dir = out_dir / '_tmp'
     todo = [f for f in files if not (out_dir / f'{f.stem}.wav').exists()]
     print(f'[{step}] {model}: {len(files) - len(todo)} done, {len(todo)} to process')
@@ -130,8 +182,8 @@ def run_uvr_stage(step, model, files, out_dir, args):
     shutil.rmtree(tmp_dir, ignore_errors=True)
 
 
-def slice_stage(files, out_dir, args):
-    out_dir.mkdir(parents=True, exist_ok=True)
+def slice_stage(files, out_dir, args, made_by):
+    fresh_stage(out_dir, f'{made_by}\nslice sr={args.sr} db={args.db_thresh} len={args.min_len}-{args.max_len}')
     min_len, max_len = int(args.min_len * args.sr), int(args.max_len * args.sr)
     slicer = Slicer(sr=args.sr, threshold=args.db_thresh, min_length=5000, min_interval=300,
                     hop_size=10, max_sil_kept=500)
@@ -213,15 +265,25 @@ def main():
     files = sorted(files)
     print(f'{len(files)} input files')
 
+    # Stage folders of an older stage order (e.g. 2_karaoke before 2_dereverb) hold outdated results.
+    layout = {f'{idx}_{step}' for idx, step in enumerate(UVR_STEPS, 1)} | {'0_input', '5_slices'}
+    for d in work.iterdir():
+        if d.is_dir() and re.fullmatch(r'\d_[a-z]+', d.name) and d.name not in layout:
+            print(f'removing {d.name}, a stage folder of an older stage order')
+            shutil.rmtree(d)
+
+    made_by = ''  # the models that made `files`, one "step=model" line per stage
     for idx, step in enumerate(UVR_STEPS, 1):
         if step in steps:
             out_dir = work / f'{idx}_{step}'
-            run_uvr_stage(step, getattr(args, f'{step}_model'), files, out_dir, args)
+            model = getattr(args, f'{step}_model')
+            made_by += f'{step}={model}\n'
+            run_uvr_stage(step, model, files, out_dir, args, made_by)
             files = [out_dir / f'{f.stem}.wav' for f in files]
 
     clips_dir = work / '5_slices'
     if 'slice' in steps:
-        slice_stage(files, clips_dir, args)
+        slice_stage(files, clips_dir, args, made_by)
     if 'split' in steps:
         if 'slice' in steps or clips_dir.exists():
             stems = {f.stem for f in files}  # only clips cut from this run's inputs
