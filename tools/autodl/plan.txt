@@ -2,8 +2,8 @@
 # Jobs: setup | download | songsplit | uvr | features | train | infer | migrate | idle
 # A comma separated chain runs in order and stops at the first failure, e.g. JOB=uvr,features,train
 # After a reboot the runner resumes a job that failed or was interrupted.
-JOB=uvr
-RUN_ID=24
+JOB=idle
+RUN_ID=25
 
 # Whose data the jobs work on: everything lives in /root/autodl-tmp/speakers/$SPEAKER/
 # (downloads, songs, raw_songs, work, data, exp, test_songs, infer_out), one model per speaker.
@@ -34,5 +34,5 @@ SPK_ID=1
 
 # Power the instance off after this many minutes with no job running and nobody on the review page
 # (0 = never): IDLE_SHUTDOWN_MIN with a GPU, IDLE_SHUTDOWN_MIN_NOGPU in no-GPU mode (¥0.10/h)
-IDLE_SHUTDOWN_MIN=30
+IDLE_SHUTDOWN_MIN=180
 IDLE_SHUTDOWN_MIN_NOGPU=1440
