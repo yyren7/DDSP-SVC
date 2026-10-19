@@ -46,6 +46,16 @@ def cpu_quota():
     return os.cpu_count() or 1
 
 
+def drop_cache(path):
+    """Have the kernel drop the file's pages from the page cache (no privileges needed)."""
+    if hasattr(os, 'posix_fadvise'):
+        fd = os.open(path, os.O_RDONLY)
+        try:
+            os.posix_fadvise(fd, 0, 0, os.POSIX_FADV_DONTNEED)
+        finally:
+            os.close(fd)
+
+
 def load_model(model_dir, device):
     labels_csv = Path(model_dir) / 'class_labels_indices.csv'
     # panns_inference reads its label list from ~/panns_data when imported and would otherwise try
@@ -56,10 +66,17 @@ def load_model(model_dir, device):
         shutil.copy(labels_csv, home_csv)
     import torch
     from panns_inference.models import Cnn14_DecisionLevelMax
+    # AutoDL's no-GPU mode has 2 GB, and the job is killed (SIGKILL, not the kernel's OOM killer) when memory
+    # counting active page cache nears that, which loading this 320 MB model used to reach: the checkpoint
+    # stayed cached from earlier runs next to its copy in memory, and the random weights the model is built
+    # with were still held while the checkpoint was read.
+    pth = Path(model_dir) / 'Cnn14_DecisionLevelMax.pth'
+    drop_cache(pth)
     model = Cnn14_DecisionLevelMax(sample_rate=SR, window_size=1024, hop_size=320, mel_bins=64,
-                                   fmin=50, fmax=14000, classes_num=527)
-    ckpt = torch.load(Path(model_dir) / 'Cnn14_DecisionLevelMax.pth', map_location='cpu', weights_only=False)
-    model.load_state_dict(ckpt['model'])
+                                   fmin=50, fmax=14000, classes_num=527).to_empty(device='meta')
+    ckpt = torch.load(pth, map_location='cpu', weights_only=False)
+    drop_cache(pth)
+    model.load_state_dict(ckpt['model'], assign=True)  # the model takes over the checkpoint's tensors
     model.eval().to(device)
     labels = [line.split(',', 2)[2].strip().strip('"')
               for line in labels_csv.read_text(encoding='utf-8').splitlines()[1:] if line.strip()]
