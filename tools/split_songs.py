@@ -269,6 +269,33 @@ def cut(src, start, end, dst):
     tmp.replace(dst)
 
 
+def moved_songs(old, new):
+    """{file: new file} for a recording cut again: song numbers shift when songs are added or dropped, so each
+    old song goes to the new song that overlaps it most, or to None when nothing overlaps it any more."""
+    def overlap(x, y):
+        return min(x['end'], y['end']) - max(x['start'], y['start'])
+    moved = {}
+    for x in old:
+        best = max(new, key=lambda y: overlap(x, y), default=None)
+        moved[x['file']] = best['file'] if best and overlap(x, best) > 0 else None
+    return moved
+
+
+def write_check_list(tsv, entries, moved):
+    """The hand-made spot-check list (_check.tsv, "file<TAB>reason") as it was when the run started, with its
+    songs renamed by this run's cuts so far. Mapping from the start keeps a name that a recording cut earlier in
+    the run has just taken from a later one from being moved twice."""
+    lines, seen = [], set()
+    for file, tab, reason in entries:
+        file = moved.get(file, file)
+        if file and file not in seen:  # two entries on songs that are now one keep the first reason
+            seen.add(file)
+            lines.append(file + tab + reason)
+    tmp = tsv.with_name('_check.tsv.tmp')
+    tmp.write_text(''.join(x + '\n' for x in lines), encoding='utf-8')
+    tmp.replace(tsv)
+
+
 def mmss(s):
     return f'{int(s) // 60}:{int(s) % 60:02d}'
 
@@ -308,7 +335,11 @@ def main():
         files = [f for f in files if a.only in f.name]
     print(f'{len(files)} recordings', flush=True)
 
-    model, taken = None, set()
+    model, taken, made = None, set(), set()
+    check_tsv = out / '_check.tsv'
+    check = [line.partition('\t') for line in check_tsv.read_text(encoding='utf-8').splitlines()] \
+        if check_tsv.exists() else None
+    moved = {}  # songs renamed or dropped by this run: old file -> new file or None
     for f in files:
         info_path = f.with_name(f.stem + '.info.json')
         info = json.loads(info_path.read_text(encoding='utf-8')) if info_path.exists() else {}
@@ -352,14 +383,20 @@ def main():
         if a.dry_run or a.limit:
             continue
 
-        # replace what an earlier run cut from this recording
+        # replace what an earlier run cut from this recording; a file a recording before it has just been
+        # cut to (same day, numbers shifted) stays
         record = cache / (f.stem + '.songs.json')
-        if record.exists():
-            for old in json.loads(record.read_text(encoding='utf-8'))['songs']:
-                (out / old['file']).unlink(missing_ok=True)
+        old = json.loads(record.read_text(encoding='utf-8'))['songs'] if record.exists() else []
+        for x in old:
+            if x['file'] not in made:
+                (out / x['file']).unlink(missing_ok=True)
         for x in songs:
             cut(f, x['start'], x['end'], out / x['file'])
+            made.add(x['file'])
         record.write_text(json.dumps({'source': f.name, 'songs': songs}, ensure_ascii=False, indent=1), encoding='utf-8')
+        if check is not None and old:
+            moved.update(moved_songs(old, songs))
+            write_check_list(out / '_check.tsv', check, moved)
 
     if not a.dry_run and not a.limit:
         rows = ['file\tsource\tstart\tend\tname']
