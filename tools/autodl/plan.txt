@@ -34,6 +34,7 @@ KEY=0
 SPK_ID=1
 
 # Power the instance off after this many minutes with no job running and nobody on the review page
-# (0 = never): IDLE_SHUTDOWN_MIN with a GPU, IDLE_SHUTDOWN_MIN_NOGPU in no-GPU mode (¥0.10/h)
-IDLE_SHUTDOWN_MIN=30
+# (0 = never): IDLE_SHUTDOWN_MIN with a GPU, IDLE_SHUTDOWN_MIN_NOGPU in no-GPU mode (¥0.10/h).
+# 0 since 2026-10-20: every GPU in AutoDL was taken; once we get one back, it stays until the user decides.
+IDLE_SHUTDOWN_MIN=0
 IDLE_SHUTDOWN_MIN_NOGPU=1440
