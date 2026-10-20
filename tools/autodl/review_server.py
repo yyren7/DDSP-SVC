@@ -75,24 +75,37 @@ async function mark(btn){  // keep / exclude button: data-t is the file, its tex
     body:JSON.stringify({target:btn.dataset.t,text:btn.textContent})});
   if(r.ok) document.getElementById(btn.dataset.s).textContent='已标记：'+btn.textContent;
 }
-// WAV (1.4 Mbit/s) stalls in AutoDL's port forwarding: browsers that play Opus get an Opus copy, with a
-// link to the WAV next to the player. Browsers without an AAC decoder (VS Code's built-in browser, for
-// one) get an Opus copy of AAC files too.
+// A player that cannot play its source switches once to data-alt (see audio_tag). Nothing here touches a
+// source before it is played: changing it on page load made the browser fetch every song on the page.
 document.addEventListener('DOMContentLoaded', () => {
-  const probe = document.createElement('audio');
-  const aac = probe.canPlayType('audio/mp4; codecs="mp4a.40.2"');
-  const ogg = probe.canPlayType('audio/ogg; codecs="opus"');
-  for (const a of document.querySelectorAll('audio')) {
-    const name = decodeURIComponent(a.src);
-    const opus = () => { if (a.src.includes('fmt=ogg')) return false; a.src += '&fmt=ogg'; a.load(); return true; };
-    if ((ogg && /\\.(wav|flac)$/i.test(name)) || (!aac && /\\.(m4a|mp4|aac)$/i.test(name))) opus();
-    a.addEventListener('error', () => { if (opus()) a.play().catch(() => {}); });
+  for (const a of document.querySelectorAll('audio[data-alt]')) {
+    a.addEventListener('error', () => {
+      if (!a.dataset.alt) return;
+      a.src = a.dataset.alt; a.dataset.alt = '';
+      a.play().catch(() => {});
+    });
   }
 });
 """
 OPUS_FROM = {'.m4a', '.mp4', '.aac', '.wav', '.flac'}
 OPUS_BITRATE = '128k'
 _transcode_locks = {}
+_foreground = threading.BoundedSemaphore(2)  # transcodes for listeners at a time, on 0.5 CPU core
+
+
+def audio_tag(rel):
+    """Player for a file (path relative to ROOT), fetched only when played. WAV (1.4 Mbit/s) stalls in
+    AutoDL's port forwarding, so it plays as an Opus copy and falls back to the WAV where Opus does not
+    play (Safari); AAC plays as it is and falls back to Opus where there is no AAC decoder (VS Code's
+    built-in browser)."""
+    src = f'file?p={urllib.parse.quote(rel)}'
+    if Path(rel).suffix.lower() in ('.wav', '.flac'):
+        src, alt = src + '&fmt=ogg', src
+    elif Path(rel).suffix.lower() in OPUS_FROM:
+        alt = src + '&fmt=ogg'
+    else:
+        return f'<audio controls preload="none" src="{src}"></audio>'
+    return f'<audio controls preload="none" src="{src}" data-alt="{alt}"></audio>'
 
 
 def audio_files(folder, recursive=False):
@@ -254,11 +267,10 @@ class Handler(BaseHTTPRequestHandler):
     def player(self, f, label=None):
         rel = f.relative_to(ROOT).as_posix()
         fid = 'fb' + str(abs(hash(rel)))
-        src = f'file?p={urllib.parse.quote(rel)}'
-        wav = (f' <a class="muted" href="{src}" download="{esc(f.name)}">下载 WAV 原文件</a>'
+        wav = (f' <a class="muted" href="file?p={urllib.parse.quote(rel)}" download="{esc(f.name)}">下载 WAV 原文件</a>'
                if f.suffix.lower() in ('.wav', '.flac') else '')
         return (f'<div class="card"><div class="name">{esc(label or f.name)}{wav}</div>'
-                f'<audio controls preload="none" src="{src}"></audio>'
+                + audio_tag(rel) +
                 f'<textarea id="{fid}" placeholder="这一段的反馈（可选）"></textarea>'
                 f'<div class="row"><button onclick="fb(\'{fid}\',\'{esc(rel)}\')">提交</button>'
                 f'<span id="{fid}_ok" class="ok"></span></div></div>')
@@ -428,7 +440,7 @@ class Handler(BaseHTTPRequestHandler):
             body.append(
                 f'<div class="card"><div class="name">{k}. {score:.0f} 分　{esc(name)}</div>'
                 f'<div class="muted">{esc(problems)}　有效歌声 {(m.get("voiced_sec") or 0) / 60:.1f} 分钟</div>'
-                f'<audio controls preload="none" src="file?p={urllib.parse.quote(rel)}"></audio>'
+                + audio_tag(rel) +
                 f'<div class="row"><button data-t="{esc(rel)}" data-s="{sid}" onclick="mark(this)">排除</button>'
                 f'<button data-t="{esc(rel)}" data-s="{sid}" onclick="mark(this)">保留</button>'
                 f'<a href="song?n={urllib.parse.quote(name)}">对比各阶段</a>'
@@ -511,10 +523,13 @@ def opus_copy(src, background=False):
         if not dst.exists():
             dst.parent.mkdir(parents=True, exist_ok=True)
             tmp = dst.with_suffix('.part.ogg')
-            r = subprocess.run((['nice', '-n', '19'] if background else []) +
-                               ['ffmpeg', '-nostdin', '-loglevel', 'error', '-y', '-i', str(src), '-vn',
-                                '-c:a', 'libopus', '-b:a', OPUS_BITRATE, '-compression_level', '5', str(tmp)],
-                               capture_output=True)
+            cmd = ['ffmpeg', '-nostdin', '-loglevel', 'error', '-y', '-i', str(src), '-vn',
+                   '-c:a', 'libopus', '-b:a', OPUS_BITRATE, '-compression_level', '5', str(tmp)]
+            if background:
+                r = subprocess.run(['nice', '-n', '19'] + cmd, capture_output=True)
+            else:
+                with _foreground:
+                    r = subprocess.run(cmd, capture_output=True)
             if r.returncode != 0:
                 print('opus transcoding failed:', r.stderr.decode(errors='replace')[-300:], flush=True)
                 tmp.unlink(missing_ok=True)
