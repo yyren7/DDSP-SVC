@@ -6,8 +6,9 @@
 # made by clips@speaker:dataset with tools/autodl/build_clips.py)
 # After a reboot the runner resumes a job that failed or was interrupted.
 # A/B baseline: every line of the dry vocals, no line selection (the other side: dataset clean)
-JOB=features@pheebie:all,features@sakura_shunka:all,train@pheebie:all,train@sakura_shunka:all
-RUN_ID=32
+# paused 2026-10-20 so that score_lines.py has the GPU; then: JOB=train@pheebie:all,train@sakura_shunka:all
+JOB=idle
+RUN_ID=33
 # train stops after MAX_STEPS steps (0 = never); A/B runs compare training sets at equal steps
 MAX_STEPS=40000
 
