@@ -500,9 +500,10 @@ class Handler(BaseHTTPRequestHandler):
                 pass
 
 
-def opus_copy(src):
+def opus_copy(src, background=False):
     """Opus version of an audio file, made once and kept in .autodl/opus (None if ffmpeg fails).
-    A 4-minute WAV takes about 3 s on the 0.5 CPU core of no-GPU mode."""
+    A 4-minute WAV takes about 3 s on the 0.5 CPU core of no-GPU mode; background runs ffmpeg at the
+    lowest CPU priority."""
     st = src.stat()
     key = hashlib.sha1(f'{src}|{st.st_size}|{st.st_mtime_ns}|{OPUS_BITRATE}'.encode()).hexdigest()
     dst = STATE / 'opus' / f'{key}.ogg'
@@ -510,7 +511,8 @@ def opus_copy(src):
         if not dst.exists():
             dst.parent.mkdir(parents=True, exist_ok=True)
             tmp = dst.with_suffix('.part.ogg')
-            r = subprocess.run(['ffmpeg', '-nostdin', '-loglevel', 'error', '-y', '-i', str(src), '-vn',
+            r = subprocess.run((['nice', '-n', '19'] if background else []) +
+                               ['ffmpeg', '-nostdin', '-loglevel', 'error', '-y', '-i', str(src), '-vn',
                                 '-c:a', 'libopus', '-b:a', OPUS_BITRATE, '-compression_level', '5', str(tmp)],
                                capture_output=True)
             if r.returncode != 0:
@@ -521,11 +523,33 @@ def opus_copy(src):
     return dst
 
 
+def prewarm():
+    """Opus copies made ahead of time, so a song plays without waiting for ffmpeg: the dry vocals of
+    every speaker, then the dereverb and vocals stages, each in the ranking page's worst-first order with
+    the speakers taking turns. Logs only at the start and the end: the runner takes a review log written
+    in the last 2 minutes for someone listening."""
+    t0, made = time.time(), 0
+    for key in ('karaoke', 'dereverb', 'vocals'):
+        lists = []
+        for spk in speakers():
+            folder = stage_dir(spk, key)
+            names = [name for _, name, _, _ in reversed(rank_songs.rank(rank_songs.load(SPEAKERS / spk)))]
+            files = [folder / f'{n}.wav' for n in names]
+            files = [f for f in files if f.is_file()] or audio_files(folder)
+            lists.append(files)
+        for k in range(max(map(len, lists), default=0)):
+            for files in lists:
+                if k < len(files):
+                    made += opus_copy(files[k], background=True) is not None
+    print(f'prewarm: {made} Opus copies ready after {time.time() - t0:.0f} s', flush=True)
+
+
 def main():
     p = argparse.ArgumentParser()
     p.add_argument('--port', type=int, default=6008)
     args = p.parse_args()
     print(f'review server on :{args.port}', flush=True)
+    threading.Thread(target=prewarm, daemon=True).start()
     ThreadingHTTPServer(('0.0.0.0', args.port), Handler).serve_forever()
 
 
