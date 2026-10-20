@@ -1,10 +1,15 @@
 # Which job runner.sh should run. Changing JOB, SPEAKER or bumping RUN_ID (re)starts it.
-# Jobs: setup | download | songsplit | uvr | compare | features | train | infer | migrate | idle
+# Jobs: setup | download | songsplit | uvr | compare | clips | features | train | infer | migrate | idle
 # A comma separated chain runs in order and stops at the first failure, e.g. JOB=uvr,features,train;
-# job@speaker runs a job for another speaker than SPEAKER, e.g. JOB=uvr,uvr@sakura_shunka
+# job@speaker runs a job for another speaker than SPEAKER, e.g. JOB=uvr,uvr@sakura_shunka;
+# job@speaker:dataset works on that training set of the speaker (data_<dataset>/, exp_<dataset>/,
+# made by clips@speaker:dataset with tools/autodl/build_clips.py)
 # After a reboot the runner resumes a job that failed or was interrupted.
-JOB=uvr,uvr@sakura_shunka
-RUN_ID=30
+# A/B baseline: every line of the dry vocals, no line selection (the other side: dataset clean)
+JOB=clips@sakura_shunka:all,features@pheebie:all,features@sakura_shunka:all,train@pheebie:all,train@sakura_shunka:all
+RUN_ID=31
+# train stops after MAX_STEPS steps (0 = never); A/B runs compare training sets at equal steps
+MAX_STEPS=40000
 
 # Whose data the jobs work on: everything lives in /root/autodl-tmp/speakers/$SPEAKER/
 # (downloads, songs, raw_songs, work, data, exp, test_songs, infer_out), one model per speaker.
