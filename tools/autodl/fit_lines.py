@@ -27,6 +27,7 @@ SIGNAL = ['score', 'kar_drop', 'kar_cut', 'dr_drop', 'vleak_low', 'vleak_mid', '
 LEARNED = ['singmos', 'dns_ovrl', 'dns_sig', 'dns_bak', 'aes_pq', 'aes_ce', 'aes_cu', 'spk_cos',
            'f0_agree', 'f0_vdis', 'f0_jump', 'f0_octave', 'f0_high', 'rmvpe_voiced']
 TAGS = ['p_sing', 'p_speech', 'p_music', 'p_instr', 'long_voiced', 'pitch_steady']  # tag_lines.py
+WINDOWS = ['w_aes_ce', 'w_aes_pq', 'w_aes_cu', 'w_dns_sig', 'w_dns_bak', 'w_dns_ovrl']  # score_windows.py
 BANDS = [(0, 50), (50, 75), (75, 90), (90, 101)]  # the score bands of the calibration sample
 
 
@@ -37,7 +38,7 @@ def load_jsonl(path):
 def table(spk):
     """{(song, k): merged measurements} of one speaker."""
     rows = {(m['song'], m['k']): dict(m) for m in load_jsonl(spk / 'eval' / 'lines.jsonl')}
-    for name in ('lines_learned.jsonl', 'lines_tags.jsonl'):
+    for name in ('lines_learned.jsonl', 'lines_tags.jsonl', 'lines_windows.jsonl'):
         for r in load_jsonl(spk / 'eval' / name):
             if (r['song'], r['k']) in rows:
                 rows[(r['song'], r['k'])].update(r)
@@ -100,7 +101,7 @@ def main():
     y, w = np.array(y), np.array(w)
     if len(y) < 20 or y.min() == y.max():
         sys.exit('too few marks (need at least 20, with both keep and exclude)')
-    feats = [f for f in SIGNAL + LEARNED + TAGS if any(r.get(f) is not None for r in rows)]
+    feats = [f for f in SIGNAL + LEARNED + TAGS + WINDOWS if any(r.get(f) is not None for r in rows)]
     X, fill = matrix(rows, feats)
 
     print('\nhow each score alone agrees with the marks (weighted AUC; 0.5 = chance, 1 = perfect):')

@@ -238,9 +238,12 @@ def calib_sample(spk):
     return out
 
 
+CLIP_STAGES = {'mix': 'mix', 'voc': 'vocals', 'derev': 'dereverb', 'kar': 'karaoke'}  # clip?from= -> STAGES key
+
+
 def line_card(spk, n, m, marks, buttons=True, note_open=False):
-    """One line of eval/lines.jsonl ({song, k, start, end}) numbered n: the dry vocals of the line and the
-    input song at the same place, keep / exclude / unsure buttons, and a box for why."""
+    """One line of eval/lines.jsonl ({song, k, start, end}) numbered n: the dry vocals of the line, the
+    same place in the input song and after each step, keep / exclude / unsure buttons, and a box for why."""
     target = f'line:{m["song"]}#{m["k"]}'
     sid = 'mk' + hashlib.sha1(f'{spk}|{target}'.encode()).hexdigest()[:10]
     state = f'已标记：{marks[target]}' if target in marks else ('还没标记' if not buttons else '')
@@ -256,8 +259,11 @@ def line_card(spk, n, m, marks, buttons=True, note_open=False):
     return (f'<div class="card"><div class="name">{n}. <span class="muted">{esc(m["song"])}　'
             f'{m["start"]:.1f}–{m["end"]:.1f} 秒</span></div>'
             f'<audio controls preload="none" src="clip?{span}&from=kar"></audio>'
-            f'<details><summary class="muted">原曲同一句</summary>'
-            f'<audio controls preload="none" src="clip?{span}&from=mix"></audio></details>'
+            f'<details><summary class="muted">原曲和每一步的同一句</summary>'
+            + ''.join(f'<div class="muted">{label}</div><audio controls preload="none" src="clip?{span}&from={key}"></audio>'
+                      for key, label in (('mix', '原曲'), ('voc', '1 分离人声'), ('derev', '2 去混响'),
+                                         ('kar', '3 去和声（最终干声）'))) +
+            '</details>'
             f'<div class="row">{marks_html}<span id="{sid}" class="ok">{esc(state)}</span></div>{note}</div>')
 
 
@@ -541,7 +547,8 @@ class Handler(BaseHTTPRequestHandler):
         there, each with a box for why it was marked the way it was."""
         body = ['<p><a href="./">← 返回</a></p><h1>写原因</h1>',
                 '<p class="muted">每句写一下为什么这样标，例如：混了伴奏、在说话不是在唱、电音或机械感、发闷、跑调、'
-                '不像她的声音。提交后会同步给 Claude；想改标记回校准页改。</p>']
+                '不像她的声音。展开“原曲和每一步的同一句”能听出问题是哪一步出现的（例如对讲机感从“2 去混响”开始），'
+                '也请写上。提交后会同步给 Claude；想改标记回校准页改。</p>']
         for part in sel.split(';'):
             spk, _, nums = part.partition(':')
             if spk not in speakers():
@@ -585,8 +592,8 @@ class Handler(BaseHTTPRequestHandler):
         self.send_path(path)
 
     def serve_clip(self, q):
-        """clip?sp=<speaker>&song=<name>&s=<sec>&e=<sec>&from=kar|mix: one line as Opus, from the dry
-        vocals (3_karaoke) or from the song as it went into the pipeline (0_input)."""
+        """clip?sp=<speaker>&song=<name>&s=<sec>&e=<sec>&from=mix|voc|derev|kar: one line as Opus, from
+        the song as it went into the pipeline (0_input) or from a stage (CLIP_STAGES), the dry vocals by default."""
         spk, song = q.get('sp', [''])[0], q.get('song', [''])[0]
         try:
             s, e = float(q.get('s', [''])[0]), float(q.get('e', [''])[0])
@@ -594,12 +601,13 @@ class Handler(BaseHTTPRequestHandler):
             return self.send_html('bad span', 400)
         if spk not in speakers() or not 0 <= s < e <= s + 60:
             return self.send_html('not found', 404)
-        if q.get('from', [''])[0] == 'mix':
+        stage = CLIP_STAGES.get(q.get('from', [''])[0], 'karaoke')
+        if stage == 'mix':
             folder = SPEAKERS / spk / 'work' / '0_input'
             src = next((f for f in audio_files(folder) if f.stem == song), None)
         else:
-            src = stage_dir(spk, 'karaoke') / f'{song}.wav'
-            src = src if src.parent == stage_dir(spk, 'karaoke') and src.is_file() else None
+            src = stage_dir(spk, stage) / f'{song}.wav'
+            src = src if src.parent == stage_dir(spk, stage) and src.is_file() else None
         path = src and opus_copy(src, span=(s, e))
         if not path:
             return self.send_html('not found', 404)
