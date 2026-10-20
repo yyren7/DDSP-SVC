@@ -71,9 +71,15 @@ async function fb(id, target){
     body:JSON.stringify({target:target,text:t})});
   if(r.ok){box.value='';document.getElementById(id+'_ok').textContent='已提交 ✓';}
 }
+async function note(btn){  // free text about one item: data-t the target, data-box the textarea, data-spk the speaker
+  const box=document.getElementById(btn.dataset.box); const t=box.value.trim(); if(!t) return;
+  const r=await fetch('feedback',{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({target:btn.dataset.t,text:t,speaker:btn.dataset.spk||''})});
+  if(r.ok) document.getElementById(btn.dataset.box+'_ok').textContent='已提交 ✓';
+}
 async function mark(btn){  // keep / exclude button: data-t is the file, its text the decision
   const r=await fetch('feedback',{method:'POST',headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({target:btn.dataset.t,text:btn.textContent})});
+    body:JSON.stringify({target:btn.dataset.t,text:btn.textContent,speaker:btn.dataset.spk||''})});
   if(r.ok) document.getElementById(btn.dataset.s).textContent='已标记：'+btn.textContent;
 }
 // A player that cannot play its source switches once to data-alt (see audio_tag). Nothing here touches a
@@ -232,6 +238,29 @@ def calib_sample(spk):
     return out
 
 
+def line_card(spk, n, m, marks, buttons=True, note_open=False):
+    """One line of eval/lines.jsonl ({song, k, start, end}) numbered n: the dry vocals of the line and the
+    input song at the same place, keep / exclude / unsure buttons, and a box for why."""
+    target = f'line:{m["song"]}#{m["k"]}'
+    sid = 'mk' + hashlib.sha1(f'{spk}|{target}'.encode()).hexdigest()[:10]
+    state = f'已标记：{marks[target]}' if target in marks else ('还没标记' if not buttons else '')
+    span = (f'sp={urllib.parse.quote(spk)}&song={urllib.parse.quote(m["song"])}'
+            f'&s={max(0, m["start"] - 0.1):.2f}&e={m["end"] + 0.1:.2f}')
+    attrs = f'data-t="{esc(target)}" data-spk="{esc(spk)}"'
+    marks_html = ''.join(f'<button {attrs} data-s="{sid}" onclick="mark(this)">{d}</button>'
+                         for d in ('保留', '排除', '拿不准')) if buttons else ''
+    note = (f'<textarea id="{sid}n" placeholder="为什么这样标（可选）"></textarea>'
+            f'<div class="row"><button {attrs} data-box="{sid}n" onclick="note(this)">提交原因</button>'
+            f'<span id="{sid}n_ok" class="ok"></span></div>')
+    note = note if note_open else f'<details><summary class="muted">写原因</summary>{note}</details>'
+    return (f'<div class="card"><div class="name">{n}. <span class="muted">{esc(m["song"])}　'
+            f'{m["start"]:.1f}–{m["end"]:.1f} 秒</span></div>'
+            f'<audio controls preload="none" src="clip?{span}&from=kar"></audio>'
+            f'<details><summary class="muted">原曲同一句</summary>'
+            f'<audio controls preload="none" src="clip?{span}&from=mix"></audio></details>'
+            f'<div class="row">{marks_html}<span id="{sid}" class="ok">{esc(state)}</span></div>{note}</div>')
+
+
 def song_groups(spk):
     """{recording title: [(file, label)]} for the songs folder, using its _songs.tsv when present."""
     folder = songs_dir(spk)
@@ -319,6 +348,8 @@ class Handler(BaseHTTPRequestHandler):
             return self.serve_clip(q)
         if route == 'calib':
             return self.page_calib()
+        if route == 'notes':
+            return self.page_notes(q.get('sel', [''])[0])
         if route == 'stage':
             return self.page_stage(q.get('s', [''])[0], int(q.get('page', ['1'])[0] or 1))
         if route == 'song':
@@ -340,7 +371,8 @@ class Handler(BaseHTTPRequestHandler):
         length = int(self.headers.get('Content-Length', 0))
         try:
             data = json.loads(self.rfile.read(min(length, 100000)))
-            entry = {'time': time.strftime('%F %T'), 'speaker': self.pick_speaker({}),
+            spk = data.get('speaker') if data.get('speaker') in speakers() else self.pick_speaker({})
+            entry = {'time': time.strftime('%F %T'), 'speaker': spk,
                      'target': str(data.get('target', ''))[:300], 'text': str(data.get('text', ''))[:5000]}
         except (ValueError, AttributeError):
             return self.send_html('bad request', 400)
@@ -501,21 +533,24 @@ class Handler(BaseHTTPRequestHandler):
                 '声音被切断或削弱、不是她的声音，就点<b>排除</b>；干净自然就点<b>保留</b>；拿不准就点<b>拿不准</b>。'
                 '<br><span class="muted">播放的是最终干声的这一句（前后各多 0.1 秒）；“原曲同一句”可以对照原曲。'
                 '标记会同步给 Claude，改主意再点一次就行，以最后一次为准。</span></div>']
-        sp = urllib.parse.quote(self.spk)
-        for i, m in enumerate(sample, 1):
-            target = f'line:{m["song"]}#{m["k"]}'
-            sid = 'mk' + hashlib.sha1(target.encode()).hexdigest()[:10]
-            state = f'已标记：{marks[target]}' if target in marks else ''
-            span = f'sp={sp}&song={urllib.parse.quote(m["song"])}&s={max(0, m["start"] - 0.1):.2f}&e={m["end"] + 0.1:.2f}'
-            buttons = ''.join(f'<button data-t="{esc(target)}" data-s="{sid}" onclick="mark(this)">{d}</button>'
-                              for d in ('保留', '排除', '拿不准'))
-            body.append(
-                f'<div class="card"><div class="name">{i}. <span class="muted">{esc(m["song"])}　'
-                f'{m["start"]:.1f}–{m["end"]:.1f} 秒</span></div>'
-                f'<audio controls preload="none" src="clip?{span}&from=kar"></audio>'
-                f'<details><summary class="muted">原曲同一句</summary>'
-                f'<audio controls preload="none" src="clip?{span}&from=mix"></audio></details>'
-                f'<div class="row">{buttons}<span id="{sid}" class="ok">{esc(state)}</span></div></div>')
+        body += [line_card(self.spk, i, m, marks) for i, m in enumerate(sample, 1)]
+        self.send_html(''.join(body))
+
+    def page_notes(self, sel):
+        """notes?sel=<speaker>:<n>,<n>;<speaker>:<n>...: lines of the calibration pages, by their number
+        there, each with a box for why it was marked the way it was."""
+        body = ['<p><a href="./">← 返回</a></p><h1>写原因</h1>',
+                '<p class="muted">每句写一下为什么这样标，例如：混了伴奏、在说话不是在唱、电音或机械感、发闷、跑调、'
+                '不像她的声音。提交后会同步给 Claude；想改标记回校准页改。</p>']
+        for part in sel.split(';'):
+            spk, _, nums = part.partition(':')
+            if spk not in speakers():
+                continue
+            sample, marks = calib_sample(spk), decisions(spk)
+            body.append(f'<h2>{esc(spk)}</h2>')
+            for n in nums.split(','):
+                if n.strip().isdigit() and 1 <= int(n) <= len(sample):
+                    body.append(line_card(spk, int(n), sample[int(n) - 1], marks, buttons=False, note_open=True))
         self.send_html(''.join(body))
 
     def page_check(self):
