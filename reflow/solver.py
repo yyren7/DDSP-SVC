@@ -282,7 +282,14 @@ def train(args, initial_global_step, model, optimizer, scheduler, vocoder, loade
                     'validation/ddsp_loss': test_ddsp_loss,
                     'validation/reflow_loss': test_reflow_loss
                 })
-                
+
                 model.train()
+
+            # optional train.max_steps: stop there (A/B runs that compare training sets at equal steps)
+            if args.train.max_steps and saver.global_step >= args.train.max_steps:
+                if saver.global_step % args.train.interval_val != 0:
+                    saver.save_model(model, None, postfix=f'{saver.global_step}')
+                saver.log_info(f'max_steps {args.train.max_steps} reached, training stops')
+                return
 
                           

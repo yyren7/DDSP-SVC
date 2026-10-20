@@ -50,6 +50,12 @@ use_speaker() {  # name -> the per-speaker folders below; all empty when the nam
     TEST_DIR="$SPK_DIR/test_songs"     # songs to convert with the latest checkpoint (you upload these)
     TEST_WORK_DIR="$SPK_DIR/work_test"
     INFER_DIR="$SPK_DIR/infer_out"     # conversion results, one folder per checkpoint
+    # DATASET=<name> (chain item job@speaker:<name>): another training set of the same speaker, made by
+    # build_clips.py, with its own features, model and results, e.g. for A/B runs of two line selections
+    if [[ "${DATASET:-}" =~ ^[A-Za-z0-9_-]+$ ]]; then
+        DATA_DIR="$SPK_DIR/data_$DATASET"; EXP_DIR="$SPK_DIR/exp_$DATASET"
+        SPK_CONFIG="$SPK_DIR/reflow_$DATASET.yaml"; INFER_DIR="$SPK_DIR/infer_out_$DATASET"
+    fi
 }
 use_speaker "${SPEAKER:-$(plan_value SPEAKER)}" || true
 

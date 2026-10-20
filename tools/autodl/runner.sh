@@ -60,15 +60,17 @@ job_exit_code() {  # job -> exit code of its last finished run, empty while it h
     tail -n 1 "$STATE_DIR/job_$1.log" 2>/dev/null | sed -n 's/^=== .* exit \([0-9]*\)$/\1/p'
 }
 
-start_job() {  # chain item: job, or job@speaker for another speaker than SPEAKER in plan.txt
-    local job="${1%%@*}" speaker now log
-    speaker="$(plan_value SPEAKER)"; [ "$1" != "$job" ] && speaker="${1#*@}"
+start_job() {  # chain item: job[@speaker][:dataset], speaker if not SPEAKER in plan.txt, dataset see config.sh
+    local item="$1" job speaker dataset="" now log
+    if [[ "$item" == *:* ]]; then dataset="${item#*:}"; item="${item%%:*}"; fi
+    job="${item%%@*}"
+    speaker="$(plan_value SPEAKER)"; [ "$item" != "$job" ] && speaker="${item#*@}"
     now="$(date '+%F %T')"; log="${now/ /_}"; log="$RUNS_DIR/${log//:/}_$job.log"
     split_job_log "$job"
     ln -sfn "runs/$(basename "$log")" "$STATE_DIR/job_$job.log"
     echo "=== $now start $job at $(git rev-parse --short HEAD)" >> "$log"
     # The speaker is fixed when the job starts, so editing plan.txt never moves a running job's files.
-    SPEAKER="$speaker" \
+    SPEAKER="$speaker" DATASET="$dataset" MAX_STEPS="$(plan_value MAX_STEPS)" \
     UVR_ARGS="$(plan_value UVR_ARGS)" KEY="$(plan_value KEY)" SPK_ID="$(plan_value SPK_ID)" \
     WORKERS="$(plan_value WORKERS)" \
     DL_URL="$(plan_value DL_URL)" DL_MATCH="$(plan_value DL_MATCH)" DL_MAX="$(plan_value DL_MAX)" DL_FILTER="$(plan_value DL_FILTER)" SPLIT_ARGS="$(plan_value SPLIT_ARGS)" \

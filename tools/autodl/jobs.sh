@@ -1,5 +1,5 @@
 #!/bin/bash
-# Predefined jobs started by runner.sh: setup | download | songsplit | uvr | compare | features | train | infer | migrate
+# Predefined jobs started by runner.sh: setup | download | songsplit | uvr | compare | clips | features | train | infer | migrate
 # Every job except setup works on the folders of SPEAKER (speakers/<name>/, see config.sh).
 # Extra arguments come from tools/autodl/plan.txt (UVR_ARGS, KEY, SPK_ID, WORKERS, ...).
 set -euo pipefail
@@ -52,7 +52,8 @@ echo "speaker: $SPEAKER ($SPK_DIR)"
 write_config() {
     local base="$BASE_CONFIG"
     [ -f "configs/speakers/$SPEAKER.yaml" ] && base="configs/speakers/$SPEAKER.yaml"
-    sed -E "s#^(\s*train_path:).*#\1 $DATA_DIR/train#; s#^(\s*valid_path:).*#\1 $DATA_DIR/val#; s#^(\s*expdir:).*#\1 $EXP_DIR#" \
+    sed -E "s#^(\s*train_path:).*#\1 $DATA_DIR/train#; s#^(\s*valid_path:).*#\1 $DATA_DIR/val#; s#^(\s*expdir:).*#\1 $EXP_DIR#
+            s#^(\s*max_steps:).*#\1 ${MAX_STEPS:-0}#" \
         "$base" > "$SPK_CONFIG"
     echo "config: $base -> $SPK_CONFIG"
 }
@@ -132,6 +133,12 @@ compare)
     conda activate "$ENV_ROOT/uvr"
     fetch_models
     python tools/autodl/compare_uvr.py --speaker-dir "$SPK_DIR" --model-dir "$UVR_MODEL_DIR"
+    ;;
+clips)
+    # A training set made of chosen lines (build_clips.py): chain item clips@<speaker>:<dataset>
+    [ -n "${DATASET:-}" ] || { echo "clips needs a dataset: clips@<speaker>:all|sig75|clean"; exit 2; }
+    conda activate "$ENV_ROOT/ddsp"
+    python tools/autodl/build_clips.py "$SPK_DIR" "$DATASET"
     ;;
 features)
     conda activate "$ENV_ROOT/ddsp"

@@ -49,6 +49,7 @@ train:
   interval_log: 1
   interval_val: 2000
   interval_force_save: 10000
+  max_steps: 0 # stop training after this many steps; 0 = never
   lr: 0.0005
   decay_step: 4000
   gamma: 0.9

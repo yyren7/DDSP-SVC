@@ -34,9 +34,29 @@ F0_MAX = 800  # f0_max of configs/reflow.yaml
 DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
 
 
+def s3prl_compat():
+    """s3prl (under SingMOS) imports all of its upstream models, and some of them use torchaudio APIs that
+    torchaudio 2.9 removed: set_audio_backend is called at import, sox_effects is imported. SingMOS needs
+    neither, so stand-ins that fail only when called are enough."""
+    import types
+    import torchaudio
+    if not hasattr(torchaudio, 'set_audio_backend'):
+        torchaudio.set_audio_backend = lambda backend: None
+    if 'torchaudio.sox_effects' not in sys.modules:
+        try:
+            import torchaudio.sox_effects  # noqa: F401
+        except ImportError:
+            def missing(*args, **kwargs):
+                raise NotImplementedError('torchaudio.sox_effects is gone in this torchaudio')
+            mod = types.ModuleType('torchaudio.sox_effects')
+            mod.apply_effects_file = mod.apply_effects_tensor = missing
+            sys.modules['torchaudio.sox_effects'] = torchaudio.sox_effects = mod
+
+
 def load_models():
     models = {}
     t0 = time.time()
+    s3prl_compat()
     models['singmos'] = torch.hub.load('South-Twilight/SingMOS:v1.1.2', 'singmos_pro', trust_repo=True).to(DEVICE).eval()
     from speechmos import dnsmos
     models['dnsmos'] = dnsmos
