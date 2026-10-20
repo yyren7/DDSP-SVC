@@ -25,6 +25,8 @@ from scipy.signal import resample_poly
 REPO = Path(__file__).resolve().parent.parent.parent
 sys.path.insert(0, str(REPO / 'tools'))
 import split_songs  # noqa: E402  (PANNs loading, class names)
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from stages import DRY  # noqa: E402
 
 SR = split_songs.SR  # 32 kHz
 FPS = 100
@@ -58,9 +60,9 @@ def main():
             by_song.setdefault(m['song'], []).append(m)
         rows = []
         for i, (song, ms) in enumerate(sorted(by_song.items()), 1):
-            x, sr = sf.read(str(spk / 'work' / '3_karaoke' / f'{song}.wav'), dtype='float32', always_2d=True)
+            x, sr = sf.read(str(spk / 'work' / DRY / f'{song}.wav'), dtype='float32', always_2d=True)
             x = resample_poly(x.mean(1), SR // 100, sr // 100).astype(np.float32)
-            f0 = np.load(spk / 'eval' / 'frames' / f'{song}.npz')['f0_kar'].astype(np.float32)
+            f0 = np.load(spk / 'eval' / 'frames' / f'{song}.npz')['f0_dry'].astype(np.float32)
             for m in ms:
                 clip = x[int(m['start'] * SR):int(m['end'] * SR)]
                 clip = np.pad(clip, (0, max(0, SR - len(clip))))  # at least 1 s for the CNN's pooling

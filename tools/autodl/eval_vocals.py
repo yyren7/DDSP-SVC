@@ -1,6 +1,6 @@
 """
-Acoustic check of the dry vocals: every song through the uvr stages (mix, vocals, dereverb, karaoke),
-measured on the same frames, so each problem can be pinned on the step that made it. One JSON line per
+Acoustic check of the dry vocals: every song through the uvr stages (mix, vocals, karaoke, dereverb;
+the order of stages.py), measured on the same frames, so each problem can be pinned on the step that made it. One JSON line per
 song in <speaker>/eval/metrics.jsonl (resumable); rank_songs.py turns them into the ranking on the
 review page. Runs in the ddsp env (parselmouth) and fits the 0.5 CPU core and 2 GB of no-GPU mode,
 at about 0.1 x real time; --shard k/n runs every n-th song, for parallel runs on a GPU instance.
@@ -13,8 +13,9 @@ dropouts inside phrases), fast flutter on steady notes, long-term spectrum and b
 breaths kept, 50-150 Hz leakage; in pauses while the mix plays, the residual level and how much it
 looks like the accompaniment; reverb tails after phrase ends; stereo width.
 
-'dry' is the final output and 'kar' the karaoke stage, which are the same folder since the denoise
-step went (2026-10-20); the 'dn' figures (denoise) are then 0.
+'dry' is the final output (the dereverb stage since 2026-10-20). A step's figures are named by its tag in
+stages.TAG (kar, dr) and compare its output with its input in the chain. Each line carries the chain it was
+measured on; lines of another chain are moved to metrics.<that chain>.jsonl and their songs measured again.
 """
 import fcntl
 import json
@@ -33,9 +34,13 @@ from numpy.lib.stride_tricks import sliding_window_view
 from scipy.ndimage import binary_dilation, binary_erosion, label
 from scipy.signal import resample_poly, butter, sosfiltfilt
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from stages import CHAIN, CHAIN_ID, DIRS, DRY, INPUT, STEPS, TAG  # noqa: E402
+
 SR, NFFT, HOP = 44100, 2048, 441  # 10 ms frames, same step as the pitch track
 FPS = SR / HOP
-STAGES = {'mix': '0_input', 'voc': '1_vocals', 'derev': '2_dereverb', 'kar': '3_karaoke', 'dry': '3_karaoke'}
+STAGES = {**DIRS, 'dry': DRY}
+CHAIN_KEYS = [k for k, _ in CHAIN]
 FREQS = np.fft.rfftfreq(NFFT, 1 / SR)
 WIN = np.hanning(NFFT + 1)[:-1].astype(np.float32)
 SCALE = 2.0 / (NFFT * NFFT * np.mean(WIN.astype(np.float64) ** 2))  # sum over bins = mean square (dBFS)
@@ -176,9 +181,9 @@ def ltas_cut(ltas):
 
 def analyse(work, name):
     t0 = time.time()
-    m = {'name': name}
+    m = {'name': name, 'chain': CHAIN_ID}
     sig = {}
-    for k in ['dry', 'derev', 'mix', 'voc', 'kar']:
+    for k in ['dry', 'mix'] + CHAIN_KEYS:
         if k != 'dry' and STAGES[k] == STAGES['dry']:
             sig[k] = sig['dry']
             continue
@@ -193,8 +198,8 @@ def analyse(work, name):
         sig[k] = x.mean(1)
         del x
     n = 1 + min(len(x) for x in sig.values()) // HOP
-    fd, fr = pitch(sig['dry'])[:n], pitch(sig['derev'])[:n]
-    vd, vr = fd > 0, fr > 0  # the dry pitch marks the sung frames every stage is measured on
+    fd, fr = pitch(sig['dry'])[:n], pitch(sig[INPUT['kar']])[:n]
+    vd, vr = fd > 0, fr > 0  # the dry pitch marks the sung frames every stage is measured on; vr: before karaoke
     F = features(sig, fd, vd, n)
     del sig
     E = {k: dB(F[k]['bands'].sum(1)) for k in F}
@@ -261,34 +266,31 @@ def analyse(work, name):
         hits = sel & (fa >= np.percentile(fa[sel], 95)) & (fa > 6)
         m['drum_hits'] = int(hits.sum())
         if hits.sum() >= 30:
-            for k in ['voc', 'derev', 'kar', 'dry']:
+            for k in CHAIN_KEYS + ['dry']:
                 fk = flux(hf8[k])
                 m[f'drum_follow_{k}'] = float(fk[hits].mean() / max(fk[sel & ~hits].mean(), 1e-6))
-    for k in ['voc', 'derev', 'kar', 'dry']:
+    for k in CHAIN_KEYS + ['dry']:
         lo = dB(band_power(F[k]['bands'], 50, 150))
         m[f'low_leak_{k}'] = med(lo[vd] - dB(band_power(F['mix']['bands'], 50, 150))[vd])
         m[f'low_rel_{k}'] = med(lo[vd] - E[k][vd])
 
-    # what each step removes from sung frames (pitch of the dereverbed vocals, before harmonies go)
-    loud = vr & (E['derev'] > med(E['derev'][vr]) - 25)
-    d_kar = E['kar'][loud] - E['derev'][loud]
+    # what each step removes from sung frames (pitch before the karaoke step, harmonies still in)
+    kin, din = INPUT['kar'], INPUT['derev']
+    loud = vr & (E[kin] > med(E[kin][vr]) - 25)
+    d_kar = E['kar'][loud] - E[kin][loud]
     m['kar_removed'] = float(np.mean(d_kar < -12))
     hi = fr[loud] > 650
     m['hi_frac'] = float(np.mean(hi))
     m['kar_removed_hi'] = float(np.mean(d_kar[hi] < -12)) if hi.sum() >= 100 else None
     m['kar_removed_lo'] = float(np.mean(d_kar[~hi] < -12)) if (~hi).sum() >= 100 else None
-    keep = loud.copy()
-    keep[loud] = d_kar >= -12
-    d_dn = E['dry'][keep] - E['kar'][keep]
-    m['dn_removed'] = float(np.mean(d_dn < -10))
-    m['dn_gain'] = med(d_dn)
-    m['dr_gain'] = med(E['derev'][loud] - E['voc'][loud])
-    m['dr_removed'] = float(np.mean(E['derev'][loud] - E['voc'][loud] < -12))
+    m['dr_gain'] = med(E['derev'][loud] - E[din][loud])
+    m['dr_removed'] = float(np.mean(E['derev'][loud] - E[din][loud] < -12))
     m['kar_gain'] = med(d_kar)
 
     # whole passages a step takes out: loud in its input (within 15 dB of the singing), 20 dB down in
     # its output; 'tonal' when the input there is harmonic (low flatness), i.e. likely voice
-    for a, b, tag in [('voc', 'derev', 'dr'), ('derev', 'kar', 'kar'), ('kar', 'dry', 'dn')]:
+    for a, b in STEPS:
+        tag = TAG[b]
         inp = E[a] > med(E[a][vd]) - 15
         cut = inp & (E[b] < E[a] - 20)
         tonal = cut & (F[a]['flat'] < 0.05)
@@ -301,7 +303,8 @@ def analyse(work, name):
 
     # dropouts inside phrases, per step
     phr = runs(vr, 30)
-    for a, b, tag in [('derev', 'voc', 'dr'), ('kar', 'derev', 'kar'), ('dry', 'kar', 'dn')]:
+    for b, a in STEPS:  # a: the step's output, b: its input
+        tag = TAG[a]
         holes = 0
         for s, e in phr:
             r = E[a][s:e] - E[b][s:e]
@@ -336,15 +339,14 @@ def analyse(work, name):
     m['cut_voc'] = ltas_cut(F['voc']['ltas_v'])
     m['cut_dry'] = ltas_cut(F['dry']['ltas_v'])
 
-    # sibilants (s, sh, ts): unvoiced, near singing, mostly 4-12 kHz, in the karaoke output
+    # sibilants (s, sh, ts): unvoiced, near singing, mostly 4-12 kHz, in the dry output
     near = binary_dilation(vr, np.ones(61, bool)) & ~vr
     hf = {k: band_power(F[k]['bands'], 4000, 12000) for k in F}
-    S = near & (hf['kar'] / np.maximum(F['kar']['bands'].sum(1), 1e-20) > 0.5) & (E['kar'] > med(E['kar'][vr]) - 35)
+    S = near & (hf['dry'] / np.maximum(F['dry']['bands'].sum(1), 1e-20) > 0.5) & (E['dry'] > med(E['dry'][vr]) - 35)
     m['sib_sec_pm'] = float(S.sum() / FPS / vmin)
     if S.sum() >= 30:
-        m['sib_keep_dn'] = med(dB(hf['dry'][S]) - dB(hf['kar'][S]))
-        m['sib_keep_kar'] = med(dB(hf['kar'][S]) - dB(hf['derev'][S]))
-        m['sib_keep_dr'] = med(dB(hf['derev'][S]) - dB(hf['voc'][S]))
+        for a, b in STEPS:
+            m[f'sib_keep_{TAG[b]}'] = med(dB(hf[b][S]) - dB(hf[a][S]))
         m['sib_rel_dry'] = med(dB(hf['dry'][S])) - m['dry_level']
 
     # breaths: unvoiced frames 60-350 ms before a phrase that follows a pause
@@ -352,19 +354,18 @@ def analyse(work, name):
     for s, e in phr:
         if s >= 35 and not vr[s - 25:s].any():
             B[s - 35:s - 6] = True
-    B &= ~vr & (E['kar'] > med(E['kar'][vr]) - 40)
+    B &= ~vr & (E['dry'] > med(E['dry'][vr]) - 40)
     m['breath_sec_pm'] = float(B.sum() / FPS / vmin)
     if B.sum() >= 30:
-        m['breath_keep_dn'] = med(E['dry'][B] - E['kar'][B])
-        m['breath_keep_kar'] = med(E['kar'][B] - E['derev'][B])
-        m['breath_keep_dr'] = med(E['derev'][B] - E['voc'][B])
+        for a, b in STEPS:
+            m[f'breath_keep_{TAG[b]}'] = med(E[b][B] - E[a][B])
         m['breath_rel_dry'] = med(E['dry'][B]) - m['dry_level']
 
     # reverb tails after phrase ends followed by 0.6 s of pause
     ends = [e for s, e in phr if e + 60 <= n and not vr[e:e + 60].any() and not vd[e:e + 60].any()]
     m['n_ends'] = len(ends)
     if len(ends) >= 5:
-        for k in ['voc', 'derev', 'kar', 'dry']:
+        for k in CHAIN_KEYS + ['dry']:
             p = F[k]['bands'].sum(1)
             m[f'tail150_{k}'] = med([dB(p[e + 10:e + 20].mean()) - dB(p[e - 10:e].mean()) for e in ends])
             m[f'tail350_{k}'] = med([dB(p[e + 30:e + 40].mean()) - dB(p[e - 10:e].mean()) for e in ends])
@@ -373,13 +374,23 @@ def analyse(work, name):
 
 
 def read_done(path):
-    done = set()
+    """Names measured on this chain. Lines of another chain go to metrics.<chain>.jsonl first."""
+    done, other = set(), None
     if path.exists():
         for line in path.read_text(encoding='utf-8').splitlines():
             try:
-                done.add(json.loads(line)['name'])
-            except (ValueError, KeyError):  # a line cut off by a shutdown: that song is redone
-                pass
+                m = json.loads(line)
+            except ValueError:  # a line cut off by a shutdown: that song is redone
+                continue
+            if m.get('chain') == CHAIN_ID:
+                done.add(m['name'])
+            else:
+                other = m.get('chain', 'voc>derev>kar')
+    if other and not done:
+        try:  # parallel shards may race to it; one rename is enough
+            path.rename(path.with_name(f'metrics.{other.replace(">", "-")}.jsonl'))
+        except FileNotFoundError:
+            pass
     return done
 
 

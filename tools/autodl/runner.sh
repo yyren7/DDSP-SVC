@@ -70,7 +70,7 @@ start_job() {  # chain item: job[@speaker][:dataset], speaker if not SPEAKER in 
     ln -sfn "runs/$(basename "$log")" "$STATE_DIR/job_$job.log"
     echo "=== $now start $job at $(git rev-parse --short HEAD)" >> "$log"
     # The speaker is fixed when the job starts, so editing plan.txt never moves a running job's files.
-    SPEAKER="$speaker" DATASET="$dataset" MAX_STEPS="$(plan_value MAX_STEPS)" \
+    SPEAKER="$speaker" DATASET="$dataset" MAX_STEPS="$(plan_value MAX_STEPS)" LINE_FEATURES="$(plan_value LINE_FEATURES)" \
     UVR_ARGS="$(plan_value UVR_ARGS)" KEY="$(plan_value KEY)" SPK_ID="$(plan_value SPK_ID)" \
     WORKERS="$(plan_value WORKERS)" \
     DL_URL="$(plan_value DL_URL)" DL_MATCH="$(plan_value DL_MATCH)" DL_MAX="$(plan_value DL_MAX)" DL_FILTER="$(plan_value DL_FILTER)" SPLIT_ARGS="$(plan_value SPLIT_ARGS)" \

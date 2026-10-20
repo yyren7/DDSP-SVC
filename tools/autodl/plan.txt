@@ -1,14 +1,19 @@
 # Which job runner.sh should run. Changing JOB, SPEAKER or bumping RUN_ID (re)starts it.
-# Jobs: setup | download | songsplit | uvr | compare | clips | features | train | infer | migrate | idle
+# Jobs: setup | download | songsplit | uvr | compare | lines | scorelines | fitlines | clips | features | train |
+#       infer | migrate | idle
 # A comma separated chain runs in order and stops at the first failure, e.g. JOB=uvr,features,train;
 # job@speaker runs a job for another speaker than SPEAKER, e.g. JOB=uvr,uvr@sakura_shunka;
 # job@speaker:dataset works on that training set of the speaker (data_<dataset>/, exp_<dataset>/,
 # made by clips@speaker:dataset with tools/autodl/build_clips.py)
 # After a reboot the runner resumes a job that failed or was interrupted.
-# 2026-10-20: the vocals again in the new order (karaoke by 3 models, then dereverb); the A/B training
-# (datasets all and clean) comes after, on the new dry vocals
-JOB=uvr,uvr@sakura_shunka
-RUN_ID=34
+# 2026-10-20: the vocals again in the new order (karaoke by 3 models, then dereverb); then the lines of
+# the new dry vocals measured and scored, the keep rule fitted to the calibration marks, and the A/B:
+# each speaker trained on every line (all) and on the kept lines (clean)
+JOB=uvr,uvr@sakura_shunka,lines,lines@sakura_shunka,scorelines,scorelines@sakura_shunka,fitlines,clips:all,clips:clean,clips@sakura_shunka:all,clips@sakura_shunka:clean,features:all,features:clean,features@sakura_shunka:all,features@sakura_shunka:clean,train:all,train:clean,train@sakura_shunka:all,train@sakura_shunka:clean
+RUN_ID=35
+# the scores fit_lines.py may use: with ~120 marks, a few chosen by what the listener named (thin /
+# walkie-talkie voice, talk instead of singing, accompaniment, reverb or loud BGM in the original)
+LINE_FEATURES=aes_cu,aes_ce,aes_pq,dns_sig,pitch_steady,p_speech,p_music,bgm_db,tail_src,level
 # train stops after MAX_STEPS steps (0 = never); A/B runs compare training sets at equal steps
 MAX_STEPS=40000
 

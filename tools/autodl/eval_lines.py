@@ -1,14 +1,18 @@
 """
-Line-level check of the dry vocals. The final dry vocals (3_karaoke) are split into lines at the pauses
-between them, and every line is measured against the earlier stages, so that a song with a few bad
-lines keeps its good ones. Training clips are later made from runs of good lines.
+Line-level check of the dry vocals. The final dry vocals (stages.DRY, 3_dereverb since 2026-10-20) are
+split into lines at the pauses between them, and every line is measured against the earlier stages, so
+that a song with a few bad lines keeps its good ones. Training clips are later made from runs of good lines.
 
     python tools/autodl/eval_lines.py frames [--shard k/n] <speaker dir>...   # slow: ~0.1 x real time; k = 0 .. n-1
     python tools/autodl/eval_lines.py lines <speaker dir>...                   # seconds, from the frames
 
-frames: per song, frame features (10 ms) of the mix, vocals, dereverb and karaoke stages and the pitch of
-the karaoke and dereverb stages, in <speaker>/eval/frames/<song>.npz (resumable). Runs in the ddsp env.
+frames: per song, frame features (10 ms) of the mix and every stage of the chain (stages.py) and the
+pitch of the dry vocals, in <speaker>/eval/frames/<song>.npz (resumable; a file made on another chain is
+made again). Runs in the ddsp env.
 lines: <speaker>/eval/lines.jsonl, one line per sung line with its time span, measurements and problems.
+Besides what the steps did, two measurements of the song as it came in, for lines to leave out rather than
+to clean (the listener, 2026-10-20: loud BGM and heavy reverb in the original): bgm_db, how far the mix is
+above the separated vocals while she sings, and tail_src, the reverb tail before the dereverb step.
 """
 import fcntl
 import json
@@ -21,9 +25,10 @@ import numpy as np
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import eval_vocals as ev  # noqa: E402
+from stages import CHAIN, CHAIN_ID, DRY_KEY, INPUT  # noqa: E402
 
 FPS = ev.FPS
-STAGE_KEYS = ['mix', 'voc', 'derev', 'kar']
+STAGE_KEYS = ['mix'] + [k for k, _ in CHAIN]
 
 
 # ---------- frames ----------
@@ -37,17 +42,28 @@ def frames(work, name):
         sig[k] = x.mean(1)
         del x
     n = 1 + min(len(x) for x in sig.values()) // ev.HOP
-    f0_kar, f0_derev = ev.pitch(sig['kar'])[:n], ev.pitch(sig['derev'])[:n]
-    F = ev.features(sig, f0_kar, f0_kar > 0, n)
-    out = {'f0_kar': f0_kar.astype(np.float16), 'f0_derev': f0_derev.astype(np.float16),
-           'flat_kar': F['kar']['flat'].astype(np.float16)}
+    f0 = ev.pitch(sig[DRY_KEY])[:n]
+    F = ev.features(sig, f0, f0 > 0, n)
+    out = {'chain': np.array(CHAIN_ID), 'f0_dry': f0.astype(np.float16),
+           'flat_dry': F[DRY_KEY]['flat'].astype(np.float16)}
     for k in STAGE_KEYS:
         out[f'E_{k}'] = ev.dB(F[k]['bands'].sum(1)).astype(np.float16)
-    for k in ('kar', 'mix'):
-        out[f'hp_{k}'] = ev.dB(np.nan_to_num(F[k]['hp'], nan=0.0)).astype(np.float16)
-        out[f'hv_{k}'] = ev.dB(np.nan_to_num(F[k]['hv'], nan=0.0)).astype(np.float16)
-    out['hf_kar'] = ev.dB(ev.band_power(F['kar']['bands'], 4000, 12000)).astype(np.float16)
+    for k, name in ((DRY_KEY, 'dry'), ('mix', 'mix')):
+        out[f'hp_{name}'] = ev.dB(np.nan_to_num(F[k]['hp'], nan=0.0)).astype(np.float16)
+        out[f'hv_{name}'] = ev.dB(np.nan_to_num(F[k]['hv'], nan=0.0)).astype(np.float16)
+    out['hf_dry'] = ev.dB(ev.band_power(F[DRY_KEY]['bands'], 4000, 12000)).astype(np.float16)
     return out
+
+
+def current(path):
+    """The frames file exists and was made on this chain."""
+    if not path.exists():
+        return False
+    try:
+        with np.load(path) as z:
+            return 'chain' in z.files and str(z['chain']) == CHAIN_ID
+    except (OSError, ValueError):
+        return False
 
 
 def run_frames(args):
@@ -62,8 +78,8 @@ def run_frames(args):
         spk = Path(d)
         out = spk / 'eval' / 'frames'
         out.mkdir(parents=True, exist_ok=True)
-        names = sorted(f.stem for f in (spk / 'work' / ev.STAGES['kar']).glob('*.wav'))
-        todo += [(spk, out, x) for x in names if not (out / f'{x}.npz').exists()]
+        names = sorted(f.stem for f in (spk / 'work' / ev.STAGES['dry']).glob('*.wav'))
+        todo += [(spk, out, x) for x in names if not current(out / f'{x}.npz')]
         print(f'{spk.name}: {len(names)} songs, {sum(t[0] == spk for t in todo)} to do', flush=True)
     random.Random(0).shuffle(todo)
     todo = todo[k::n]
@@ -122,26 +138,36 @@ def med(x):
 def measure(z, s, e, level, n, next_start):
     """Measurements of the line [s, e) in frames; next_start is where the next line starts."""
     E = {k: z[f'E_{k}'].astype(np.float32) for k in STAGE_KEYS}
-    f0 = z['f0_kar'].astype(np.float32)
+    dry = E[DRY_KEY]
+    f0 = z['f0_dry'].astype(np.float32)
     sl = slice(s, e)
     voiced = f0[sl] > 0
     m = {'start': round(s / FPS, 2), 'end': round(e / FPS, 2), 'dur': round((e - s) / FPS, 2)}
     m['voiced'] = float(voiced.mean())
-    m['level'] = med(E['kar'][sl][voiced]) - level if voiced.any() else med(E['kar'][sl]) - level
-    # karaoke: how far below the dereverbed vocals the line is, on frames where those are loud
-    loud = E['derev'][sl] > level - 25
-    d = (E['kar'][sl] - E['derev'][sl])[loud]
+    m['level'] = med(dry[sl][voiced]) - level if voiced.any() else med(dry[sl]) - level
+    # karaoke: how far below its input the line is, on frames where the input is loud
+    kin = INPUT['kar']
+    loud = E[kin][sl] > level - 25
+    d = (E['kar'][sl] - E[kin][sl])[loud]
     m['kar_drop'] = med(d) if len(d) else 0.0
     # holes: frames the karaoke step took more than 10 dB out of AND left weak (taking out a harmony
     # leaves the lead at its level, so that does not count)
     holes = (d < -10) & (E['kar'][sl][loud] < level - 15)
     m['kar_cut'] = float(np.mean(holes)) if len(d) else 0.0
-    # dereverb: how far below the separated vocals, on frames where those are loud
-    loud_v = E['voc'][sl] > level - 25
-    d2 = (E['derev'][sl] - E['voc'][sl])[loud_v]
+    # dereverb: how far below its input, on frames where the input is loud
+    din = INPUT['derev']
+    loud_i = E[din][sl] > level - 25
+    d2 = (E['derev'][sl] - E[din][sl])[loud_i]
     m['dr_drop'] = med(d2) if len(d2) else 0.0
+    # the song as it came in: how far the mix is above the separated vocals while she sings (accompaniment
+    # loud against the voice), and the reverb tail before the dereverb step (a wet original)
+    if voiced.any():
+        m['bgm_db'] = med((E['mix'][sl] - E['voc'][sl])[voiced])
+    if e + 50 <= min(n, next_start):
+        p_in = 10 ** (E[din] / 10)
+        m['tail_src'] = float(ev.dB(p_in[e + 15:e + 35].mean()) - ev.dB(p_in[max(s, e - 10):e].mean()))
     # while singing: harmonic-to-valley ratio and the valleys against the mix (accompaniment under the voice)
-    hp, hv, hvm = (z[k].astype(np.float32)[sl][voiced] for k in ('hp_kar', 'hv_kar', 'hv_mix'))
+    hp, hv, hvm = (z[k].astype(np.float32)[sl][voiced] for k in ('hp_dry', 'hv_dry', 'hv_mix'))
     if voiced.sum() >= 20:
         m['hvr_mid'] = med(hp[:, 1] - hv[:, 1])
         m['hvr_low'] = med(hp[:, 0] - hv[:, 0])
@@ -150,11 +176,11 @@ def measure(z, s, e, level, n, next_start):
     # unpitched sound inside the line (talking, noise, other voices), excluding the edges
     inner = np.zeros(e - s, bool)
     inner[int(0.15 * FPS):max(0, e - s - int(0.15 * FPS))] = True
-    unp = inner & ~voiced & (E['kar'][sl] > level - 20)
+    unp = inner & ~voiced & (dry[sl] > level - 20)
     m['unpitched'] = float(unp.mean())
-    # reverb: after the line, when the next line starts at least 0.5 s later
+    # reverb left in the dry vocals: after the line, when the next line starts at least 0.5 s later
     if e + 50 <= min(n, next_start):
-        p = 10 ** (E['kar'] / 10)
+        p = 10 ** (dry / 10)
         m['tail'] = float(ev.dB(p[e + 15:e + 35].mean()) - ev.dB(p[max(s, e - 10):e].mean()))
     m['f0'] = med(f0[sl][voiced])
     return m
@@ -167,7 +193,9 @@ def problems(m):
     return [
         (3.0, clip((-g('kar_drop') - 3) / 9), f'主唱被去和声削弱（比去和声前低 {-g("kar_drop"):.0f} dB）'),
         (2.0, clip((g('kar_cut') - 0.05) / 0.35), f'去和声切出断口（{100 * g("kar_cut"):.0f}% 的帧）'),
-        (2.0, clip((-g('dr_drop') - 4) / 8), f'被去混响削弱（低 {-g("dr_drop"):.0f} dB）'),
+        (2.0, clip((-g('dr_drop') - 4) / 8), f'被去混响削弱（比去混响前低 {-g("dr_drop"):.0f} dB）'),
+        (2.0, clip((g('bgm_db', 0) - 6) / 8), f'原曲伴奏很响（比人声高 {g("bgm_db", 0):.0f} dB）'),
+        (1.5, clip((g('tail_src', -60) + 30) / 20), f'原曲混响重（去混响前句尾只降了 {max(0.0, -g("tail_src", -60)):.0f} dB）'),
         (2.0, clip((g('vleak_low', -40) + 18) / 10), f'唱歌时底下有伴奏残留（谐波间隙只比原曲低 {-g("vleak_low", -40):.0f} dB）'),
         (1.5, clip((14 - g('hvr_mid', 30)) / 8), f'嗓音杂音多（1.5–4 kHz 谐波只比间隙高 {g("hvr_mid", 30):.0f} dB）'),
         (1.5, clip((g('unpitched') - 0.15) / 0.3), f'有不像唱歌的声音（{100 * g("unpitched"):.0f}% 的帧没有音高）'),
@@ -190,10 +218,10 @@ def run_lines(args):
         fdir = spk / 'eval' / 'frames'
         out = []
         for f in sorted(fdir.glob('*.npz')):
-            if f.name.endswith('.part.npz'):
+            if f.name.endswith('.part.npz') or not current(f):
                 continue
             z = np.load(f)
-            E, f0 = z['E_kar'].astype(np.float32), z['f0_kar'].astype(np.float32)
+            E, f0 = z[f'E_{DRY_KEY}'].astype(np.float32), z['f0_dry'].astype(np.float32)
             lines, level = segment(E, f0)
             for k, (s, e) in enumerate(lines):
                 next_start = lines[k + 1][0] if k + 1 < len(lines) else len(E)

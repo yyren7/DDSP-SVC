@@ -4,7 +4,7 @@ eval_lines.py. A problem the listener hears often lasts a second or two of a lon
 voice turns thin", "at 10 s the accompaniment comes in"), and the whole-line scores of score_lines.py
 average it away.
 
-    python tools/autodl/score_windows.py [--stage voc|derev] [--calib] <speaker dir>...   # evalq env, GPU
+    python tools/autodl/score_windows.py [--stage voc|kar] [--calib] <speaker dir>...   # evalq env, GPU
 
 Writes <speaker>/eval/lines_windows.jsonl: per (song, k) of lines.jsonl the lowest window score of each of
 aes_ce, aes_pq, aes_cu, dns_sig, dns_bak, dns_ovrl, as w_<name>. Lines shorter than a window are one window.
@@ -25,9 +25,10 @@ from scipy.signal import resample_poly
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from score_lines import DNS_WORKERS, SR, dns_init, dns_score  # noqa: E402
+from stages import DIRS, DRY_KEY  # noqa: E402
 
 WIN, HOP = 3.0, 1.5
-STAGE_DIRS = {'voc': '1_vocals', 'derev': '2_dereverb', 'kar': '3_karaoke'}
+STAGE_DIRS = {k: v for k, v in DIRS.items() if k != 'mix'}
 
 
 def windows(n):
@@ -47,7 +48,7 @@ def main():
     from audiobox_aesthetics.infer import initialize_predictor
     aes = initialize_predictor()
     pool = ProcessPoolExecutor(DNS_WORKERS, mp_context=multiprocessing.get_context('spawn'), initializer=dns_init)
-    args, stage, calib = sys.argv[1:], 'kar', False
+    args, stage, calib = sys.argv[1:], DRY_KEY, False
     while args and args[0].startswith('--'):
         if args[0] == '--stage':
             stage, args = args[1], args[2:]
@@ -86,7 +87,7 @@ def main():
                 rows.append({'song': song, 'k': m['k'], **{f'w_{k}': round(v, 4) for k, v in s.items()}})
             if i % 25 == 0:
                 print(f'{spk.name}: {i}/{len(by_song)} songs, {time.time() - t0:.0f} s', flush=True)
-        name = 'lines_windows' + ('' if stage == 'kar' else f'_{stage}') + ('_calib' if calib else '')
+        name = 'lines_windows' + ('' if stage == DRY_KEY else f'_{stage}') + ('_calib' if calib else '')
         path = spk / 'eval' / f'{name}.jsonl'
         tmp = path.with_suffix('.part')
         tmp.write_text(''.join(json.dumps(r, ensure_ascii=False) + '\n' for r in rows), encoding='utf-8')

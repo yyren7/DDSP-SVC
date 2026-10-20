@@ -23,7 +23,7 @@ from sklearn.model_selection import StratifiedKFold
 REPO = Path(__file__).resolve().parent.parent.parent
 FEEDBACK = REPO / '.autodl' / 'feedback.jsonl'
 SIGNAL = ['score', 'kar_drop', 'kar_cut', 'dr_drop', 'vleak_low', 'vleak_mid', 'hvr_mid', 'hvr_low', 'unpitched',
-          'tail', 'level', 'voiced', 'dur']
+          'tail', 'level', 'voiced', 'dur', 'bgm_db', 'tail_src']
 LEARNED = ['singmos', 'dns_ovrl', 'dns_sig', 'dns_bak', 'aes_pq', 'aes_ce', 'aes_cu', 'spk_cos',
            'f0_agree', 'f0_vdis', 'f0_jump', 'f0_octave', 'f0_high', 'rmvpe_voiced']
 TAGS = ['p_sing', 'p_speech', 'p_music', 'p_instr', 'long_voiced', 'pitch_steady']  # tag_lines.py
@@ -45,18 +45,40 @@ def table(spk):
     return rows
 
 
-def marks(spk):
-    """{(song, k): 1 keep / 0 exclude}, the latest mark per line; 拿不准 leaves a line out."""
-    out = {}
+def marks(spk, tab=None):
+    """{(song, k) of lines.jsonl: 1 keep / 0 exclude}, the latest mark per calibration line; 拿不准 leaves a
+    line out. The marks name the lines of the calibration page (eval/calib.json, time spans kept); each
+    goes to the line of the current lines.jsonl that overlaps it most, since the lines move a little when
+    the dry vocals are made again (2026-10-20, new order of the steps). Under half overlap it is dropped."""
+    marked = {}
     for e in load_jsonl(FEEDBACK):
         t = e.get('target', '')
         if e.get('speaker') != spk.name or not t.startswith('line:') or '#' not in t:
             continue
         song, k = t[5:].rsplit('#', 1)
         if e.get('text') in ('保留', '排除'):
-            out[(song, int(k))] = 1 if e['text'] == '保留' else 0
+            marked[(song, int(k))] = 1 if e['text'] == '保留' else 0
         elif e.get('text') == '拿不准':
-            out.pop((song, int(k)), None)
+            marked.pop((song, int(k)), None)
+    calib = spk / 'eval' / 'calib.json'
+    spans = {(c['song'], c['k']): (c['start'], c['end'])
+             for c in (json.loads(calib.read_text(encoding='utf-8')) if calib.exists() else [])}
+    by_song = {}
+    for r in (tab if tab is not None else table(spk)).values():
+        by_song.setdefault(r['song'], []).append(r)
+    out = {}
+    for (song, k), v in marked.items():
+        if (song, k) not in spans:
+            continue
+        s0, e0 = spans[(song, k)]
+        best, iou = None, 0.0
+        for r in by_song.get(song, []):
+            inter = max(0.0, min(e0, r['end']) - max(s0, r['start']))
+            union = max(e0, r['end']) - min(s0, r['start'])
+            if union > 0 and inter / union > iou:
+                best, iou = r, inter / union
+        if best is not None and iou >= 0.5:
+            out[(song, best['k'])] = v
     return out
 
 
@@ -89,7 +111,8 @@ def main():
     spks = [Path(d) for d in args]
     rows, y, w, who = [], [], [], []
     for spk in spks:
-        tab, mk = table(spk), marks(spk)
+        tab = table(spk)
+        mk = marks(spk, tab)
         pop = np.bincount([band(r['score']) for r in tab.values()], minlength=len(BANDS)) / len(tab)
         got = [(tab[key], v) for key, v in mk.items() if key in tab]
         if not got:

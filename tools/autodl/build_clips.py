@@ -7,7 +7,10 @@ lines of each song, joined where they follow each other, become clips of MIN_LEN
 dataset (which lines go in):
     all    every line, i.e. the dry vocals as they are (the baseline of an A/B run)
     sig75  lines with a signal score (eval_lines.py) of at least 75
-    clean  lines that the model fitted to the listener's marks keeps (eval/line_model.json, fit_lines.py)
+    clean  lines that the model fitted to the listener's marks keeps (eval/line_model.json, fit_lines.py),
+           in songs where it keeps at least SONG_KEEP_MIN of the sung time: when it leaves out most of a
+           song, the song itself is the problem (heavy reverb or loud BGM in the original, talk), and its
+           remaining lines go too
 
 Writes <speaker>/data_<dataset>/train/audio and val/audio (config.sh: DATASET=<dataset>). A few songs are
 held out of every dataset (eval/holdout.json, drawn once): their best lines are the validation set, the
@@ -21,10 +24,14 @@ from pathlib import Path
 import numpy as np
 import soundfile as sf
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from stages import DRY  # noqa: E402
+
 MIN_LEN, MAX_LEN = 2.5, 15.0  # seconds; DDSP-SVC trains on 2 s crops (data.duration)
 MAX_GAP = 1.0                 # lines further apart stay in separate clips
 MARGIN = 0.05                 # seconds kept before and after a clip's lines
 HOLDOUT_SONGS = 4
+SONG_KEEP_MIN = 0.5           # dataset clean: share of a song's sung time the model must keep
 VAL_CLIPS = 12
 
 
@@ -54,7 +61,16 @@ def chosen(spk, dataset, lines):
         return {(m['song'], m['k']) for m in lines if m['score'] >= 75}
     if dataset == 'clean':
         import fit_lines  # next to this file
-        return fit_lines.keep_set(spk)
+        keep = fit_lines.keep_set(spk)
+        total, kept = {}, {}
+        for m in lines:
+            total[m['song']] = total.get(m['song'], 0.0) + m['dur']
+            if (m['song'], m['k']) in keep:
+                kept[m['song']] = kept.get(m['song'], 0.0) + m['dur']
+        bad = {s for s in total if kept.get(s, 0.0) < SONG_KEEP_MIN * total[s]}
+        print(f'{spk.name}: {len(bad)} of {len(total)} songs left out whole (under {SONG_KEEP_MIN:.0%} kept): '
+              + ', '.join(sorted(bad)[:20]) + (' ...' if len(bad) > 20 else ''), flush=True)
+        return {key for key in keep if key[0] not in bad}
     sys.exit(f'unknown dataset {dataset}')
 
 
@@ -79,7 +95,7 @@ def clips_of(song_lines, keep):
 
 
 def write_clips(spk, song, spans, folder):
-    x, sr = sf.read(str(spk / 'work' / '3_karaoke' / f'{song}.wav'), dtype='float32', always_2d=True)
+    x, sr = sf.read(str(spk / 'work' / DRY / f'{song}.wav'), dtype='float32', always_2d=True)
     x = x.mean(1)
     for s, e, k in spans:
         a, b = max(0, int((s - MARGIN) * sr)), min(len(x), int((e + MARGIN) * sr))

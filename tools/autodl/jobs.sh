@@ -1,5 +1,5 @@
 #!/bin/bash
-# Predefined jobs started by runner.sh: setup | download | songsplit | uvr | compare | clips | features | train | infer | migrate
+# Predefined jobs started by runner.sh: setup | download | songsplit | uvr | compare | lines | scorelines | fitlines | clips | features | train | infer | migrate
 # Every job except setup works on the folders of SPEAKER (speakers/<name>/, see config.sh).
 # Extra arguments come from tools/autodl/plan.txt (UVR_ARGS, KEY, SPK_ID, WORKERS, ...).
 set -euo pipefail
@@ -41,7 +41,7 @@ require_gpu() {
     echo "no GPU found: this instance runs in no-card mode. Restart it with a GPU; the runner resumes this job."
     exit 3
 }
-case "$JOB" in uvr|compare|features|train|infer) require_gpu ;; esac
+case "$JOB" in uvr|compare|scorelines|features|train|infer) require_gpu ;; esac
 
 if [ "$JOB" != setup ] && [ -z "$SPK_DIR" ]; then
     echo "set SPEAKER in plan.txt (letters, digits, _ and - only), e.g. SPEAKER=sakura_shunka"; exit 2
@@ -133,6 +133,39 @@ compare)
     conda activate "$ENV_ROOT/uvr"
     fetch_models
     python tools/autodl/compare_uvr.py --speaker-dir "$SPK_DIR" --model-dir "$UVR_MODEL_DIR"
+    ;;
+lines)
+    # The dry vocals split into lines and measured (eval_lines.py): frames in parallel shards, then lines;
+    # then the song measurements of the ranking page (eval_vocals.py)
+    conda activate "$ENV_ROOT/ddsp"
+    shards=$(( $(nproc_quota) > 2 ? $(nproc_quota) - 2 : 1 ))
+    for k in $(seq 0 $((shards - 1))); do
+        OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 \
+            python tools/autodl/eval_lines.py frames --shard "$k/$shards" "$SPK_DIR" > "$STATE_DIR/lines_frames_$k.log" 2>&1 &
+    done
+    wait
+    cat "$STATE_DIR"/lines_frames_*.log | grep -v '^[0-9]*/[0-9]* ' || true
+    python tools/autodl/eval_lines.py lines "$SPK_DIR"
+    for k in $(seq 0 $((shards - 1))); do
+        OMP_NUM_THREADS=1 python tools/autodl/eval_vocals.py --shard "$k/$shards" "$SPK_DIR" > /dev/null 2>&1 &
+    done
+    wait
+    echo "song measurements: $(grep -c . "$SPK_DIR/eval/metrics.jsonl") lines in eval/metrics.jsonl"
+    ;;
+scorelines)
+    # Learned scores, the pitch check and the sung / spoken / instrument tags of every line
+    # (score_lines.py in the evalq venv of /root/autodl-tmp/setup_evalq.sh, tag_lines.py in the uvr env)
+    [ -x "$ENV_ROOT/evalq/bin/python" ] || { echo "no evalq env: run /root/autodl-tmp/setup_evalq.sh first"; exit 2; }
+    "$ENV_ROOT/evalq/bin/python" tools/autodl/score_lines.py "$SPK_DIR"
+    "$ENV_ROOT/uvr/bin/python" tools/autodl/tag_lines.py "$SPK_DIR"
+    ;;
+fitlines)
+    # The keep / exclude rule from the calibration marks of all speakers with lines (fit_lines.py);
+    # LINE_FEATURES in plan.txt picks the scores it may use
+    conda activate "$ENV_ROOT/ddsp"
+    spks=()
+    for d in "$SPEAKERS_DIR"/*/; do [ -s "$d/eval/lines.jsonl" ] && spks+=("${d%/}"); done
+    python tools/autodl/fit_lines.py ${LINE_FEATURES:+--features "$LINE_FEATURES"} "${spks[@]}"
     ;;
 clips)
     # A training set made of chosen lines (build_clips.py): chain item clips@<speaker>:<dataset>

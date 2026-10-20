@@ -25,6 +25,12 @@ export TORCH_HOME="$DATA_ROOT/.cache/torch"
 # torch is pinned in both environments so no dependency can swap it for another CUDA build.
 TORCH_CONSTRAINTS="$REPO_DIR/tools/autodl/torch-constraints.txt"
 
+nproc_quota() {  # CPUs this container may use: the cgroup quota (nproc reports the host's 256)
+    local q p
+    read -r q p < /sys/fs/cgroup/cpu.max 2>/dev/null || { nproc; return; }
+    if [ "$q" = max ]; then nproc; else echo $(( q / p > 0 ? q / p : 1 )); fi
+}
+
 plan_value() {  # key -> value from plan.txt (plain KEY=VALUE lines, never executed)
     grep -E "^$1=" "$REPO_DIR/tools/autodl/plan.txt" 2>/dev/null | tail -1 | cut -d= -f2- | sed 's/[[:space:]]*#.*$//; s/^"//; s/"$//'
 }

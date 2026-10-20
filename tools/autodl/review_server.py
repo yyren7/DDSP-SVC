@@ -38,17 +38,18 @@ PAGE_SIZE = 40
 # Stages shown on the page, in pipeline order, as folders inside speakers/<name>/ (see config.sh).
 STAGES = [
     ('raw', '原始歌曲', 'raw_songs'),
-    ('vocals', '1 分离人声', 'work/1_vocals'),
-    ('dereverb', '2 去混响', 'work/2_dereverb'),
-    ('karaoke', '3 去和声', 'work/3_karaoke'),
+    ('vocals', '1 分离人声', 'work/1_vocals'),  # the stage folders of stages.py, in its order
+    ('karaoke', '2 去和声', 'work/2_karaoke'),
+    ('dereverb', '3 去混响（最终干声）', 'work/3_dereverb'),
     ('slices', '4 切片', 'work/4_slices'),
     ('train', '训练集', 'data/train/audio'),
     ('val', '验证集', 'data/val/audio'),
     ('test', '测试歌曲', 'test_songs'),
-    ('test_dry', '测试歌曲干声', 'work_test/3_karaoke'),
+    ('test_dry', '测试歌曲干声', 'work_test/3_dereverb'),
     ('infer', '转换结果', 'infer_out'),
 ]
-SONG_STAGES = ['raw', 'vocals', 'dereverb', 'karaoke']
+SONG_STAGES = ['raw', 'vocals', 'karaoke', 'dereverb']
+DRY_STAGE = 'dereverb'  # the final dry vocals (stages.DRY)
 STAGE_NAME = {k: n for k, n, _ in STAGES}
 SPEAKER_RE = re.compile(r'[A-Za-z0-9_-]+')
 
@@ -242,7 +243,7 @@ def calib_sample(spk):
     return out
 
 
-CLIP_STAGES = {'mix': 'mix', 'voc': 'vocals', 'derev': 'dereverb', 'kar': 'karaoke'}  # clip?from= -> STAGES key
+CLIP_STAGES = {'mix': 'mix', 'voc': 'vocals', 'kar': 'karaoke', 'derev': 'dereverb', 'dry': DRY_STAGE}  # clip?from=
 ORIGINAL_DIR = '0 原曲'  # compare_lines.py: the input song, cut like the versions
 BLIND_NAMES = '甲乙丙丁戊己庚辛'
 
@@ -271,11 +272,11 @@ def line_card(spk, n, m, marks, buttons=True, note_open=False):
     note = note if note_open else f'<details><summary class="muted">写原因</summary>{note}</details>'
     return (f'<div class="card"><div class="name">{n}. <span class="muted">{esc(m["song"])}　'
             f'{m["start"]:.1f}–{m["end"]:.1f} 秒</span></div>'
-            f'<audio controls preload="none" src="clip?{span}&from=kar"></audio>'
+            f'<audio controls preload="none" src="clip?{span}&from=dry"></audio>'
             f'<details><summary class="muted">原曲和每一步的同一句</summary>'
             + ''.join(f'<div class="muted">{label}</div><audio controls preload="none" src="clip?{span}&from={key}"></audio>'
-                      for key, label in (('mix', '原曲'), ('voc', '1 分离人声'), ('derev', '2 去混响'),
-                                         ('kar', '3 去和声（最终干声）'))) +
+                      for key, label in (('mix', '原曲'), ('voc', '1 分离人声'), ('kar', '2 去和声'),
+                                         ('derev', '3 去混响（最终干声）'))) +
             '</details>'
             f'<div class="row">{marks_html}<span id="{sid}" class="ok">{esc(state)}</span></div>{note}</div>')
 
@@ -510,7 +511,7 @@ class Handler(BaseHTTPRequestHandler):
             return self.send_html('not found', 404)
         ranked = rank_songs.rank(rank_songs.load(SPEAKERS / self.spk))
         marks = decisions(self.spk)
-        folder = stage_dir(self.spk, 'karaoke')
+        folder = stage_dir(self.spk, DRY_STAGE)
         items = []
         for k, (score, name, labels, m) in enumerate(ranked, 1):
             f = folder / f'{name}.wav'
@@ -527,7 +528,7 @@ class Handler(BaseHTTPRequestHandler):
                 f'<h1>干声按质量排序：{"从坏到好" if worst_first else "从好到坏"}</h1>',
                 f'<p><a href="rank{"" if worst_first else "?order=worst"}">改成{"从好到坏" if worst_first else "从坏到好"}</a></p>',
                 '<p class="muted">分数只反映测出来的问题（去和声断口、整段被去掉、伴奏残影、底噪、混响、嗓音杂音等），'
-                '100 分表示没测到问题，最终以耳朵为准。播放的是最终干声（3 去和声）；“对比各阶段”能听原曲和每一步。'
+                '100 分表示没测到问题，最终以耳朵为准。播放的是最终干声（3 去混响）；“对比各阶段”能听原曲和每一步。'
                 '标记会同步给 Claude。</p>',
                 f'<div class="card">{counts}<br>已标记排除 {len(excluded)} 首；'
                 f'有效歌声 {sung / 3600:.1f} 小时，排除后剩 {left / 3600:.1f} 小时</div>']
@@ -568,7 +569,7 @@ class Handler(BaseHTTPRequestHandler):
         there, each with a box for why it was marked the way it was."""
         body = ['<p><a href="./">← 返回</a></p><h1>写原因</h1>',
                 '<p class="muted">每句写一下为什么这样标，例如：混了伴奏、在说话不是在唱、电音或机械感、发闷、跑调、'
-                '不像她的声音。展开“原曲和每一步的同一句”能听出问题是哪一步出现的（例如对讲机感从“2 去混响”开始），'
+                '不像她的声音。展开“原曲和每一步的同一句”能听出问题是哪一步出现的（例如对讲机感从“3 去混响”开始），'
                 '也请写上。提交后会同步给 Claude；想改标记回校准页改。</p>']
         for part in sel.split(';'):
             spk, _, nums = part.partition(':')
@@ -655,7 +656,7 @@ class Handler(BaseHTTPRequestHandler):
             return self.send_html('bad span', 400)
         if spk not in speakers() or not 0 <= s < e <= s + 60:
             return self.send_html('not found', 404)
-        stage = CLIP_STAGES.get(q.get('from', [''])[0], 'karaoke')
+        stage = CLIP_STAGES.get(q.get('from', [''])[0], DRY_STAGE)
         if stage == 'mix':
             folder = SPEAKERS / spk / 'work' / '0_input'
             src = next((f for f in audio_files(folder) if f.stem == song), None)
@@ -735,11 +736,11 @@ def opus_copy(src, background=False, span=None):
 
 def prewarm():
     """Opus copies made ahead of time, so a song plays without waiting for ffmpeg: the dry vocals of
-    every speaker, then the dereverb and vocals stages, each in the ranking page's worst-first order with
+    every speaker, then the karaoke and vocals stages, each in the ranking page's worst-first order with
     the speakers taking turns. Logs only at the start and the end: the runner takes a review log written
     in the last 2 minutes for someone listening."""
     t0, made = time.time(), 0
-    for key in ('karaoke', 'dereverb', 'vocals'):
+    for key in (DRY_STAGE, 'karaoke', 'vocals'):
         lists = []
         for spk in speakers():
             folder = stage_dir(spk, key)

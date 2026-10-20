@@ -7,7 +7,7 @@ root, see /root/autodl-tmp/setup_evalq.sh):
     speaker       WavLM-base-plus-sv embedding; cosine to the speaker's centroid of clean lines
     pitch         RMVPE, the f0 extractor DDSP-SVC trains with (configs/*.yaml), against the Praat pitch of
                   eval_lines.py: where they disagree, training sees a wrong pitch for that line
-Lines are cut from the dry vocals (3_karaoke) with 0.1 s around them and resampled to 16 kHz.
+Lines are cut from the dry vocals (stages.DRY) with 0.1 s around them and resampled to 16 kHz.
 
     python tools/autodl/score_lines.py [--limit n] <speaker dir>...
 
@@ -28,6 +28,8 @@ from scipy.signal import resample_poly
 
 REPO = Path(__file__).resolve().parent.parent.parent
 sys.path.insert(0, str(REPO))
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from stages import DRY  # noqa: E402
 
 SR = 16000
 PAD = 0.1
@@ -170,9 +172,9 @@ def score_speaker(models, spk, limit=None):
     songs = sorted(by_song.items())[:limit]
     results, t0 = [], time.time()
     for i, (song, ms) in enumerate(songs, 1):
-        x, sr = sf.read(str(spk / 'work' / '3_karaoke' / f'{song}.wav'), dtype='float32', always_2d=True)
+        x, sr = sf.read(str(spk / 'work' / DRY / f'{song}.wav'), dtype='float32', always_2d=True)
         x = resample_poly(x.mean(1), SR // 100, sr // 100).astype(np.float32)
-        praat = np.load(spk / 'eval' / 'frames' / f'{song}.npz')['f0_kar'].astype(np.float32)
+        praat = np.load(spk / 'eval' / 'frames' / f'{song}.npz')['f0_dry'].astype(np.float32)
         spans = [(max(0.0, m['start'] - PAD), m['end'] + PAD) for m in ms]
         clips = [x[int(s * SR):int(e * SR)] for s, e in spans]
         for m, (s, e), d in zip(ms, spans, score_clips(models, clips)):
