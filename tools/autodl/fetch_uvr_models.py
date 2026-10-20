@@ -59,7 +59,7 @@ def main():
     model_dir = Path(args.model_dir)
     model_dir.mkdir(parents=True, exist_ok=True)
     separator = Separator(model_file_dir=str(model_dir), output_dir=str(model_dir), log_level=30)
-    for model in args.models or list(DEFAULT_MODELS.values()):
+    for model in args.models or [m for v in DEFAULT_MODELS.values() for m in v.split('+')]:
         print(f'== {model}', flush=True)
         if model in EXTRA_MODELS:
             fetch_from_hf(model, model_dir)

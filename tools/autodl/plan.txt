@@ -5,10 +5,10 @@
 # job@speaker:dataset works on that training set of the speaker (data_<dataset>/, exp_<dataset>/,
 # made by clips@speaker:dataset with tools/autodl/build_clips.py)
 # After a reboot the runner resumes a job that failed or was interrupted.
-# A/B baseline: every line of the dry vocals, no line selection (the other side: dataset clean)
-# paused 2026-10-20 so that score_lines.py has the GPU; then: JOB=train@pheebie:all,train@sakura_shunka:all
-JOB=idle
-RUN_ID=33
+# 2026-10-20: the vocals again in the new order (karaoke by 3 models, then dereverb); the A/B training
+# (datasets all and clean) comes after, on the new dry vocals
+JOB=uvr,uvr@sakura_shunka
+RUN_ID=34
 # train stops after MAX_STEPS steps (0 = never); A/B runs compare training sets at equal steps
 MAX_STEPS=40000
 
@@ -34,7 +34,7 @@ DL_FILTER=
 # songsplit: recordings in downloads/ -> one file per song in songs/ (see tools/split_songs.py -h).
 # Per-speaker settings live in tools/autodl/split/<speaker>.args; SPLIT_ARGS is added after them.
 SPLIT_ARGS=
-UVR_ARGS=--steps vocals,dereverb,karaoke
+UVR_ARGS=--steps vocals,karaoke,dereverb
 WORKERS=8
 KEY=0
 SPK_ID=1

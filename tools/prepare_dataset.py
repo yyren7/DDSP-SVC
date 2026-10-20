@@ -3,8 +3,8 @@ One-click dataset preparation for DDSP-SVC, built on UVR5 models via python-audi
 
 Pipeline (each stage loads its model once and processes every file):
     1. vocals   : separate vocals from accompaniment
-    2. dereverb : remove reverb and echo
-    3. karaoke  : keep lead vocal, remove backing vocals / harmonies
+    2. karaoke  : keep lead vocal, remove backing vocals / harmonies
+    3. dereverb : remove reverb and echo
     4. slice    : cut on silence, resample to mono, drop clips that are too short
     5. split    : write clips to <out>/train/audio and pick a few for <out>/val/audio
 
@@ -40,22 +40,29 @@ from slicer import Slicer  # noqa: E402
 
 AUDIO_EXTS = {'.wav', '.flac', '.mp3', '.m4a', '.ogg', '.opus', '.aac', '.wma'}
 
-# Order as in the AI Hub RVC dataset guide (2026-03): reverb is removed before the lead vocal is
-# told apart from the backing vocals. No denoise step since 2026-10-20: after these three, aufr33's
-# aggressive denoise model changed its input by only -47 to -52 dB (6 songs of two speakers checked).
-UVR_STEPS = ['vocals', 'dereverb', 'karaoke']
+# Backing vocals come off before the reverb since 2026-10-20 (until then, as in the AI Hub RVC dataset
+# guide, the other way round): where the vocal separation leaves some of the accompaniment's voices in,
+# the dereverb model also took part of the lead, which turned thin "like through a walkie-talkie". On the
+# 119 calibration lines (compare_lines.py) this order scored higher on Audiobox CE / PQ and DNSMOS SIG,
+# left 3 dB less reverb tail, and won the blind listening. No denoise step since 2026-10-20 either:
+# after the other steps, aufr33's aggressive denoise model changed its input by only -47 to -52 dB.
+UVR_STEPS = ['vocals', 'karaoke', 'dereverb']
 ALL_STEPS = UVR_STEPS + ['slice', 'split']
 SLICES_DIR = f'{len(UVR_STEPS) + 1}_slices'
 
-# The best models that can be downloaded, as of 2026-10-19 (MVSEP's own models score higher but only
-# run on mvsep.com):
-#   vocals   BS-Roformer Leap Xe by unwa: vocals SDR 11.79 on the MVSEP Multisong leaderboard
-#   dereverb BS-Roformer by anvuew: best but MVSEP's own on MVSEP's vocal dereverb validation
-#   karaoke  BS-Roformer Karaoke by anvuew: lead SDR 10.23 on MVSEP's lead/back leaderboard
+# The best models that can be downloaded, as of 2026-10-20 (MVSEP's own models score higher on every
+# step but only run on mvsep.com):
+#   vocals   BS-Roformer Leap Xe by unwa: vocals SDR 11.79, the best single downloadable model on the
+#            MVSEP Multisong leaderboard
+#   karaoke  the average of three BS-Roformer karaoke models (anvuew; becruily & frazer; Gabox "IS"):
+#            lead SDR 10.43 on MVSEP's lead/back leaderboard, the best entry made of downloadable models
+#            (anvuew's alone: 10.23); "a+b+c" averages the models' outputs
+#   dereverb DeReverb stereo BS-Roformer by anvuew: SDR 8.80 on MVSEP's 2026.07 vocal dereverb set, the
+#            best downloadable, after the MVSEP Team's 9.81
 DEFAULT_MODELS = {
     'vocals': 'bs_leap_xe_voc.ckpt',
+    'karaoke': 'karaoke_bs_roformer_anvuew.ckpt+bs_roformer_karaoke_frazer_becruily.ckpt+bs_karaoke_gabox_IS.ckpt',
     'dereverb': 'dereverb_bs_roformer_anvuew_sdr_22.5050.ckpt',
-    'karaoke': 'karaoke_bs_roformer_anvuew.ckpt',
 }
 
 # Models audio-separator does not list, published on Hugging Face as a checkpoint and a yaml for
@@ -120,7 +127,8 @@ def parse_args():
                    help=f'comma separated subset of: {",".join(ALL_STEPS)}')
     p.add_argument('--model-dir', default='pretrain/uvr', help='where UVR models are downloaded to')
     for step in UVR_STEPS:
-        p.add_argument(f'--{step}-model', default=DEFAULT_MODELS[step], help=f'UVR model for the {step} stage')
+        p.add_argument(f'--{step}-model', default=DEFAULT_MODELS[step],
+                       help=f'UVR model for the {step} stage; a+b+c averages several')
     p.add_argument('--overlap', type=int, default=None,
                    help='Roformer/MDXC overlap; smaller is faster (try 2 on CPU), default uses the model setting')
     p.add_argument('--batch-size', type=int, default=None, help='Roformer/MDXC batch size (raise on large GPUs)')
@@ -161,6 +169,9 @@ def fresh_stage(out_dir, made_by):
 
 
 def run_uvr_stage(step, model, files, out_dir, args, made_by):
+    """model: a checkpoint name, or several joined by '+', whose outputs are averaged (an ensemble, as the
+    "(AVG)" entries of MVSEP's leaderboards). All of them stay loaded and each file goes through every
+    one before the next file, so no full set of per-model outputs piles up on the disk."""
     from audio_separator.separator import Separator
     register_extra_models(Separator)
 
@@ -172,21 +183,36 @@ def run_uvr_stage(step, model, files, out_dir, args, made_by):
         return
     mdxc_params = {'segment_size': 256, 'override_model_segment_size': False,
                    'batch_size': args.batch_size, 'overlap': args.overlap, 'pitch_shift': 0}
-    separator = Separator(output_dir=str(tmp_dir), model_file_dir=args.model_dir,
-                          output_format='WAV', mdxc_params=mdxc_params, log_level=30)
-    separator.load_model(model_filename=model)
+    models = model.split('+')
+    separators = []
+    for k, name in enumerate(models):
+        sep = Separator(output_dir=str(tmp_dir / str(k)), model_file_dir=args.model_dir,
+                        output_format='WAV', mdxc_params=mdxc_params, log_level=30)
+        sep.load_model(model_filename=name)
+        separators.append(sep)
     keep = KEEP_STEMS[step]
     for n, f in enumerate(todo, 1):
         t0 = time.time()
         shutil.rmtree(tmp_dir, ignore_errors=True)
-        tmp_dir.mkdir(parents=True)
-        outputs = [tmp_dir / Path(o).name for o in separator.separate(str(f))]
-        stems = {STEM_RE.search(o.name).group(1).lower(): o for o in outputs if STEM_RE.search(o.name)}
-        picked = [o for s, o in stems.items() if s in keep]
-        if len(picked) != 1:
-            raise RuntimeError(f'[{step}] cannot tell which stem to keep from {list(stems)}; '
-                               f'expected one of {sorted(keep)}')
-        shutil.move(str(picked[0]), str(out_dir / f'{f.stem}.wav'))
+        picked = []
+        for k, sep in enumerate(separators):
+            (tmp_dir / str(k)).mkdir(parents=True)
+            outputs = [tmp_dir / str(k) / Path(o).name for o in sep.separate(str(f))]
+            stems = {STEM_RE.search(o.name).group(1).lower(): o for o in outputs if STEM_RE.search(o.name)}
+            kept = [o for s, o in stems.items() if s in keep]
+            if len(kept) != 1:
+                raise RuntimeError(f'[{step}] {models[k]}: cannot tell which stem to keep from {list(stems)}; '
+                                   f'expected one of {sorted(keep)}')
+            picked.append(kept[0])
+        if len(picked) == 1:
+            shutil.move(str(picked[0]), str(out_dir / f'{f.stem}.wav'))
+        else:
+            xs = [sf.read(str(p), dtype='float32', always_2d=True) for p in picked]
+            length = min(len(x) for x, _ in xs)
+            mean = np.mean([x[:length] for x, _ in xs], axis=0)
+            part = out_dir / f'{f.stem}.part.wav'
+            sf.write(str(part), mean, xs[0][1], subtype='PCM_16')
+            part.replace(out_dir / f'{f.stem}.wav')
         print(f'[{step}] {n}/{len(todo)} {f.name} ({time.time() - t0:.1f}s)')
     shutil.rmtree(tmp_dir, ignore_errors=True)
 

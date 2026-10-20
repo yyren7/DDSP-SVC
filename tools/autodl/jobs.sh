@@ -121,7 +121,7 @@ songsplit)
         --model-dir pretrain/panns $spk_args ${SPLIT_ARGS:-}
     ;;
 uvr)
-    # Raw songs -> separated, de-reverbed, de-harmonised, sliced clips in data/
+    # Raw songs -> separated, de-harmonised, de-reverbed (UVR_ARGS picks the steps; see prepare_dataset.py)
     conda activate "$ENV_ROOT/uvr"
     fetch_models
     # shellcheck disable=SC2086
@@ -157,12 +157,12 @@ infer)
     conda activate "$ENV_ROOT/uvr"
     # shellcheck disable=SC2086
     python tools/prepare_dataset.py -i "$TEST_DIR" -w "$TEST_WORK_DIR" --model-dir "$UVR_MODEL_DIR" \
-        --steps vocals,dereverb,karaoke ${UVR_ARGS:-}
+        --steps vocals,karaoke,dereverb ${UVR_ARGS:-}
     conda deactivate
     conda activate "$ENV_ROOT/ddsp"
     out="$INFER_DIR/$(basename "$ckpt" .pt)_key${KEY:-0}"
     mkdir -p "$out"
-    for f in "$TEST_WORK_DIR"/3_karaoke/*.wav; do
+    for f in "$TEST_WORK_DIR"/3_dereverb/*.wav; do
         [ -e "$f" ] || continue
         echo "converting $(basename "$f")"
         python main_reflow.py -i "$f" -m "$ckpt" -o "$out/$(basename "$f")" \
