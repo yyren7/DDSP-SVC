@@ -384,12 +384,14 @@ def read_done(path):
 
 
 def main():
-    """eval_vocals.py [--shard k/n] <speaker dir>... : shard k of n runs every n-th song (parallel runs)."""
+    """eval_vocals.py [--shard k/n] <speaker dir>... : shard k of n (k = 0 .. n-1) runs every n-th song (parallel runs)."""
     args = sys.argv[1:]
     k, n = 0, 1
     if args and args[0] == '--shard':
         k, n = map(int, args[1].split('/'))
         args = args[2:]
+        if not 0 <= k < n:
+            sys.exit(f'--shard {k}/{n}: k runs from 0 to {n - 1}')
     todo = []
     for d in args:
         spk = Path(d)

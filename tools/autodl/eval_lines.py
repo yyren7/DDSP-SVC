@@ -3,7 +3,7 @@ Line-level check of the dry vocals. The final dry vocals (3_karaoke) are split i
 between them, and every line is measured against the earlier stages, so that a song with a few bad
 lines keeps its good ones. Training clips are later made from runs of good lines.
 
-    python tools/autodl/eval_lines.py frames [--shard k/n] <speaker dir>...   # slow: ~0.1 x real time
+    python tools/autodl/eval_lines.py frames [--shard k/n] <speaker dir>...   # slow: ~0.1 x real time; k = 0 .. n-1
     python tools/autodl/eval_lines.py lines <speaker dir>...                   # seconds, from the frames
 
 frames: per song, frame features (10 ms) of the mix, vocals, dereverb and karaoke stages and the pitch of
@@ -55,6 +55,8 @@ def run_frames(args):
     if args and args[0] == '--shard':
         k, n = map(int, args[1].split('/'))
         args = args[2:]
+        if not 0 <= k < n:  # 1 .. n would skip the first song of the list
+            sys.exit(f'--shard {k}/{n}: k runs from 0 to {n - 1}')
     todo = []
     for d in args:
         spk = Path(d)
