@@ -22,6 +22,8 @@ from http import cookies
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
+import rank_songs  # next to this file, which runner.sh starts as a script
+
 REPO = Path(__file__).resolve().parent.parent.parent
 ROOT = REPO.parent  # the data disk: the repo, and the speaker folders kept outside it
 SPEAKERS = ROOT / 'speakers'
@@ -67,6 +69,11 @@ async function fb(id, target){
   const r=await fetch('feedback',{method:'POST',headers:{'Content-Type':'application/json'},
     body:JSON.stringify({target:target,text:t})});
   if(r.ok){box.value='';document.getElementById(id+'_ok').textContent='已提交 ✓';}
+}
+async function mark(btn){  // keep / exclude button: data-t is the file, its text the decision
+  const r=await fetch('feedback',{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({target:btn.dataset.t,text:btn.textContent})});
+  if(r.ok) document.getElementById(btn.dataset.s).textContent='已标记：'+btn.textContent;
 }
 // WAV (1.4 Mbit/s) stalls in AutoDL's port forwarding: browsers that play Opus get an Opus copy, with a
 // link to the WAV next to the player. Browsers without an AAC decoder (VS Code's built-in browser, for
@@ -164,6 +171,26 @@ def check_list(spk):
     return out
 
 
+DECISIONS = ('排除', '保留')
+
+
+def decisions(spk):
+    """{file path relative to ROOT: latest of DECISIONS} from the feedback of this speaker."""
+    out = {}
+    try:
+        lines = (STATE / 'feedback.jsonl').read_text(encoding='utf-8').splitlines()
+    except OSError:
+        return out
+    for line in lines:
+        try:
+            e = json.loads(line)
+        except ValueError:
+            continue
+        if e.get('speaker') == spk and e.get('text') in DECISIONS:
+            out[e.get('target')] = e['text']
+    return out
+
+
 def song_groups(spk):
     """{recording title: [(file, label)]} for the songs folder, using its _songs.tsv when present."""
     folder = songs_dir(spk)
@@ -258,6 +285,8 @@ class Handler(BaseHTTPRequestHandler):
             return self.page_check()
         if route == 'compare':
             return self.page_compare()
+        if route == 'rank':
+            return self.page_rank(q.get('order', [''])[0] == 'worst')
         return self.page_index()
 
     def do_POST(self):
@@ -295,6 +324,11 @@ class Handler(BaseHTTPRequestHandler):
         if sets:
             parts.append(f'<h2>模型对比（{len(sets)} 段）</h2><div class="card row"><a class="name" href="compare">'
                          '逐段试听</a><span class="muted">同一段歌用不同的模型和步骤去伴奏，选出最好的做法</span></div>')
+        ranked = rank_songs.rank(rank_songs.load(SPEAKERS / spk))
+        if ranked:
+            parts.append(f'<h2>干声按质量排序（{len(ranked)} 首）</h2><div class="card row"><a class="name" href="rank">'
+                         '从好到坏</a> · <a class="name" href="rank?order=worst">从坏到好</a>'
+                         '<span class="muted">按测出的问题打分，每首可以标记排除或保留</span></div>')
         check = check_list(spk)
         if check:
             parts.append(f'<h2>待抽查（{len(check)} 首）</h2><div class="card row"><a class="name" href="check">'
@@ -359,6 +393,46 @@ class Handler(BaseHTTPRequestHandler):
         body = [f'<p><a href="./">← 返回</a></p><h1>{esc(title)}</h1>',
                 f'<p class="muted">{len(songs)} 首，时间是这首歌在原录像里的位置</p>']
         body += [self.player(f, label) for f, label in songs]
+        self.send_html(''.join(body))
+
+    def page_rank(self, worst_first):
+        if not self.spk:
+            return self.send_html('not found', 404)
+        ranked = rank_songs.rank(rank_songs.load(SPEAKERS / self.spk))
+        marks = decisions(self.spk)
+        folder = stage_dir(self.spk, 'karaoke')
+        items = []
+        for k, (score, name, labels, m) in enumerate(ranked, 1):
+            f = folder / f'{name}.wav'
+            if f.is_file():
+                items.append((k, score, name, labels, m, f, f.relative_to(ROOT).as_posix()))
+        if worst_first:
+            items.reverse()
+        excluded = [it for it in items if marks.get(it[6]) == '排除']
+        sung = sum(it[4].get('voiced_sec') or 0 for it in items)
+        left = sung - sum(it[4].get('voiced_sec') or 0 for it in excluded)
+        bands = [(90, 101), (75, 90), (60, 75), (40, 60), (0, 40)]
+        counts = '，'.join(f'{lo}–{min(hi, 100)} 分 {sum(lo <= it[1] < hi for it in items)} 首' for lo, hi in bands)
+        body = ['<p><a href="./">← 返回</a></p>',
+                f'<h1>干声按质量排序：{"从坏到好" if worst_first else "从好到坏"}</h1>',
+                f'<p><a href="rank{"" if worst_first else "?order=worst"}">改成{"从好到坏" if worst_first else "从坏到好"}</a></p>',
+                '<p class="muted">分数只反映测出来的问题（去和声断口、整段被去掉、伴奏残影、底噪、混响、嗓音杂音等），'
+                '100 分表示没测到问题，最终以耳朵为准。播放的是最终干声（3 去和声）；“对比各阶段”能听原曲和每一步。'
+                '标记会同步给 Claude。</p>',
+                f'<div class="card">{counts}<br>已标记排除 {len(excluded)} 首；'
+                f'有效歌声 {sung / 3600:.1f} 小时，排除后剩 {left / 3600:.1f} 小时</div>']
+        for k, score, name, labels, m, f, rel in items:
+            sid = 'mk' + hashlib.sha1(rel.encode()).hexdigest()[:10]
+            state = f'已标记：{marks[rel]}' if rel in marks else ''
+            problems = '；'.join(labels) if labels else '没测到问题'
+            body.append(
+                f'<div class="card"><div class="name">{k}. {score:.0f} 分　{esc(name)}</div>'
+                f'<div class="muted">{esc(problems)}　有效歌声 {(m.get("voiced_sec") or 0) / 60:.1f} 分钟</div>'
+                f'<audio controls preload="none" src="file?p={urllib.parse.quote(rel)}"></audio>'
+                f'<div class="row"><button data-t="{esc(rel)}" data-s="{sid}" onclick="mark(this)">排除</button>'
+                f'<button data-t="{esc(rel)}" data-s="{sid}" onclick="mark(this)">保留</button>'
+                f'<a href="song?n={urllib.parse.quote(name)}">对比各阶段</a>'
+                f'<span id="{sid}" class="ok">{esc(state)}</span></div></div>')
         self.send_html(''.join(body))
 
     def page_check(self):
