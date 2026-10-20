@@ -67,6 +67,15 @@ EXTRA_MODELS = {
         ('anvuew/dereverb_bs_roformer', 'dereverb_bs_roformer_anvuew_sdr_22.5050.ckpt', 'config.yaml'),
     'karaoke_bs_roformer_anvuew.ckpt':
         ('anvuew/karaoke_bs_roformer', 'karaoke_bs_roformer_anvuew.ckpt', 'karaoke_bs_roformer_anvuew.yaml'),
+    # candidates of 2026-10-20 (compare_lines.py): the newest dry-vocal model, and the two other karaoke
+    # models of the best downloadable ensemble on MVSEP's lead/back leaderboard (with anvuew's, lead SDR 10.43)
+    'gilliaan_bsroformer_deeffect_v1beta.ckpt':
+        ('gilliaan/Stem-Separation-Models', 'DeEffect/BandSplitRoformer/gilliaan_bsroformer_deeffect_v1beta.ckpt',
+         'DeEffect/BandSplitRoformer/gilliaan_bsroformer_deeffect_v1beta.yaml'),
+    'bs_roformer_karaoke_frazer_becruily.ckpt':
+        ('becruily/bs-roformer-karaoke', 'bs_roformer_karaoke_frazer_becruily.ckpt', 'config_karaoke_frazer_becruily.yaml'),
+    'bs_karaoke_gabox_IS.ckpt':
+        ('GaboxR67/MelBandRoformers', 'bsroformers/bs_karaoke_gabox_IS.ckpt', 'bsroformers/karaoke_bs_roformer.yaml'),
 }
 
 
@@ -95,7 +104,7 @@ def register_extra_models(separator_cls):
 KEEP_STEMS = {
     'vocals': {'vocals'},
     'karaoke': {'vocals'},
-    'dereverb': {'no reverb', 'noreverb', 'no echo', 'dry'},
+    'dereverb': {'no reverb', 'noreverb', 'no echo', 'dry', 'vocals'},  # vocals: gilliaan's DeEffect
     'denoise': {'dry', 'no noise'},
 }
 
