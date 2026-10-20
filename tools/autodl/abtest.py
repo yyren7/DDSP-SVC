@@ -30,6 +30,7 @@ sys.path.insert(0, str(REPO))
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 SOURCE = '_source'
+AB_LEN = 8.0  # seconds: long enough to judge a voice, short enough to compare three in a row
 
 
 def checkpoints(spk, datasets):
@@ -49,10 +50,15 @@ def checkpoints(spk, datasets):
 
 
 def sources(spk, dataset):
-    """[(source speaker, clip)]: the validation clips of every speaker with this dataset, hers first."""
+    """[(source speaker, clip)]: the validation clips of every speaker with this dataset, hers first; each
+    speaker's clips nearest AB_LEN seconds first, since the A/B page asks for the first few only."""
     spks = [spk] + sorted(d for d in spk.parent.iterdir()
                           if d != spk and (d / f'data_{dataset}' / 'val' / 'audio').is_dir())
-    return [(s.name, f) for s in spks for f in sorted((s / f'data_{dataset}' / 'val' / 'audio').glob('*.wav'))]
+    out = []
+    for s in spks:
+        clips = sorted((s / f'data_{dataset}' / 'val' / 'audio').glob('*.wav'))
+        out += [(s.name, f) for f in sorted(clips, key=lambda f: abs(sf.info(str(f)).duration - AB_LEN))]
+    return out
 
 
 def active_rms(x, sr):

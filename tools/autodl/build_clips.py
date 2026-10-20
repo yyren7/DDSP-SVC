@@ -13,8 +13,9 @@ dataset (which lines go in):
            remaining lines go too
 
 Writes <speaker>/data_<dataset>/train/audio and val/audio (config.sh: DATASET=<dataset>). A few songs are
-held out of every dataset (eval/holdout.json, drawn once): their best lines are the validation set, the
-same for all datasets so that runs compare, and the songs serve as test material for the A/B listening.
+held out of every dataset (eval/holdout.json, drawn once): their lines that look good to the signal score
+and to the listener's model are the validation set, the same for all datasets so that runs compare, and
+the input of the A/B listening (abtest.py).
 """
 import json
 import random
@@ -31,6 +32,7 @@ MIN_LEN, MAX_LEN = 2.5, 15.0  # seconds; DDSP-SVC trains on 2 s crops (data.dura
 MAX_GAP = 1.0                 # lines further apart stay in separate clips
 MARGIN = 0.05                 # seconds kept before and after a clip's lines
 HOLDOUT_SONGS = 4
+HOLDOUT_GOOD = 0.8            # held-out songs: share of their lines that must look good (see holdout)
 SONG_KEEP_MIN = 0.5           # dataset clean: share of a song's sung time the model must keep
 VAL_CLIPS = 12
 
@@ -39,29 +41,43 @@ def load_jsonl(path):
     return [json.loads(x) for x in path.read_text(encoding='utf-8').splitlines() if x.strip()] if path.exists() else []
 
 
-def holdout(spk, lines):
-    """Songs kept out of training, drawn once among songs whose lines are mostly good."""
+def listener_keeps(spk):
+    """{(song, k)} of the lines the model fitted to the listener's marks keeps (fit_lines.py), None before the fit."""
+    if not (spk / 'eval' / 'line_model.json').exists():
+        return None
+    import fit_lines  # next to this file
+    return fit_lines.keep_set(spk)
+
+
+def holdout(spk, lines, keep):
+    """Songs kept out of training, drawn once among songs whose lines are mostly good: at least HOLDOUT_GOOD
+    of their lines with a signal score of 75, and once it is fitted, kept by the listener's model (the signal
+    score alone hardly agrees with the listener: AUC 0.52 on the marks of 2026-10-20)."""
     path = spk / 'eval' / 'holdout.json'
     if path.exists():
         return json.loads(path.read_text(encoding='utf-8'))
     by_song = {}
     for m in lines:
-        by_song.setdefault(m['song'], []).append(m['score'] >= 75)
-    good = sorted(s for s, v in by_song.items() if len(v) >= 10 and np.mean(v) >= 0.8)
+        by_song.setdefault(m['song'], []).append(m)
+    good = sorted(s for s, ms in by_song.items()
+                  if len(ms) >= 10 and np.mean([m['score'] >= 75 for m in ms]) >= HOLDOUT_GOOD)
+    if keep is not None:
+        liked = [s for s in good if np.mean([(m['song'], m['k']) in keep for m in by_song[s]]) >= HOLDOUT_GOOD]
+        good = liked if len(liked) >= HOLDOUT_SONGS else good
     songs = sorted(random.Random(spk.name).sample(good, min(HOLDOUT_SONGS, len(good))))
     path.write_text(json.dumps(songs, ensure_ascii=False), encoding='utf-8')
     return songs
 
 
-def chosen(spk, dataset, lines):
+def chosen(spk, dataset, lines, keep):
     """{(song, k)} of the lines that go into this dataset."""
     if dataset == 'all':
         return {(m['song'], m['k']) for m in lines}
     if dataset == 'sig75':
         return {(m['song'], m['k']) for m in lines if m['score'] >= 75}
     if dataset == 'clean':
-        import fit_lines  # next to this file
-        keep = fit_lines.keep_set(spk)
+        if keep is None:
+            sys.exit(f'{spk.name}: no eval/line_model.json yet; run fitlines first')
         total, kept = {}, {}
         for m in lines:
             total[m['song']] = total.get(m['song'], 0.0) + m['dur']
@@ -112,8 +128,9 @@ def main():
     train.mkdir(parents=True, exist_ok=True)
     val.mkdir(parents=True, exist_ok=True)
     lines = load_jsonl(spk / 'eval' / 'lines.jsonl')
-    held = set(holdout(spk, lines))
-    keep = chosen(spk, dataset, lines)
+    liked = listener_keeps(spk)
+    held = set(holdout(spk, lines, liked))
+    keep = chosen(spk, dataset, lines, liked)
     by_song = {}
     for m in lines:
         by_song.setdefault(m['song'], []).append(m)
@@ -124,8 +141,10 @@ def main():
         spans = clips_of(ms, keep)
         total += write_clips(spk, song, spans, train)
         n += len(spans)
-    # validation: the best lines of the held-out songs, the same for every dataset
-    best = {(m['song'], m['k']) for m in lines if m['song'] in held and m['score'] >= 90}
+    # validation: lines of the held-out songs with a signal score of 75 that the listener's model keeps, the
+    # same for every dataset; tools/autodl/abtest.py converts them for the A/B listening
+    best = {(m['song'], m['k']) for m in lines if m['song'] in held and m['score'] >= 75
+            and (liked is None or (m['song'], m['k']) in liked)}
     spans = sorted(((song, c) for song in sorted(held) for c in clips_of(by_song[song], best)),
                    key=lambda t: (t[0], t[1][0]))
     spans = random.Random(spk.name).sample(spans, min(VAL_CLIPS, len(spans)))
