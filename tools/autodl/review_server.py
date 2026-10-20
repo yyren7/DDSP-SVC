@@ -38,15 +38,14 @@ STAGES = [
     ('vocals', '1 分离人声', 'work/1_vocals'),
     ('dereverb', '2 去混响', 'work/2_dereverb'),
     ('karaoke', '3 去和声', 'work/3_karaoke'),
-    ('denoise', '4 去噪', 'work/4_denoise'),
-    ('slices', '5 切片', 'work/5_slices'),
+    ('slices', '4 切片', 'work/4_slices'),
     ('train', '训练集', 'data/train/audio'),
     ('val', '验证集', 'data/val/audio'),
     ('test', '测试歌曲', 'test_songs'),
-    ('test_dry', '测试歌曲干声', 'work_test/4_denoise'),
+    ('test_dry', '测试歌曲干声', 'work_test/3_karaoke'),
     ('infer', '转换结果', 'infer_out'),
 ]
-SONG_STAGES = ['raw', 'vocals', 'dereverb', 'karaoke', 'denoise']
+SONG_STAGES = ['raw', 'vocals', 'dereverb', 'karaoke']
 STAGE_NAME = {k: n for k, n, _ in STAGES}
 SPEAKER_RE = re.compile(r'[A-Za-z0-9_-]+')
 

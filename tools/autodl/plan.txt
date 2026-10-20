@@ -28,7 +28,7 @@ DL_FILTER=
 # songsplit: recordings in downloads/ -> one file per song in songs/ (see tools/split_songs.py -h).
 # Per-speaker settings live in tools/autodl/split/<speaker>.args; SPLIT_ARGS is added after them.
 SPLIT_ARGS=
-UVR_ARGS=--steps vocals,dereverb,karaoke,denoise
+UVR_ARGS=--steps vocals,dereverb,karaoke
 WORKERS=4
 KEY=0
 SPK_ID=1

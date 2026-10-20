@@ -5,9 +5,8 @@ Pipeline (each stage loads its model once and processes every file):
     1. vocals   : separate vocals from accompaniment
     2. dereverb : remove reverb and echo
     3. karaoke  : keep lead vocal, remove backing vocals / harmonies
-    4. denoise  : remove residual noise
-    5. slice    : cut on silence, resample to mono, drop clips that are too short
-    6. split    : write clips to <out>/train/audio and pick a few for <out>/val/audio
+    4. slice    : cut on silence, resample to mono, drop clips that are too short
+    5. split    : write clips to <out>/train/audio and pick a few for <out>/val/audio
 
 Every stage writes to its own folder under --work and skips files that are already done,
 so an interrupted run can be resumed by running the same command again. A stage records the
@@ -15,7 +14,7 @@ models that made its files (_models.txt); when they change, the stage starts ove
 
 Example:
     python tools/prepare_dataset.py -i raw_songs -o data
-    python tools/prepare_dataset.py -i dry_vocals -o data --steps dereverb,denoise,slice,split
+    python tools/prepare_dataset.py -i dry_vocals -o data --steps dereverb,slice,split
 """
 import argparse
 import os
@@ -42,21 +41,21 @@ from slicer import Slicer  # noqa: E402
 AUDIO_EXTS = {'.wav', '.flac', '.mp3', '.m4a', '.ogg', '.opus', '.aac', '.wma'}
 
 # Order as in the AI Hub RVC dataset guide (2026-03): reverb is removed before the lead vocal is
-# told apart from the backing vocals.
-UVR_STEPS = ['vocals', 'dereverb', 'karaoke', 'denoise']
+# told apart from the backing vocals. No denoise step since 2026-10-20: after these three, aufr33's
+# aggressive denoise model changed its input by only -47 to -52 dB (6 songs of two speakers checked).
+UVR_STEPS = ['vocals', 'dereverb', 'karaoke']
 ALL_STEPS = UVR_STEPS + ['slice', 'split']
+SLICES_DIR = f'{len(UVR_STEPS) + 1}_slices'
 
 # The best models that can be downloaded, as of 2026-10-19 (MVSEP's own models score higher but only
 # run on mvsep.com):
 #   vocals   BS-Roformer Leap Xe by unwa: vocals SDR 11.79 on the MVSEP Multisong leaderboard
 #   dereverb BS-Roformer by anvuew: best but MVSEP's own on MVSEP's vocal dereverb validation
 #   karaoke  BS-Roformer Karaoke by anvuew: lead SDR 10.23 on MVSEP's lead/back leaderboard
-#   denoise  Mel-Roformer by aufr33, aggressive (SDR 27.98, the regular one 27.99): what the guide recommends
 DEFAULT_MODELS = {
     'vocals': 'bs_leap_xe_voc.ckpt',
     'dereverb': 'dereverb_bs_roformer_anvuew_sdr_22.5050.ckpt',
     'karaoke': 'karaoke_bs_roformer_anvuew.ckpt',
-    'denoise': 'denoise_mel_band_roformer_aufr33_aggr_sdr_27.9768.ckpt',
 }
 
 # Models audio-separator does not list, published on Hugging Face as a checkpoint and a yaml for
@@ -91,7 +90,8 @@ def register_extra_models(separator_cls):
     with_extra.with_extra_models = True
     separator_cls.list_supported_model_files = with_extra
 
-# Stem names (lower case) that hold the part we want to keep after each UVR stage.
+# Stem names (lower case) that hold the part we want to keep after each UVR stage (denoise: for the
+# model chains compare_uvr.py still compares).
 KEEP_STEMS = {
     'vocals': {'vocals'},
     'karaoke': {'vocals'},
@@ -266,7 +266,7 @@ def main():
     print(f'{len(files)} input files')
 
     # Stage folders of an older stage order (e.g. 2_karaoke before 2_dereverb) hold outdated results.
-    layout = {f'{idx}_{step}' for idx, step in enumerate(UVR_STEPS, 1)} | {'0_input', '5_slices'}
+    layout = {f'{idx}_{step}' for idx, step in enumerate(UVR_STEPS, 1)} | {'0_input', SLICES_DIR}
     for d in work.iterdir():
         if d.is_dir() and re.fullmatch(r'\d_[a-z]+', d.name) and d.name not in layout:
             print(f'removing {d.name}, a stage folder of an older stage order')
@@ -281,7 +281,7 @@ def main():
             run_uvr_stage(step, model, files, out_dir, args, made_by)
             files = [out_dir / f'{f.stem}.wav' for f in files]
 
-    clips_dir = work / '5_slices'
+    clips_dir = work / SLICES_DIR
     if 'slice' in steps:
         slice_stage(files, clips_dir, args, made_by)
     if 'split' in steps:

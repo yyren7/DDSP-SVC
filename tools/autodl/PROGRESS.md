@@ -12,13 +12,13 @@
 | 佐仓旬夏歌回录像（`download`） | 完成：13 场，30.7 小时 |
 | 佐仓旬夏单曲（`download`） | 完成：27 个视频 |
 | 切歌（`songsplit`） | 完成：去掉聊天，每首一个文件，共 177 首、12.1 小时（2026-10-19 起明显在说话的歌不要，去掉了 14 首） |
-| 人声分离（`uvr`） | 试跑了 10 首：211 段切片，训练集 201 段、验证集 10 段 |
+| 人声分离（`uvr`） | 完成：177 首，2026-10-20 10:43 跑完（当时还有去噪，共四步），先不切片 |
 | 按说话人分目录（`migrate`） | 完成（2026-10-18） |
 | 特征提取、训练 | 未开始 |
 | 菲比Pheebie 录像（`download`） | 两批共 13 场（9 月 30 日～10 月 18 日），评论里没有道标 |
 | 菲比Pheebie 翻唱和 PV（`download`） | 完成：本人空间 2～8 分钟的视频约 22 个 |
 | 菲比Pheebie 切歌（`songsplit`） | 完成：187 首、10.8 小时（录像 168 首，翻唱和 PV 19 首）。2 分钟以下的不要（跨 P 被切开的半首除外），明显在说话的不要 |
-| 菲比Pheebie 人声分离（`uvr`） | 2026-10-20 00:33 用新模型重跑（见下面“去伴奏模型”），185 首，有卡约 4.5 小时。#5 公主殿下、#12 炉心融解两首翻唱修音太重，已去掉 |
+| 菲比Pheebie 人声分离（`uvr`） | 完成：185 首，2026-10-20 05:22 用新模型跑完（见下面“去伴奏模型”，当时还有去噪），先不切片。#5 公主殿下、#12 炉心融解两首翻唱修音太重，已去掉 |
 
 ## 数据
 
@@ -72,9 +72,10 @@
 | 1 分离人声 | BS-Roformer Leap Xe（unwa） | Multisong 人声 SDR 11.79，社区模型里最高 | Mel-Roformer FV4（Gabox） |
 | 2 去混响 | BS-RoFormer dereverb（anvuew，`sdr_22.5050`） | MVSEP 人声去混响验证里仅次于 MVSEP 自家模型 | VR 架构 UVR-DeEcho-DeReverb |
 | 3 去和声 | BS-RoFormer Karaoke（anvuew） | lead/back 排行榜主唱 SDR 10.23 | Mel-Roformer（aufr33/viperx），约 8.9 |
-| 4 去噪 | Mel-Roformer denoise aggressive（aufr33） | AI Hub 指南推荐，没有排行榜 | 同作者的普通版 |
 
-顺序按 AI Hub 指南改成先去混响、再去和声。前三个模型不在 audio-separator 的列表里，从 Hugging Face 下载（`prepare_dataset.py` 的 `EXTRA_MODELS`）；去噪模型从 GitHub 下载只有约 100KB/s，改用 Hugging Face 上 Politrees/UVR_resources 的副本。
+顺序按 AI Hub 指南改成先去混响、再去和声。三个模型都不在 audio-separator 的列表里，从 Hugging Face 下载（`prepare_dataset.py` 的 `EXTRA_MODELS`）。
+
+2026-10-20 起去掉了第 4 步去噪（Mel-Roformer denoise aggressive，aufr33）。两人的歌都用四步跑完后抽查 6 首，去噪的输出和输入只差 -47～-52 dB：前三步做完已经没有噪声可去，这一步每人要多花约 1 小时显卡时间。
 
 选之前用 `compare` 任务截了 6 段 40 秒，把原来的四步、新的四步、新的三步（不去噪）、两步（直接在原曲上去和声再去混响）并排试听，最后选了新的四步。
 
