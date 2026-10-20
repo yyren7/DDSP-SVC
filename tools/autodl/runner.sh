@@ -270,7 +270,9 @@ load_job_state
 pkill -f "python3 tools/autodl/review_server.py --port $REVIEW_PORT" 2>/dev/null
 start_review
 while true; do
-    if net git fetch -q origin "$BRANCH" 2>/dev/null && [ "$(git rev-parse HEAD)" != "$(git rev-parse FETCH_HEAD)" ]; then
+    # With the token: GitHub turns anonymous fetches from AutoDL's shared address away for long spells
+    # ("Authentication failed", 2026-10-20 21:53-22:45 without one update).
+    if net git fetch -q "$PUSH_URL" "$BRANCH" 2>/dev/null && [ "$(git rev-parse HEAD)" != "$(git rev-parse FETCH_HEAD)" ]; then
         old_runner="$(git rev-parse HEAD:tools/autodl/runner.sh)"
         git reset -q --hard FETCH_HEAD
         echo "$(date '+%F %T') updated to $(git rev-parse --short HEAD)"
