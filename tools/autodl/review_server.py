@@ -65,20 +65,24 @@ padding:8px;border-radius:6px;max-height:360px;overflow:auto} .ok{color:#18794e}
 """
 
 JS = """
+// The access key rides along in the URL where the page got it there: VS Code's browser shows pages in a
+// frame, which does not send the SameSite=Lax key cookie with the page's own requests.
+const KEYQ = (location.search.match(/[?&](key=[^&]*)/) || [])[1];
+const FEEDBACK = 'feedback' + (KEYQ ? '?' + KEYQ : '');
 async function fb(id, target){
   const box=document.getElementById(id); const t=box.value.trim(); if(!t) return;
-  const r=await fetch('feedback',{method:'POST',headers:{'Content-Type':'application/json'},
+  const r=await fetch(FEEDBACK,{method:'POST',headers:{'Content-Type':'application/json'},
     body:JSON.stringify({target:target,text:t})});
   if(r.ok){box.value='';document.getElementById(id+'_ok').textContent='已提交 ✓';}
 }
 async function note(btn){  // free text about one item: data-t the target, data-box the textarea, data-spk the speaker
   const box=document.getElementById(btn.dataset.box); const t=box.value.trim(); if(!t) return;
-  const r=await fetch('feedback',{method:'POST',headers:{'Content-Type':'application/json'},
+  const r=await fetch(FEEDBACK,{method:'POST',headers:{'Content-Type':'application/json'},
     body:JSON.stringify({target:btn.dataset.t,text:t,speaker:btn.dataset.spk||''})});
   if(r.ok) document.getElementById(btn.dataset.box+'_ok').textContent='已提交 ✓';
 }
 async function mark(btn){  // keep / exclude button: data-t is the file, its text the decision
-  const r=await fetch('feedback',{method:'POST',headers:{'Content-Type':'application/json'},
+  const r=await fetch(FEEDBACK,{method:'POST',headers:{'Content-Type':'application/json'},
     body:JSON.stringify({target:btn.dataset.t,text:btn.textContent,speaker:btn.dataset.spk||''})});
   if(r.ok) document.getElementById(btn.dataset.s).textContent='已标记：'+btn.textContent;
 }
@@ -296,6 +300,7 @@ class Handler(BaseHTTPRequestHandler):
             return True
         if query.get('key', [''])[0] == key:
             self.cookies_out.append(f'review_key={key}; Path=/; Max-Age=2592000; SameSite=Lax')
+            self.url_key = key  # send_html puts it into the page's links and players too
             return True
         c = cookies.SimpleCookie(self.headers.get('Cookie', ''))
         return 'review_key' in c and c['review_key'].value == key
@@ -315,6 +320,11 @@ class Handler(BaseHTTPRequestHandler):
 
     # ---------- helpers ----------
     def send_html(self, body, status=200):
+        if getattr(self, 'url_key', None):  # opened with ?key=: keep it in every relative link and source
+            def add_key(m):
+                url = m.group(2)
+                return f'{m.group(1)}="{url}{"&" if "?" in url else "?"}key={self.url_key}"'
+            body = re.sub(r'\b(src|href|data-alt)="(?!https?:|#|javascript:|data:)([^"]*)"', add_key, body)
         data = ('<!doctype html><html lang="zh"><head><meta charset="utf-8">'
                 '<meta name="viewport" content="width=device-width,initial-scale=1">'
                 f'<title>DDSP-SVC 试听</title><style>{CSS}</style><script>{JS}</script></head>'
@@ -372,7 +382,7 @@ class Handler(BaseHTTPRequestHandler):
 
     def do_POST(self):
         self.cookies_out = []
-        if not self.authorized({}):
+        if not self.authorized(urllib.parse.parse_qs(urllib.parse.urlparse(self.path).query)):
             return self.send_html('forbidden', 403)
         length = int(self.headers.get('Content-Length', 0))
         try:
