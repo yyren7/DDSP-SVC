@@ -243,6 +243,15 @@ def calib_sample(spk):
 
 
 CLIP_STAGES = {'mix': 'mix', 'voc': 'vocals', 'derev': 'dereverb', 'kar': 'karaoke'}  # clip?from= -> STAGES key
+ORIGINAL_DIR = '0 原曲'  # compare_lines.py: the input song, cut like the versions
+BLIND_NAMES = '甲乙丙丁戊己庚辛'
+
+
+def blind_order(root, spk, n):
+    """[(neutral name, version folder)] of compare/_lines/ for line n, in an order fixed by speaker and n."""
+    versions = sorted(d.name for d in root.iterdir() if d.is_dir() and not d.name.startswith(('_', '0 ')))
+    random.Random(f'{spk}|{n}').shuffle(versions)
+    return list(zip(BLIND_NAMES, versions))
 
 
 def line_card(spk, n, m, marks, buttons=True, note_open=False):
@@ -366,6 +375,8 @@ class Handler(BaseHTTPRequestHandler):
             return self.page_calib()
         if route == 'notes':
             return self.page_notes(q.get('sel', [''])[0])
+        if route == 'lcmp':
+            return self.page_lcmp(q.get('sel', [''])[0])
         if route == 'stage':
             return self.page_stage(q.get('s', [''])[0], int(q.get('page', ['1'])[0] or 1))
         if route == 'song':
@@ -568,6 +579,39 @@ class Handler(BaseHTTPRequestHandler):
             for n in nums.split(','):
                 if n.strip().isdigit() and 1 <= int(n) <= len(sample):
                     body.append(line_card(spk, int(n), sample[int(n) - 1], marks, buttons=False, note_open=True))
+        self.send_html(''.join(body))
+
+    def page_lcmp(self, sel):
+        """lcmp?sel=<speaker>:<n>,...: calibration lines n through the chains of compare_lines.py, blind: the
+        versions of each line in a shuffled order (fixed by speaker and n, see blind_order) under neutral names."""
+        body = ['<p><a href="./">← 返回</a></p><h1>同一句的几种做法（盲听）</h1>',
+                '<p class="muted">每句先是原曲，然后是几种去伴奏做法的结果，顺序每句打乱，名字不代表做法。'
+                '听完写一句：哪个最好、哪个有对讲机感或发虚、哪个混响没去干净，例如“丙最好，甲乙发虚”。'
+                '提交后会同步给 Claude。</p>']
+        for part in sel.split(';'):
+            spk, _, nums = part.partition(':')
+            root = compare_dir(spk) / '_lines' if spk in speakers() else None
+            if not root or not root.is_dir():
+                continue
+            sample = calib_sample(spk)
+            body.append(f'<h2>{esc(spk)}</h2>')
+            for n in nums.split(','):
+                if not (n.strip().isdigit() and 1 <= int(n) <= len(sample)):
+                    continue
+                m = sample[int(n) - 1]
+                target = f'cmp:line:{m["song"]}#{m["k"]}'
+                sid = 'cm' + hashlib.sha1(f'{spk}|{target}'.encode()).hexdigest()[:10]
+                players = ''
+                for name, version in [('原曲', ORIGINAL_DIR)] + blind_order(root, spk, int(n)):
+                    f = root / version / f'{int(n)}.wav'
+                    if f.is_file():
+                        players += f'<div class="muted">{name}</div>' + audio_tag(f.relative_to(ROOT).as_posix())
+                body.append(
+                    f'<div class="card"><div class="name">{int(n)}. <span class="muted">{esc(m["song"])}　'
+                    f'{m["start"]:.1f}–{m["end"]:.1f} 秒</span></div>{players}'
+                    f'<textarea id="{sid}" placeholder="哪个最好、哪个发虚或有对讲机感"></textarea>'
+                    f'<div class="row"><button data-t="{esc(target)}" data-spk="{esc(spk)}" data-box="{sid}" '
+                    f'onclick="note(this)">提交</button><span id="{sid}_ok" class="ok"></span></div></div>')
         self.send_html(''.join(body))
 
     def page_check(self):
