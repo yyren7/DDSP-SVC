@@ -13,6 +13,7 @@ import hashlib
 import html
 import json
 import os
+import random
 import re
 import subprocess
 import threading
@@ -184,7 +185,7 @@ def check_list(spk):
     return out
 
 
-DECISIONS = ('排除', '保留')
+DECISIONS = ('排除', '保留', '拿不准')
 
 
 def decisions(spk):
@@ -201,6 +202,33 @@ def decisions(spk):
             continue
         if e.get('speaker') == spk and e.get('text') in DECISIONS:
             out[e.get('target')] = e['text']
+    return out
+
+
+CALIB_BANDS = [(0, 50, 12), (50, 75, 18), (75, 90, 18), (90, 101, 12)]  # line score band, lines drawn from it
+
+
+def calib_sample(spk):
+    """[{song, k, start, end}] drawn once from eval/lines.jsonl (eval_lines.py) to calibrate the line
+    scores against the listener: a fixed number of lines from each score band, in random order. Kept in
+    eval/calib.json so that every visit shows the same lines."""
+    path = SPEAKERS / spk / 'eval' / 'calib.json'
+    if path.exists():
+        return json.loads(path.read_text(encoding='utf-8'))
+    src = SPEAKERS / spk / 'eval' / 'lines.jsonl'
+    if not src.exists():
+        return []
+    lines = [json.loads(x) for x in src.read_text(encoding='utf-8').splitlines() if x.strip()]
+    rnd = random.Random(spk)
+    out = []
+    for lo, hi, n in CALIB_BANDS:
+        band = [m for m in lines if lo <= m['score'] < hi]
+        out += rnd.sample(band, min(n, len(band)))
+    rnd.shuffle(out)
+    out = [{'song': m['song'], 'k': m['k'], 'start': m['start'], 'end': m['end']} for m in out]
+    tmp = path.with_suffix('.part')
+    tmp.write_text(json.dumps(out, ensure_ascii=False), encoding='utf-8')
+    tmp.replace(path)
     return out
 
 
@@ -287,6 +315,10 @@ class Handler(BaseHTTPRequestHandler):
         self.spk = self.pick_speaker(q)
         if route == 'file':
             return self.serve_file(q.get('p', [''])[0], q.get('fmt', [''])[0])
+        if route == 'clip':
+            return self.serve_clip(q)
+        if route == 'calib':
+            return self.page_calib()
         if route == 'stage':
             return self.page_stage(q.get('s', [''])[0], int(q.get('page', ['1'])[0] or 1))
         if route == 'song':
@@ -336,6 +368,13 @@ class Handler(BaseHTTPRequestHandler):
         if sets:
             parts.append(f'<h2>模型对比（{len(sets)} 段）</h2><div class="card row"><a class="name" href="compare">'
                          '逐段试听</a><span class="muted">同一段歌用不同的模型和步骤去伴奏，选出最好的做法</span></div>')
+        sample = calib_sample(spk)
+        if sample:
+            marks = decisions(spk)
+            done = sum(f'line:{m["song"]}#{m["k"]}' in marks for m in sample)
+            parts.append(f'<h2>逐句校准（已标 {done}/{len(sample)} 句）</h2><div class="card row">'
+                         '<a class="name" href="calib">逐句试听并标记</a><span class="muted">随机抽的句子，分数不显示；'
+                         '你的标记用来校准逐句评分</span></div>')
         ranked = rank_songs.rank(rank_songs.load(SPEAKERS / spk))
         if ranked:
             parts.append(f'<h2>干声按质量排序（{len(ranked)} 首）</h2><div class="card row"><a class="name" href="rank">'
@@ -447,6 +486,38 @@ class Handler(BaseHTTPRequestHandler):
                 f'<span id="{sid}" class="ok">{esc(state)}</span></div></div>')
         self.send_html(''.join(body))
 
+    def page_calib(self):
+        sample = calib_sample(self.spk) if self.spk else []
+        if not sample:
+            return self.send_html('<p><a href="./">← 返回</a></p><p>这个说话人还没有逐句结果（eval_lines.py lines）。</p>', 404)
+        marks = decisions(self.spk)
+        done = sum(f'line:{m["song"]}#{m["k"]}' in marks for m in sample)
+        others = ' · '.join(f'<a href="calib?spk={urllib.parse.quote(s)}">{esc(s)}</a>' for s in speakers()
+                            if s != self.spk and (SPEAKERS / s / 'eval' / 'lines.jsonl').exists())
+        body = ['<p><a href="./">← 返回</a></p>', f'<h1>逐句校准：{esc(self.spk)}</h1>',
+                f'<p>其他说话人：{others}</p>' if others else '',
+                f'<div class="card">已标 {done}/{len(sample)} 句。这些句子是从各个分数段随机抽的，顺序打乱，分数不显示。'
+                '<br>按“这一句能不能拿去训练”来判断：听得出伴奏或和声残留、混响拖尾重、杂音或电音、'
+                '声音被切断或削弱、不是她的声音，就点<b>排除</b>；干净自然就点<b>保留</b>；拿不准就点<b>拿不准</b>。'
+                '<br><span class="muted">播放的是最终干声的这一句（前后各多 0.1 秒）；“原曲同一句”可以对照原曲。'
+                '标记会同步给 Claude，改主意再点一次就行，以最后一次为准。</span></div>']
+        sp = urllib.parse.quote(self.spk)
+        for i, m in enumerate(sample, 1):
+            target = f'line:{m["song"]}#{m["k"]}'
+            sid = 'mk' + hashlib.sha1(target.encode()).hexdigest()[:10]
+            state = f'已标记：{marks[target]}' if target in marks else ''
+            span = f'sp={sp}&song={urllib.parse.quote(m["song"])}&s={max(0, m["start"] - 0.1):.2f}&e={m["end"] + 0.1:.2f}'
+            buttons = ''.join(f'<button data-t="{esc(target)}" data-s="{sid}" onclick="mark(this)">{d}</button>'
+                              for d in ('保留', '排除', '拿不准'))
+            body.append(
+                f'<div class="card"><div class="name">{i}. <span class="muted">{esc(m["song"])}　'
+                f'{m["start"]:.1f}–{m["end"]:.1f} 秒</span></div>'
+                f'<audio controls preload="none" src="clip?{span}&from=kar"></audio>'
+                f'<details><summary class="muted">原曲同一句</summary>'
+                f'<audio controls preload="none" src="clip?{span}&from=mix"></audio></details>'
+                f'<div class="row">{buttons}<span id="{sid}" class="ok">{esc(state)}</span></div></div>')
+        self.send_html(''.join(body))
+
     def page_check(self):
         check = check_list(self.spk) if self.spk else []
         body = ['<p><a href="./">← 返回</a></p><h1>待抽查</h1>',
@@ -476,6 +547,30 @@ class Handler(BaseHTTPRequestHandler):
             path = opus_copy(path)
             if not path:
                 return self.send_html('transcoding failed', 500)
+        self.send_path(path)
+
+    def serve_clip(self, q):
+        """clip?sp=<speaker>&song=<name>&s=<sec>&e=<sec>&from=kar|mix: one line as Opus, from the dry
+        vocals (3_karaoke) or from the song as it went into the pipeline (0_input)."""
+        spk, song = q.get('sp', [''])[0], q.get('song', [''])[0]
+        try:
+            s, e = float(q.get('s', [''])[0]), float(q.get('e', [''])[0])
+        except ValueError:
+            return self.send_html('bad span', 400)
+        if spk not in speakers() or not 0 <= s < e <= s + 60:
+            return self.send_html('not found', 404)
+        if q.get('from', [''])[0] == 'mix':
+            folder = SPEAKERS / spk / 'work' / '0_input'
+            src = next((f for f in audio_files(folder) if f.stem == song), None)
+        else:
+            src = stage_dir(spk, 'karaoke') / f'{song}.wav'
+            src = src if src.parent == stage_dir(spk, 'karaoke') and src.is_file() else None
+        path = src and opus_copy(src, span=(s, e))
+        if not path:
+            return self.send_html('not found', 404)
+        self.send_path(path)
+
+    def send_path(self, path):
         size = path.stat().st_size
         start, end = 0, size - 1
         m = re.match(r'bytes=(\d*)-(\d*)', self.headers.get('Range', ''))
@@ -512,18 +607,21 @@ class Handler(BaseHTTPRequestHandler):
                 pass
 
 
-def opus_copy(src, background=False):
-    """Opus version of an audio file, made once and kept in .autodl/opus (None if ffmpeg fails).
+def opus_copy(src, background=False, span=None):
+    """Opus version of an audio file, made once and kept in .autodl/opus (None if ffmpeg fails); with
+    span=(start, end) in seconds, of that part only (in .autodl/opus/clips).
     A 4-minute WAV takes about 3 s on the 0.5 CPU core of no-GPU mode; background runs ffmpeg at the
     lowest CPU priority."""
     st = src.stat()
-    key = hashlib.sha1(f'{src}|{st.st_size}|{st.st_mtime_ns}|{OPUS_BITRATE}'.encode()).hexdigest()
-    dst = STATE / 'opus' / f'{key}.ogg'
+    cut = f'|{span[0]:.2f}-{span[1]:.2f}' if span else ''
+    key = hashlib.sha1(f'{src}|{st.st_size}|{st.st_mtime_ns}|{OPUS_BITRATE}{cut}'.encode()).hexdigest()
+    dst = STATE / 'opus' / ('clips' if span else '') / f'{key}.ogg'
     with _transcode_locks.setdefault(key, threading.Lock()):  # range requests arrive in parallel
         if not dst.exists():
             dst.parent.mkdir(parents=True, exist_ok=True)
             tmp = dst.with_suffix('.part.ogg')
-            cmd = ['ffmpeg', '-nostdin', '-loglevel', 'error', '-y', '-i', str(src), '-vn',
+            seek = ['-ss', f'{span[0]:.2f}', '-t', f'{span[1] - span[0]:.2f}'] if span else []
+            cmd = ['ffmpeg', '-nostdin', '-loglevel', 'error', '-y', *seek, '-i', str(src), '-vn',
                    '-c:a', 'libopus', '-b:a', OPUS_BITRATE, '-compression_level', '5', str(tmp)]
             if background:
                 r = subprocess.run(['nice', '-n', '19'] + cmd, capture_output=True)
