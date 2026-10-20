@@ -3,7 +3,7 @@ Calibrate the line scores against the listener: the keep / exclude marks of the 
 (review_server.py, calib) train a logistic regression over the signal measurements of eval_lines.py and the
 learned scores of score_lines.py and the sung / spoken / instrument tags of tag_lines.py, pooled over the speakers given.
 
-    python tools/autodl/fit_lines.py <speaker dir>...
+    python tools/autodl/fit_lines.py [--features a,b,c] <speaker dir>...
 
 Prints how well each score alone agrees with the marks (AUC) and how well the fitted model does in
 cross-validation, then writes the model to <speaker>/eval/line_model.json for each speaker. build_clips.py
@@ -83,7 +83,10 @@ def keep_set(spk, threshold=None):
 
 
 def main():
-    spks = [Path(d) for d in sys.argv[1:]]
+    args, only = sys.argv[1:], None
+    if args and args[0] == '--features':  # fit on these alone: with ~100 marks, many features overfit
+        only, args = args[1].split(','), args[2:]
+    spks = [Path(d) for d in args]
     rows, y, w, who = [], [], [], []
     for spk in spks:
         tab, mk = table(spk), marks(spk)
@@ -101,7 +104,7 @@ def main():
     y, w = np.array(y), np.array(w)
     if len(y) < 20 or y.min() == y.max():
         sys.exit('too few marks (need at least 20, with both keep and exclude)')
-    feats = [f for f in SIGNAL + LEARNED + TAGS + WINDOWS if any(r.get(f) is not None for r in rows)]
+    feats = [f for f in (only or SIGNAL + LEARNED + TAGS + WINDOWS) if any(r.get(f) is not None for r in rows)]
     X, fill = matrix(rows, feats)
 
     print('\nhow each score alone agrees with the marks (weighted AUC; 0.5 = chance, 1 = perfect):')
