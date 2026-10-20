@@ -6,8 +6,8 @@
 # made by clips@speaker:dataset with tools/autodl/build_clips.py)
 # After a reboot the runner resumes a job that failed or was interrupted.
 # A/B baseline: every line of the dry vocals, no line selection (the other side: dataset clean)
-JOB=clips@sakura_shunka:all,features@pheebie:all,features@sakura_shunka:all,train@pheebie:all,train@sakura_shunka:all
-RUN_ID=31
+JOB=features@pheebie:all,features@sakura_shunka:all,train@pheebie:all,train@sakura_shunka:all
+RUN_ID=32
 # train stops after MAX_STEPS steps (0 = never); A/B runs compare training sets at equal steps
 MAX_STEPS=40000
 
@@ -34,7 +34,7 @@ DL_FILTER=
 # Per-speaker settings live in tools/autodl/split/<speaker>.args; SPLIT_ARGS is added after them.
 SPLIT_ARGS=
 UVR_ARGS=--steps vocals,dereverb,karaoke
-WORKERS=4
+WORKERS=8
 KEY=0
 SPK_ID=1
 

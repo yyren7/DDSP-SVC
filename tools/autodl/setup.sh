@@ -43,7 +43,8 @@ fi
 conda activate "$ENV_ROOT/ddsp"
 pip_install torch torchaudio
 pip_install -r requirements.txt
-python -c "import torch; print('ddsp env: torch', torch.__version__, 'cuda', torch.cuda.is_available())"
+pip_install "setuptools<81"  # pyworld imports pkg_resources, which setuptools 81 dropped
+python -c "import torch, pyworld; print('ddsp env: torch', torch.__version__, 'cuda', torch.cuda.is_available())"
 conda deactivate
 
 # ---- uvr: audio-separator for vocal separation / de-reverb / denoise ----
