@@ -79,6 +79,19 @@ start_job() {  # chain item: job[@speaker][:dataset], speaker if not SPEAKER in 
     save_job_state
 }
 
+# A plan key is "<chain>:<RUN_ID>:<SPEAKER>" (chain items may hold ':' themselves). A new plan with the same
+# RUN_ID and SPEAKER whose chain is the same up to the current job (jobs appended, or later ones changed)
+# carries on instead of starting the chain again from the beginning.
+same_chain_so_far() {  # new plan key
+    local old_chain="${JOB_KEY%:*:*}" new_chain="${1%:*:*}" i
+    local -a old new
+    [ -n "$JOB_NAME" ] && [ "${JOB_KEY:${#old_chain}}" = "${1:${#new_chain}}" ] || return 1
+    IFS=',' read -r -a old <<< "${old_chain// /}"
+    IFS=',' read -r -a new <<< "${new_chain// /}"
+    [ "$JOB_IDX" -lt "${#new[@]}" ] || return 1
+    for ((i = 0; i <= JOB_IDX; i++)); do [ "${old[$i]:-}" = "${new[$i]}" ] || return 1; done
+}
+
 # An empty JOB_PID must never reach `kill -0`: `kill -0 0` checks our own process group and succeeds.
 job_running() { [ -n "$JOB_PID" ] && kill -0 "$JOB_PID" 2>/dev/null; }
 
@@ -286,6 +299,10 @@ while true; do
 
     want_chain="$(plan_value JOB)"; want_key="$want_chain:$(plan_value RUN_ID):$(plan_value SPEAKER)"
     IFS=',' read -r -a chain <<< "${want_chain// /}"
+    if [ "$want_key" != "$JOB_KEY" ] && same_chain_so_far "$want_key"; then
+        echo "$(date '+%F %T') chain changed only after $JOB_NAME, carrying on with it"
+        JOB_KEY="$want_key"; save_job_state
+    fi
     if [ "$want_key" != "$JOB_KEY" ]; then
         # New plan: stop whatever runs and start the chain from the beginning.
         stop_group "$JOB_PID"; JOB_PID=""

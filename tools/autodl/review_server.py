@@ -12,6 +12,7 @@ import argparse
 import hashlib
 import html
 import json
+import math
 import os
 import random
 import re
@@ -63,6 +64,7 @@ audio{width:100%;max-width:520px;height:36px} .muted{color:#777;font-size:13px}
 textarea{width:100%;box-sizing:border-box;min-height:44px;font:inherit}
 button{padding:4px 12px;font:inherit;cursor:pointer} pre{white-space:pre-wrap;font-size:12px;background:#f0f0f0;
 padding:8px;border-radius:6px;max-height:360px;overflow:auto} .ok{color:#18794e}
+td,th{padding:3px 8px;border-bottom:1px solid #eee;text-align:right} td:first-child{text-align:left}
 """
 
 JS = """
@@ -255,6 +257,69 @@ def blind_order(root, spk, n):
     return list(zip(BLIND_NAMES, versions))
 
 
+AB_CHOICES = ('甲更好', '乙更好', '差不多')
+AB_FIRST = 8  # cards of each speaker shown first: half her own clips, half the other speakers'
+
+
+def ab_manifest(spk):
+    """abtest/manifest.json of tools/autodl/abtest.py, or None."""
+    path = SPEAKERS / spk / 'abtest' / 'manifest.json'
+    try:
+        return json.loads(path.read_text(encoding='utf-8'))
+    except (OSError, ValueError):
+        return None
+
+
+def ab_items(spk, man):
+    """The clips of the manifest with their own ones and the other speakers' taking turns."""
+    own = [it for it in man['items'] if it['src_spk'] == spk]
+    other = [it for it in man['items'] if it['src_spk'] != spk]
+    out = []
+    for k in range(max(len(own), len(other))):
+        out += own[k:k + 1] + other[k:k + 1]
+    return out
+
+
+def ab_order(spk, name, datasets):
+    """[(甲, dataset), (乙, dataset)] for one clip, shuffled by speaker and clip, the same on every visit."""
+    ds = list(datasets)
+    random.Random(f'ab|{spk}|{name}').shuffle(ds)
+    return list(zip(BLIND_NAMES, ds))
+
+
+def ab_audio(spk, name, v):
+    """Player of one clip of the A/B page by its neutral name (v: 原声 or a name of ab_order), so that its
+    address does not tell the model either (abclip resolves it)."""
+    src = f'abclip?sp={urllib.parse.quote(spk)}&n={urllib.parse.quote(name)}&v={urllib.parse.quote(v)}'
+    return f'<audio controls preload="none" src="{src}&fmt=ogg" data-alt="{src}"></audio>'
+
+
+def ab_choices(spk):
+    """{clip name: latest of AB_CHOICES} from the feedback on the A/B page of this speaker."""
+    out = {}
+    try:
+        lines = (STATE / 'feedback.jsonl').read_text(encoding='utf-8').splitlines()
+    except OSError:
+        return out
+    for line in lines:
+        try:
+            e = json.loads(line)
+        except ValueError:
+            continue
+        t = str(e.get('target', ''))
+        if e.get('speaker') == spk and t.startswith(f'ab:{spk}:') and e.get('text') in AB_CHOICES:
+            out[t[len(f'ab:{spk}:'):]] = e['text']
+    return out
+
+
+def sign_test(wins, losses):
+    """Two-sided sign test p-value of wins against losses (ties left out)."""
+    n, k = wins + losses, max(wins, losses)
+    if not n:
+        return 1.0
+    return min(1.0, 2 * sum(math.comb(n, i) for i in range(k, n + 1)) / 2 ** n)
+
+
 def line_card(spk, n, m, marks, buttons=True, note_open=False):
     """One line of eval/lines.jsonl ({song, k, start, end}) numbered n: the dry vocals of the line, the
     same place in the input song and after each step, keep / exclude / unsure buttons, and a box for why."""
@@ -378,6 +443,12 @@ class Handler(BaseHTTPRequestHandler):
             return self.page_notes(q.get('sel', [''])[0])
         if route == 'lcmp':
             return self.page_lcmp(q.get('sel', [''])[0])
+        if route == 'ab':
+            return self.page_ab()
+        if route == 'abclip':
+            return self.serve_abclip(q)
+        if route == 'abres':
+            return self.page_abres()
         if route == 'stage':
             return self.page_stage(q.get('s', [''])[0], int(q.get('page', ['1'])[0] or 1))
         if route == 'song':
@@ -424,6 +495,13 @@ class Handler(BaseHTTPRequestHandler):
                  '<span id="fbgen_ok" class="ok"></span></div></div>']
         if not spk:
             return self.send_html(''.join(parts))
+        ab = [(s, m) for s in speakers() if (m := ab_manifest(s))]
+        if ab:
+            done = sum(len(ab_choices(s)) for s, _ in ab)
+            parts.append(f'<h2>A/B 盲听（已听 {done} 句）</h2><div class="card row"><a class="name" href="ab">'
+                         '两个模型比一比</a><span class="muted">'
+                         + '；'.join(f'{esc(s)}：{" 和 ".join(map(esc, m["datasets"]))}，{m["step"]} 步' for s, m in ab)
+                         + '</span></div>')
         sets = compare_sets(spk)
         if sets:
             parts.append(f'<h2>模型对比（{len(sets)} 段）</h2><div class="card row"><a class="name" href="compare">'
@@ -615,6 +693,105 @@ class Handler(BaseHTTPRequestHandler):
                     f'onclick="note(this)">提交</button><span id="{sid}_ok" class="ok"></span></div></div>')
         self.send_html(''.join(body))
 
+    def page_ab(self):
+        """ab: the conversions of tools/autodl/abtest.py, blind. Each card is one clip: the input, then the
+        result of each model under a neutral name in an order fixed by speaker and clip (ab_order)."""
+        body = ['<p><a href="./">← 返回</a></p><h1>A/B 盲听：两个模型哪个好</h1>',
+                '<div class="card">每句先听<b>原声</b>（模型的输入），再听<b>甲</b>和<b>乙</b>：同一句由两个模型各转换一次，'
+                '顺序每句随机，名字不代表模型。选更好的一个：更像她本人、更自然、没有电音、沙哑、发虚或对讲机感。'
+                '分不出就点“差不多”。<br>每人前 8 句就够（4 句是她自己的歌重建，4 句是别人的歌转成她的声音），'
+                '想多听再展开“更多”。响度已对齐。听完点最下面的“揭晓”。'
+                '<span class="muted">改主意再点一次，以最后一次为准。</span></div>']
+        for spk in speakers():
+            man = ab_manifest(spk)
+            if not man:
+                continue
+            root, choices = SPEAKERS / spk / 'abtest', ab_choices(spk)
+            items = ab_items(spk, man)
+            own = [it for it in items if it['src_spk'] == spk]
+            body.append(f'<h2>{esc(spk)}</h2>')
+            if own:
+                body.append(f'<div class="card"><div class="muted">她本人的声音，用来对照像不像</div>'
+                            + ab_audio(spk, own[0]['name'], '原声') + '</div>')
+            cards = []
+            for i, it in enumerate(items, 1):
+                target = f'ab:{spk}:{it["name"]}'
+                sid = 'ab' + hashlib.sha1(target.encode()).hexdigest()[:10]
+                what = '她自己的歌，重建' if it['src_spk'] == spk else f'{esc(it["src_spk"])} 的歌，转成她的声音'
+                players = '<div class="muted">原声</div>' + ab_audio(spk, it['name'], '原声')
+                for name, _ in ab_order(spk, it['name'], man['datasets']):
+                    players += f'<div class="muted">{name}</div>' + ab_audio(spk, it['name'], name)
+                attrs = f'data-t="{esc(target)}" data-spk="{esc(spk)}"'
+                state = f'已标记：{choices[it["name"]]}' if it['name'] in choices else ''
+                cards.append(
+                    f'<div class="card"><div class="name">{i}. <span class="muted">{what}　{it["dur"]:.0f} 秒</span></div>'
+                    f'{players}<div class="row">'
+                    + ''.join(f'<button {attrs} data-s="{sid}" onclick="mark(this)">{c}</button>' for c in AB_CHOICES)
+                    + f'<span id="{sid}" class="ok">{esc(state)}</span></div>'
+                    f'<details><summary class="muted">写原因（可选）</summary>'
+                    f'<textarea id="{sid}n" placeholder="例如：乙有电音，甲更像她"></textarea>'
+                    f'<div class="row"><button {attrs} data-box="{sid}n" onclick="note(this)">提交原因</button>'
+                    f'<span id="{sid}n_ok" class="ok"></span></div></details></div>')
+            body += cards[:AB_FIRST]
+            if len(cards) > AB_FIRST:
+                body.append(f'<details><summary>更多（{len(cards) - AB_FIRST} 句，可选）</summary>'
+                            + ''.join(cards[AB_FIRST:]) + '</details>')
+        body.append('<p><a href="abres">听完了，揭晓 →</a></p>')
+        self.send_html(''.join(body))
+
+    def page_abres(self):
+        """abres: the listener's choices of the A/B page decoded into the models, and the learned scores
+        of the results (abtest/scores.jsonl) next to those of the inputs."""
+        body = ['<p><a href="ab">← 回到盲听</a></p><h1>A/B 结果</h1>',
+                '<p class="muted">p 是符号检验（不算“差不多”）：小于 0.05 才算听感上真的分出了好坏。'
+                '下表是机器打分的平均，“原声”一行是输入本身，作为参照。</p>']
+        names = {'singmos': 'SingMOS 歌声自然度', 'aes_pq': '制作质量 PQ', 'aes_ce': '好听程度 CE',
+                 'dns_ovrl': 'DNSMOS 总体', 'spk_cos': '像她（声纹相似度）', 'f0_rmse_cents': '音高误差（音分）'}
+        for spk in speakers():
+            man = ab_manifest(spk)
+            if not man:
+                continue
+            ds, choices = man['datasets'], ab_choices(spk)
+            body.append(f'<h2>{esc(spk)}：{" 对 ".join(map(esc, ds))}（{man["step"]} 步）</h2>')
+            own_names = {it['name'] for it in man['items'] if it['src_spk'] == spk}
+            rows = []
+            for label, pick in (('全部', lambda n: True), ('她自己的歌', lambda n: n in own_names),
+                                ('别人的歌', lambda n: n not in own_names)):
+                wins, ties = {d: 0 for d in ds}, 0
+                for n, c in choices.items():
+                    if not pick(n):
+                        continue
+                    order = dict(ab_order(spk, n, ds))
+                    if c == '差不多':
+                        ties += 1
+                    elif c[0] in order:
+                        wins[order[c[0]]] += 1
+                p = f'，p = {sign_test(*[wins[d] for d in ds[:2]]):.2f}' if len(ds) == 2 else ''
+                rows.append(f'{label}：' + '，'.join(f'{esc(d)} 胜 {w}' for d, w in wins.items()) + f'，差不多 {ties}{p}')
+            body.append(f'<div class="card">已听 {len(choices)}/{len(man["items"])} 句<br>' + '<br>'.join(rows) + '</div>')
+            path = SPEAKERS / spk / 'abtest' / 'scores.jsonl'
+            if not path.exists():
+                body.append('<p class="muted">机器打分还没做完。</p>')
+                continue
+            scores = [json.loads(x) for x in path.read_text(encoding='utf-8').splitlines() if x.strip()]
+            for label, own in (('她自己的歌（重建）', True), ('别人的歌（转换）', False)):
+                head = ''.join(f'<th>{esc(names[k])}</th>' for k in names)
+                trs = []
+                for d in ['_source'] + ds:
+                    sel = [r for r in scores if r['dataset'] == d and r['self'] == own]
+                    if not sel:
+                        continue
+                    cells = []
+                    for k in names:
+                        v = [r[k] for r in sel if r.get(k) is not None]
+                        cells.append(f'<td>{sum(v) / len(v):.3f}</td>' if v else '<td>–</td>')
+                    trs.append(f'<tr><td>{"原声" if d == "_source" else esc(d)}</td>{"".join(cells)}</tr>')
+                n = sum((it['src_spk'] == spk) == own for it in man['items'])
+                body.append(f'<div class="card"><b>{label}</b>，每格是 {n} 句的平均；音高误差越小越好，其余越大越好'
+                            f'<div style="overflow-x:auto"><table style="border-collapse:collapse;font-size:13px">'
+                            f'<tr><th></th>{head}</tr>{"".join(trs)}</table></div></div>')
+        self.send_html(''.join(body))
+
     def page_check(self):
         check = check_list(self.spk) if self.spk else []
         body = ['<p><a href="./">← 返回</a></p><h1>待抽查</h1>',
@@ -641,6 +818,22 @@ class Handler(BaseHTTPRequestHandler):
         if not allowed or not path.is_file() or path.suffix.lower() not in AUDIO_EXTS:
             return self.send_html('not found', 404)
         if fmt == 'ogg' and path.suffix.lower() in OPUS_FROM:
+            path = opus_copy(path)
+            if not path:
+                return self.send_html('transcoding failed', 500)
+        self.send_path(path)
+
+    def serve_abclip(self, q):
+        """abclip?sp=<speaker>&n=<clip>&v=原声|甲|乙[&fmt=ogg]: one clip of the A/B page (ab_audio)."""
+        spk, name, v = (q.get(k, [''])[0] for k in ('sp', 'n', 'v'))
+        man = ab_manifest(spk) if spk in speakers() else None
+        if not man or name not in {it['name'] for it in man['items']}:
+            return self.send_html('not found', 404)
+        folder = '_source' if v == '原声' else dict(ab_order(spk, name, man['datasets'])).get(v)
+        path = SPEAKERS / spk / 'abtest' / folder / f'{name}.wav' if folder else None
+        if not path or not path.is_file():
+            return self.send_html('not found', 404)
+        if q.get('fmt', [''])[0] == 'ogg':
             path = opus_copy(path)
             if not path:
                 return self.send_html('transcoding failed', 500)

@@ -1,5 +1,5 @@
 #!/bin/bash
-# Predefined jobs started by runner.sh: setup | download | songsplit | uvr | compare | lines | scorelines | fitlines | clips | features | train | infer | migrate
+# Predefined jobs started by runner.sh: setup | download | songsplit | uvr | compare | lines | scorelines | fitlines | clips | features | train | abtest | infer | migrate
 # Every job except setup works on the folders of SPEAKER (speakers/<name>/, see config.sh).
 # Extra arguments come from tools/autodl/plan.txt (UVR_ARGS, KEY, SPK_ID, WORKERS, ...).
 set -euo pipefail
@@ -41,7 +41,7 @@ require_gpu() {
     echo "no GPU found: this instance runs in no-card mode. Restart it with a GPU; the runner resumes this job."
     exit 3
 }
-case "$JOB" in uvr|compare|scorelines|features|train|infer) require_gpu ;; esac
+case "$JOB" in uvr|compare|scorelines|features|train|abtest|infer) require_gpu ;; esac
 
 if [ "$JOB" != setup ] && [ -z "$SPK_DIR" ]; then
     echo "set SPEAKER in plan.txt (letters, digits, _ and - only), e.g. SPEAKER=sakura_shunka"; exit 2
@@ -156,6 +156,9 @@ scorelines)
     # Learned scores, the pitch check and the sung / spoken / instrument tags of every line
     # (score_lines.py in the evalq venv of /root/autodl-tmp/setup_evalq.sh, tag_lines.py in the uvr env)
     [ -x "$ENV_ROOT/evalq/bin/python" ] || { echo "no evalq env: run /root/autodl-tmp/setup_evalq.sh first"; exit 2; }
+    # The scorers load from the caches on the data disk (TORCH_HOME, HF_HOME of config.sh), Hugging Face offline:
+    # a missing model fails at once instead of hanging on huggingface.co from AutoDL
+    export HF_HUB_OFFLINE=1
     "$ENV_ROOT/evalq/bin/python" tools/autodl/score_lines.py "$SPK_DIR"
     "$ENV_ROOT/uvr/bin/python" tools/autodl/tag_lines.py "$SPK_DIR"
     ;;
@@ -181,6 +184,16 @@ train)
     conda activate "$ENV_ROOT/ddsp"
     export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
     python train_reflow.py -c "$SPK_CONFIG"
+    ;;
+abtest)
+    # The A/B listening of the run that trained this speaker on every line (all) and on the kept lines
+    # (clean): both models convert the validation clips of every speaker, at equal steps; then the learned
+    # scores of the results (abtest.py). The review page plays them blind (ab) and reveals them (abres).
+    conda activate "$ENV_ROOT/ddsp"
+    python tools/autodl/abtest.py convert "$SPK_DIR" all clean
+    # the listening page needs only the conversions, so the job does not fail on the scores
+    HF_HUB_OFFLINE=1 "$ENV_ROOT/evalq/bin/python" tools/autodl/abtest.py score "$SPK_DIR" ||
+        echo "learned scores failed (see above); the A/B page works without them"
     ;;
 infer)
     # Convert every song in test_songs/ with the newest checkpoint.

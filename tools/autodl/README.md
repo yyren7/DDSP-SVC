@@ -51,7 +51,9 @@ AutoDL 控制台 → 实例的「自定义服务」→ 打开 6008 端口对应�
 
 网页里可以：
 - 在顶部切换说话人，默认打开 `plan.txt` 里的 `SPEAKER`
-- 按歌曲对比原曲、分离人声、去混响、去和声的效果
+- 按歌曲对比原曲、分离人声、去和声、去混响的效果
+- 「逐句校准」：随机抽的句子标保留、排除或拿不准，用来校准逐句评分
+- 「A/B 盲听」：同一句由两个模型各转换一次，盲选哪个好；听完点「揭晓」看胜负、符号检验和机器打分
 - 在「模型对比」里听同一段歌用不同模型和步骤处理的结果
 - 按阶段浏览切片、训练集、转换结果
 - 按场次试听 `songsplit` 切好的歌回歌曲，每首标出它在原录像里的位置
@@ -67,8 +69,11 @@ AutoDL 控制台 → 实例的「自定义服务」→ 打开 6008 端口对应�
 ├── songs/        songsplit 切好的歌，每首一个文件
 ├── raw_songs/    挑出来做训练集的歌
 ├── work/         uvr 各阶段的中间结果（1_vocals … 4_slices）
+├── eval/         lines 等逐句测量、打分和校准的结果
 ├── data/         训练集 train/audio、验证集 val/audio，以及 features 的特征
-├── exp/          训练出的模型和训练日志
+├── data_<名>/    clips 用选出的句子做的训练集（例如 all、clean），A/B 用
+├── exp/          训练出的模型和训练日志（data_<名>/ 的模型在 exp_<名>/）
+├── abtest/       abtest 的盲听材料
 ├── reflow.yaml   这个人的训练配置（每次 features/train/infer 时自动生成，不要手改）
 ├── test_songs/   想试转换效果的歌
 ├── work_test/    测试歌曲的干声
@@ -89,17 +94,22 @@ AutoDL 控制台 → 实例的「自定义服务」→ 打开 6008 端口对应�
 | `setup` | 建 conda 环境（ddsp、uvr），下载 ContentVec、NSF-HiFiGAN、RMVPE |
 | `download` | 按 `DL_URL` 下载 B 站空间里标题匹配 `DL_MATCH` 的视频音频（`DL_URL` 也可以是仓库里的链接清单，比如 `tools/autodl/lists/` 下的文件），存到 `downloads/`（冷存储）。`DL_MAX` 限制每次最多下载几个新视频（空间按新到旧排，多 P 视频每个 P 算一个）。`DL_FILTER` 追加 yt-dlp 的过滤条件，比如 `duration>=120 & duration<=480`。需要登录时把 cookies 放到 `.autodl/bilibili_cookies.txt` |
 | `songsplit` | 把 `downloads/` 里的歌回录像按歌曲切开，去掉聊天，每首歌一个文件存到 `songs/`。歌名取自评论里的道标；切分结果列在 `songs/_songs.tsv`。每个人的切歌参数写在 `tools/autodl/split/<说话人>.args`，`SPLIT_ARGS` 加在它后面，用来临时试参数（见 `python tools/split_songs.py -h`） |
-| `uvr` | `raw_songs/` 依次分离人声、去混响、去和声，再切片，输出到 `data/`。模型见 `tools/prepare_dataset.py` 的 `DEFAULT_MODELS`，换了模型的阶段会自动重做 |
+| `uvr` | `raw_songs/` 依次分离人声、去和声（3 个模型取平均）、去混响（`UVR_ARGS=--steps vocals,karaoke,dereverb`），结果在 `work/`。模型见 `tools/prepare_dataset.py` 的 `DEFAULT_MODELS`，换了模型的阶段会自动重做 |
+| `lines` | 把干声切成句子并逐帧测量（`eval_lines.py`），再做整首的测量（`eval_vocals.py`），结果在 `eval/` |
+| `scorelines` | 每句的机器打分（SingMOS-Pro、DNSMOS、Audiobox Aesthetics、声纹、RMVPE 音高检查）和唱/说/伴奏标签（`score_lines.py`、`tag_lines.py`） |
+| `fitlines` | 用所有说话人的校准标记拟合“哪些句子能拿去训练”的规则（`fit_lines.py`，可用的分数由 `LINE_FEATURES` 指定） |
+| `clips` | 写成 `clips@<说话人>:<名>`：用选出的句子拼成训练集 `data_<名>/`，`all` 是全部句子，`clean` 是规则保留的句子（`build_clips.py`）。后面的 `features`、`train` 也写成 `任务@说话人:<名>` |
 | `compare` | 从几首歌各截 40 秒，用几套模型和步骤分别去伴奏，在试听网页的「模型对比」里并排听（`tools/autodl/compare_uvr.py`） |
 | `features` | DDSP-SVC 特征预处理（`preprocess.py`） |
 | `train` | 训练。重启任务时会从最近保存的 checkpoint 继续 |
+| `abtest` | A/B：这个人的 `all` 和 `clean` 两个模型在相同步数下转换同一批没参与训练的句子（她自己的和别人的），再做机器打分（`abtest.py`），网页「A/B 盲听」里盲听 |
 | `infer` | 用最新的 checkpoint 转换 `test_songs/` 里的歌曲，结果在网页的「转换结果」里 |
 | `migrate` | 一次性任务：把旧的单人目录（仓库里的 `raw_songs/`、`preprocess_work/`、`data/` 等，以及数据盘上的 `<名字>_raw_songs/`、`<名字>_songs/`）搬进 `speakers/`。目标目录里已经有文件时会停下，不覆盖 |
 | `idle` | 停止当前任务 |
 
 表格里的目录都在当前说话人的目录 `speakers/<SPEAKER>/` 下。
 
-改 `JOB`、`SPEAKER`，或者把 `RUN_ID` 加 1，都会让 runner 停掉当前任务并按新计划启动。
+改 `JOB`、`SPEAKER`，或者把 `RUN_ID` 加 1，都会让 runner 停掉当前任务并按新计划启动。例外：新的 `JOB` 只在正在跑的任务之后有变化（比如在链尾追加任务）时，runner 不重启，接着跑原来的链。
 
 `JOB` 可以写成用逗号连接的任务链，比如 `JOB=uvr,features,train`。runner 会按顺序执行，前一个成功才启动下一个，遇到失败就停下。
 
