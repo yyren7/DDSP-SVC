@@ -10,7 +10,7 @@
 # the new dry vocals measured and scored, the keep rule fitted to the calibration marks, and the A/B:
 # each speaker trained on every line (all) and on the kept lines (clean)
 JOB=uvr,uvr@sakura_shunka,lines,lines@sakura_shunka,scorelines,scorelines@sakura_shunka,fitlines,clips:all,clips:clean,clips@sakura_shunka:all,clips@sakura_shunka:clean,features:all,features:clean,features@sakura_shunka:all,features@sakura_shunka:clean,train:all,train:clean,train@sakura_shunka:all,train@sakura_shunka:clean
-RUN_ID=35
+RUN_ID=36
 # the scores fit_lines.py may use: with ~120 marks, a few chosen by what the listener named (thin /
 # walkie-talkie voice, talk instead of singing, accompaniment, reverb or loud BGM in the original)
 LINE_FEATURES=aes_cu,aes_ce,aes_pq,dns_sig,pitch_steady,p_speech,p_music,bgm_db,tail_src,level
