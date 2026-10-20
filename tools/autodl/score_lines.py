@@ -15,8 +15,10 @@ Writes <speaker>/eval/lines_learned.jsonl, one line per (song, k) of lines.jsonl
 first n songs of each speaker and only prints them (a test).
 """
 import json
+import multiprocessing
 import sys
 import time
+from concurrent.futures import ProcessPoolExecutor
 from pathlib import Path
 
 import numpy as np
@@ -53,13 +55,36 @@ def s3prl_compat():
             sys.modules['torchaudio.sox_effects'] = torchaudio.sox_effects = mod
 
 
+DNS_WORKERS = 10  # DNSMOS runs on the CPU; the instance has 18 cores
+_dnsmos = None
+
+
+def dns_init():
+    """DNSMOS worker process. onnxruntime sizes its thread pool by the host's 256 cores, not by the
+    instance's share, and crawls; one thread per worker process instead."""
+    global _dnsmos
+    import onnxruntime as ort
+    so = ort.SessionOptions()
+    so.intra_op_num_threads = so.inter_op_num_threads = 1
+    plain = ort.InferenceSession
+    ort.InferenceSession = lambda path, *a, **k: plain(path, sess_options=so, providers=['CPUExecutionProvider'])
+    from speechmos import dnsmos
+    _dnsmos = dnsmos
+
+
+def dns_score(x):
+    r = _dnsmos.run(np.clip(x, -1, 1), sr=SR)
+    return float(r['ovrl_mos']), float(r['sig_mos']), float(r['bak_mos'])
+
+
 def load_models():
     models = {}
     t0 = time.time()
+    torch.set_num_threads(8)
     s3prl_compat()
     models['singmos'] = torch.hub.load('South-Twilight/SingMOS:v1.1.2', 'singmos_pro', trust_repo=True).to(DEVICE).eval()
-    from speechmos import dnsmos
-    models['dnsmos'] = dnsmos
+    models['dns_pool'] = ProcessPoolExecutor(DNS_WORKERS, mp_context=multiprocessing.get_context('spawn'),
+                                             initializer=dns_init)
     from audiobox_aesthetics.infer import initialize_predictor
     models['aes'] = initialize_predictor()
     from transformers import AutoFeatureExtractor, WavLMForXVector
@@ -71,26 +96,50 @@ def load_models():
     return models
 
 
+TIMES = {}  # seconds spent per scorer, printed at the end of each speaker
+
+
+class timed:
+    def __init__(self, name):
+        self.name = name
+
+    def __enter__(self):
+        if DEVICE == 'cuda':
+            torch.cuda.synchronize()
+        self.t0 = time.time()
+
+    def __exit__(self, *exc):
+        if DEVICE == 'cuda':
+            torch.cuda.synchronize()
+        TIMES[self.name] = TIMES.get(self.name, 0.0) + time.time() - self.t0
+
+
 @torch.no_grad()
 def score_clips(models, clips):
     """clips: list of 16 kHz float32 arrays -> list of score dicts (plus '_emb' and '_f0')."""
     out = [{} for _ in clips]
+    dns = [models['dns_pool'].submit(dns_score, x) for x in clips]  # on the CPU while the GPU works
     # SingMOS-Pro, one clip at a time (lengths differ a lot; padding would change the scores)
-    for d, x in zip(out, clips):
-        w = torch.from_numpy(x).unsqueeze(0).to(DEVICE)
-        d['singmos'] = float(models['singmos'](w, torch.tensor([w.shape[1]], device=DEVICE)).item())
-    for d, x in zip(out, clips):
-        r = models['dnsmos'].run(x, sr=SR)
-        d['dns_ovrl'], d['dns_sig'], d['dns_bak'] = float(r['ovrl_mos']), float(r['sig_mos']), float(r['bak_mos'])
-    res = models['aes'].forward([{'path': torch.from_numpy(x).unsqueeze(0), 'sample_rate': SR} for x in clips])
-    for d, r in zip(out, res):
-        for k in ('PQ', 'PC', 'CE', 'CU'):
-            d[f'aes_{k.lower()}'] = float(r[k])
-    for d, x in zip(out, clips):
-        feats = models['spk_fe'](x, sampling_rate=SR, return_tensors='pt').to(DEVICE)
-        emb = models['spk'](**feats).embeddings[0]
-        d['_emb'] = torch.nn.functional.normalize(emb, dim=-1).cpu().numpy()
-        d['_f0'] = models['rmvpe'].infer_from_audio(x, SR, device=DEVICE, thred=0.03)
+    with timed('singmos'):
+        for d, x in zip(out, clips):
+            w = torch.from_numpy(x).unsqueeze(0).to(DEVICE)
+            d['singmos'] = float(models['singmos'](w, torch.tensor([w.shape[1]], device=DEVICE)).item())
+    with timed('audiobox'):
+        res = models['aes'].forward([{'path': torch.from_numpy(x).unsqueeze(0), 'sample_rate': SR} for x in clips])
+        for d, r in zip(out, res):
+            for k in ('PQ', 'PC', 'CE', 'CU'):
+                d[f'aes_{k.lower()}'] = float(r[k])
+    with timed('wavlm'):
+        for d, x in zip(out, clips):
+            feats = models['spk_fe'](x, sampling_rate=SR, return_tensors='pt').to(DEVICE)
+            emb = models['spk'](**feats).embeddings[0]
+            d['_emb'] = torch.nn.functional.normalize(emb, dim=-1).cpu().numpy()
+    with timed('rmvpe'):
+        for d, x in zip(out, clips):
+            d['_f0'] = models['rmvpe'].infer_from_audio(x, SR, device=DEVICE, thred=0.03)
+    with timed('dnsmos wait'):
+        for d, f in zip(out, dns):
+            d['dns_ovrl'], d['dns_sig'], d['dns_bak'] = f.result()
     return out
 
 
@@ -144,8 +193,8 @@ def score_speaker(models, spk, limit=None):
         r.pop('_emb')
         r['spk_cos'] = float(c)
     rows = [{k: (round(v, 4) if isinstance(v, float) else v) for k, v in r.items()} for r in results]
-    print(f'{spk.name}: {len(rows)} lines scored in {time.time() - t0:.0f} s, centroid from {len(clean)} lines',
-          flush=True)
+    print(f'{spk.name}: {len(rows)} lines scored in {time.time() - t0:.0f} s, centroid from {len(clean)} lines; '
+          + ', '.join(f'{k} {v:.0f} s' for k, v in TIMES.items()), flush=True)
     return rows
 
 
@@ -166,6 +215,7 @@ def main():
         tmp = path.with_suffix('.part')
         tmp.write_text(''.join(json.dumps(r, ensure_ascii=False) + '\n' for r in rows), encoding='utf-8')
         tmp.replace(path)
+    models['dns_pool'].shutdown()
 
 
 if __name__ == '__main__':
