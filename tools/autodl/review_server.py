@@ -68,17 +68,23 @@ async function fb(id, target){
     body:JSON.stringify({target:target,text:t})});
   if(r.ok){box.value='';document.getElementById(id+'_ok').textContent='已提交 ✓';}
 }
-// Browsers without an AAC decoder (VS Code's built-in browser, for one) get an Opus copy instead.
+// WAV (1.4 Mbit/s) stalls in AutoDL's port forwarding: browsers that play Opus get an Opus copy, with a
+// link to the WAV next to the player. Browsers without an AAC decoder (VS Code's built-in browser, for
+// one) get an Opus copy of AAC files too.
 document.addEventListener('DOMContentLoaded', () => {
-  const aac = document.createElement('audio').canPlayType('audio/mp4; codecs="mp4a.40.2"');
+  const probe = document.createElement('audio');
+  const aac = probe.canPlayType('audio/mp4; codecs="mp4a.40.2"');
+  const ogg = probe.canPlayType('audio/ogg; codecs="opus"');
   for (const a of document.querySelectorAll('audio')) {
+    const name = decodeURIComponent(a.src);
     const opus = () => { if (a.src.includes('fmt=ogg')) return false; a.src += '&fmt=ogg'; a.load(); return true; };
-    if (!aac && /\\.(m4a|mp4|aac)$/i.test(decodeURIComponent(a.src))) opus();
+    if ((ogg && /\\.(wav|flac)$/i.test(name)) || (!aac && /\\.(m4a|mp4|aac)$/i.test(name))) opus();
     a.addEventListener('error', () => { if (opus()) a.play().catch(() => {}); });
   }
 });
 """
-OPUS_FROM = {'.m4a', '.mp4', '.aac'}
+OPUS_FROM = {'.m4a', '.mp4', '.aac', '.wav', '.flac'}
+OPUS_BITRATE = '128k'
 _transcode_locks = {}
 
 
@@ -221,8 +227,11 @@ class Handler(BaseHTTPRequestHandler):
     def player(self, f, label=None):
         rel = f.relative_to(ROOT).as_posix()
         fid = 'fb' + str(abs(hash(rel)))
-        return (f'<div class="card"><div class="name">{esc(label or f.name)}</div>'
-                f'<audio controls preload="none" src="file?p={urllib.parse.quote(rel)}"></audio>'
+        src = f'file?p={urllib.parse.quote(rel)}'
+        wav = (f' <a class="muted" href="{src}" download="{esc(f.name)}">下载 WAV 原文件</a>'
+               if f.suffix.lower() in ('.wav', '.flac') else '')
+        return (f'<div class="card"><div class="name">{esc(label or f.name)}{wav}</div>'
+                f'<audio controls preload="none" src="{src}"></audio>'
                 f'<textarea id="{fid}" placeholder="这一段的反馈（可选）"></textarea>'
                 f'<div class="row"><button onclick="fb(\'{fid}\',\'{esc(rel)}\')">提交</button>'
                 f'<span id="{fid}_ok" class="ok"></span></div></div>')
@@ -418,16 +427,18 @@ class Handler(BaseHTTPRequestHandler):
 
 
 def opus_copy(src):
-    """Opus version of an AAC file, made once and kept in .autodl/opus (None if ffmpeg fails)."""
+    """Opus version of an audio file, made once and kept in .autodl/opus (None if ffmpeg fails).
+    A 4-minute WAV takes about 3 s on the 0.5 CPU core of no-GPU mode."""
     st = src.stat()
-    key = hashlib.sha1(f'{src}|{st.st_size}|{st.st_mtime_ns}'.encode()).hexdigest()
+    key = hashlib.sha1(f'{src}|{st.st_size}|{st.st_mtime_ns}|{OPUS_BITRATE}'.encode()).hexdigest()
     dst = STATE / 'opus' / f'{key}.ogg'
     with _transcode_locks.setdefault(key, threading.Lock()):  # range requests arrive in parallel
         if not dst.exists():
             dst.parent.mkdir(parents=True, exist_ok=True)
             tmp = dst.with_suffix('.part.ogg')
             r = subprocess.run(['ffmpeg', '-nostdin', '-loglevel', 'error', '-y', '-i', str(src), '-vn',
-                                '-c:a', 'libopus', '-b:a', '96k', str(tmp)], capture_output=True)
+                                '-c:a', 'libopus', '-b:a', OPUS_BITRATE, '-compression_level', '5', str(tmp)],
+                               capture_output=True)
             if r.returncode != 0:
                 print('opus transcoding failed:', r.stderr.decode(errors='replace')[-300:], flush=True)
                 tmp.unlink(missing_ok=True)
