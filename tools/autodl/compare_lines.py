@@ -4,7 +4,7 @@ does not leave the voice thin ("like through a walkie-talkie"). The listener hea
 from the dereverb step, which also took part of the lead voice where the vocal separation had left some
 of the accompaniment's voices in (2026-10-20).
 
-    python tools/autodl/compare_lines.py run <speaker dir>... [--model-dir pretrain/uvr]   # uvr env, GPU
+    python tools/autodl/compare_lines.py run <speaker dir>... [--model-dir pretrain/uvr] [--sel spk:n,n;spk:n]  # uvr env
     python tools/autodl/compare_lines.py score <speaker dir>...                            # evalq env, GPU
 
 run: every calibration line with 5 s of the input song around it goes through each chain of VERSIONS;
@@ -61,16 +61,21 @@ def cut(src, dst, start, end):
                     '-i', str(src), '-ac', '2', '-ar', '44100', str(dst)], check=True)
 
 
-def run(spks, model_dir):
+def run(spks, model_dir, sel=None):
+    """sel: {speaker: {n}} to run only those lines (the ones to listen to, ahead of the rest)."""
     sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
     from prepare_dataset import run_uvr_stage
     uvr_args = SimpleNamespace(model_dir=model_dir, batch_size=None, overlap=None)
     for spk in spks:
+        if sel is not None and spk.name not in sel:
+            continue
         out = spk / 'compare' / '_lines'
         work = out / '_work'
         (work / 'input').mkdir(parents=True, exist_ok=True)
         inputs, spans = [], {}
         for n, m in calib_lines(spk):
+            if sel is not None and n not in sel[spk.name]:
+                continue
             src = next(f for f in (spk / 'work' / '0_input').iterdir() if f.stem == m['song'])
             a = max(0.0, m['start'] - CONTEXT)
             dst = work / 'input' / f'{n}.wav'
@@ -140,12 +145,19 @@ def score(spks):
 
 def main():
     args = sys.argv[1:]
-    model_dir = 'pretrain/uvr'
-    if '--model-dir' in args:
-        i = args.index('--model-dir')
-        model_dir, args = args[i + 1], args[:i] + args[i + 2:]
+    opts = {}
+    for name in ('--model-dir', '--sel'):  # --sel <speaker>:<n>,<n>;<speaker>:<n> as on the lcmp page
+        if name in args:
+            i = args.index(name)
+            opts[name], args = args[i + 1], args[:i] + args[i + 2:]
+    sel = None
+    if '--sel' in opts:
+        sel = {}
+        for part in opts['--sel'].split(';'):
+            spk, _, nums = part.partition(':')
+            sel[spk] = {int(n) for n in nums.split(',') if n.strip().isdigit()}
     spks = [Path(d) for d in args[1:]]
-    run(spks, model_dir) if args[0] == 'run' else score(spks)
+    run(spks, opts.get('--model-dir', 'pretrain/uvr'), sel) if args[0] == 'run' else score(spks)
 
 
 if __name__ == '__main__':
