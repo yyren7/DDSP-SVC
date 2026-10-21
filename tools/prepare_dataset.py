@@ -115,7 +115,9 @@ KEEP_STEMS = {
     'denoise': {'dry', 'no noise'},
 }
 
-STEM_RE = re.compile(r'_\(([^)]+)\)_')
+# audio-separator names its outputs <input>_(<stem>)_<model>: the last parenthesised part, as the input's own
+# name may have some too ("glow (1)" is staged as glow_(1))
+STEM_RE = re.compile(r'_\(([^)]+)\)_[^()]*$')
 
 
 def parse_args():

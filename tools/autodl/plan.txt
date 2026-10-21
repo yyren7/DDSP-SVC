@@ -18,10 +18,11 @@
 # 14:55: the listener preferred 40k steps over 10k (10:4, 2 ties); the all models go on to 80k and are A/B tested against 40k
 # 16:00: pheebie's 40k/80k A/B made by hand as soon as her 80k was done; the chain makes sakura_shunka's
 # 2026-10-22: both keep their 80k all models. hanamaru_hareru next, the same way: 190 songs drawn from her
-# live-stream compilation (raw_songs/, _selection.tsv) are separated and measured; then by hand
+# live-stream compilation (raw_songs/, _selection.tsv: no medleys, duets, group songs or repeats) are
+# separated and measured; then by hand
 # exclude_sources.py --apply leaves out the wettest 20 % and loudest BGM 5 %, and the all set trains to 80k
 JOB=uvr,lines
-RUN_ID=38
+RUN_ID=39
 # the scores fit_lines.py may use: with ~120 marks, a few chosen by what the listener named (thin /
 # walkie-talkie voice, talk instead of singing, accompaniment, reverb or loud BGM in the original)
 LINE_FEATURES=aes_cu,aes_ce,aes_pq,dns_sig,pitch_steady,p_speech,p_music,bgm_db,tail_src,level
