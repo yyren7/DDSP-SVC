@@ -29,6 +29,10 @@ LEARNED = ['singmos', 'dns_ovrl', 'dns_sig', 'dns_bak', 'aes_pq', 'aes_ce', 'aes
 TAGS = ['p_sing', 'p_speech', 'p_music', 'p_instr', 'long_voiced', 'pitch_steady']  # tag_lines.py
 WINDOWS = ['w_aes_ce', 'w_aes_pq', 'w_aes_cu', 'w_dns_sig', 'w_dns_bak', 'w_dns_ovrl']  # score_windows.py
 BANDS = [(0, 50), (50, 75), (75, 90), (90, 101)]  # the score bands of the calibration sample
+# The threshold may lose at most 15 % of the lines the listener keeps. At the best balanced accuracy alone
+# (0.74 with the 82 marks of 2026-10-21, 0.72 against 0.69 at 0.60, within the noise of so few marks) the
+# clean set of pheebie fell from 7.0 h to 1.8 h, most of her songs left out whole.
+KEEP_GOOD_MIN = 0.85
 
 
 def load_jsonl(path):
@@ -148,17 +152,22 @@ def main():
         if not best or auc > best[0]:
             best = (auc, C, p)
     auc, C, p = best
-    # threshold: the best balanced accuracy of the cross-validated predictions
+    # threshold: the best balanced accuracy of the cross-validated predictions among those that keep at least
+    # KEEP_GOOD_MIN of the lines the listener keeps
+    def tpr(t):
+        return np.average((p >= t)[y == 1], weights=w[y == 1])
+
     def bacc(t):
-        keep = p >= t
-        return 0.5 * (np.average(keep[y == 1], weights=w[y == 1]) + np.average(~keep[y == 0], weights=w[y == 0]))
-    t = max(np.arange(0.2, 0.81, 0.02), key=bacc)
-    sig_auc = roc_auc_score(y, X[:, feats.index('score')], sample_weight=w)
-    sig_acc = 0.5 * (np.average(X[y == 1, feats.index('score')] >= 75, weights=w[y == 1])
-                     + np.average(X[y == 0, feats.index('score')] < 75, weights=w[y == 0]))
+        return 0.5 * (tpr(t) + np.average((p < t)[y == 0], weights=w[y == 0]))
+    t = max((t for t in np.arange(0.2, 0.81, 0.02) if tpr(t) >= KEEP_GOOD_MIN), key=bacc)
+    # the signal score of every line for comparison, also when --features leaves it out of the model
+    sig = np.array([float(r['score']) for r in rows])
+    sig_auc = roc_auc_score(y, sig, sample_weight=w)
+    sig_acc = 0.5 * (np.average(sig[y == 1] >= 75, weights=w[y == 1]) + np.average(sig[y == 0] < 75, weights=w[y == 0]))
     print(f'\nsignal score alone: AUC {sig_auc:.3f}, balanced accuracy at 75 points {sig_acc:.3f}')
     print(f'fitted model (C={C}, 5-fold cross-validation): AUC {auc:.3f}, balanced accuracy {bacc(t):.3f} '
-          f'at p >= {t:.2f}')
+          f'at p >= {t:.2f}, keeping {tpr(t):.0%} of the lines the listener keeps and '
+          f'{np.average((p >= t)[y == 0], weights=w[y == 0]):.0%} of those excluded')
     m = LogisticRegression(C=C, max_iter=2000).fit(Z, y, sample_weight=w)
     print('weights (standardized features, + = keep):',
           ', '.join(f'{f} {c:+.2f}' for f, c in sorted(zip(feats, m.coef_[0]), key=lambda t: -abs(t[1]))[:12]))
