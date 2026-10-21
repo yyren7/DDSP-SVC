@@ -23,8 +23,11 @@
 # exclude_sources.py --apply leaves out the wettest 20 % and loudest BGM 5 %, and the all set trains to 80k
 # 03:10: 47 songs out (drr_db < 7.9 dB or bgm_db > 4.7 dB), 143 left with 7.3 h of sung lines; lines again
 # without them, then the all set built and trained
-JOB=lines,clips:all,features:all,train:all
-RUN_ID=40
+# 05:22: 80k reached (2593 clips, 7.15 h); her validation loss rose more than theirs (1.02 -> 1.17), so her
+# 40k and 80k go through the same blind A/B as theirs, on the validation clips of all three (pheebie's and
+# sakura_shunka's data_all/val/audio put back from their abtest_steps80/_source after the cleanup)
+JOB=abtest:steps80=all@40000+all@80000
+RUN_ID=41
 # the scores fit_lines.py may use: with ~120 marks, a few chosen by what the listener named (thin /
 # walkie-talkie voice, talk instead of singing, accompaniment, reverb or loud BGM in the original)
 LINE_FEATURES=aes_cu,aes_ce,aes_pq,dns_sig,pitch_steady,p_speech,p_music,bgm_db,tail_src,level
