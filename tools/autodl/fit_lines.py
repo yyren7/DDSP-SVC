@@ -192,7 +192,7 @@ def main():
     print('weights (standardized features, + = keep):',
           ', '.join(f'{f} {c:+.2f}' for f, c in sorted(zip(feats, m.coef_[0]), key=lambda t: -abs(t[1]))[:12]))
     model = {'features': feats, 'fill': fill.tolist(), 'mean': mean.tolist(), 'std': std.tolist(),
-             'coef': m.coef_[0].tolist(), 'intercept': float(m.intercept_[0]), 'threshold': float(t),
+             'coef': m.coef_[0].tolist(), 'intercept': float(m.intercept_[0]), 'threshold': float(t), 'C': C,
              'cv_auc': auc, 'cv_balanced_accuracy': bacc(t), 'marks': int(len(y))}
     for spk in spks:
         (spk / 'eval' / 'line_model.json').write_text(json.dumps(model, indent=1), encoding='utf-8')
