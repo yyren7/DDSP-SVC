@@ -21,8 +21,10 @@
 # live-stream compilation (raw_songs/, _selection.tsv: no medleys, duets, group songs or repeats) are
 # separated and measured; then by hand
 # exclude_sources.py --apply leaves out the wettest 20 % and loudest BGM 5 %, and the all set trains to 80k
-JOB=uvr,lines
-RUN_ID=39
+# 03:10: 47 songs out (drr_db < 7.9 dB or bgm_db > 4.7 dB), 143 left with 7.3 h of sung lines; lines again
+# without them, then the all set built and trained
+JOB=lines,clips:all,features:all,train:all
+RUN_ID=40
 # the scores fit_lines.py may use: with ~120 marks, a few chosen by what the listener named (thin /
 # walkie-talkie voice, talk instead of singing, accompaniment, reverb or loud BGM in the original)
 LINE_FEATURES=aes_cu,aes_ce,aes_pq,dns_sig,pitch_steady,p_speech,p_music,bgm_db,tail_src,level
