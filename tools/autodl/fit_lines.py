@@ -50,10 +50,11 @@ def table(spk):
 
 
 def marks(spk, tab=None):
-    """{(song, k) of lines.jsonl: 1 keep / 0 exclude}, the latest mark per calibration line; 拿不准 leaves a
-    line out. The marks name the lines of the calibration page (eval/calib.json, time spans kept); each
-    goes to the line of the current lines.jsonl that overlaps it most, since the lines move a little when
-    the dry vocals are made again (2026-10-20, new order of the steps). Under half overlap it is dropped."""
+    """{(song, k) of lines.jsonl: (1 keep / 0 exclude, the line's entry of eval/calib.json)}, the latest mark
+    per calibration line; 拿不准 leaves a line out. The marks name the lines of the calibration page
+    (calib.json, time spans kept); each goes to the line of the current lines.jsonl that overlaps it most,
+    since the lines move a little when the dry vocals are made again (2026-10-20, new order of the steps).
+    Under half overlap it is dropped."""
     marked = {}
     for e in load_jsonl(FEEDBACK):
         t = e.get('target', '')
@@ -65,16 +66,16 @@ def marks(spk, tab=None):
         elif e.get('text') == '拿不准':
             marked.pop((song, int(k)), None)
     calib = spk / 'eval' / 'calib.json'
-    spans = {(c['song'], c['k']): (c['start'], c['end'])
-             for c in (json.loads(calib.read_text(encoding='utf-8')) if calib.exists() else [])}
+    entries = {(c['song'], c['k']): c for c in (json.loads(calib.read_text(encoding='utf-8')) if calib.exists() else [])}
     by_song = {}
     for r in (tab if tab is not None else table(spk)).values():
         by_song.setdefault(r['song'], []).append(r)
     out = {}
     for (song, k), v in marked.items():
-        if (song, k) not in spans:
+        c = entries.get((song, k))
+        if c is None:
             continue
-        s0, e0 = spans[(song, k)]
+        s0, e0 = c['start'], c['end']
         best, iou = None, 0.0
         for r in by_song.get(song, []):
             inter = max(0.0, min(e0, r['end']) - max(s0, r['start']))
@@ -82,8 +83,24 @@ def marks(spk, tab=None):
             if union > 0 and inter / union > iou:
                 best, iou = r, inter / union
         if best is not None and iou >= 0.5:
-            out[(song, best['k'])] = v
+            out[(song, best['k'])] = (v, c)
     return out
+
+
+def weights(tab, got):
+    """One weight per mark, 1 / the chance that its line was drawn for the calibration page, so that the
+    fit and its figures stand for all lines rather than for the sample. The first sample was drawn by
+    signal score band (CALIB_BANDS of review_server.py): a band's share among all lines over its share
+    among those marks. The lines calib_add.py added carry their chance (q). Each sample's weights average 1."""
+    pop = np.bincount([band(r['score']) for r in tab.values()], minlength=len(BANDS)) / len(tab)
+    first = [r for r, _, c in got if 'q' not in c]
+    smp = np.bincount([band(r['score']) for r in first], minlength=len(BANDS)) / max(len(first), 1)
+    w = np.array([1 / c['q'] if 'q' in c else pop[band(r['score'])] / smp[band(r['score'])] for r, _, c in got])
+    added = np.array(['q' in c for _, _, c in got])
+    for sel in (added, ~added):
+        if sel.any():
+            w[sel] /= w[sel].mean()
+    return w.tolist()
 
 
 def band(score):
@@ -97,15 +114,21 @@ def matrix(rows, feats, fill=None):
     return X, fill
 
 
-def keep_set(spk, threshold=None):
-    """{(song, k)} of the lines the fitted model keeps (build_clips.py, dataset clean)."""
-    model = json.loads((spk / 'eval' / 'line_model.json').read_text(encoding='utf-8'))
+def probabilities(spk, model=None):
+    """{(song, k): keep probability} of every line of the speaker under the fitted model (eval/line_model.json)."""
+    model = model or json.loads((spk / 'eval' / 'line_model.json').read_text(encoding='utf-8'))
     rows = list(table(spk).values())
     X, _ = matrix(rows, model['features'], model['fill'])
     z = (X - model['mean']) / model['std']
     p = 1 / (1 + np.exp(-(z @ np.array(model['coef']) + model['intercept'])))
+    return {(r['song'], r['k']): float(pi) for r, pi in zip(rows, p)}
+
+
+def keep_set(spk, threshold=None):
+    """{(song, k)} of the lines the fitted model keeps (build_clips.py, dataset clean)."""
+    model = json.loads((spk / 'eval' / 'line_model.json').read_text(encoding='utf-8'))
     t = model['threshold'] if threshold is None else threshold
-    return {(r['song'], r['k']) for r, pi in zip(rows, p) if pi >= t}
+    return {key for key, p in probabilities(spk, model).items() if p >= t}
 
 
 def main():
@@ -116,18 +139,15 @@ def main():
     rows, y, w, who = [], [], [], []
     for spk in spks:
         tab = table(spk)
-        mk = marks(spk, tab)
-        pop = np.bincount([band(r['score']) for r in tab.values()], minlength=len(BANDS)) / len(tab)
-        got = [(tab[key], v) for key, v in mk.items() if key in tab]
+        got = [(tab[key], v, c) for key, (v, c) in marks(spk, tab).items() if key in tab]
         if not got:
             continue
-        smp = np.bincount([band(r['score']) for r, _ in got], minlength=len(BANDS)) / len(got)
-        for r, v in got:
-            rows.append(r)
-            y.append(v)
-            w.append(pop[band(r['score'])] / smp[band(r['score'])])
-            who.append(spk.name)
-        print(f'{spk.name}: {len(got)} marked lines, {sum(v for _, v in got)} keep', flush=True)
+        rows += [r for r, _, _ in got]
+        y += [v for _, v, _ in got]
+        w += weights(tab, got)
+        who += [spk.name] * len(got)
+        added = sum('q' in c for _, _, c in got)
+        print(f'{spk.name}: {len(got)} marked lines ({added} of the added ones), {sum(v for _, v, _ in got)} keep', flush=True)
     y, w = np.array(y), np.array(w)
     if len(y) < 20 or y.min() == y.max():
         sys.exit('too few marks (need at least 20, with both keep and exclude)')

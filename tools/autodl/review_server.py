@@ -438,7 +438,7 @@ class Handler(BaseHTTPRequestHandler):
         if route == 'clip':
             return self.serve_clip(q)
         if route == 'calib':
-            return self.page_calib()
+            return self.page_calib(q.get('todo', [''])[0] == '1')
         if route == 'notes':
             return self.page_notes(q.get('sel', [''])[0])
         if route == 'lcmp':
@@ -511,8 +511,8 @@ class Handler(BaseHTTPRequestHandler):
             marks = decisions(spk)
             done = sum(f'line:{m["song"]}#{m["k"]}' in marks for m in sample)
             parts.append(f'<h2>逐句校准（已标 {done}/{len(sample)} 句）</h2><div class="card row">'
-                         '<a class="name" href="calib">逐句试听并标记</a><span class="muted">随机抽的句子，分数不显示；'
-                         '你的标记用来校准逐句评分</span></div>')
+                         '<a class="name" href="calib?todo=1">只看没标的</a> · <a class="name" href="calib">全部</a>'
+                         '<span class="muted">抽出来的句子，分数不显示；你的标记用来校准逐句评分</span></div>')
         ranked = rank_songs.rank(rank_songs.load(SPEAKERS / spk))
         if ranked:
             parts.append(f'<h2>干声按质量排序（{len(ranked)} 首）</h2><div class="card row"><a class="name" href="rank">'
@@ -624,22 +624,31 @@ class Handler(BaseHTTPRequestHandler):
                 f'<span id="{sid}" class="ok">{esc(state)}</span></div></div>')
         self.send_html(''.join(body))
 
-    def page_calib(self):
+    def page_calib(self, todo=False):
+        """calib: the lines of eval/calib.json to mark, numbered as there; calib?todo=1: only those not marked
+        yet (calib_add.py adds lines after the first marks). Lines of songs no longer there are left out."""
         sample = calib_sample(self.spk) if self.spk else []
         if not sample:
             return self.send_html('<p><a href="./">← 返回</a></p><p>这个说话人还没有逐句结果（eval_lines.py lines）。</p>', 404)
         marks = decisions(self.spk)
+        dry = stage_dir(self.spk, DRY_STAGE)
+        cards = [(i, m) for i, m in enumerate(sample, 1) if (dry / f'{m["song"]}.wav').is_file()
+                 and not (todo and f'line:{m["song"]}#{m["k"]}' in marks)]
         done = sum(f'line:{m["song"]}#{m["k"]}' in marks for m in sample)
-        others = ' · '.join(f'<a href="calib?spk={urllib.parse.quote(s)}">{esc(s)}</a>' for s in speakers()
-                            if s != self.spk and (SPEAKERS / s / 'eval' / 'lines.jsonl').exists())
+        view = f'calib{"?todo=1" if todo else ""}'
+        others = ' · '.join(f'<a href="{view}{"&" if todo else "?"}spk={urllib.parse.quote(s)}">{esc(s)}</a>'
+                            for s in speakers() if s != self.spk and (SPEAKERS / s / 'eval' / 'lines.jsonl').exists())
         body = ['<p><a href="./">← 返回</a></p>', f'<h1>逐句校准：{esc(self.spk)}</h1>',
                 f'<p>其他说话人：{others}</p>' if others else '',
-                f'<div class="card">已标 {done}/{len(sample)} 句。这些句子是从各个分数段随机抽的，顺序打乱，分数不显示。'
+                f'<div class="card">已标 {done}/{len(sample)} 句'
+                + (f'，这里只列还没标的 {len(cards)} 句（<a href="calib">看全部</a>）。' if todo
+                   else '（<a href="calib?todo=1">只看没标的</a>）。')
+                + '顺序打乱，分数不显示。'
                 '<br>按“这一句能不能拿去训练”来判断：听得出伴奏或和声残留、混响拖尾重、杂音或电音、'
                 '声音被切断或削弱、不是她的声音，就点<b>排除</b>；干净自然就点<b>保留</b>；拿不准就点<b>拿不准</b>。'
-                '<br><span class="muted">播放的是最终干声的这一句（前后各多 0.1 秒）；“原曲同一句”可以对照原曲。'
+                '<br><span class="muted">播放的是最终干声的这一句（前后各多 0.1 秒）；“原曲和每一步的同一句”可以对照。'
                 '标记会同步给 Claude，改主意再点一次就行，以最后一次为准。</span></div>']
-        body += [line_card(self.spk, i, m, marks) for i, m in enumerate(sample, 1)]
+        body += [line_card(self.spk, i, m, marks) for i, m in cards]
         self.send_html(''.join(body))
 
     def page_notes(self, sel):
