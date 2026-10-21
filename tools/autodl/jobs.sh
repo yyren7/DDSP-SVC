@@ -189,10 +189,16 @@ abtest)
     # The A/B listening of the run that trained this speaker on every line (all) and on the kept lines
     # (clean): both models convert the validation clips of every speaker, at equal steps; then the learned
     # scores of the results (abtest.py). The review page plays them blind (ab) and reveals them (abres).
+    # abtest:<name>=<set>+<set> runs another experiment, e.g. abtest:steps80=all@40000+all@80000 for two
+    # checkpoints of one training (abtest_<name>/, page ab?x=<name>)
+    sets=(all clean); named=()
+    if [ -n "${DATASET:-}" ]; then
+        named=(--name "${DATASET%%=*}"); IFS='+' read -r -a sets <<< "${DATASET#*=}"
+    fi
     conda activate "$ENV_ROOT/ddsp"
-    python tools/autodl/abtest.py convert "$SPK_DIR" all clean
+    python tools/autodl/abtest.py convert "${named[@]}" "$SPK_DIR" "${sets[@]}"
     # the listening page needs only the conversions, so the job does not fail on the scores
-    HF_HUB_OFFLINE=1 "$ENV_ROOT/evalq/bin/python" tools/autodl/abtest.py score "$SPK_DIR" ||
+    HF_HUB_OFFLINE=1 "$ENV_ROOT/evalq/bin/python" tools/autodl/abtest.py score "${named[@]}" "$SPK_DIR" ||
         echo "learned scores failed (see above); the A/B page works without them"
     ;;
 infer)
