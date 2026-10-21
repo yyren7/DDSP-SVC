@@ -1,12 +1,15 @@
 """
-Leave whole songs out before the separation when the original has heavy reverb or loud BGM (2026-10-21,
-the listener: "先剔除一些混响太大，bgm太吵的曲子"). The measurements come from the frames of eval_lines.py
-made on the earlier chain (vocals -> dereverb -> karaoke), whose mix and separated vocals are those of the
-current chain too, so they run before the lines job redoes those frames:
+Leave whole songs out when the original has heavy reverb or loud BGM (2026-10-21, the listener: "先剔除一些
+混响太大，bgm太吵的曲子"). The measurements come from the frames of eval_lines.py:
 
-    drr_db  direct-to-reverberant ratio inside the lines: 10 log10(sum P_derev / sum (P_voc - P_derev)),
-            i.e. against what that dereverb step took out of the separated vocals; lower = wetter
+    drr_db  direct-to-reverberant ratio inside the lines: 10 log10(sum P_derev / sum (P_in - P_derev)),
+            i.e. against what the dereverb step took out of its input, lower = wetter: the separated vocals
+            on the earlier chain (vocals -> dereverb -> karaoke), the lead on the current one (stages.py)
     bgm_db  median over sung frames of the mix minus the separated vocals: accompaniment against the voice
+
+pheebie and sakura_shunka were measured on the earlier chain and left out before the current one ran;
+hanamaru_hareru (2026-10-22) on the current chain, so --apply also moves the separated stages and frames of
+her songs that are out, which the lines job and build_clips.py would otherwise still take.
 
 On the songs the listener named (2026-10-20) drr_db put "原曲混响太大" 31st and "混响开太大，应剔除" 74th
 of 362, bgm_db put "原曲 BGM 太吵" 1st, and the song "背景和混响大，但还能用" 274th and 160th.
@@ -15,7 +18,8 @@ of 362, bgm_db put "原曲 BGM 太吵" 1st, and the song "背景和混响大，�
 
 Songs among the wettest REVERB_PCT % or the loudest BGM_PCT % of all speakers given are listed with their
 measurements in <speaker>/raw_songs_excluded/_excluded.tsv; --apply also moves their files from raw_songs/
-there (outside raw_songs, which prepare_dataset.py reads recursively). Moving a file back restores the song.
+there (outside raw_songs, which prepare_dataset.py reads recursively), and their stage outputs and frames
+to raw_songs_excluded/_separated/. Moving the files back restores the song.
 """
 import json
 import re
@@ -24,6 +28,9 @@ import sys
 from pathlib import Path
 
 import numpy as np
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from stages import DIRS, INPUT  # noqa: E402
 
 REVERB_PCT, BGM_PCT = 20, 5  # with these about 7 h of sung lines stay per speaker (DDSP-SVC asks for ~1000 clips)
 FPS = 100
@@ -42,17 +49,21 @@ def measure(spk):
     rows = {}
     for f in sorted((spk / 'eval' / 'frames').glob('*.npz')):
         z = np.load(f)
-        if 'chain' in z.files or 'E_derev' not in z.files:
-            continue  # made on the current chain already: its dereverb input is no longer the separated vocals
-        ev, ed, em = (z[k].astype(np.float64) for k in ('E_voc', 'E_derev', 'E_mix'))
-        pv, pd = 10 ** (ev / 10), 10 ** (ed / 10)
+        if 'E_derev' not in z.files:
+            continue
+        # the current chain stamps itself into the file; the earlier one dereverbed the separated vocals and
+        # took the pitch of its last step, the karaoke output
+        current = 'chain' in z.files
+        ein, ed, ev, em = (z[k].astype(np.float64) for k in
+                           (f'E_{INPUT["derev"]}' if current else 'E_voc', 'E_derev', 'E_voc', 'E_mix'))
+        pi, pd = 10 ** (ein / 10), 10 ** (ed / 10)
         inside = np.zeros(len(ev), bool)
         for m in lines.get(f.stem, []):
             inside[int(m['start'] * FPS):int(m['end'] * FPS)] = True
-        sung = z['f0_kar'].astype(np.float32) > 0
+        sung = z['f0_dry' if current else 'f0_kar'].astype(np.float32) > 0
         if inside.sum() < 300 or sung.sum() < 300:
             continue
-        rows[f.stem] = {'drr_db': float(10 * np.log10(pd[inside].sum() / max((pv - pd)[inside].clip(0).sum(), 1e-12))),
+        rows[f.stem] = {'drr_db': float(10 * np.log10(pd[inside].sum() / max((pi - pd)[inside].clip(0).sum(), 1e-12))),
                         'bgm_db': float(np.median((em - ev)[sung])),
                         'sung_h': sum(m['dur'] for m in lines.get(f.stem, [])) / 3600}
     return rows
@@ -66,7 +77,7 @@ def main():
     drr = [r['drr_db'] for rs in rows.values() for r in rs.values()]
     bgm = [r['bgm_db'] for rs in rows.values() for r in rs.values()]
     if not drr:
-        sys.exit('no frames of the earlier chain left to measure')
+        sys.exit('no frames to measure')
     d_cut, b_cut = np.percentile(drr, REVERB_PCT), np.percentile(bgm, 100 - BGM_PCT)
     print(f'{len(drr)} songs; out: drr_db < {d_cut:.1f} dB (wettest {REVERB_PCT} %) or bgm_db > {b_cut:.1f} dB '
           f'(loudest {BGM_PCT} %)', flush=True)
@@ -86,6 +97,12 @@ def main():
                 if f.is_file() and f.suffix.lower() in AUDIO_EXTS and song_name(f) in out:
                     shutil.move(str(f), str(dest / f.name))
                     moved += 1
+            done = [(spk / 'work' / d, '*') for d in DIRS.values()] + [(spk / 'eval' / 'frames', '*.npz')]
+            for folder, pattern in done:
+                for f in sorted(folder.glob(pattern)):
+                    if f.stem in out:
+                        (dest / '_separated' / folder.name).mkdir(parents=True, exist_ok=True)
+                        shutil.move(str(f), str(dest / '_separated' / folder.name / f.name))
         left = sum(r['sung_h'] for s, r in rs.items() if s not in out)
         print(f'{spk.name}: {len(out)} of {len(rs)} songs out ({sum(r["sung_h"] for r in out.values()):.1f} h), '
               f'{left:.1f} h of sung lines left; {moved} files moved to {dest}', flush=True)

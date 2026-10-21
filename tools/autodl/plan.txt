@@ -17,8 +17,11 @@
 # again and the clean sets built again after the all models (the earlier ones are in data_clean.rule-0830)
 # 14:55: the listener preferred 40k steps over 10k (10:4, 2 ties); the all models go on to 80k and are A/B tested against 40k
 # 16:00: pheebie's 40k/80k A/B made by hand as soon as her 80k was done; the chain makes sakura_shunka's
-JOB=train:all,train@sakura_shunka:all,abtest@sakura_shunka:steps80=all@40000+all@80000
-RUN_ID=37
+# 2026-10-22: both keep their 80k all models. hanamaru_hareru next, the same way: 190 songs drawn from her
+# live-stream compilation (raw_songs/, _selection.tsv) are separated and measured; then by hand
+# exclude_sources.py --apply leaves out the wettest 20 % and loudest BGM 5 %, and the all set trains to 80k
+JOB=uvr,lines
+RUN_ID=38
 # the scores fit_lines.py may use: with ~120 marks, a few chosen by what the listener named (thin /
 # walkie-talkie voice, talk instead of singing, accompaniment, reverb or loud BGM in the original)
 LINE_FEATURES=aes_cu,aes_ce,aes_pq,dns_sig,pitch_steady,p_speech,p_music,bgm_db,tail_src,level
@@ -27,7 +30,7 @@ MAX_STEPS=80000
 
 # Whose data the jobs work on: everything lives in /root/autodl-tmp/speakers/$SPEAKER/
 # (downloads, songs, raw_songs, work, data, exp, test_songs, infer_out), one model per speaker.
-SPEAKER=pheebie
+SPEAKER=hanamaru_hareru
 
 # Optional settings passed to the jobs
 # download: Bilibili space -> audio of the videos whose title matches DL_MATCH (Python regex), into downloads/;
