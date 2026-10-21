@@ -16,7 +16,8 @@
 # 09:40: with 133 marks the listener chose threshold 0.60 (fit_lines.KEEP_GOOD_MIN 0.80); the rule is fitted
 # again and the clean sets built again after the all models (the earlier ones are in data_clean.rule-0830)
 # 14:55: the listener preferred 40k steps over 10k (10:4, 2 ties); the all models go on to 80k and are A/B tested against 40k
-JOB=train:all,train@sakura_shunka:all,abtest:steps80=all@40000+all@80000,abtest@sakura_shunka:steps80=all@40000+all@80000
+# 16:00: pheebie's 40k/80k A/B made by hand as soon as her 80k was done; the chain makes sakura_shunka's
+JOB=train:all,train@sakura_shunka:all,abtest@sakura_shunka:steps80=all@40000+all@80000
 RUN_ID=37
 # the scores fit_lines.py may use: with ~120 marks, a few chosen by what the listener named (thin /
 # walkie-talkie voice, talk instead of singing, accompaniment, reverb or loud BGM in the original)
