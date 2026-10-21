@@ -19,6 +19,7 @@ the input of the A/B listening (abtest.py).
 """
 import json
 import random
+import shutil
 import sys
 from pathlib import Path
 
@@ -142,14 +143,21 @@ def main():
         total += write_clips(spk, song, spans, train)
         n += len(spans)
     # validation: lines of the held-out songs with a signal score of 75 that the listener's model keeps, the
-    # same for every dataset; tools/autodl/abtest.py converts them for the A/B listening
-    best = {(m['song'], m['k']) for m in lines if m['song'] in held and m['score'] >= 75
-            and (liked is None or (m['song'], m['k']) in liked)}
-    spans = sorted(((song, c) for song in sorted(held) for c in clips_of(by_song[song], best)),
-                   key=lambda t: (t[0], t[1][0]))
-    spans = random.Random(spk.name).sample(spans, min(VAL_CLIPS, len(spans)))
-    for song in held:
-        write_clips(spk, song, [c for s, c in spans if s == song], val)
+    # same for every dataset; tools/autodl/abtest.py converts them for the A/B listening. A dataset built
+    # earlier lends its validation clips as they are, since the model may have been fitted again since.
+    earlier = next((d for d in [spk / 'data_all' / 'val' / 'audio'] + sorted(spk.glob('data_*/val/audio'))
+                    if d.is_dir() and d != val and any(d.glob('*.wav'))), None)
+    if earlier:
+        spans = [shutil.copy(f, val / f.name) for f in sorted(earlier.glob('*.wav'))]
+        print(f'{spk.name} {dataset}: validation clips copied from {earlier.parent.parent.name}', flush=True)
+    else:
+        best = {(m['song'], m['k']) for m in lines if m['song'] in held and m['score'] >= 75
+                and (liked is None or (m['song'], m['k']) in liked)}
+        spans = sorted(((song, c) for song in sorted(held) for c in clips_of(by_song[song], best)),
+                       key=lambda t: (t[0], t[1][0]))
+        spans = random.Random(spk.name).sample(spans, min(VAL_CLIPS, len(spans)))
+        for song in held:
+            write_clips(spk, song, [c for s, c in spans if s == song], val)
     print(f'{spk.name} {dataset}: {n} training clips, {total / 3600:.2f} h from {len(keep)} of {len(lines)} lines; '
           f'{len(spans)} validation clips from the held-out songs {sorted(held)}', flush=True)
 

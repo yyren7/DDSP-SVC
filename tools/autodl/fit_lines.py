@@ -29,10 +29,11 @@ LEARNED = ['singmos', 'dns_ovrl', 'dns_sig', 'dns_bak', 'aes_pq', 'aes_ce', 'aes
 TAGS = ['p_sing', 'p_speech', 'p_music', 'p_instr', 'long_voiced', 'pitch_steady']  # tag_lines.py
 WINDOWS = ['w_aes_ce', 'w_aes_pq', 'w_aes_cu', 'w_dns_sig', 'w_dns_bak', 'w_dns_ovrl']  # score_windows.py
 BANDS = [(0, 50), (50, 75), (75, 90), (90, 101)]  # the score bands of the calibration sample
-# The threshold may lose at most 15 % of the lines the listener keeps. At the best balanced accuracy alone
+# The threshold may lose at most 20 % of the lines the listener keeps. At the best balanced accuracy alone
 # (0.74 with the 82 marks of 2026-10-21, 0.72 against 0.69 at 0.60, within the noise of so few marks) the
-# clean set of pheebie fell from 7.0 h to 1.8 h, most of her songs left out whole.
-KEEP_GOOD_MIN = 0.85
+# clean set of pheebie fell from 7.0 h to 1.8 h, most of her songs left out whole. With 133 marks the
+# listener chose 0.60 (82 % of the good lines kept, 44 % of the bad ones removed) over stricter thresholds.
+KEEP_GOOD_MIN = 0.80
 
 
 def load_jsonl(path):
