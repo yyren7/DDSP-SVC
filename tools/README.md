@@ -46,6 +46,25 @@ python tools/prepare_dataset.py -i singer_b -o data --spk 2 -w work_b
 
 在 4 核 CPU 上，30 秒音频四个 UVR 步骤（当时还有去噪）合计约 10 分钟，大约是实时速度的 20 倍慢，只适合试跑少量文件。CPU 上可以加 `--overlap 2` 提速，音质会略有损失。大批量数据请在 GPU 机器（如 AutoDL）上运行。
 
+## 翻唱：原曲 + 官方 off vocal
+
+选有官方 off vocal（伴奏）的歌，原唱用相减得到，比分离模型干净，伴奏直接用来混音。
+
+```bash
+# 对齐（跟随时间漂移）、相减；输出 vocal.wav、inst.wav 和抵消深度，判断两条是不是同一母带
+python tools/offvocal.py 原曲.m4a off_vocal.m4a -o covers/歌名/phase
+
+# vocal.wav 走 prepare_dataset.py 的 vocals,karaoke,dereverb 三步，干的主唱用 main_reflow.py 转换，再混音
+python tools/cover_mix.py --inst covers/歌名/phase/inst.wav --source covers/歌名/phase/vocal.wav \
+    --vocals work/1_vocals/歌名.wav --lead work/2_karaoke/歌名.wav --dry work/3_dereverb/歌名.wav \
+    --conv 转换结果.wav -o 混音.wav
+```
+
+- 抵消深度看最安静的 3 秒：无损的同一母带能到 -50 dB 以下，B 站、YouTube 的有损音源约 -20～-40 dB，高于 -15 dB 说明不是同一个混音或母带。
+- 两条音轨最好出自同一张碟、同一个人的上传（B 站卡拉 OK 投稿常把 On Vocal 和 Off Vocal 放在 P1、P2）。
+- 混音时，转换后的主唱加上人工混响，合起来按 BS.1770 响度对齐去混响前的原主唱。人工混响按原曲去混响前后每个八度的比例来补，每个频段不超过人声本身，所以低频切得和原曲一样，高频也一样亮。原唱的和声（vocals − lead）保留，`--no-backing` 可以去掉。
+- `--source` 不能省：分离工具（audio-separator）会把峰值超过 0.9 的输入整条压到 0.9，而原曲减伴奏常常超过 1，分出来的分轨会整体轻 1～5 dB。cover_mix.py 按 vocal.wav 把它们放大回原来的音量。vocal.wav 是浮点 WAV，不要转成 FLAC，转了会削波。
+
 ## legacy/
 
 原 6.3 分支上的自用脚本（VAD 切片、验证集调整、局域网传文件、启动训练），原样保留在 `legacy/` 里。

@@ -13,3 +13,6 @@ infer_out/
 
 # local credentials (GitHub token)
 env.json
+
+# cover songs: downloaded originals and off vocals, conversions, mixes
+covers/
