@@ -4,8 +4,12 @@ datasets, exp_<dataset>/): every model converts the same clips, the validation c
 (their lines of the held-out songs, never trained on). Her own clips test the resynthesis (how close to her
 real voice), the other speakers' clips the conversion (the real use). The review page plays them blind (ab).
 
-    python tools/autodl/abtest.py convert <speaker dir> <dataset>...   (ddsp env, GPU, from the repo root)
-    python tools/autodl/abtest.py score <speaker dir>                  (evalq env, GPU)
+    python tools/autodl/abtest.py convert [--name <x>] <speaker dir> <set>...   (ddsp env, GPU, from the repo root)
+    python tools/autodl/abtest.py score [--name <x>] <speaker dir>              (evalq env, GPU)
+
+A set is a dataset, or <dataset>@<step> for one checkpoint of it (e.g. all@10000 all@40000 compares two
+points of one training). --name keeps the experiment apart in abtest_<x>/ (review page ab?x=<x>), so that
+an earlier one and the listener's choices on it stay as they are.
 
 convert: the checkpoints at the latest step every dataset reached (equal steps), the settings of
 main_reflow.py's defaults (RMVPE, key 0, the config's sampler), each result matched in loudness to its input
@@ -33,20 +37,30 @@ SOURCE = '_source'
 AB_LEN = 8.0  # seconds: long enough to judge a voice, short enough to compare three in a row
 
 
-def checkpoints(spk, datasets):
-    """(step, {dataset: checkpoint}) at the latest step that every dataset's training saved."""
-    steps = {}
-    for d in datasets:
-        steps[d] = {}
+def checkpoints(spk, sets):
+    """(step, {set: checkpoint}). A set is a dataset (its model in exp_<dataset>/) or <dataset>@<step> for that
+    step's checkpoint; the plain datasets take the latest step every one of them saved. step is that step, or
+    the steps of the sets joined by '/' when they differ."""
+    found, picked = {}, {}
+    for s in sets:
+        d, _, at = s.partition('@')
+        found[s] = {}
         for f in (spk / f'exp_{d}').glob('model_*.pt'):
             m = re.fullmatch(r'model_(\d+)\.pt', f.name)
             if m and int(m.group(1)) > 0:
-                steps[d][int(m.group(1))] = f
-    common = set.intersection(*(set(s) for s in steps.values()))
-    if not common:
-        sys.exit(f'{spk.name}: no checkpoint of the same step in ' + ', '.join(f'exp_{d}' for d in datasets))
-    step = max(common)
-    return step, {d: steps[d][step] for d in datasets}
+                found[s][int(m.group(1))] = f
+        if at:
+            if int(at) not in found[s]:
+                sys.exit(f'{spk.name}: no model_{at}.pt in exp_{d}')
+            picked[s] = found[s][int(at)]
+    plain = [s for s in sets if s not in picked]
+    if plain:
+        common = set.intersection(*(set(found[s]) for s in plain))
+        if not common:
+            sys.exit(f'{spk.name}: no checkpoint of the same step in ' + ', '.join(f'exp_{s}' for s in plain))
+        picked.update({s: found[s][max(common)] for s in plain})
+    steps = [int(picked[s].stem.split('_')[1]) for s in sets]
+    return (steps[0] if len(set(steps)) == 1 else ' / '.join(map(str, steps))), {s: picked[s] for s in sets}
 
 
 def sources(spk, dataset):
@@ -71,7 +85,7 @@ def active_rms(x, sr):
     return float(np.sqrt(p[p >= p.max() * 1e-3].mean()))
 
 
-def convert(spk, datasets):
+def convert(spk, datasets, root):
     import librosa
     import torch
     import yaml
@@ -90,10 +104,10 @@ def convert(spk, datasets):
             if c.data[k] != args.data[k]:
                 sys.exit(f'{spk.name}: exp_{d} reads its input with data.{k} {c.data[k]}, '
                          f'exp_{datasets[0]} with {args.data[k]}')
-    items = sources(spk, datasets[0])  # the validation clips are the same in every dataset (build_clips.py)
+    first = datasets[0].partition('@')[0]
+    items = sources(spk, first)  # the validation clips are the same in every dataset (build_clips.py)
     if not items:
-        sys.exit(f'{spk.name}: no validation clips in data_{datasets[0]}/val/audio')
-    root = spk / 'abtest'
+        sys.exit(f'{spk.name}: no validation clips in data_{first}/val/audio')
     if root.exists():
         shutil.rmtree(root)  # results of other checkpoints
     (root / SOURCE).mkdir(parents=True)
@@ -163,11 +177,10 @@ def convert(spk, datasets):
     (root / 'manifest.json').write_text(json.dumps(manifest, ensure_ascii=False, indent=1), encoding='utf-8')
 
 
-def score(spk):
+def score(spk, root):
     import score_lines
     from scipy.signal import resample_poly
 
-    root = spk / 'abtest'
     manifest = json.loads((root / 'manifest.json').read_text(encoding='utf-8'))
     models = score_lines.load_models()
 
@@ -212,11 +225,17 @@ def score(spk):
 
 
 def main():
-    cmd, spk = sys.argv[1], Path(sys.argv[2])
+    cmd, args, name = sys.argv[1], sys.argv[2:], None
+    if args[:1] == ['--name']:
+        name, args = args[1], args[2:]
+        if not re.fullmatch(r'[A-Za-z0-9_-]+', name):
+            sys.exit(f'--name {name}: letters, digits, _ and - only')
+    spk = Path(args[0])
+    root = spk / (f'abtest_{name}' if name else 'abtest')
     if cmd == 'convert':
-        convert(spk, sys.argv[3:] or ['all', 'clean'])
+        convert(spk, args[1:] or ['all', 'clean'], root)
     elif cmd == 'score':
-        score(spk)
+        score(spk, root)
     else:
         sys.exit(__doc__)
 

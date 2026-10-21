@@ -261,11 +261,41 @@ AB_CHOICES = ('甲更好', '乙更好', '差不多')
 AB_FIRST = 8  # cards of each speaker shown first: half her own clips, half the other speakers'
 
 
-def ab_manifest(spk):
-    """abtest/manifest.json of tools/autodl/abtest.py, or None."""
-    path = SPEAKERS / spk / 'abtest' / 'manifest.json'
+def ab_root(spk, x=''):
+    """The folder of one A/B experiment of tools/autodl/abtest.py: abtest/, or abtest_<x>/ for a named one."""
+    return SPEAKERS / spk / (f'abtest_{x}' if x else 'abtest')
+
+
+def ab_param(q):
+    """The experiment named by ?x= ('' for the first one, abtest/)."""
+    x = q.get('x', [''])[0]
+    return x if SPEAKER_RE.fullmatch(x) else ''
+
+
+def ab_experiments():
+    """Names of the A/B experiments any speaker has results of, the first one ('') first."""
+    out = set()
+    for s in speakers():
+        for d in (SPEAKERS / s).glob('abtest*'):
+            x = d.name[len('abtest_'):] if d.name.startswith('abtest_') else ''
+            if (d.name == 'abtest' or SPEAKER_RE.fullmatch(x)) and (d / 'manifest.json').is_file():
+                out.add(x)
+    return sorted(out)
+
+
+def ab_tag(x=''):
+    """The prefix of the feedback targets of an experiment: ab:<speaker>:<clip>, ab_<x>:<speaker>:<clip>."""
+    return f'ab_{x}' if x else 'ab'
+
+
+def ab_query(x):
+    return f'?x={x}' if x else ''
+
+
+def ab_manifest(spk, x=''):
+    """manifest.json of the experiment of tools/autodl/abtest.py, or None."""
     try:
-        return json.loads(path.read_text(encoding='utf-8'))
+        return json.loads((ab_root(spk, x) / 'manifest.json').read_text(encoding='utf-8'))
     except (OSError, ValueError):
         return None
 
@@ -280,22 +310,24 @@ def ab_items(spk, man):
     return out
 
 
-def ab_order(spk, name, datasets):
-    """[(甲, dataset), (乙, dataset)] for one clip, shuffled by speaker and clip, the same on every visit."""
+def ab_order(spk, name, datasets, x=''):
+    """[(甲, dataset), (乙, dataset)] for one clip, shuffled by experiment, speaker and clip, the same on
+    every visit."""
     ds = list(datasets)
-    random.Random(f'ab|{spk}|{name}').shuffle(ds)
+    random.Random(f'{ab_tag(x)}|{spk}|{name}').shuffle(ds)
     return list(zip(BLIND_NAMES, ds))
 
 
-def ab_audio(spk, name, v):
+def ab_audio(spk, name, v, x=''):
     """Player of one clip of the A/B page by its neutral name (v: 原声 or a name of ab_order), so that its
     address does not tell the model either (abclip resolves it)."""
-    src = f'abclip?sp={urllib.parse.quote(spk)}&n={urllib.parse.quote(name)}&v={urllib.parse.quote(v)}'
+    src = (f'abclip?sp={urllib.parse.quote(spk)}&n={urllib.parse.quote(name)}&v={urllib.parse.quote(v)}'
+           + (f'&x={x}' if x else ''))
     return f'<audio controls preload="none" src="{src}&fmt=ogg" data-alt="{src}"></audio>'
 
 
-def ab_choices(spk):
-    """{clip name: latest of AB_CHOICES} from the feedback on the A/B page of this speaker."""
+def ab_choices(spk, x=''):
+    """{clip name: latest of AB_CHOICES} from the feedback on the A/B page of this speaker and experiment."""
     out = {}
     try:
         lines = (STATE / 'feedback.jsonl').read_text(encoding='utf-8').splitlines()
@@ -306,9 +338,9 @@ def ab_choices(spk):
             e = json.loads(line)
         except ValueError:
             continue
-        t = str(e.get('target', ''))
-        if e.get('speaker') == spk and t.startswith(f'ab:{spk}:') and e.get('text') in AB_CHOICES:
-            out[t[len(f'ab:{spk}:'):]] = e['text']
+        t, head = str(e.get('target', '')), f'{ab_tag(x)}:{spk}:'
+        if e.get('speaker') == spk and t.startswith(head) and e.get('text') in AB_CHOICES:
+            out[t[len(head):]] = e['text']
     return out
 
 
@@ -444,11 +476,11 @@ class Handler(BaseHTTPRequestHandler):
         if route == 'lcmp':
             return self.page_lcmp(q.get('sel', [''])[0])
         if route == 'ab':
-            return self.page_ab()
+            return self.page_ab(ab_param(q))
         if route == 'abclip':
             return self.serve_abclip(q)
         if route == 'abres':
-            return self.page_abres()
+            return self.page_abres(ab_param(q))
         if route == 'stage':
             return self.page_stage(q.get('s', [''])[0], int(q.get('page', ['1'])[0] or 1))
         if route == 'song':
@@ -495,11 +527,11 @@ class Handler(BaseHTTPRequestHandler):
                  '<span id="fbgen_ok" class="ok"></span></div></div>']
         if not spk:
             return self.send_html(''.join(parts))
-        ab = [(s, m) for s in speakers() if (m := ab_manifest(s))]
-        if ab:
-            done = sum(len(ab_choices(s)) for s, _ in ab)
-            parts.append(f'<h2>A/B 盲听（已听 {done} 句）</h2><div class="card row"><a class="name" href="ab">'
-                         '两个模型比一比</a><span class="muted">'
+        for x in ab_experiments():
+            ab = [(s, m) for s in speakers() if (m := ab_manifest(s, x))]
+            done = sum(len(ab_choices(s, x)) for s, _ in ab)
+            parts.append(f'<h2>A/B 盲听{"：" + esc(x) if x else ""}（已听 {done} 句）</h2><div class="card row">'
+                         f'<a class="name" href="ab{ab_query(x)}">两个模型比一比</a><span class="muted">'
                          + '；'.join(f'{esc(s)}：{" 和 ".join(map(esc, m["datasets"]))}，{m["step"]} 步' for s, m in ab)
                          + '</span></div>')
         sets = compare_sets(spk)
@@ -702,34 +734,34 @@ class Handler(BaseHTTPRequestHandler):
                     f'onclick="note(this)">提交</button><span id="{sid}_ok" class="ok"></span></div></div>')
         self.send_html(''.join(body))
 
-    def page_ab(self):
-        """ab: the conversions of tools/autodl/abtest.py, blind. Each card is one clip: the input, then the
-        result of each model under a neutral name in an order fixed by speaker and clip (ab_order)."""
-        body = ['<p><a href="./">← 返回</a></p><h1>A/B 盲听：两个模型哪个好</h1>',
+    def page_ab(self, x=''):
+        """ab[?x=<experiment>]: the conversions of tools/autodl/abtest.py, blind. Each card is one clip: the
+        input, then the result of each model under a neutral name in an order fixed by speaker and clip (ab_order)."""
+        body = [f'<p><a href="./">← 返回</a></p><h1>A/B 盲听{"：" + esc(x) if x else ""}：两个模型哪个好</h1>',
                 '<div class="card">每句先听<b>原声</b>（模型的输入），再听<b>甲</b>和<b>乙</b>：同一句由两个模型各转换一次，'
                 '顺序每句随机，名字不代表模型。选更好的一个：更像她本人、更自然、没有电音、沙哑、发虚或对讲机感。'
                 '分不出就点“差不多”。<br>每人前 8 句就够（4 句是她自己的歌重建，4 句是别人的歌转成她的声音），'
                 '想多听再展开“更多”。响度已对齐。听完点最下面的“揭晓”。'
                 '<span class="muted">改主意再点一次，以最后一次为准。</span></div>']
         for spk in speakers():
-            man = ab_manifest(spk)
+            man = ab_manifest(spk, x)
             if not man:
                 continue
-            root, choices = SPEAKERS / spk / 'abtest', ab_choices(spk)
+            choices = ab_choices(spk, x)
             items = ab_items(spk, man)
             own = [it for it in items if it['src_spk'] == spk]
             body.append(f'<h2>{esc(spk)}</h2>')
             if own:
                 body.append(f'<div class="card"><div class="muted">她本人的声音，用来对照像不像</div>'
-                            + ab_audio(spk, own[0]['name'], '原声') + '</div>')
+                            + ab_audio(spk, own[0]['name'], '原声', x) + '</div>')
             cards = []
             for i, it in enumerate(items, 1):
-                target = f'ab:{spk}:{it["name"]}'
+                target = f'{ab_tag(x)}:{spk}:{it["name"]}'
                 sid = 'ab' + hashlib.sha1(target.encode()).hexdigest()[:10]
                 what = '她自己的歌，重建' if it['src_spk'] == spk else f'{esc(it["src_spk"])} 的歌，转成她的声音'
-                players = '<div class="muted">原声</div>' + ab_audio(spk, it['name'], '原声')
-                for name, _ in ab_order(spk, it['name'], man['datasets']):
-                    players += f'<div class="muted">{name}</div>' + ab_audio(spk, it['name'], name)
+                players = '<div class="muted">原声</div>' + ab_audio(spk, it['name'], '原声', x)
+                for name, _ in ab_order(spk, it['name'], man['datasets'], x):
+                    players += f'<div class="muted">{name}</div>' + ab_audio(spk, it['name'], name, x)
                 attrs = f'data-t="{esc(target)}" data-spk="{esc(spk)}"'
                 state = f'已标记：{choices[it["name"]]}' if it['name'] in choices else ''
                 cards.append(
@@ -745,22 +777,22 @@ class Handler(BaseHTTPRequestHandler):
             if len(cards) > AB_FIRST:
                 body.append(f'<details><summary>更多（{len(cards) - AB_FIRST} 句，可选）</summary>'
                             + ''.join(cards[AB_FIRST:]) + '</details>')
-        body.append('<p><a href="abres">听完了，揭晓 →</a></p>')
+        body.append(f'<p><a href="abres{ab_query(x)}">听完了，揭晓 →</a></p>')
         self.send_html(''.join(body))
 
-    def page_abres(self):
-        """abres: the listener's choices of the A/B page decoded into the models, and the learned scores
-        of the results (abtest/scores.jsonl) next to those of the inputs."""
-        body = ['<p><a href="ab">← 回到盲听</a></p><h1>A/B 结果</h1>',
+    def page_abres(self, x=''):
+        """abres[?x=<experiment>]: the listener's choices of the A/B page decoded into the models, and the
+        learned scores of the results (scores.jsonl of the experiment) next to those of the inputs."""
+        body = [f'<p><a href="ab{ab_query(x)}">← 回到盲听</a></p><h1>A/B 结果{"：" + esc(x) if x else ""}</h1>',
                 '<p class="muted">p 是符号检验（不算“差不多”）：小于 0.05 才算听感上真的分出了好坏。'
                 '下表是机器打分的平均，“原声”一行是输入本身，作为参照。</p>']
         names = {'singmos': 'SingMOS 歌声自然度', 'aes_pq': '制作质量 PQ', 'aes_ce': '好听程度 CE',
                  'dns_ovrl': 'DNSMOS 总体', 'spk_cos': '像她（声纹相似度）', 'f0_rmse_cents': '音高误差（音分）'}
         for spk in speakers():
-            man = ab_manifest(spk)
+            man = ab_manifest(spk, x)
             if not man:
                 continue
-            ds, choices = man['datasets'], ab_choices(spk)
+            ds, choices = man['datasets'], ab_choices(spk, x)
             body.append(f'<h2>{esc(spk)}：{" 对 ".join(map(esc, ds))}（{man["step"]} 步）</h2>')
             own_names = {it['name'] for it in man['items'] if it['src_spk'] == spk}
             rows = []
@@ -770,7 +802,7 @@ class Handler(BaseHTTPRequestHandler):
                 for n, c in choices.items():
                     if not pick(n):
                         continue
-                    order = dict(ab_order(spk, n, ds))
+                    order = dict(ab_order(spk, n, ds, x))
                     if c == '差不多':
                         ties += 1
                     elif c[0] in order:
@@ -778,7 +810,7 @@ class Handler(BaseHTTPRequestHandler):
                 p = f'，p = {sign_test(*[wins[d] for d in ds[:2]]):.2f}' if len(ds) == 2 else ''
                 rows.append(f'{label}：' + '，'.join(f'{esc(d)} 胜 {w}' for d, w in wins.items()) + f'，差不多 {ties}{p}')
             body.append(f'<div class="card">已听 {len(choices)}/{len(man["items"])} 句<br>' + '<br>'.join(rows) + '</div>')
-            path = SPEAKERS / spk / 'abtest' / 'scores.jsonl'
+            path = ab_root(spk, x) / 'scores.jsonl'
             if not path.exists():
                 body.append('<p class="muted">机器打分还没做完。</p>')
                 continue
@@ -833,13 +865,14 @@ class Handler(BaseHTTPRequestHandler):
         self.send_path(path)
 
     def serve_abclip(self, q):
-        """abclip?sp=<speaker>&n=<clip>&v=原声|甲|乙[&fmt=ogg]: one clip of the A/B page (ab_audio)."""
+        """abclip?sp=<speaker>&n=<clip>&v=原声|甲|乙[&x=<experiment>][&fmt=ogg]: one clip of the A/B page (ab_audio)."""
         spk, name, v = (q.get(k, [''])[0] for k in ('sp', 'n', 'v'))
-        man = ab_manifest(spk) if spk in speakers() else None
+        x = ab_param(q)
+        man = ab_manifest(spk, x) if spk in speakers() else None
         if not man or name not in {it['name'] for it in man['items']}:
             return self.send_html('not found', 404)
-        folder = '_source' if v == '原声' else dict(ab_order(spk, name, man['datasets'])).get(v)
-        path = SPEAKERS / spk / 'abtest' / folder / f'{name}.wav' if folder else None
+        folder = '_source' if v == '原声' else dict(ab_order(spk, name, man['datasets'], x)).get(v)
+        path = ab_root(spk, x) / folder / f'{name}.wav' if folder else None
         if not path or not path.is_file():
             return self.send_html('not found', 404)
         if q.get('fmt', [''])[0] == 'ogg':
