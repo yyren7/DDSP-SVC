@@ -11,7 +11,8 @@ on 2026-10-22, without songsplit.
 - Out: duets and group songs (another name joined with ×, &, feat., 合唱), medleys (串烧, メドレー), talk
   and intros, and songs shorter than --min-sec or longer than --max-sec.
 - One take per song: titles compare without punctuation, spaces, case, 翻唱 / Take2 marks and a few
-  traditional-simplified pairs; a title that is a prefix of another, or 90 % similar, is the same song.
+  traditional-simplified pairs; a title of 4 or more characters that is the start of another and at least
+  60 % of it (a cut-off title), or 90 % similar, is the same song.
   The longest take stays.
 - Of what is left, --n songs are drawn at random with a fixed seed (the speaker's name), so the choice can
   be made again.
@@ -29,7 +30,7 @@ import sys
 from pathlib import Path
 
 NAME = re.compile(r'^(\d{8}) (.*?)(?: p(\d+) (.*?))? \[([A-Za-z0-9_]+)\]\.(\w+)$')
-DATE_TAIL = re.compile(r'\s*\d{2}\.\d{1,2}\.\d{1,2}\s*$')
+DATE_TAIL = re.compile(r'\s*\d{2}(?:\.\d{1,3}){1,2}\s*$')  # "26.10.10", also mistyped ones like "24.1.124"
 OUT = re.compile(r'咩栗|MeUmy|×|&|feat\.?|ft\.|合唱|串烧|メドレー|medley|自我介绍|开场|结束|闲聊|杂谈|聊天|talk', re.I)
 MARKS = re.compile(r'翻唱|take\s*\d|\(?\d+\)?$|【.*?】|（.*?）|\(.*?\)', re.I)
 PUNCT = re.compile(r'[\s\W_]+', re.U)
@@ -55,7 +56,9 @@ def norm(title):
 
 
 def same(a, b):
-    return a == b or (len(a) >= 3 and (b.startswith(a) or a.startswith(b))) \
+    """A cut title is the longer one's prefix and most of it (玫瑰 is not 玫瑰窃贼, 想见你 not 想见你想见你想见你)."""
+    short, long_ = sorted((a, b), key=len)
+    return a == b or (len(short) >= 4 and long_.startswith(short) and len(short) >= 0.6 * len(long_)) \
         or difflib.SequenceMatcher(None, a, b).ratio() >= SIMILAR
 
 

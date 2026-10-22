@@ -34,8 +34,11 @@
 # tripped it), so the 76 videos (64 h) are listed in tools/autodl/lists/umi_compilations.txt, made from the PC
 # 11:20: the compilations are one part per song (p01 求神呐26.10.10 ...), about a thousand parts: no cap, and no
 # songsplit; the songs are chosen from downloads/ into raw_songs/ as hanamaru_hareru's were
-JOB=download
-RUN_ID=44
+# 16:24: 1256 parts downloaded (4.9 GB); select_songs.py (one take per song, 2-8 min, no duets or medleys)
+# drew 190 of 478 distinct songs, 11.7 h, into raw_songs/ (_selection.tsv). Separated and measured now; then by
+# hand exclude_sources.py --apply (wettest 20 %, loudest BGM 5 %), as for hanamaru_hareru
+JOB=uvr,lines
+RUN_ID=45
 # the scores fit_lines.py may use: with ~120 marks, a few chosen by what the listener named (thin /
 # walkie-talkie voice, talk instead of singing, accompaniment, reverb or loud BGM in the original)
 LINE_FEATURES=aes_cu,aes_ce,aes_pq,dns_sig,pitch_steady,p_speech,p_music,bgm_db,tail_src,level
