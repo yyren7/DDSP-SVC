@@ -21,6 +21,7 @@
 | 花丸晴琉原曲剔除 | 完成（03:05）：剔除她自己的歌里最湿的 20%（直达/混响比低于 7.9 dB）和 BGM 最响的 5%（比人声高 4.7 dB 以上），共 47 首。剩 143 首，歌声 7.3 小时。名单见 `raw_songs_excluded/_excluded.tsv` |
 | 花丸晴琉训练（`lines`、`clips:all`、`features:all`、`train:all`） | 完成：2026-10-22 03:16～05:22 训到 8 万步。训练集 2593 段、7.15 小时，验证集是留出的 4 首歌里的 12 段。4 万、8 万步的模型已备份到本地 `exp/hanamaru_hareru_all/`，MD5 一致 |
 | 花丸晴琉 4 万对 8 万盲听（`abtest:steps80`） | 材料已做好（05:27），等耳朵：试听网页「A/B 盲听」里的 steps80。她的验证 loss 从 1.02 升到 1.17，比菲比、旬夏升得多，所以也做了这份盲听。用的是三个人的验证句；菲比、旬夏的 `data_all/val/audio` 已在清理时删掉，从她们的 `abtest_steps80/_source/` 拷了回来。机器打分见下 |
+| 呜米（umi）下载（`download`） | 进行中（2026-10-22 11:20 起）：切片号「叶光光光光光」2024～2026 年的 76 场单人歌回合集，64 小时，每首歌一个 P，约一千首，清单在 `lists/umi_compilations.txt`。之后用 `select_songs.py` 挑 190 首进 `raw_songs/`，再 `uvr`、`lines`、`clips:all`，和菲比合成双人模型 `umi_pheebie`（`multi` 任务，`configs/speakers/umi_pheebie.yaml`，说话人 1 = 菲比、2 = 呜米） |
 | 菲比Pheebie 录像（`download`） | 两批共 13 场（9 月 30 日～10 月 18 日），评论里没有道标 |
 | 菲比Pheebie 翻唱和 PV（`download`） | 完成：本人空间 2～8 分钟的视频约 22 个 |
 | 菲比Pheebie 切歌（`songsplit`） | 完成：187 首、10.8 小时（录像 168 首，翻唱和 PV 19 首）。2 分钟以下的不要（跨 P 被切开的半首除外），明显在说话的不要 |
