@@ -1,0 +1,5 @@
+# Settings for tools/split_songs.py when SPEAKER=umi (see python tools/split_songs.py -h).
+# Otherwise the defaults tuned for sakura_shunka.
+# 呜米 (umi): the clipper's per-stream compilations hold songs only, so the same floor as pheebie:
+# songs under 2 minutes (fragments at the ends of a cut) are dropped.
+--min-song 120
