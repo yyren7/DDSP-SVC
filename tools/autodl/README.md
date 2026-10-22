@@ -84,6 +84,7 @@ AutoDL 控制台 → 实例的「自定义服务」→ 打开 6008 端口对应�
 - 任务启动时就定下了说话人，任务跑到一半改 `SPEAKER` 不会把文件写到别人的目录里。
 - 训练配置以 `configs/reflow.yaml` 为底，只替换数据和模型目录。想给某个人单独调参，就新建 `configs/speakers/<说话人>.yaml`（完整的一份配置），有这个文件时用它代替 `configs/reflow.yaml`。
 - 加新人：把 `SPEAKER` 改成新名字，再跑 `download` 或者直接往 `raw_songs/` 放歌，目录会自动建好。
+- 几个人合训一个模型：用 `multi` 任务（见下表）把各人的训练集并进一个合名目录（比如 `umi_pheebie`），它和单人一样有自己的 `data_<名>/`、`exp_<名>/`。转换时 `SPK_ID` 选用谁的声音（按 `multi` 里给的顺序），`main_reflow.py --spk_mix_dict` 可以按比例混合几个人。
 
 ## 之后的流程
 
@@ -99,6 +100,7 @@ AutoDL 控制台 → 实例的「自定义服务」→ 打开 6008 端口对应�
 | `scorelines` | 每句的机器打分（SingMOS-Pro、DNSMOS、Audiobox Aesthetics、声纹、RMVPE 音高检查）和唱/说/伴奏标签（`score_lines.py`、`tag_lines.py`） |
 | `fitlines` | 用所有说话人的校准标记拟合“哪些句子能拿去训练”的规则（`fit_lines.py`，可用的分数由 `LINE_FEATURES` 指定） |
 | `clips` | 写成 `clips@<说话人>:<名>`：用选出的句子拼成训练集 `data_<名>/`，`all` 是全部句子，`clean` 是规则保留的句子（`build_clips.py`）。后面的 `features`、`train` 也写成 `任务@说话人:<名>` |
+| `multi` | 写成 `multi@<合名>:<名>=<说话人>+<说话人>…`：把几个人各自的 `data_<名>/` 并成一个多人训练集，放在 `speakers/<合名>/data_<名>/`，第 n 个人是说话人 n（`build_multi.py`，硬链接，不占空间）。再跑 `features@<合名>:<名>`、`train@<合名>:<名>`，配置用 `configs/speakers/<合名>.yaml`（`n_spk` 等于人数）。例如 `multi@umi_pheebie:all=pheebie+umi` |
 | `compare` | 从几首歌各截 40 秒，用几套模型和步骤分别去伴奏，在试听网页的「模型对比」里并排听（`tools/autodl/compare_uvr.py`） |
 | `features` | DDSP-SVC 特征预处理（`preprocess.py`） |
 | `train` | 训练。重启任务时会从最近保存的 checkpoint 继续 |

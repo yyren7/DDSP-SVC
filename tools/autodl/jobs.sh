@@ -176,6 +176,16 @@ clips)
     conda activate "$ENV_ROOT/ddsp"
     python tools/autodl/build_clips.py "$SPK_DIR" "$DATASET"
     ;;
+multi)
+    # One training set out of several speakers' sets, for a model of them all (build_multi.py): chain item
+    # multi@<mix>:<dataset>=<speaker>+<speaker>..., e.g. multi@umi_pheebie:all=pheebie+umi puts pheebie's and
+    # umi's data_all/ into speakers/umi_pheebie/data_all/ as speakers 1 and 2 (in the order given); then
+    # features@umi_pheebie:all and train@umi_pheebie:all with configs/speakers/umi_pheebie.yaml (n_spk: 2)
+    [[ "${DATASET:-}" == *=* ]] || { echo "multi needs <dataset>=<speaker>+<speaker>...: multi@umi_pheebie:all=pheebie+umi"; exit 2; }
+    conda activate "$ENV_ROOT/ddsp"
+    IFS='+' read -r -a members <<< "${DATASET#*=}"
+    python tools/autodl/build_multi.py "$SPK_DIR" "${DATASET%%=*}" "${members[@]/#/$SPEAKERS_DIR/}"
+    ;;
 features)
     conda activate "$ENV_ROOT/ddsp"
     python preprocess.py -c "$SPK_CONFIG" -j "${WORKERS:-4}"
