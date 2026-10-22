@@ -8,6 +8,7 @@
 #   - starts itself again after every power-on (see AUTOSTART below)
 #   - keeps the review web page running (restarted after every code update)
 #   - publishes status, log tails and review feedback to the $LOG_BRANCH branch
+#   - installs the instance-wide way to GitHub (ghnet and the git shim, see ghnet.sh)
 # Usage (inside tmux):  bash tools/autodl/runner.sh
 # The GitHub token is read from $GITHUB_TOKEN, or from .autodl/token after the first run.
 set -uo pipefail
@@ -21,18 +22,20 @@ if [ -n "${GITHUB_TOKEN:-}" ]; then
 fi
 [ -s "$TOKEN_FILE" ] || { echo "set GITHUB_TOKEN for the first run"; exit 1; }
 REPO_URL="https://github.com/$GITHUB_REPO.git"
-# The token travels in an Authorization header on every request (the way actions/checkout does it)
-# rather than in the URL: with it in the URL git first sends every request anonymously and only
-# repeats it with the token after GitHub's 401, and the anonymous request is the one that GitHub's
-# throttling of AutoDL's shared addresses hits first ("Authentication failed" with a valid token).
-# It also keeps the token out of `ps`. GIT_TERMINAL_PROMPT=0 turns a refusal into an immediate
-# failure instead of a password prompt on the tmux terminal.
-TOKEN_B64="$(printf 'x-access-token:%s' "$(cat "$TOKEN_FILE")" | base64 -w0)"
-GIT_ENV=(GIT_TERMINAL_PROMPT=0 GIT_CONFIG_COUNT=4
-    GIT_CONFIG_KEY_0="http.https://github.com/.extraheader" GIT_CONFIG_VALUE_0="Authorization: Basic $TOKEN_B64"
-    GIT_CONFIG_KEY_1=http.version GIT_CONFIG_VALUE_1=HTTP/1.1    # HTTP/2 streams to GitHub break now and then
-    GIT_CONFIG_KEY_2=http.lowSpeedLimit GIT_CONFIG_VALUE_2=1000  # a transfer below 1 kB/s for 30 s is given up
-    GIT_CONFIG_KEY_3=http.lowSpeedTime GIT_CONFIG_VALUE_3=30)
+# How GitHub is reached is the instance-wide rule in tools/autodl/ghnet.sh (the way that works,
+# retries, the token in a header, a log), installed as /usr/local/bin/ghnet together with the git
+# shim /usr/local/bin/git that sends every git network command on this machine through it. Both
+# are installed from the repository here and again after every update, with the token.
+GHNET_STATE=/root/.ghnet
+install_ghnet() {
+    mkdir -p -m 700 "$GHNET_STATE"
+    cmp -s "$TOKEN_FILE" "$GHNET_STATE/token" || install -m 600 "$TOKEN_FILE" "$GHNET_STATE/token"
+    cmp -s tools/autodl/ghnet.sh /usr/local/bin/ghnet || install -m 755 tools/autodl/ghnet.sh /usr/local/bin/ghnet
+    cmp -s tools/autodl/git-shim.sh /usr/local/bin/git || install -m 755 tools/autodl/git-shim.sh /usr/local/bin/git
+}
+install_ghnet
+net() { GHNET_TIMEOUT="${NET_TIMEOUT:-45}" ghnet "$@"; }   # the runner's own transfers are small
+TOKEN_B64="$(printf 'x-access-token:%s' "$(cat "$TOKEN_FILE")" | base64 -w0)"   # masked in published logs
 
 REVIEW_KEY_FILE="$STATE_DIR/review_key"
 [ -s "$REVIEW_KEY_FILE" ] || (umask 077; head -c 12 /dev/urandom | od -An -tx1 | tr -d ' \n' > "$REVIEW_KEY_FILE")
@@ -57,49 +60,6 @@ stop_group() {  # pid
     kill -TERM -- "-$1" 2>/dev/null
     for _ in $(seq 30); do kill -0 "$1" 2>/dev/null || return 0; sleep 1; done
     kill -KILL -- "-$1" 2>/dev/null
-}
-
-# Two ways to GitHub, both shared with every other AutoDL user and both bad at times: the direct
-# connection stalls for minutes to hours when the link abroad is bad, and the academic proxy (a
-# Squid at 172.26.1.26 that opens the TLS connections itself) answers 503 or turns a valid token
-# away for a while. Every call tries the way that worked last time first, then the other, and both
-# once more after a pause. An attempt is cut off after NET_TIMEOUT seconds (a healthy one takes a
-# few seconds), so a dead way never holds the loop for long. Every failed attempt is logged with
-# its reason, on the console and in net.log (published, counted in status.txt).
-NET_TIMEOUT="${NET_TIMEOUT:-45}"
-NET_WAY_FILE="$STATE_DIR/net_way"
-NET_LOG="$STATE_DIR/net.log"
-net_via() {  # direct|proxy command...
-    local way="$1"; shift
-    if [ "$way" = direct ]; then
-        env -u http_proxy -u https_proxy -u HTTP_PROXY -u HTTPS_PROXY -u all_proxy -u ALL_PROXY \
-            "${GIT_ENV[@]}" timeout "$NET_TIMEOUT" "$@"
-    else
-        [ -f /etc/network_turbo ] || { echo "no /etc/network_turbo" >&2; return 1; }
-        (source /etc/network_turbo >/dev/null 2>&1; env "${GIT_ENV[@]}" timeout "$NET_TIMEOUT" "$@")
-    fi
-}
-net() {  # what command...   what: the word for the log, e.g. fetch
-    local what="$1" first other way round rc reason err="$STATE_DIR/net.err"; shift
-    first="$(cat "$NET_WAY_FILE" 2>/dev/null)"
-    [ "$first" = direct ] || [ "$first" = proxy ] || { [ -f /etc/network_turbo ] && first=proxy || first=direct; }
-    [ "$first" = direct ] && other=proxy || other=direct
-    for round in 1 2; do
-        [ "$round" = 1 ] || sleep 10
-        for way in "$first" "$other"; do
-            net_via "$way" "$@" 2>"$err"; rc=$?
-            if [ "$rc" = 0 ]; then
-                echo "$way" > "$NET_WAY_FILE"
-                [ "$round$way" = "1$first" ] || echo "$(date '+%F %T') github $what ok via $way after retrying"
-                return 0
-            fi
-            reason="$(grep -v '^$' "$err" | tail -1)"; [ "$rc" = 124 ] && reason="no answer in $NET_TIMEOUT s"
-            # with prompts disabled, git reports a 401 as a missing username
-            [[ "$reason" == *"could not read Username"* ]] && reason="token refused (401)"
-            echo "$(date '+%F %T') github $what via $way failed: $reason" | tee -a "$NET_LOG"
-        done
-    done
-    return 1
 }
 
 job_exit_code() {  # job -> exit code of its last finished run, empty while it has not finished
@@ -261,7 +221,7 @@ publish() {
         echo "logs:     job_<job>.log latest run of each job, runs/ last $LOG_PUBLISH_RUNS runs, runner.log runner console"
         echo "mode:     $(has_gpu && echo "GPU, idle shutdown after $(plan_value IDLE_SHUTDOWN_MIN) min" \
                                    || echo "no GPU, idle shutdown after $(plan_value IDLE_SHUTDOWN_MIN_NOGPU) min")"
-        echo "github:   via $(cat "$NET_WAY_FILE" 2>/dev/null || echo "-"); failed attempts in the last 24 h: $(awk -v t="$(date -d '24 hours ago' '+%F %T')" '$1" "$2 >= t' "$NET_LOG" 2>/dev/null | wc -l) (see net.log)"
+        echo "github:   via $(cat "$GHNET_STATE/way" 2>/dev/null || echo "-"); last ok: $(cat "$GHNET_STATE/last_ok" 2>/dev/null || echo "-"); failed attempts in the last 24 h: $(awk -v t="$(date -d '24 hours ago' '+%F %T')" '$1" "$2 >= t' "$GHNET_STATE/net.log" 2>/dev/null | wc -l) (see net.log)"
         echo; nvidia-smi --query-gpu=name,utilization.gpu,memory.used,memory.total,temperature.gpu --format=csv 2>/dev/null
         echo; df -h "$REPO_DIR" 2>/dev/null | tail -1
         echo; for d in "$DL_DIR" "$SONG_DIR" "$RAW_DIR" "$WORK_DIR"/* "$DATA_DIR"/train/audio "$DATA_DIR"/val/audio \
@@ -290,15 +250,12 @@ publish() {
     fi
     [ -f "$STATE_DIR/feedback.jsonl" ] && cp "$STATE_DIR/feedback.jsonl" "$PUB/feedback.jsonl"
     [ -f "$STATE_DIR/shutdown.log" ] && tail -n 200 "$STATE_DIR/shutdown.log" | render > "$PUB/shutdown.log"
-    if [ -f "$NET_LOG" ]; then
-        [ "$(wc -l < "$NET_LOG")" -gt 3000 ] && { tail -n 2000 "$NET_LOG" > "$NET_LOG.tmp" && mv "$NET_LOG.tmp" "$NET_LOG"; }
-        tail -n 300 "$NET_LOG" | render > "$PUB/net.log"
-    fi
+    [ -f "$GHNET_STATE/net.log" ] && tail -n 300 "$GHNET_STATE/net.log" | render > "$PUB/net.log"
     # One squashed commit, force-pushed, so the log branch never grows.
     git -C "$PUB" add -A
     git -C "$PUB" -c user.name=autodl-runner -c user.email=runner@autodl commit -q --amend -m "status $(date '+%F %T')" 2>/dev/null \
         || git -C "$PUB" -c user.name=autodl-runner -c user.email=runner@autodl commit -q -m "status $(date '+%F %T')"
-    net push git -C "$PUB" push -q -f "$REPO_URL" "HEAD:refs/heads/$LOG_BRANCH"
+    net git -C "$PUB" push -q -f "$REPO_URL" "HEAD:refs/heads/$LOG_BRANCH"
     # Every amend leaves the replaced commit behind; drop those once they pile up.
     if [ "$(git -C "$PUB" count-objects | cut -d' ' -f1)" -gt 3000 ]; then
         git -C "$PUB" reflog expire --expire=now --all && git -C "$PUB" gc -q --prune=now
@@ -334,10 +291,11 @@ load_job_state
 pkill -f "python3 tools/autodl/review_server.py --port $REVIEW_PORT" 2>/dev/null
 start_review
 while true; do
-    if net fetch git fetch -q "$REPO_URL" "$BRANCH" && [ "$(git rev-parse HEAD)" != "$(git rev-parse FETCH_HEAD)" ]; then
+    if net git fetch -q "$REPO_URL" "$BRANCH" && [ "$(git rev-parse HEAD)" != "$(git rev-parse FETCH_HEAD)" ]; then
         old_runner="$(git rev-parse HEAD:tools/autodl/runner.sh)"
         git reset -q --hard FETCH_HEAD
         echo "$(date '+%F %T') updated to $(git rev-parse --short HEAD)"
+        install_ghnet
         if [ "$old_runner" != "$(git rev-parse HEAD:tools/autodl/runner.sh)" ]; then
             echo "$(date '+%F %T') runner.sh changed, restarting runner (jobs keep running)"
             stop_group "$REVIEW_PID"
@@ -393,7 +351,7 @@ while true; do
             echo "$(date '+%F %T') idle for $limit min, shutting down"
             echo "shutdown: idle for $limit min at $(date '+%F %T %Z')" >> "$PUB/status.txt"
             git -C "$PUB" add -A && git -C "$PUB" -c user.name=autodl-runner -c user.email=runner@autodl commit -q --amend -m "shutdown $(date '+%F %T')"
-            net push git -C "$PUB" push -q -f "$REPO_URL" "HEAD:refs/heads/$LOG_BRANCH"
+            net git -C "$PUB" push -q -f "$REPO_URL" "HEAD:refs/heads/$LOG_BRANCH"
             power_off
             # Still here, so the shutdown did not take effect: report it and try again next window.
             echo "$(date '+%F %T') shutdown did not take effect, see .autodl/shutdown.log"

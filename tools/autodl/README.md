@@ -132,4 +132,13 @@ bash tools/autodl/runner.sh
 - TensorBoard 可以照常用 6006 端口：`tensorboard --logdir /root/autodl-tmp/speakers --port 6006`，所有人的训练曲线都能看到。
 - 日志：任务每运行一次单独记一个文件 `.autodl/runs/<开始时间>_<任务名>.log`，`.autodl/job_<任务名>.log` 指向这个任务最近一次运行的日志。想自己看：`tail -F .autodl/job_<任务名>.log`。实例上从新到旧保留 2G 日志，每个任务最近一次运行的日志总会保留。`autodl-logs` 分支上有最近 60 次运行的日志：进度条只留最后一帧，超过 2000 行的只留开头 300 行和最后 1700 行。runner 自己的输出在分支上的 `runner.log`。
 - 系统盘只有约 30G，所以 conda 环境（`/root/autodl-tmp/conda_envs/`）、pip/conda/HuggingFace 缓存（`/root/autodl-tmp/.cache/`）都放在数据盘上。两个环境里的 torch 都锁定为 2.9.1（见 `torch-constraints.txt`），防止依赖把它换成另一套 CUDA 版本。
-- runner 访问 GitHub 有两条路：直连和学术加速。两条都是和整台宿主机上所有用户共用的出口，都会时好时坏：直连会一次断上几分钟到几小时（2026-10-22 实测），学术加速（一台会自己解开 TLS 的 Squid 代理）偶尔返回 503，或者把有效的 token 当成无效的。所以 runner 记住上一次走通的那条路，先走它，失败再换另一条，两条都失败就隔 10 秒再各试一次；每次尝试最多等 45 秒，不会被一条断掉的路拖住。每次失败都带原因记在 `.autodl/net.log` 里（分支上也有一份），`status.txt` 里的 `github:` 一行是当前走的路和最近 24 小时失败的次数。token 放在每个请求的 Authorization 头里，而不是 URL 里：这样 git 不会先发一个匿名请求再被 401 打回来重发，而共享出口被 GitHub 限流时，先被拒的正是匿名请求。
+- 访问 GitHub 怎么走，见下面「GitHub 访问规则」，对整台实例生效。
+
+## GitHub 访问规则（整台实例）
+
+AutoDL 出去有两条路：直连和学术加速。两条都是和整台宿主机上所有用户共用的出口，都会时好时坏：直连会一次断上几分钟到几小时（2026-10-22 实测），学术加速（一台会自己解开 TLS 的 Squid 代理，`172.26.1.26`）偶尔返回 503，或者把有效的 token 当成无效的。规则由两个文件实现，runner 从 `tools/autodl/ghnet.sh`、`git-shim.sh` 安装到系统里，每次更新代码后重装：
+
+- `/usr/local/bin/ghnet`：用走得通的那条路跑一个命令。记住上一次走通的路先走，失败换另一条，两条都失败隔 10 秒再各试一次；只对像网络的失败重试，合并冲突、路径不对之类立刻报错。对 git 还做三件事：token 放在每个请求的 Authorization 头里而不是 URL 里（git 不再先发匿名请求再被 401 打回来重发——共享出口被 GitHub 限流时先被拒的正是匿名请求；token 也不再出现在 `ps` 里），被拒的 token 会再匿名试一次；强制 HTTP/1.1（HTTP/2 到 GitHub 的流时常断）；传输低于 1 kB/s 持续 30 秒就放弃。
+- `/usr/local/bin/git`：git 的垫片。`fetch`、`pull`、`push`、`clone`、`ls-remote` 自动经过 ghnet，其他子命令原样直通。所以机器上别的项目（比如 `svc-mv`）直接 `git pull` 就有了这套规则，什么都不用改；git 以外的命令写 `ghnet curl ...` 即可。
+
+每次失败带原因记在 `/root/.ghnet/net.log`（分支上的 `net.log` 是它的尾巴），当前走的路在 `/root/.ghnet/way`，`status.txt` 的 `github:` 一行是汇总。token 由 runner 复制到 `/root/.ghnet/token`。现在的 token 只对 `yyren7/DDSP-SVC` 有写权限，读任何公开仓库都没问题；要从机器上往别的仓库推，生成 token 时把那个仓库也勾上，然后 `GITHUB_TOKEN=新token bash tools/autodl/runner.sh` 重启一次 runner，它会把新 token 装到位。
