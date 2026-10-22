@@ -37,8 +37,13 @@
 # 16:24: 1256 parts downloaded (4.9 GB); select_songs.py (one take per song, 2-8 min, no duets or medleys)
 # drew 190 of 478 distinct songs, 11.7 h, into raw_songs/ (_selection.tsv). Separated and measured now; then by
 # hand exclude_sources.py --apply (wettest 20 %, loudest BGM 5 %), as for hanamaru_hareru
-JOB=uvr,lines
-RUN_ID=45
+# 18:32: separated and measured (5451 lines, 8.35 h). exclude_sources.py --apply: 47 songs out (drr_db < 16.1 dB or
+# bgm_db > 2.8 dB; she records much drier than hanamaru_hareru, whose cut was 7.9 dB), 143 left with 6.2 h of
+# sung lines. pheebie's all set rebuilt by hand at 16:40 (2581 clips, 6.81 h, the same 12 validation clips).
+# Now: lines again without them, umi's all set, the two-speaker set (1 = pheebie, 2 = umi), features and
+# training to MAX_STEPS with configs/speakers/umi_pheebie.yaml (n_spk: 2)
+JOB=lines,clips:all,multi@umi_pheebie:all=pheebie+umi,features@umi_pheebie:all,train@umi_pheebie:all
+RUN_ID=46
 # the scores fit_lines.py may use: with ~120 marks, a few chosen by what the listener named (thin /
 # walkie-talkie voice, talk instead of singing, accompaniment, reverb or loud BGM in the original)
 LINE_FEATURES=aes_cu,aes_ce,aes_pq,dns_sig,pitch_steady,p_speech,p_music,bgm_db,tail_src,level
