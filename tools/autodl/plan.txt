@@ -30,8 +30,10 @@
 # for a two-speaker model with pheebie. Her solo song streams come cut into songs by the clipper 叶光光光光光
 # (space 39870354, 345 h of 【呜米】 compilations since 2022); the per-stream ones of 2024-2026 are titled
 # 【呜米】yy.m.d...翻唱合集 (about 85 h); the 【MeUmy】/【双女】 duets and the ten-hour 23年翻唱合集N stay out
+# 11:15: listing her space from the instance got Bilibili's 412 (the listing calls made while choosing sources
+# tripped it), so the 76 videos (64 h) are listed in tools/autodl/lists/umi_compilations.txt, made from the PC
 JOB=download,songsplit
-RUN_ID=42
+RUN_ID=43
 # the scores fit_lines.py may use: with ~120 marks, a few chosen by what the listener named (thin /
 # walkie-talkie voice, talk instead of singing, accompaniment, reverb or loud BGM in the original)
 LINE_FEATURES=aes_cu,aes_ce,aes_pq,dns_sig,pitch_steady,p_speech,p_music,bgm_db,tail_src,level
@@ -51,7 +53,7 @@ SPEAKER=umi
 # First batch (RUN_ID=15): DL_MATCH=^【菲比Pheebie】(?!.*联动).*(歌回|歌杂|唱) with DL_MAX=20; it missed streams
 # titled 歌！. Second batch (RUN_ID=17): the next 40 parts (about 8 streams) with the broader rule below;
 # _archive.txt skips the parts already downloaded, so each run continues with older streams.
-DL_URL=https://space.bilibili.com/39870354/video
+DL_URL=tools/autodl/lists/umi_compilations.txt
 DL_MATCH=^【呜米】2[456]\.\d+\.\d+.*合集
 DL_MAX=120
 # DL_FILTER: more yt-dlp --match-filter conditions. Her own covers and PVs: DL_URL=https://space.bilibili.com/3546961967843490/video
