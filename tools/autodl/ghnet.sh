@@ -78,7 +78,7 @@ for round in 1 2; do
     for way in "$first" "$other"; do
         for auth in token anon; do
             via "$way" "$auth" "$@" 2>"$err"; rc=$?
-            [ -t 2 ] && cat "$err" >&2   # a person at a terminal sees what the command said
+            cat "$err" >&2   # what the command said, as without ghnet (only after it finished)
             if [ "$rc" = 0 ]; then
                 echo "$way" > "$STATE/way"
                 echo "$(date '+%F %T') $what via $way" > "$STATE/last_ok"
@@ -93,11 +93,10 @@ for round in 1 2; do
                 else reason="refused, no token (401)"; fi
             fi
             # the command's own failure (a merge conflict, a wrong path): no retry, not the log's business
-            network_error "$rc" "$err" || { [ -t 2 ] || cat "$err" >&2; exit "$rc"; }
+            network_error "$rc" "$err" || exit "$rc"
             log "$what via $way failed: $reason"
             [ "$reason" = "token refused (401)" ] || break   # the anonymous try only follows a refused token
         done
     done
 done
-[ -t 2 ] || cat "$err" >&2
 exit "$rc"
