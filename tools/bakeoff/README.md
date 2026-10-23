@@ -74,7 +74,7 @@ SVCC 2025（[分析论文](https://arxiv.org/html/2509.15629)）：最好的系�
 | 她的训练片段（第二轮用） | 重建完成：清理时删掉的 `data_all/train/audio` 用 `build_clips.py all` 重做，2593 段、7.15 小时，和当初一样；12 句验证句逐字节相同 |
 | 第一轮转换和打分（`round1.sh`） | 完成（23:00～23:45），结果见下面「第一轮结果」。SoulX 第一次失败：DDSP-SVC 根目录的 `preprocess.py` 挡住了 SoulX 没有 `__init__.py` 的 `preprocess/`，`convert.py` 进入候选目录时把 DDSP-SVC 根目录移出 `sys.path` 后重跑 |
 | 盲听材料 | 做好（10-24 00:10），等用户听，见下面「试听」 |
-| 第二轮：微调 Seed-VC（`finetune_seedvc.sh`） | 进行中（10-23 23:53 起）。batch 4，学习率 1e-5（train.py 固定），每 2500 步存档。占显存 16 GB；GPU 利用率只有 20～35%，瓶颈在数据加载和每步的 OpenVoice 音色扰动；另一个会话的 Blender 渲染同时在用 GPU 时约 2 秒一步，单独跑约 1.1 秒一步。训到 1 万步（约 15 个 epoch）后由 `round2.sh` 停下，四个存档各转一遍再打分。第一次启动缺 `se_db.pt`（OpenVoice 扰动的目标音色库），已补进 `setup.sh` |
+| 第二轮：微调 Seed-VC（`finetune_seedvc.sh`） | 进行中（10-23 23:53 起）。batch 4，学习率 1e-5（train.py 固定），每 2500 步存档。占显存 16 GB；GPU 利用率只有 20～35%，瓶颈在数据加载和每步的 OpenVoice 音色扰动；另一个会话的 Blender 渲染同时在用 GPU 时约 2 秒一步，单独跑约 1.1 秒一步。实例只有 18 个 CPU 核（cgroup 配额），10-24 凌晨 PV 的绘图、ffmpeg 合成和另一个会话在 CPU 上跑的 DDSP 推理占满了它们，训练一度只有 4% 的 GPU 利用率，平均约 2.7 秒一步。所以评测点从 1 万步提前到 5000 步：`round2.sh`（`UNTIL=5000`）停下训练后，2500、5000 步两个存档各转一遍再打分；5000 步明显更好的话，再从它接着训（train.py 续训会把步数和优化器归零，学习率是固定的 1e-5，没有预热，影响不大）。第一次启动缺 `se_db.pt`（OpenVoice 扰动的目标音色库），已补进 `setup.sh` |
 | 重唱（`svs.py`） | 准备中：`setup_svs.sh` 在装依赖、下载 SVS 模型和中文预处理模型。要用 GPU 的步骤排在第二轮停下训练之后 |
 
 ## 第一轮结果（零样本，2026-10-23）
