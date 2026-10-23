@@ -41,11 +41,29 @@
 | 佐仓旬夏 uvr 试跑 | `/root/autodl-tmp/speakers/sakura_shunka/{raw_songs,work,data}/`（原仓库里的 `raw_songs/`、`preprocess_work/`、`data/`） | 10 首歌的各阶段结果和切片 |
 | 花丸晴琉歌曲 | `/root/autodl-tmp/speakers/hanamaru_hareru/downloads/`（原 `hanamaru_hareru_raw_songs/`） | 949 首 mp3（320 kbps、48 kHz），60.1 小时 |
 | 花丸晴琉训练用歌 | `/root/autodl-tmp/speakers/hanamaru_hareru/raw_songs/` | 190 首，是 `downloads/` 的硬链接；对照表 `_selection.tsv` |
-| 模型 | AutoDL `/root/autodl-tmp/speakers/<说话人>/exp_all/` | 菲比、旬夏各留 4 万、8 万步；花丸晴琉、`umi_pheebie` 各存 1 万～8 万步共 8 个，每个约 220MB。2026-10-22 曾把前三人的 4 万、8 万步备份到本地 `exp/<说话人>_all/`，MD5 一致；但 2026-10-23 检查时本地 `exp/` 只剩 `.gitignore`，D 盘和用户目录里也没找到，所以目前**本地没有备份** |
+| 模型 | AutoDL `/root/autodl-tmp/speakers/<说话人>/exp_all/` | 菲比、旬夏各留 4 万、8 万步；花丸晴琉、`umi_pheebie` 各存 1 万～8 万步共 8 个，每个约 220MB。2026-10-22 曾把前三人的 4 万、8 万步备份到本地 `exp/<说话人>_all/`，但 2026-10-23 检查时已经不在了。2026-10-23 清理前重新备份了定稿的 4 个模型，连同 `config.yaml`，放在本地 `D:\DDSP-SVC\exp\<说话人>_all\`，MD5 和实例上一致：花丸晴琉 4 万、菲比 8 万、旬夏 8 万、`umi_pheebie` 8 万。其余步数只在 AutoDL 上 |
 
 音频都是 B 站的原始音轨（AAC，44.1 kHz，约 315 kbps），下载和切分时没有重新编码。
 
 数据来自公开视频，只用于个人研究。训练出的模型和转换结果不公开发布，也不用来冒充本人。
+
+### 清理（2026-10-23）
+
+数据盘剩余空间从 40G 涨到 98G（250G 的盘）。用户同意后删了这些，都是中间产物或能重新生成的东西：
+
+| 删掉的 | 腾出 | 要用时怎么办 |
+|---|---|---|
+| `umi_pheebie/data_all/train` 的训练特征（units、mel、aug_mel、f0、volume、aug_vol），音频和 `val/` 留着 | 约 15.6G | 跑 `features` 重新生成 |
+| 花丸晴琉、呜米的 `raw_songs_excluded/_separated/`（被剔除歌曲的分离结果和帧数据） | 约 11.4G | 被剔除的原曲还在 `raw_songs_excluded/`，要放回来就重新分离 |
+| 呜米的 `work/1_vocals`、`2_karaoke`（其他三人的早就删了） | 约 10.3G | 重跑 `uvr` |
+| HF 缓存里的 Qwen3-ASR-1.7B、VocalParse，`conda_envs/asr` | 约 8.5G | `setup_asr.sh` |
+| 四个模型 `exp_all/logs` 里的 TensorBoard 日志，`log_info.txt` 留着 | 约 5.2G | 没法恢复；验证 loss 在 `log_info.txt` 里 |
+| `covers/out` 里有 FLAC 副本的混音 WAV，`covers/pack`，没通过的候选对（houlai、naiyou、ningxia、hananotou、kawaikute、kafeiguan、jiemao） | 约 6.6G | 用 `cover_mix.py` 重混 |
+| `rmvpe.zip.part`、pip 和 conda 的下载缓存 | 约 0.4G | |
+
+- 留下了两个混音 WAV：两人份的幸福的定稿，以及我会好好的旧版全转换（`haohaode_..._40000_allconv_mix.wav`），后者在试听页上没有 FLAC 副本。
+- 还没删：试听网页 Opus 缓存（`.autodl/opus`）里 1220 个孤儿文件，约 3.9G，原文件已经删掉或改过，不会再用到。Claude 删的时候被权限检查拦下了，等用户决定。
+- 别的项目的目录没有动：`svc-mv/`（其中 `renders/ring_lab` 的特效对比帧约 36G）、`qwen21/`、`ComfyUI/`、`pv/`、`backup/`、`inner_architecture/`、`tools/blender`。
 
 ### 歌回录像
 
@@ -318,7 +336,7 @@ runner 在 6008 端口开了试听网页，从 AutoDL 控制台的“自定义�
    - 同日清理了试听页：`covers_80000/`（8 万步，不用了）、`covers_40000/`（旧混音），以及两人份的幸福的其他版本，都挪到 `speakers/hanamaru_hareru/infer_archive/`（23 个文件），试听网页不再显示。原始 WAV 都还在 `covers/out/`。双人模型的 `infer_out/steps_40k_vs_80k/` 是硬链接，定了 8 万步后删掉了，原文件在 `abtest_steps80*/` 里。
    - 其余 5 首（晴る、勇者、我会好好的、爱你、アイドル）还没定，留在 `covers_40000_eq/` 和 `covers_40000_lift/` 里等试听。
    - 咬字：[diction.py](../diction.py) 已写好，用 Qwen3-ASR 找唱错的句子，从候选转换里换一版拼进去。候选在 `covers/cand/<歌>/`，每首 6 个版本。但还没在歌上跑过。识别器听原唱本人时，中文的错误率是 1～9%，日语是 7～23%，日语靠不住。之后改为人耳听出唱错的秒数和字，再从候选里挑（2026-10-23 定，管线同日写好，见上面的待办 A；自动模式停用）。
-   - 还能清理的：训练特征 `data_all`，1 万～3 万步和 5 万～8 万步的模型，被剔除歌曲的分离结果（`raw_songs_excluded/_separated/`）。删不删由用户定。
+   - 清理：2026-10-23 删了训练特征和被剔除歌曲的分离结果，见“数据”里的“清理”。没选中的步数的模型（1 万～3 万步、5 万～8 万步）还在，删不删由用户定；其中 3 万、5 万、6 万、8 万步是咬字修补的候选来源。
 2a. 呜米+菲比双人模型 `umi_pheebie` 已训到 8 万步（2026-10-22 21:14），**用 8 万步**（2026-10-23 定，用户听了标明步数的对比，没做盲听）。之前的记录：
    - 4 万对 8 万盲听，两个声音各一份，说话人都选 `umi_pheebie`：试听网页「A/B 盲听」里的 steps80 是转成呜米的，steps80_pheebie 是转成菲比的（09:43 做好）。菲比那份的机器打分，格式为“她自己的 / 别人的”：SingMOS 4 万步 3.73 / 3.78，8 万步 3.81 / 3.88；音高误差（音分）27.4 / 32.7 对 37.2 / 33.1，也就是 8 万步重建她自己的句子时音高误差大了 10 音分。验证 loss 取两人的 24 句（`exp_all/log_info.txt`）：1.8 万步最低，为 1.027；2 万～3.8 万步在 1.03～1.05 之间；4 万步 1.064；之后一路升到 7 万～8 万步的 1.09～1.10。菲比单人模型（1.02 → 1.10）和花丸晴琉（1.02 → 1.18）也都是这样升上去的，但盲听里菲比选了 8 万步，花丸晴琉选了 4 万步，所以单看 loss 定不了步数。
    - 接下来做翻唱，用 `exp_all/model_80000.pt`。推理用 `-id 2` 是呜米，`-id 1` 是菲比。
