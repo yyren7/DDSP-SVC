@@ -31,6 +31,8 @@ for repo, f in [('Plachta/Seed-VC', 'DiT_seed_v2_uvit_whisper_base_f0_44k_bigvga
                 ('lj1995/VoiceConversionWebUI', 'rmvpe.pt'), ('funasr/campplus', 'campplus_cn_common.bin'),
                 ('GiantAILab/YingMusic-SVC', 'YingMusic-SVC-full.pt')]:
     print(hf_hub_download(repo, f, cache_dir='./checkpoints'))
+for f in ('converter/checkpoint.pth', 'converter/config.json'):  # train.py: OpenVoice perturbs the input's timbre
+    print(hf_hub_download('myshell-ai/OpenVoiceV2', f, cache_dir='./checkpoints'))
 for f in ('config.json', 'bigvgan_generator.pt'):
     print(hf_hub_download('nvidia/bigvgan_v2_44khz_128band_512x', f))
 print(snapshot_download('openai/whisper-small', allow_patterns=['*.json', 'model.safetensors']))
