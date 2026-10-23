@@ -10,6 +10,8 @@ songs: the whole songs on the same 8 s windows where the input sings (as cover_s
        into bakeoff/scores_songs.jsonl, means printed by song and system.
 ab <system>: hanamaru_hareru's A/B experiment bk_<system> for the review page (「A/B 盲听」, ?x=bk_<system>): the
        baseline ddsp40k against <system> on the 36 clips, hard links of the files, the machine scores of lines.
+blind <folder> [<system>...]: the whole songs under neutral names in her 转换结果 (infer_out/<folder>/), the key
+       in bakeoff/<folder>.json.
 Only systems given on the command line, or all in out/ when none are.
 """
 import json
@@ -29,6 +31,7 @@ B = Path('/root/autodl-tmp/bakeoff')
 SPK = Path('/root/autodl-tmp/speakers/hanamaru_hareru')
 BASE = 'ddsp40k'
 WIN = 8  # seconds
+BLIND = '甲乙丙丁戊己庚辛'  # neutral names of the systems in the blind song folders
 KEYS = ('singmos', 'aes_pq', 'aes_ce', 'dns_ovrl', 'spk_cos', 'f0_rmse_cents')
 
 
@@ -133,10 +136,39 @@ def ab(names):
         print(f'{root}: {BASE} against {s}, {len(man["items"])} clips; review page ab?x=bk_{s}')
 
 
+def blind(args):
+    """The whole songs for listening on the review page, hanamaru_hareru's 转换结果 infer_out/<folder>/<song>/: the
+    input as 0_输入.flac, every system under a neutral name in an order drawn per song; which is which only in
+    bakeoff/<folder>.json, outside what the page serves."""
+    import random
+    folder, names = args[0], args[1:]
+    items = [it for it in manifest()['items'] if it['kind'] == 'song']
+    sys_ = systems(names, items)
+    root = SPK / 'infer_out' / folder
+    if root.exists():
+        shutil.rmtree(root)
+    key = {}
+    for it in items:
+        song = it['src_spk']
+        (root / song).mkdir(parents=True)
+        order = list(sys_)
+        random.Random(f'{folder}|{song}').shuffle(order)
+        x, sr = sf.read(it['input'], dtype='float32', always_2d=True)
+        sf.write(str(root / song / '0_输入.flac'), x.mean(1), sr, subtype='PCM_24')
+        key[song] = {}
+        for label, s in zip(BLIND, order):
+            y, sr = sf.read(str(B / 'out' / s / f'{it["name"]}.wav'), dtype='float32')
+            sf.write(str(root / song / f'{label}.flac'), y, sr, subtype='PCM_24')
+            key[song][label] = s
+    (B / f'{folder}.json').write_text(json.dumps(key, ensure_ascii=False, indent=1), encoding='utf-8')
+    print(f'{root}: {len(items)} songs, {len(sys_)} systems each; the key in {B / folder}.json')
+
+
+
 def main():
-    if len(sys.argv) < 2 or sys.argv[1] not in ('lines', 'songs', 'ab'):
+    if len(sys.argv) < 2 or sys.argv[1] not in ('lines', 'songs', 'ab', 'blind'):
         sys.exit(__doc__)
-    {'lines': lines, 'songs': songs, 'ab': ab}[sys.argv[1]](sys.argv[2:])
+    {'lines': lines, 'songs': songs, 'ab': ab, 'blind': blind}[sys.argv[1]](sys.argv[2:])
 
 
 if __name__ == '__main__':
