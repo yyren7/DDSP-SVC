@@ -51,8 +51,12 @@ torchaudio.load, torchaudio.save = sf_load, sf_save
 
 
 def enter(repo):
+    """Run from the candidate's folder, its modules first. abtest.py (through make_set) put the DDSP-SVC root on the
+    path, whose preprocess.py would win over SoulX-Singer's preprocess/ (a folder without __init__.py loses to a
+    module anywhere on the path)."""
     os.chdir(R / repo)
-    sys.path.insert(0, str(R / repo))
+    root = Path(__file__).resolve().parents[2]
+    sys.path[:] = [str(R / repo)] + [p for p in sys.path if p and Path(p).resolve() != root]
 
 
 def hf_file(repo, name):

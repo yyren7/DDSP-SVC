@@ -7,7 +7,7 @@ cd /root/autodl-tmp/DDSP-SVC
 export HF_HOME=/root/autodl-tmp/.cache/huggingface HF_HUB_OFFLINE=1
 for m in ${MODELS:-seedvc yingmusic soulx}; do
     # the Whisper feature extractor warns on every call that it was not told the rate (it is given 16 kHz)
-    /root/autodl-tmp/conda_envs/bk/bin/python tools/bakeoff/convert.py $m 2>&1 | grep -v 'sampling_rate\|^RTF\|it/s\]'
+    /root/autodl-tmp/conda_envs/bk/bin/python tools/bakeoff/convert.py $m 2>&1 | grep --line-buffered -v 'sampling_rate\|^RTF\|it/s\]'
     [ ${PIPESTATUS[0]} -eq 0 ] || echo "$m failed"
 done
 E=/root/autodl-tmp/conda_envs/evalq/bin/python
