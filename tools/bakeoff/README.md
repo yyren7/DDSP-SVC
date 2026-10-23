@@ -21,7 +21,7 @@
 | DDSP-SVC 6.3（现用，基线） | master 最后提交 2025-01 | 能（现在就是） | Poly-SVC 论文（2026-05）主观测试：单旋律自然度 3.83，相似度 3.33 | MIT |
 | Seed-VC 唱歌版（44 kHz，Whisper-small，200M） | 2024-10；仓库 2025-11 归档 | 能，官方 `train.py` | 同一张表：自然度 3.85，相似度 3.74。SVCC 2025 里基于它的系统 S5，歌手相似度和真人没有显著差别 | GPL-3.0 |
 | YingMusic-SVC（Seed-VC 改进 + Flow-GRPO） | 2025-11 | 官方没放训练代码，架构是 Seed-VC | 自报（主唱干净的设置）：CMOS 4.26 对 Seed-VC 3.98；混着伴奏、和声时优势更大 | 代码 MIT |
-| SoulX-Singer-SVC（由 4.2 万小时的 SoulX-Singer 微调） | 2026-03 | 没有训练代码 | 论文附录：和 YingMusic-SVC、Vevo-SVC 接近 | Apache-2.0；只列中、英、粤语 |
+| SoulX-Singer-SVC（由 4.2 万小时的 SoulX-Singer 微调） | 2026-03 | 没有训练代码 | 论文附录：和 YingMusic-SVC、Vevo-SVC 接近 | Apache-2.0；只列中、英、粤语；**输出 24 kHz**（12 kHz 以上没有） |
 | Vevo2（Amphion） | 2026-03 | 没有 | 零样本 SVC 和 Seed-VC 接近；输出 24 kHz | 权重 CC BY-NC-ND |
 | RIFT-SVC v3（rectified flow transformer） | 2025-03，最后提交 2025-11 | 能，按人微调 | 没有公开评测 | CC BY-NC-SA |
 | HQ-SVC（AAAI 2026） | 2025-12 | 没有 | 只和 SaMoye-SVC 比过 | Apache-2.0 |
@@ -47,7 +47,9 @@ SVCC 2025（[分析论文](https://arxiv.org/html/2509.15629)）：最好的系�
 - **整首**：
   - Moni Blue「April Blues」、Rubblebucket「Carousel Ride」的多轨原始主唱（英语，干净输入），基线是 `clean_pilot/<歌>/conv_clean_hanamaru_hareru_40000.wav`。
   - 晴る（日语）、两人份的幸福（中文）的翻唱干声 `covers/cand/<歌>/dry.wav`，基线是同目录的 `0_40k.wav`。
-- **零样本参考音频**：从她训练集里挑最干净的几句拼成约 20 秒，所有零样本模型用同一份。不用验证集里的句子，免得重建时偷看答案。
+- **零样本参考音频**：`set/ref/ref.wav`，所有零样本模型用同一份。从她训练用的歌里挑（不含留出的 4 首，免得重建时偷看答案）：每首取 `eval_lines.py` 信号分最高、4～10 秒、有声比例 85% 以上的一句，按分数取到 15 秒以上。结果是 1027_アナタノオト、0207_This_is_運命、0126_鳴呼、素晴らしきニャン生 各一句，都是满分，共 16.6 秒（`ref.json`）。参考不超过 15～20 秒，是因为 Seed-VC 一次只看 30 秒，参考占得越多，每段源音频越短。
+- **调用设置**：都不移调。YingMusic 默认会自动移调，还额外加 3.5 个半音，这里关掉。扩散步数和引导系数用各项目给唱歌推荐的值：Seed-VC 50 步、0.7，YingMusic 100 步、0.7，SoulX 32 步、3.0（`convert.py` 的 `DEFAULTS`）。
+- **兼容处理**：候选都用 torchaudio 读写音频，而 torchaudio 2.9 要 TorchCodec 和 FFmpeg 的库，`convert.py` 改用 soundfile 读写。YingMusic 导入的混伴奏模块要用 2.9 里已删掉的 `sox_effects`，我们不混伴奏，所以给它一个空模块。
 
 ### 评分
 
@@ -67,17 +69,23 @@ SVCC 2025（[分析论文](https://arxiv.org/html/2509.15629)）：最好的系�
 |---|---|
 | 现状调研 | 完成（2026-10-23），见上面「候选」 |
 | 实例上克隆三个候选仓库 | 完成（21:50） |
-| 环境和权重（`setup.sh`） | 进行中：venv `conda_envs/bk` 已装好，权重在下载 |
-| 测试集（`make_set.py`）、转换（`convert.py`）、打分（`score.py`） | 脚本已写好，未运行 |
+| 环境和权重（`setup.sh`） | 完成（22:50 前后）：venv `conda_envs/bk` 建在 ddsp 环境上（torch 2.9.1，transformers 4.46.3），权重共约 6 GB。实例上 git clone GitHub 时断时续，重试后才成功；hf-mirror 偶尔超时，会自动重试 |
+| 测试集（`make_set.py`） | 完成：40 项（36 句 + 4 首），基线放在 `out/ddsp40k/` |
+| 她的训练片段（第二轮用） | 重建完成：清理时删掉的 `data_all/train/audio` 用 `build_clips.py all` 重做，2593 段、7.15 小时，和当初一样；12 句验证句逐字节相同 |
+| 第一轮转换和打分（`round1.sh`） | 进行中（23:00 起）。Seed-VC 先单独试了 36 句：6.1 分钟音频转了 146 秒（RTF 0.4），加载模型 82 秒 |
 
 ## 实例上的布局
 
 | 位置 | 内容 |
 |---|---|
-| `/root/autodl-tmp/bakeoff/repos/` | 候选模型的代码（`seed-vc`、`YingMusic-SVC`、`SoulX-Singer`） |
+| `/root/autodl-tmp/bakeoff/repos/` | 候选模型的代码（`seed-vc`、`YingMusic-SVC`、`SoulX-Singer`）和权重（各自的 `checkpoints/`、`pretrained_models/`；YingMusic 的 `checkpoints/` 链接到 Seed-VC 的） |
 | `/root/autodl-tmp/bakeoff/set/` | 测试材料和参考音频 |
-| `/root/autodl-tmp/bakeoff/out/<系统>/` | 每个系统的输出 |
-| `/root/autodl-tmp/conda_envs/bk_<模型>` | 每个模型自己的环境 |
+| `/root/autodl-tmp/bakeoff/out/<系统>/` | 每个系统的输出，`info.json` 记设置和耗时 |
+| `/root/autodl-tmp/bakeoff/lines_ab/` | 36 句的机器打分（`abtest.py` 的格式，`scores.jsonl`） |
+| `/root/autodl-tmp/bakeoff/scores_songs.jsonl` | 整首的 8 秒窗口打分 |
+| `/root/autodl-tmp/bakeoff/ft/seedvc/` | 第二轮 Seed-VC 微调的各步存档 |
+| `speakers/hanamaru_hareru/abtest_bk_<系统>/` | 给试听网页的一对一盲听（`score.py ab <系统>`） |
+| `/root/autodl-tmp/conda_envs/bk` | 三个候选共用的环境 |
 
 ## 来源
 
