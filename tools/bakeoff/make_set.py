@@ -35,6 +35,7 @@ SONGS = {  # name: (dry lead, the DDSP-SVC 40k conversion of it)
                       DATA / 'clean_pilot/carousel_ride/conv_clean_hanamaru_hareru_40000.wav'),
     'haru': (DATA / 'covers/cand/haru/dry.wav', DATA / 'covers/cand/haru/0_40k.wav'),
     'liangrenfen': (DATA / 'covers/cand/liangrenfen/dry.wav', DATA / 'covers/cand/liangrenfen/0_40k.wav'),
+    'aini': (DATA / 'covers/cand/aini/dry.wav', DATA / 'covers/cand/aini/0_40k.wav'),  # the 2nd Chinese one (svs.py)
 }
 REF_LEN = 15.0       # seconds of reference: Seed-VC's 30 s window holds the reference and the source chunk together
 REF_GAP = 0.2        # seconds of silence between the lines of the reference

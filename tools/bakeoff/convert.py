@@ -156,12 +156,14 @@ def main():
     p.add_argument('--checkpoint')
     p.add_argument('--config')
     p.add_argument('--only', choices=('line', 'song'))
+    p.add_argument('--items', help='comma-separated names of the manifest, e.g. song__aini: only these')
     args = p.parse_args()
     steps, cfg = args.steps or DEFAULTS[args.model][0], args.cfg or DEFAULTS[args.model][1]
     args.ref = str(Path(args.ref).resolve())
     system = args.system or args.model
     man = json.loads((B / 'set' / 'manifest.json').read_text(encoding='utf-8'))
-    items = [it for it in man['items'] if not args.only or it['kind'] == args.only]
+    items = [it for it in man['items'] if (not args.only or it['kind'] == args.only)
+             and (not args.items or it['name'] in args.items.split(','))]
     out = B / 'out' / system
     out.mkdir(parents=True, exist_ok=True)
     t0 = time.time()

@@ -71,7 +71,9 @@ def load16(path, sr16):
 def songs(names):
     import score_lines as sl
     items = [it for it in manifest()['items'] if it['kind'] == 'song']
-    sys_ = systems(names, items)
+    full = systems(names, items)  # the systems with every song: the mean over all songs is theirs only
+    sys_ = full + [d.name for d in sorted((B / 'out').iterdir()) if d.name not in full and (not names or d.name in names)
+                   and any((d / f'{it["name"]}.wav').exists() for it in items)]  # e.g. the re-singing of two songs
     models = sl.load_models()
 
     def score(clips, k=4):  # a few at a time: the GPU may be shared
@@ -83,7 +85,8 @@ def songs(names):
     rows = []
     for it in items:
         audio = {'_source': load16(it['input'], sl.SR)}
-        audio.update({s: load16(B / 'out' / s / f'{it["name"]}.wav', sl.SR) for s in sys_})
+        audio.update({s: load16(B / 'out' / s / f'{it["name"]}.wav', sl.SR) for s in sys_
+                      if (B / 'out' / s / f'{it["name"]}.wav').exists()})
         n = min(len(x) for x in audio.values())
         win, hop = WIN * sl.SR, sl.SR // 100
         x = audio['_source'][:n // hop * hop]
@@ -109,8 +112,10 @@ def songs(names):
                                           encoding='utf-8')
     for song in [it['src_spk'] for it in items] + [None]:
         print(f'== {song or "all songs"}')
-        for s in ['_source'] + sys_:
+        for s in ['_source'] + (sys_ if song else full):
             sel = [r for r in rows if r['system'] == s and (song is None or r['song'] == song)]
+            if not sel:
+                continue
             print(f'{s:12s} ' + ', '.join(f'{k} {np.mean([r[k] for r in sel if r.get(k) is not None]):.3f}'
                                           for k in KEYS if any(r.get(k) is not None for r in sel)), flush=True)
 
@@ -143,15 +148,17 @@ def blind(args):
     import random
     folder, names = args[0], args[1:]
     items = [it for it in manifest()['items'] if it['kind'] == 'song']
-    sys_ = systems(names, items)
+    sys_ = names or [d.name for d in sorted((B / 'out').iterdir()) if d.is_dir()]
     root = SPK / 'infer_out' / folder
     if root.exists():
         shutil.rmtree(root)
     key = {}
     for it in items:
         song = it['src_spk']
+        order = [s for s in sys_ if (B / 'out' / s / f'{it["name"]}.wav').exists()]
+        if len(order) < 2:
+            continue
         (root / song).mkdir(parents=True)
-        order = list(sys_)
         random.Random(f'{folder}|{song}').shuffle(order)
         x, sr = sf.read(it['input'], dtype='float32', always_2d=True)
         sf.write(str(root / song / '0_输入.flac'), x.mean(1), sr, subtype='PCM_24')
@@ -161,8 +168,7 @@ def blind(args):
             sf.write(str(root / song / f'{label}.flac'), y, sr, subtype='PCM_24')
             key[song][label] = s
     (B / f'{folder}.json').write_text(json.dumps(key, ensure_ascii=False, indent=1), encoding='utf-8')
-    print(f'{root}: {len(items)} songs, {len(sys_)} systems each; the key in {B / folder}.json')
-
+    print(f'{root}: ' + ', '.join(f'{s} {len(k)}' for s, k in key.items()) + f' systems; the key in {B / folder}.json')
 
 
 def main():
