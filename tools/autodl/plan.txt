@@ -42,8 +42,12 @@
 # sung lines. pheebie's all set rebuilt by hand at 16:40 (2581 clips, 6.81 h, the same 12 validation clips).
 # Now: lines again without them, umi's all set, the two-speaker set (1 = pheebie, 2 = umi), features and
 # training to MAX_STEPS with configs/speakers/umi_pheebie.yaml (n_spk: 2)
-JOB=lines,clips:all,multi@umi_pheebie:all=pheebie+umi,features@umi_pheebie:all,train@umi_pheebie:all
-RUN_ID=46
+# 21:14: umi_pheebie reached 80k (pheebie 2581 clips, umi 2364 clips / 6.12 h; validation loss 1.091)
+# 2026-10-23: hanamaru_hareru keeps her 40k model (her blind A/B: 40k 19, 80k 14, no ties; 8:3 on her own
+# clips). umi_pheebie's 40k and 80k go through the same blind A/B, converting into umi (SPK_ID=2): umi's
+# validation clips and the other three speakers'
+JOB=abtest@umi_pheebie:steps80=all@40000+all@80000
+RUN_ID=47
 # the scores fit_lines.py may use: with ~120 marks, a few chosen by what the listener named (thin /
 # walkie-talkie voice, talk instead of singing, accompaniment, reverb or loud BGM in the original)
 LINE_FEATURES=aes_cu,aes_ce,aes_pq,dns_sig,pitch_steady,p_speech,p_music,bgm_db,tail_src,level
@@ -75,7 +79,7 @@ SPLIT_ARGS=
 UVR_ARGS=--steps vocals,karaoke,dereverb
 WORKERS=8
 KEY=0
-SPK_ID=1
+SPK_ID=2
 
 # Power the instance off after this many minutes with no job running and nobody on the review page
 # (0 = never): IDLE_SHUTDOWN_MIN with a GPU, IDLE_SHUTDOWN_MIN_NOGPU in no-GPU mode (¥0.10/h).

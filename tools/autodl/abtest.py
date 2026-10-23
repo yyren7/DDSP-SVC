@@ -4,12 +4,15 @@ datasets, exp_<dataset>/): every model converts the same clips, the validation c
 (their lines of the held-out songs, never trained on). Her own clips test the resynthesis (how close to her
 real voice), the other speakers' clips the conversion (the real use). The review page plays them blind (ab).
 
-    python tools/autodl/abtest.py convert [--name <x>] <speaker dir> <set>...   (ddsp env, GPU, from the repo root)
-    python tools/autodl/abtest.py score [--name <x>] <speaker dir>              (evalq env, GPU)
+    python tools/autodl/abtest.py convert [--name <x>] [--spk <n>] <speaker dir> <set>...   (ddsp env, GPU, from the repo root)
+    python tools/autodl/abtest.py score [--name <x>] <speaker dir>                          (evalq env, GPU)
 
 A set is a dataset, or <dataset>@<step> for one checkpoint of it (e.g. all@10000 all@40000 compares two
 points of one training). --name keeps the experiment apart in abtest_<x>/ (review page ab?x=<x>), so that
 an earlier one and the listener's choices on it stay as they are.
+--spk: the speaker id the models convert into (default 1). For a model of several speakers (build_multi.py,
+val/audio/<n>/) her own clips are those of member n, and the members' own folders are not taken again as
+other speakers (the mix's clips are hard links of theirs).
 
 convert: the checkpoints at the latest step every dataset reached (equal steps), the settings of
 main_reflow.py's defaults (RMVPE, key 0, the config's sampler), each result matched in loudness to its input
@@ -63,15 +66,21 @@ def checkpoints(spk, sets):
     return (steps[0] if len(set(steps)) == 1 else ' / '.join(map(str, steps))), {s: picked[s] for s in sets}
 
 
-def sources(spk, dataset):
-    """[(source speaker, clip)]: the validation clips of every speaker with this dataset, hers first; each
-    speaker's clips nearest AB_LEN seconds first, since the A/B page asks for the first few only."""
-    spks = [spk] + sorted(d for d in spk.parent.iterdir()
-                          if d != spk and (d / f'data_{dataset}' / 'val' / 'audio').is_dir())
-    out = []
-    for s in spks:
+def sources(spk, dataset, spk_id=1):
+    """[(source speaker, clip)]: the validation clips of every speaker with this dataset, hers first (member
+    spk_id's of a model of several speakers); each speaker's clips nearest AB_LEN seconds first, since the A/B
+    page asks for the first few only."""
+    def by_len(clips):
+        return sorted(clips, key=lambda f: abs(sf.info(str(f)).duration - AB_LEN))
+
+    val = spk / f'data_{dataset}' / 'val' / 'audio'
+    hers = sorted((val / str(spk_id) if (val / str(spk_id)).is_dir() else val).glob('*.wav'))
+    inodes = {f.stat().st_ino for f in hers}
+    out = [(spk.name, f) for f in by_len(hers)]
+    for s in sorted(d for d in spk.parent.iterdir() if d != spk):
         clips = sorted((s / f'data_{dataset}' / 'val' / 'audio').glob('*.wav'))
-        out += [(s.name, f) for f in sorted(clips, key=lambda f: abs(sf.info(str(f)).duration - AB_LEN))]
+        if clips and not any(f.stat().st_ino in inodes for f in clips):
+            out += [(s.name, f) for f in by_len(clips)]
     return out
 
 
@@ -85,7 +94,7 @@ def active_rms(x, sr):
     return float(np.sqrt(p[p >= p.max() * 1e-3].mean()))
 
 
-def convert(spk, datasets, root):
+def convert(spk, datasets, root, spk_id=1):
     import librosa
     import torch
     import yaml
@@ -105,7 +114,7 @@ def convert(spk, datasets, root):
                 sys.exit(f'{spk.name}: exp_{d} reads its input with data.{k} {c.data[k]}, '
                          f'exp_{datasets[0]} with {args.data[k]}')
     first = datasets[0].partition('@')[0]
-    items = sources(spk, first)  # the validation clips are the same in every dataset (build_clips.py)
+    items = sources(spk, first, spk_id)  # the validation clips are the same in every dataset (build_clips.py)
     if not items:
         sys.exit(f'{spk.name}: no validation clips in data_{first}/val/audio')
     if root.exists():
@@ -140,7 +149,7 @@ def convert(spk, datasets, root):
             model, vocoder, args = load_model_vocoder(str(ckpt), device=device)
             block, out_sr = args.data.block_size, args.data.sampling_rate
             t_start = float(args.model.t_start) if args.model.t_start is not None else 0.0
-            spk_id = torch.LongTensor(np.array([[1]])).to(device)
+            spk_tensor = torch.LongTensor(np.array([[spk_id]])).to(device)
             shift = torch.zeros(1, 1, device=device)
             (root / d).mkdir()
             t1 = time.time()
@@ -149,7 +158,7 @@ def convert(spk, datasets, root):
                 for start, units in p['segs']:  # main_reflow.py, key 0
                     n = units.size(1)
                     f0 = p['f0'][:, start:start + n, :]
-                    mel = model(units, f0, p['volume'][:, start:start + n, :], spk_id=spk_id, spk_mix_dict=None,
+                    mel = model(units, f0, p['volume'][:, start:start + n, :], spk_id=spk_tensor, spk_mix_dict=None,
                                 aug_shift=shift, vocoder=vocoder, infer_step=args.infer.infer_step,
                                 method=args.infer.method, t_start=t_start, use_tqdm=False)
                     out = vocoder.infer(mel, f0) * p['mask'][:, start * block:(start + n) * block]
@@ -171,7 +180,7 @@ def convert(spk, datasets, root):
                   flush=True)
             del model, vocoder
             torch.cuda.empty_cache()
-    manifest = {'datasets': datasets, 'step': step, 'checkpoints': {d: str(c) for d, c in ckpts.items()},
+    manifest = {'datasets': datasets, 'step': step, 'spk_id': spk_id, 'checkpoints': {d: str(c) for d, c in ckpts.items()},
                 'made': time.strftime('%F %T'),
                 'items': [{k: p[k] for k in ('name', 'src_spk', 'clip', 'dur')} for p in prepared]}
     (root / 'manifest.json').write_text(json.dumps(manifest, ensure_ascii=False, indent=1), encoding='utf-8')
@@ -225,15 +234,19 @@ def score(spk, root):
 
 
 def main():
-    cmd, args, name = sys.argv[1], sys.argv[2:], None
-    if args[:1] == ['--name']:
-        name, args = args[1], args[2:]
-        if not re.fullmatch(r'[A-Za-z0-9_-]+', name):
-            sys.exit(f'--name {name}: letters, digits, _ and - only')
+    cmd, args, name, spk_id = sys.argv[1], sys.argv[2:], None, 1
+    while args[:1] in (['--name'], ['--spk']):
+        if args[0] == '--name':
+            name = args[1]
+            if not re.fullmatch(r'[A-Za-z0-9_-]+', name):
+                sys.exit(f'--name {name}: letters, digits, _ and - only')
+        else:
+            spk_id = int(args[1])
+        args = args[2:]
     spk = Path(args[0])
     root = spk / (f'abtest_{name}' if name else 'abtest')
     if cmd == 'convert':
-        convert(spk, args[1:] or ['all', 'clean'], root)
+        convert(spk, args[1:] or ['all', 'clean'], root, spk_id)
     elif cmd == 'score':
         score(spk, root)
     else:
