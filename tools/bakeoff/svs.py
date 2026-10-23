@@ -15,6 +15,7 @@ sing:   the dry lead of each song of set/manifest.json (by its name, e.g. liangr
 The transcriptions are kept in svs/<song>/metadata.json; the authors advise correcting them by hand with their MIDI
 editor for the best result, which this test does not do.
 """
+import copy
 import json
 import re
 import shutil
@@ -35,8 +36,12 @@ PROMPT_MIN, PROMPT_MAX = 8.0, 20.0  # seconds
 HAN = re.compile(r'[一-鿿]')
 
 
-def pipeline(audio, out, max_merge_s):
+def pipeline(audio, out, max_merge_s, again=False):
+    """SoulX-Singer's metadata of a dry vocal (segments with words, notes and F0), kept in out/metadata.json and
+    taken from there when it is already made, unless again."""
     from preprocess.pipeline import PreprocessPipeline
+    if (out / 'metadata.json').exists() and not again:
+        return json.loads((out / 'metadata.json').read_text(encoding='utf-8'))
     if out.exists():
         shutil.rmtree(out)
     PreprocessPipeline(device='cuda', language='Mandarin', save_dir=str(out), vocal_sep=False,
@@ -48,7 +53,9 @@ def pipeline(audio, out, max_merge_s):
 def prompt(path):
     path = Path(path).resolve()
     convert.enter('SoulX-Singer')
-    segs = pipeline(path, S / 'prompt_src', PROMPT_MAX)
+    segs = pipeline(path, S / f'prompt_{path.stem}', PROMPT_MAX)
+    for s in segs:  # what the recogniser heard, to judge the prompt by (she sings some Chinese songs in Japanese)
+        print(f'  {s["index"]} {(s["time"][1] - s["time"][0]) / 1000:.1f} s: {"".join(HAN.findall(s["text"]))}')
 
     def sung(seg):
         return len(HAN.findall(seg['text']))
@@ -81,10 +88,11 @@ def sing(songs):
         for control in ('melody', 'score'):
             y = np.zeros(int(segs[-1]['time'][1] / 1000 * sr), np.float32)
             for seg in segs:  # as cli/inference.py: each segment generated and put back at its time
+                target = dp.process(copy.deepcopy(seg), None)  # process() rewrites the segment it is given
                 with torch.no_grad():
-                    g = model.infer({'prompt': prompt_data, 'target': dp.process(seg, None)}, auto_shift=False,
-                                    pitch_shift=0, n_steps=config.infer.n_steps, cfg=config.infer.cfg,
-                                    control=control, use_fp16=True)
+                    g = model.infer({'prompt': prompt_data, 'target': target}, auto_shift=False, pitch_shift=0,
+                                    n_steps=config.infer.n_steps, cfg=config.infer.cfg, control=control,
+                                    use_fp16=True)
                 g = g.squeeze().float().cpu().numpy()
                 a = int(seg['time'][0] / 1000 * sr)
                 n = min(len(g), len(y) - a)
