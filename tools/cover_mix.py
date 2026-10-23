@@ -112,15 +112,17 @@ def octaves(x, sr):
     return np.array([p[(f >= c / np.sqrt(2)) & (f < c * np.sqrt(2))].sum() for c in OCTAVES])
 
 
-def match(x, ref, sr):
+def match(x, ref, sr, most=MATCH_MAX):
     """(x EQ'd so that its balance follows `ref` octave by octave, the gains in dB): its overall energy stays, each
-    octave moves at most MATCH_MAX dB, and the lowest and highest only go down, as there `ref` holds rumble, bleed
-    and the lossy source's cutoff more than voice. Linear phase, no delay."""
+    octave moves at most `most` dB (0: no EQ), and the lowest and highest only go down, as there `ref` holds rumble,
+    bleed and the lossy source's cutoff more than voice. Linear phase, no delay."""
+    if most <= 0:
+        return x, np.zeros(len(OCTAVES))
     px = octaves(x, sr)
     db = 10 * np.log10(np.maximum(octaves(ref, sr), 1e-30) / np.maximum(px, 1e-30))
     db -= 10 * np.log10((px * 10 ** (db / 10)).sum() / max(px.sum(), 1e-30))
     db[[0, -1]] = np.minimum(db[[0, -1]], 0)
-    db = np.clip(db, -MATCH_MAX, MATCH_MAX)
+    db = np.clip(db, -most, most)
     n = 8193
     f = np.fft.rfftfreq(n, 1 / sr)
     gain = 10 ** (np.interp(np.log2(np.maximum(f, 1)), np.log2(OCTAVES), db) / 20)
@@ -163,6 +165,8 @@ def main():
     ap.add_argument('--lift', type=float, default=0.0,
                     help='dB the vocals of the mix sit above the original\'s against the off vocal (a converted voice '
                          'cuts through less than the singer it stands in for)')
+    ap.add_argument('--eq-max', type=float, default=MATCH_MAX,
+                    help=f'dB the match EQ may move an octave of a converted voice (default {MATCH_MAX:g}; 0: no EQ)')
     ap.add_argument('--harm-conv', help='the backing vocals converted as well (they then replace the original ones)')
     ap.add_argument('--harm-source', help="the backing vocals as offvocal.py wrote them, which --harm-wet was "
                                           "separated from")
@@ -188,14 +192,14 @@ def main():
     g = restore(source, vocals)
     vocals, lead, dry = g * vocals, g * lead, g * dry
 
-    conv, wet, wet_level, eq = voice(conv, dry, lead, sr, seed=0)
+    conv, wet, wet_level, eq = voice(conv, dry, lead, sr, seed=0, eq_max=args.eq_max)
     kept = np.zeros_like(inst) if args.no_backing else vocals - lead  # the original singer's backing, as sung
     ref = lead + kept  # the original parts that the vocals of the mix stand in for
     if args.harm_conv:
         hsource, hconv, hdry, hwet = read(('harm_source', 'harm_conv', 'harm_dry', 'harm_wet'))
         hg = restore(hsource, hwet)
         ref, what = ref + hg * hwet, 'converted'
-        hconv, hwet, _, _ = voice(hconv, hg * hdry, hg * hwet, sr, seed=1)
+        hconv, hwet, _, _ = voice(hconv, hg * hdry, hg * hwet, sr, seed=1, eq_max=args.eq_max)
         # whatever backing the karaoke models still found next to the lead was in neither off vocal: it stays
         # as sung (nothing when original - chorus off vocal was the lead alone)
     else:
@@ -215,15 +219,15 @@ def main():
           f'mix {20 * np.log10(fixed):+.1f} dB, then the limiter at most {20 * np.log10(deepest):.1f} dB')
 
 
-def voice(conv, dry, wet_ref, sr, seed):
+def voice(conv, dry, wet_ref, sr, seed, eq_max=MATCH_MAX):
     """(converted voice in the middle, its synthetic reverb, the reverb's loudness against the voice in dB, the
-    voice's EQ in dB): the voice EQ'd to the balance of `dry` (match), the two together as loud (BS.1770) as the
+    voice's EQ in dB): the voice EQ'd to the balance of `dry` (match, at most eq_max dB an octave), the two together as loud (BS.1770) as the
     voice was before dereverb (`wet_ref`), the reverb as loud against the voice, octave by octave, as the dereverb
     step's removal (wet_ref - dry) was against `dry`, but never louder than the voice. Original reverbs are mostly
     cut low and bright, a plain room would muddy the voice; of stacked backing vocals a dereverb model takes out
     much of the voices themselves, 10 dB and more, which the cap keeps from turning into reverb. In the lowest band
     the removal is rumble and bleed more than reverb, so it takes no more than the next."""
-    conv, eq = match(conv.mean(axis=1, keepdims=True).repeat(2, axis=1), dry, sr)
+    conv, eq = match(conv.mean(axis=1, keepdims=True).repeat(2, axis=1), dry, sr, eq_max)
     ratio = np.minimum(octaves(wet_ref - dry, sr) / np.maximum(octaves(dry, sr), 1e-30), 1.0)
     ratio[0] = min(ratio[0], ratio[1])
     ir = room(sr, np.maximum(ratio, 1e-6), seed)
