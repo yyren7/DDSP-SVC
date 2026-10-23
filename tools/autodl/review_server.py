@@ -89,6 +89,11 @@ async function mark(btn){  // keep / exclude button: data-t is the file, its tex
     body:JSON.stringify({target:btn.dataset.t,text:btn.textContent,speaker:btn.dataset.spk||''})});
   if(r.ok) document.getElementById(btn.dataset.s).textContent='已标记：'+btn.textContent;
 }
+async function pick(btn){  // diction page: take data-take for line data-n of data-song, written into its fix list
+  const r=await fetch('dpick'+(KEYQ?'?'+KEYQ:''),{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({speaker:btn.dataset.spk,song:btn.dataset.song,n:+btn.dataset.n,take:btn.dataset.take})});
+  document.getElementById(btn.dataset.s).textContent=r.ok?'已选：'+btn.textContent:'没记上：清单改过了，请刷新页面';
+}
 // A player that cannot play its source switches once to data-alt (see audio_tag). Nothing here touches a
 // source before it is played: changing it on page load made the browser fetch every song on the page.
 document.addEventListener('DOMContentLoaded', () => {
@@ -168,6 +173,87 @@ def compare_sets(spk):
             for f in audio_files(version):
                 out.setdefault(f.stem, []).append((f, version.name))
     return dict(sorted(out.items()))
+
+
+DICTION_NONE = 'none'  # tools/diction.py: the take of a line that no candidate is right for
+_diction_lock = threading.Lock()
+
+
+def diction_dir(spk):
+    return SPEAKERS / spk / 'diction'
+
+
+def diction_songs(spk):
+    """{song: clips.json} of tools/diction.py clips, which cuts the lines of a song's fix list into
+    diction/<song>/<line>/: the dry lead (dry.flac), the conversion being fixed and every candidate."""
+    out = {}
+    root = diction_dir(spk)
+    for d in sorted(root.iterdir()) if root.is_dir() else []:
+        try:
+            out[d.name] = json.loads((d / 'clips.json').read_text(encoding='utf-8'))
+        except (OSError, ValueError):
+            pass
+    return out
+
+
+def diction_rows(man):
+    """(lines, column names, {line number: index in lines}) of the fix list of a clips.json, numbered as
+    tools/diction.py numbers them: the lines after the column names that are not blank."""
+    lines = Path(man['fixes']).read_text(encoding='utf-8').splitlines()
+    head = [c.strip() for c in lines[0].split('\t')] if lines else []
+    return lines, head, {n: i for n, i in enumerate((i for i, line in enumerate(lines) if i and line.strip()), 1)}
+
+
+def diction_takes(man):
+    """{line number: take} of the fix list of a clips.json, for the lines still as their clips were cut (time and
+    span the same); a line edited since is left out until its clips are cut again."""
+    try:
+        lines, head, at = diction_rows(man)
+    except OSError:
+        return {}
+    out = {}
+    for r in man['rows']:
+        if r['n'] in at:
+            cells = dict(zip(head, (c.strip() for c in lines[at[r['n']]].split('\t'))))
+            if all(cells.get(k, '') == r[k] for k in ('time', 'start', 'end')):
+                out[r['n']] = cells.get('take', '')
+    return out
+
+
+def diction_labels(man):
+    """{take: its button}: the candidates under neutral names in folder order, then the base and none."""
+    return {**{t: f'候选 {i}' for i, t in enumerate(man['takes'], 1)}, man['base']: '现在的就行', DICTION_NONE: '都不对'}
+
+
+def diction_pick(spk, data):
+    """dpick {song, n, take}: the listener's take for line n of a song on the diction page, written into the take
+    column of the song's fix list; the feedback entry that logs it, or None when the take is not one the page
+    offers or the line changed since its clips were cut."""
+    song, take = str(data.get('song', '')), str(data.get('take', ''))
+    man = diction_songs(spk).get(song)
+    if not man or take not in diction_labels(man):
+        return None
+    try:
+        n = int(data.get('n'))
+        with _diction_lock:
+            if n not in diction_takes(man):
+                return None
+            lines, head, at = diction_rows(man)
+            cells = lines[at[n]].split('\t')
+            cells += [''] * (len(head) - len(cells))
+            cells[head.index('take')] = take
+            lines[at[n]] = '\t'.join(cells)
+            path = Path(man['fixes'])
+            tmp = path.with_name(path.name + '.part')
+            tmp.write_text('\n'.join(lines) + '\n', encoding='utf-8')
+            tmp.replace(path)
+    except (TypeError, ValueError, OSError):
+        return None
+    return {'time': time.strftime('%F %T'), 'speaker': spk, 'target': f'diction:{song}#{n}', 'text': take}
+
+
+def mmss(t):
+    return f'{int(t // 60)}:{t % 60:04.1f}'
 
 
 def song_meta(folder):
@@ -491,6 +577,8 @@ class Handler(BaseHTTPRequestHandler):
             return self.page_check()
         if route == 'compare':
             return self.page_compare()
+        if route == 'diction':
+            return self.page_diction()
         if route == 'rank':
             return self.page_rank(q.get('order', [''])[0] == 'worst')
         return self.page_index()
@@ -507,6 +595,10 @@ class Handler(BaseHTTPRequestHandler):
                      'target': str(data.get('target', ''))[:300], 'text': str(data.get('text', ''))[:5000]}
         except (ValueError, AttributeError):
             return self.send_html('bad request', 400)
+        if urllib.parse.urlparse(self.path).path.rstrip('/').split('/')[-1] == 'dpick':
+            entry = diction_pick(spk, data)
+            if not entry:
+                return self.send_html('conflict', 409)
         STATE.mkdir(exist_ok=True)
         with open(STATE / 'feedback.jsonl', 'a', encoding='utf-8') as fp:
             fp.write(json.dumps(entry, ensure_ascii=False) + '\n')
@@ -534,6 +626,12 @@ class Handler(BaseHTTPRequestHandler):
                          f'<a class="name" href="ab{ab_query(x)}">两个模型比一比</a><span class="muted">'
                          + '；'.join(f'{esc(s)}：{" 和 ".join(map(esc, m["datasets"]))}，{m["step"]} 步' for s, m in ab)
                          + '</span></div>')
+        fixes = diction_songs(spk)
+        if fixes:
+            lines = sum(len(m['rows']) for m in fixes.values())
+            todo = sum(not t for m in fixes.values() for t in diction_takes(m).values())
+            parts.append(f'<h2>咬字修补（{lines} 处，{todo} 处还没选）</h2><div class="card row"><a class="name" href="diction">'
+                         '逐处试听</a><span class="muted">你报的唱错的地方：原唱、现在的和重新转换的几个候选，选一个拼回去</span></div>')
         sets = compare_sets(spk)
         if sets:
             parts.append(f'<h2>模型对比（{len(sets)} 段）</h2><div class="card row"><a class="name" href="compare">'
@@ -851,10 +949,44 @@ class Handler(BaseHTTPRequestHandler):
             body += [self.player(f, version) for f, version in items]
         self.send_html(''.join(body))
 
+    def page_diction(self):
+        """diction: every line of the fix lists of tools/diction.py, cut from the dry lead, from the conversion being
+        fixed and from every candidate, with a button per candidate that writes the choice into the list (dpick)."""
+        body = ['<p><a href="./">← 返回</a></p><h1>咬字修补</h1>',
+                '<div class="card">每处先听<b>原唱</b>和<b>现在的</b>（混音里唱错的那版），再听各个<b>候选</b>：同一句干声用别的步数、'
+                '别的随机种子重新转换的结果。选一个咬字对、听着也自然的，它会从前一个换气到后一个换气整段拼回去。'
+                '都不对就点“都不对”，我再多转几版；现在的其实没唱错就点“现在的就行”。'
+                '<span class="muted">片段不是你说的那一句的话，在总体反馈里告诉我。改主意再点一次，以最后一次为准。</span></div>']
+        for song, man in (diction_songs(self.spk) if self.spk else {}).items():
+            takes, labels = diction_takes(man), diction_labels(man)
+            folder = diction_dir(self.spk) / song
+            body.append(f'<h2>{esc(song)}</h2>')
+            for r in man['rows']:
+                n = r['n']
+                sid = 'dc' + hashlib.sha1(f'{self.spk}|{song}|{n}'.encode()).hexdigest()[:10]
+                heard = '　'.join(x for x in (f'听成“{esc(r["heard"])}”' if r['heard'] else '',
+                                             f'应该是“{esc(r["want"])}”' if r['want'] else '') if x)
+                players = ''.join(f'<div class="muted">{label}</div>'
+                                  + audio_tag((folder / f'{n:02d}' / f'{name}.flac').relative_to(ROOT).as_posix())
+                                  for label, name in [('原唱', 'dry'), ('现在的', man['base'])]
+                                  + [(labels[t], t) for t in man['takes']])
+                if n in takes:
+                    attrs = f'data-spk="{esc(self.spk)}" data-song="{esc(song)}" data-n="{n}" data-s="{sid}"'
+                    buttons = ''.join(f'<button {attrs} data-take="{esc(t)}" onclick="pick(this)">{label}</button>'
+                                      for t, label in labels.items())
+                    state = f'已选：{labels.get(takes[n], takes[n])}' if takes[n] else ''
+                else:
+                    buttons, state = '', '清单里这一处改过了，要重新出片段'
+                body.append(f'<div class="card"><div class="name">{n}. {esc(r["time"])}　{heard}<span class="muted">　'
+                            f'片段 {mmss(float(r["start"]))}–{mmss(float(r["end"]))}</span></div>{players}'
+                            f'<div class="row">{buttons}<span id="{sid}" class="ok">{esc(state)}</span></div></div>')
+        self.send_html(''.join(body))
+
     def serve_file(self, rel, fmt=''):
         path = (ROOT / rel).resolve()
         # any speaker's audio folders, so a page opened before switching speakers keeps playing
-        dirs = [d for s in speakers() for d in [stage_dir(s, k) for k in STAGE_NAME] + [songs_dir(s), compare_dir(s)]]
+        dirs = [d for s in speakers()
+                for d in [stage_dir(s, k) for k in STAGE_NAME] + [songs_dir(s), compare_dir(s), diction_dir(s)]]
         allowed = any(os.path.commonpath([path, d.resolve()]) == str(d.resolve()) for d in dirs)
         if not allowed or not path.is_file() or path.suffix.lower() not in AUDIO_EXTS:
             return self.send_html('not found', 404)

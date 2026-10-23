@@ -82,24 +82,47 @@ python tools/cover_mix.py --inst covers/歌名/phase/inst.wav --source covers/�
 
 做法：同一首先出几个版本放进试听网页的「转换结果」，听完挑一个，把定下的设置记进下表。以后换模型或重做时，照表重混。
 
+定下的设置同时在实例上写成 `covers/<歌>/mix.args`：`cover_mix.py` 除 `--conv`、`-o` 以外的参数，一行可以写几个，路径里不能有空格。用 `python tools/cover_mix.py @covers/<歌>/mix.args --conv 转换结果.wav -o 混音.wav` 照原样重混，咬字修补后的重混（下一节）就是这样做的。
+
 | 歌 | 说话人 / 模型 | EQ | 和声 | 人声音量 | 定稿文件 |
 |---|---|---|---|---|---|
 | 两人份的幸福（王心凌） | 花丸晴琉 4 万步 | 默认（6） | 保留原唱 | +2 dB | `infer_out/covers_final/两人份的幸福（王心凌）.flac` |
 
 - 两人份的幸福（2026-10-23，花丸晴琉）：比较过旧混音、EQ、全转换 +0/+2/+4 dB、保留原唱 +2 dB，用户选了 EQ 加保留原唱加 +2 dB。原唱和声比主唱低约 9 dB。命令同 `autodl/cover_scripts/remix_eq.sh` 里的普通版，另加 `--lift 2`。
 
-### 咬字检查和修补（`diction.py`，还没在歌上用过）
+### 咬字修补（`diction.py`）
 
-转换后有的字会唱错。`diction.py` 按换气把干声切成乐句，用 Qwen3-ASR 识别原唱和几个候选转换（同一模型的其他随机种子、其他步数），按歌词逐个单位比较：中文是不带声调的拼音音节，日语是假名的拍，英语是单词。转换比原唱错得多的句子，换成候选里错得最少的那一版，在前后换气的中点拼接，交叉淡化 20 ms。歌词不会喂给识别器，否则它会把唱错的听成对的。
+转换后有的字会唱错。2026-10-23 起改为靠人耳找（这套流程还没在歌上用过）：用户听出来报给 Claude，Claude 从同一条干声的别的转换（其他随机种子、其他步数）里切出这一句给用户挑，选中的那版在前后换气处拼回去，再按这首歌定好的混音设置重混。
+
+1. **报错**：一行一处，“歌名 分:秒 听成了什么 → 应该是什么”，时间按试听网页上那首混音算，差几秒也没关系。Claude 把它记进这首歌的修补清单 `covers/<歌>/diction_fixes.tsv`。
+2. **出片段**：`diction.py clips` 按原唱干声的换气切出乐句，找到这个时间落在的那一句（落在两句之间就取近的那句），范围从前一个换气的中点到后一个换气的中点，最多超出乐句 0.5 秒，写进清单的 `start`、`end`。然后把原唱、现在的转换和每个候选的这一段切出来，放进试听网页的「咬字修补」。
+3. **挑**：用户在网页上听，点选一个候选，选择直接写进清单的 `take`。都不对就点“都不对”，`diction.py cand` 换随机种子或步数再转几版，再出一次片段，点过“都不对”的那几处会重新等用户挑。
+4. **拼回去、重混**：`diction.py apply` 把选中的段落拼进现在的转换，两头交叉淡化 20 ms，句子中间没有接缝。再用 `covers/<歌>/mix.args`（见上一节）重混，用户整首再听一遍。
+
+修补清单是 TSV，第一行是列名（没有的话按下表的顺序）。`clips` 会补上缺的列：
+
+| 列 | 内容 |
+|---|---|
+| `time` | 报的时间：`83`、`1:23`、`1:23.5`；一处跨了几句时写范围，如 `1:20-1:26` |
+| `heard`、`want` | 听成了什么、应该是什么 |
+| `start`、`end` | 拼接范围（秒），由 `clips` 写入，之后不再变，所以同一份清单重拼的结果一样。范围不对可以手改，改了要重新出片段 |
+| `take` | 选中的候选，就是它的文件名去掉 `.wav`。`none` 是都不对，空着是还没选。选“现在的就行”时填的是现在那版的名字，不拼 |
+| `note` | 备注 |
 
 ```bash
-# asr 环境：ddsp 环境加上 qwen-asr、pypinyin、pykakasi（tools/autodl/setup_asr.sh）
-python tools/diction.py --dry 3_dereverb/歌名.wav --lyrics 歌名.lrc --lang Chinese \
-    --conv 40k.wav 40k_种子1.wav 50k.wav ... -o 修补后.wav --report 修补后.json
+# ddsp 环境。--cand 目录里每个 .wav 都是同一条干声的一次转换，dry.wav 是干声本身；
+# 按文件名排第一个的是现在用的那版（--base 可以指定别的）
+python tools/diction.py clips --cand covers/cand/歌 --fixes covers/歌/diction_fixes.tsv -o speakers/说话人/diction/歌名
+python tools/diction.py cand --cand covers/cand/歌 --model exp/model_40000.pt --seed 3 4 5   # 要 GPU
+python tools/diction.py apply --cand covers/cand/歌 --fixes covers/歌/diction_fixes.tsv -o 修补后.wav
+python tools/cover_mix.py @covers/歌/mix.args --conv 修补后.wav -o 修补后_混音.wav
 ```
 
-- 识别器靠不靠得住要先看它听原唱本人的错误率（2026-10-22，Qwen3-ASR-1.7B，`autodl/cover_scripts/asr_bench.py`）。中文：两人份的幸福 1.2%、我会好好的 2.1%、爱你 8.9%（另有 96 个音节没识别出来）。日语：アイドル 6.6%、勇者 14.3%、晴る 22.6%。中文基本可用，日语不可靠。VocalParse 加载时词表大小对不上（152101 对 151936），没测成。
-- 另一种做法（之后再试）：人耳听出唱错的地方，报大概的秒数和字。按秒数找到那一句，把各候选的这一句切出来比较，挑一个拼进去。拼接用 `diction.py` 里的 `phrases`、`splice`。
+- 实例上用 [autodl/diction_fix.sh](autodl/diction_fix.sh) 的 `clips`、`cand`、`apply`，路径按 `covers/` 的约定自动填好。`apply` 会接着重混，结果放在 `infer_out/covers_final/<歌名>_咬字修补.flac`；用户听过认可后，它再替换定稿。
+- 候选：`autodl/cover_scripts/cand.sh` 已经给 6 首歌各做了 7 版，在 `covers/cand/<歌>/`：4 万步默认（就是混音里那版，`0_40k`），4 万步种子 1、2，3 万、5 万、6 万、8 万步。`cand` 新做的叫 `<序号>_<步数>k_s<种子>.wav`，同一步数、同一种子已经有了就跳过。
+- 网页上候选按文件名顺序叫“候选 1、2……”，不显示步数和种子。片段要是没包住报的那个字，就在清单里改 `time` 或 `start`、`end`，再出一次片段。
+- 同一句里报了几处，各占一行，选的要是同一个候选；范围重叠而选的候选不同，`apply` 会报错。
+- 自动模式 `diction.py auto`（Qwen3-ASR 找错句、挑候选）2026-10-23 停用，没在歌上用过，代码留着。识别器听原唱本人时就有不少错：中文 1～9%，日语 7～23%（2026-10-22，Qwen3-ASR-1.7B，`autodl/cover_scripts/asr_bench.py`）。歌词又不能喂给识别器，否则它会把唱错的听成对的。
 - 2026-10-22 实际跑过的翻唱脚本在 [autodl/cover_scripts/](autodl/cover_scripts/)，说明见那里的 README。
 
 ## legacy/

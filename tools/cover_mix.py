@@ -22,6 +22,9 @@ With --harm-conv (and --harm-source, --harm-dry, --harm-wet) the backing vocals 
 vocal with the chorus and one without it are both official, their difference is the backing vocals alone
 (offvocal.py), which go through dereverb and conversion like the lead. --inst is then the off vocal without the
 chorus; backing that was in neither off vocal (vocals - lead) is still added as sung unless --no-backing.
+
+@file reads arguments from a file, any number to a line (no spaces inside a path): the settings chosen by ear
+for a song are kept that way, as covers/<song>/mix.args, to mix it again the same (tools/README.md).
 """
 import argparse
 
@@ -157,7 +160,9 @@ def room(sr, ratio, seed=0):
 
 
 def main():
-    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter,
+                                 fromfile_prefix_chars='@')
+    ap.convert_arg_line_to_args = str.split
     for name in ('inst', 'source', 'vocals', 'lead', 'dry', 'conv'):
         ap.add_argument(f'--{name}', required=True)
     ap.add_argument('-o', '--out', required=True)
