@@ -48,6 +48,8 @@ python tools/prepare_dataset.py -i singer_b -o data --spk 2 -w work_b
 
 ## 翻唱：原曲 + 官方 off vocal
 
+> 2026-10-23 起，原曲减伴奏（再分离）得到的人声不再作为转换的输入：用户试听后认为效果很差。干净导唱的来源调研和新管线见 [clean_stems.md](clean_stems.md)。下面的流程留作记录；其中 `offvocal.py` 的对齐和抵消测量、`cover_mix.py` 的混音，新管线还会用到。
+
 选有官方 off vocal（伴奏）的歌，原唱用相减得到，比分离模型干净，伴奏直接用来混音。
 
 ```bash
