@@ -9,7 +9,8 @@
    - 先查这首歌有没有官方分轨，有就直接用。
    - 没有的话，**另外生成一条干净的导唱**：真人录（自己唱或者请人唱），或者用歌声合成渲染。
    - 原曲减伴奏、分离模型得到的人声，**不再作为转换的输入**。最多拿来参考音符和时间，比如从中扒 MIDI 给歌声合成用。
-3. **对大多数歌来说，现实的选择是真人导唱或歌声合成导唱。**两者都是干声，录在官方伴奏上或者按伴奏的节拍渲染，天然对齐。哪个效果好要实测：建议先拿一首歌，把这两种和现在的做法放在一起比，再定默认做法。
+3. **欧美歌好办得多**（用户可以接受欧美歌）：独立音乐人的歌有研究、教学用的多轨库，带录音室原始干声，免费或便宜；知名歌有 Karaoke Version 的重录多轨、DJ pool 的官方 acapella。见“欧美歌”一节。
+4. **对其余的歌来说，现实的选择是真人导唱或歌声合成导唱。**两者都是干声，录在官方伴奏上或者按伴奏的节拍渲染，天然对齐。哪个效果好要实测：建议先拿一首歌，把这两种和现在的做法放在一起比，再定默认做法。
 
 ## 什么算“干净”
 
@@ -38,6 +39,38 @@
 | **歌声合成导唱** | 用 Synthesizer V、ACE Studio、OpenUtau + DiffSinger 等，从 MIDI 加歌词渲染出的干声 | **完全干净**：没有混响、渗漏，音高准 | 按伴奏的节拍渲染，对得上 | 任何歌，前提是有 MIDI 和歌词 | 见下面一节 | **候选默认做法之一**。好处是每个字的发音都能指定，和待办 A（修唱错的字）正好互补 |
 | 歌声数据集（[M4Singer](https://proceedings.neurips.cc/paper_files/paper/2022/hash/2de60892dd329683ec21877a4e7c3091-Abstract.html)、[GTSinger](https://arxiv.org/abs/2409.13832v7)、Opencpop） | 专业歌手在录音室录的清唱 | 很干净 | **对不上**：没有伴奏，速度和调也是歌手自己定的 | M4Singer：700 首普通话歌；GTSinger：9 种语言，包括中文、日语；Opencpop：100 首普通话流行歌 | 都只许非商业使用：M4Singer 是 CC BY-NC-SA 4.0，要申请审核；GTSinger 据转引也是 CC BY-NC-SA 4.0；Opencpop 的许可这次没打开官网，需核实 | 只适合当测试素材，不适合做翻唱 |
 | 不用的 | acapella 下载站（DJ 指南说[多半是分离出来的](https://www.digitaldjtips.com/where-djs-get-acapellas/)，没法核实）、游戏解包的多轨（Rock Band 等，侵权）、AI 分离和相位抵消（正是要避免的） | — | — | — | — | 排除 |
+
+### 欧美歌（2026-10-23 补充：用户可以接受欧美歌）
+
+欧美这边官方或艺人认可的分轨多得多，按好不好拿分四类：
+
+| 来源 | 内容 | 人声干净程度 | 有哪些歌 | 怎么获取 | 结论 |
+|---|---|---|---|---|---|
+| 研究、教学用的多轨库：[MedleyDB](https://zenodo.org/records/1649325)（另有 [2.0](https://zenodo.org/record/1715175)）、[Weathervane Music「Shaking Through」](https://weathervanemusic.org/shakingthrough/remix)、Cambridge-MT、[MUSDB18-HQ](https://zenodo.org/records/3338373) | 原始多轨（每件乐器、每条人声单独一轨，人声是**原始干声**），以及混音后的分轨；MUSDB18-HQ 只有人声、鼓、贝斯、其他四轨混音分轨 | 最好：录音室原始干声，没有混响。MedleyDB 的元数据标了每首有没有串音（`has_bleed`） | 独立音乐人的歌，不出名。MedleyDB 里女声主唱、无串音、整首的有 14 首（见下） | MedleyDB、MUSDB18-HQ：在 Zenodo 填表申请，只许非商业研究（CC BY-NC-SA 4.0）。Shaking Through：免费会员只能下最新一期，月费会员能下最新 4 期加 4 期存档，年费会员能下全部存档。Cambridge-MT：500 多个项目，教育用途免费下载；网站有 Cloudflare 验证，脚本抓不到，要用浏览器下 | **最适合先拿来试点**：能直接验证干净的输入能不能解决转换发虚、发脏 |
+| [Karaoke Version](https://www.karaoke-version.com/custombackingtrack/adele/someone-like-you.html) | 录音室乐手**重新录制**的多轨（不含原版录音的任何部分），分 Lead Vocal、Backing Vocals 和各件乐器，每一轨都能单独导出 | 录音室重录，干净；但主唱是它请的歌手，伴奏也是重录的 | 欧美流行曲库很大。例：Adele「Someone Like You」分 Piano、Backing Vocals、Lead Vocal 三轨 | 每首约 2.99 美元，MP3 320 kbps，买了以后可以无限次导出 | **想翻知名欧美歌时最实际** |
+| DJ pool（[DJcity](https://support.djcity.com/hc/en-us/articles/34409884914708-What-type-of-music-does-DJcity-provide)、BPM Supreme 等） | 唱片公司提供给 DJ 的官方 acapella 和 instrumental | 是官方原版。但 acapella 一般是整条人声：主唱加和声，带着混音里的效果，多数是 MP3 | 当下的流行、嘻哈、R&B、舞曲热门 | 按月订阅，授权给 DJ 使用 | 知名歌的官方原版分轨；要订阅，和声和效果还得另外处理 |
+| 艺人放出的分轨、remix 比赛 | 官方分轨 | 官方录音室分轨 | 很零散。艺人放出的：Beyoncé「End of Time」、[Grimes「You'll Miss Me When I'm Not Around」](https://www.rollingstone.com/pro/features/pop-grimes-coronavirus-remix-979137/)（2020）、Charli XCX（2020 年做专辑期间）、SoundCloud 和 Fadr 的活动（[Erin LeCount「Godspeed」](https://soundcloud.com/stories/post/erin-lecount-godspeed-remix-campaign)，Fadr 已在 2025-08 停止免费下载）。remix 比赛：[Skio、Beatport 等](https://www.remiexs.com/remixcontest)，多为舞曲，例如 Jessi「Girls Like Me」、Agnis「Baba Jaga」 | 多半已经过期，或者只在比赛期内能下；规约一般只许参赛使用 | 碰上了再用 |
+
+MedleyDB 里女声主唱、无串音、整首的歌。这份名单是从 [GitHub 上的元数据](https://github.com/marl/medleydb/tree/master/medleydb/data/Metadata)筛出来的，排除了片段和来源标为 `Mogg` 的歌（那是 Rock Band 游戏解包的多轨，没有公开音频）：
+
+- Aimee Norwich – Child
+- Cassandra Jenkins – Perfect Day
+- Cat Martino – I Promise
+- Cayetana – Miss Thing
+- Clara Berry and Wooldog – Air Traffic、Stella、Waltz For My Victims
+- Filthy Bird – I'd Like To Know
+- Hop Along – Sister Cities
+- Little Tybee – The Alchemist
+- Liz Nelson & Jennifer Davies – Coldwar、Rainfall
+- Secret Mountains – High Horse
+- The Kitchenettes – Alive
+- Torres – New Skin
+
+其中来源是 Weathervane 的几首（Cassandra Jenkins、Cat Martino、Cayetana、Filthy Bird、Hop Along、Little Tybee、Secret Mountains、Torres），也能从 Shaking Through 下载。
+
+有了官方分轨，`cover_mix.py` 基本可以照用：原唱的主唱分轨（`--lead`）、干声（`--dry`）、整条人声（`--vocals`）都能直接拿官方的，不用再从混音里分离。
+
+**风险**：几个模型都是用中文、日语歌训练的，唱英语时咬字可能不准。内容编码 ContentVec 本身是在英语语音上训练的，这一步应该问题不大，但效果要实测。
 
 ### 歌声合成导唱的做法
 
@@ -74,6 +107,10 @@
 
 ## 下一步建议
 
+0. **欧美歌先行**（2026-10-23，用户可以接受欧美歌）：
+   - 先从多轨库挑一两首女声歌，用原始干声做转换，看干净的输入能不能解决发虚、发脏。MedleyDB 要申请，Shaking Through 和 Cambridge-MT 要注册或用浏览器下。
+   - 想翻知名欧美歌时，用 Karaoke Version 的重录多轨。
+   - 两条路都要用户先动手：填申请表、注册或者购买。
 1. **试点**：挑一首歌，把三种导唱放在一起比：现在的做法（原曲减伴奏再分离，作为基线）、歌声合成导唱、真人导唱。两人份的幸福已经有定稿的混音设置，可以当作这首。真人导唱要看用户能不能录、愿不愿意录。
 2. 查 TuneCore「Rework with 可愛くてごめん」和「少女A」的分轨还能不能下、包不包含单独的人声轨。
 3. 写检查脚本：空隙底噪、渗漏、混响尾巴、频宽。
