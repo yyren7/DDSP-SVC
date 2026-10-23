@@ -46,8 +46,10 @@
 # 2026-10-23: hanamaru_hareru keeps her 40k model (her blind A/B: 40k 19, 80k 14, no ties; 8:3 on her own
 # clips). umi_pheebie's 40k and 80k go through the same blind A/B, converting into umi (SPK_ID=2): umi's
 # validation clips and the other three speakers'
-JOB=abtest@umi_pheebie:steps80=all@40000+all@80000
-RUN_ID=47
+# 09:38: umi's made; now the other half, converting into pheebie (SPK_ID=1) as steps80_pheebie, so that the
+# listener's choices on umi's stay as they are
+JOB=abtest@umi_pheebie:steps80_pheebie=all@40000+all@80000
+RUN_ID=48
 # the scores fit_lines.py may use: with ~120 marks, a few chosen by what the listener named (thin /
 # walkie-talkie voice, talk instead of singing, accompaniment, reverb or loud BGM in the original)
 LINE_FEATURES=aes_cu,aes_ce,aes_pq,dns_sig,pitch_steady,p_speech,p_music,bgm_db,tail_src,level
@@ -79,7 +81,7 @@ SPLIT_ARGS=
 UVR_ARGS=--steps vocals,karaoke,dereverb
 WORKERS=8
 KEY=0
-SPK_ID=2
+SPK_ID=1
 
 # Power the instance off after this many minutes with no job running and nobody on the review page
 # (0 = never): IDLE_SHUTDOWN_MIN with a GPU, IDLE_SHUTDOWN_MIN_NOGPU in no-GPU mode (¥0.10/h).
