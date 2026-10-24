@@ -13,7 +13,11 @@ cd $R
 CKPT=$(ls checkpoints/models--Plachta--Seed-VC/snapshots/*/DiT_seed_v2_uvit_whisper_base_f0_44k_bigvgan_pruned_ft_ema_v2.pth | tail -1)
 CFG=$(ls checkpoints/models--Plachta--Seed-VC/snapshots/*/config_dit_mel_seed_uvit_whisper_base_f0_44k.yml | tail -1)
 mkdir -p $KEEP
-cp $CFG $KEEP/config.yml
+# the released config logs to ./runs/run_dit_mel_seed_uvit_whisper_base_f0_44k/, not to the ./runs of the repo's
+# presets: trained with a copy set to ./runs, so that runs/$RUN is where the checkpoints are (on 10-23 none were
+# kept for missing this, and train.py deleted all but the last two)
+sed 's|^log_dir:.*|log_dir: "./runs"|' $CFG > $KEEP/config.yml
+CFG=$KEEP/config.yml
 keep() { for f in runs/$RUN/*.pth; do [ -e "$f" ] && [ ! -e "$KEEP/${f##*/}" ] && ln "$f" "$KEEP/" || true; done; }
 ( while sleep 30; do keep; done ) &
 watcher=$!
