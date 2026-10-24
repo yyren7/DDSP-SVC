@@ -17,8 +17,10 @@ The candidates load and save audio through torchaudio, whose 2.9 needs TorchCode
 stands in for them, and YingMusic's accompaniment remix (torchaudio.sox_effects, gone in 2.9) is never imported.
 """
 import argparse
+import atexit
 import json
 import os
+import shutil
 import sys
 import tempfile
 import time
@@ -59,6 +61,13 @@ def enter(repo):
     sys.path[:] = [str(R / repo)] + [p for p in sys.path if p and Path(p).resolve() != root]
 
 
+def scratch(prefix):
+    """A folder for the candidate's own output files, removed when the run ends."""
+    tmp = tempfile.mkdtemp(prefix=prefix, dir=B)
+    atexit.register(shutil.rmtree, tmp, True)
+    return tmp
+
+
 def hf_file(repo, name):
     """A file downloaded by setup.sh into ./checkpoints (the cache of Seed-VC's hf_utils.py)."""
     found = sorted(Path('checkpoints').glob(f'models--{repo.replace("/", "--")}/snapshots/*/{name}'))
@@ -78,7 +87,7 @@ def seedvc(args, steps, cfg):
     loaded once."""
     enter('seed-vc')
     import inference as sv
-    tmp = tempfile.mkdtemp(prefix='seedvc_', dir=B)
+    tmp = scratch('seedvc_')
     a = seed_args(args, steps, cfg, tmp, args.checkpoint, args.config)
     if not a.checkpoint:  # the released singing model, as inference.py picks it with --f0-condition
         a.checkpoint = hf_file('Plachta/Seed-VC', 'DiT_seed_v2_uvit_whisper_base_f0_44k_bigvgan_pruned_ft_ema_v2.pth')
@@ -102,7 +111,7 @@ def yingmusic(args, steps, cfg):
     remix.auger = types.SimpleNamespace(echo_then_reverb_save=None)
     sys.modules['Remix'], sys.modules['Remix.auger'] = remix, remix.auger
     import my_inference as ym
-    tmp = tempfile.mkdtemp(prefix='yingmusic_', dir=B)
+    tmp = scratch('yingmusic_')
     a = seed_args(args, steps, cfg, tmp, args.checkpoint or hf_file('GiantAILab/YingMusic-SVC', 'YingMusic-SVC-full.pt'),
                   args.config or './configs/YingMusic-SVC.yml')
     device = torch.device('cuda')
