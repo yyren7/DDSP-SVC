@@ -5,6 +5,7 @@ without moving the key (as the covers' -k 0), into out/<system>/<name>.wav, matc
 
     /root/autodl-tmp/conda_envs/bk/bin/python tools/bakeoff/convert.py <model> [--system <name>] [--steps N]
         [--cfg X] [--ref <wav>] [--checkpoint <pt> --config <yml>] [--only line|song] [--items <names>] [--split]
+        [--manifest <json>]
 
 <model>:
   seedvc     Seed-VC's 44.1 kHz singing model (Whisper-small content, F0 conditioned, BigVGAN); --checkpoint and
@@ -198,11 +199,13 @@ def main():
     p.add_argument('--only', choices=('line', 'song'))
     p.add_argument('--items', help='comma-separated names of the manifest, e.g. song__aini: only these')
     p.add_argument('--split', action='store_true', help='a phrase at a time, cut at the pauses (by_phrase)')
+    p.add_argument('--manifest', default=str(B / 'set' / 'manifest.json'),
+                   help='the items to convert (set/manifest_clean.json: the clean inputs of clean_set.py)')
     args = p.parse_args()
     steps, cfg = args.steps or DEFAULTS[args.model][0], args.cfg or DEFAULTS[args.model][1]
     args.ref = str(Path(args.ref).resolve())
     system = args.system or args.model
-    man = json.loads((B / 'set' / 'manifest.json').read_text(encoding='utf-8'))
+    man = json.loads(Path(args.manifest).read_text(encoding='utf-8'))
     items = [it for it in man['items'] if (not args.only or it['kind'] == args.only)
              and (not args.items or it['name'] in args.items.split(','))]
     out = B / 'out' / system
