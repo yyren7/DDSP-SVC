@@ -10,8 +10,8 @@ songs: the whole songs on the same 8 s windows where the input sings (as cover_s
        into bakeoff/scores_songs.jsonl, means printed by song and system.
 ab <system>: hanamaru_hareru's A/B experiment bk_<system> for the review page (「A/B 盲听」, ?x=bk_<system>): the
        baseline ddsp40k against <system> on the 36 clips, hard links of the files, the machine scores of lines.
-blind <folder> [<system>...]: the whole songs under neutral names in her 转换结果 (infer_out/<folder>/), the key
-       in bakeoff/<folder>.json.
+blind <folder> [<system>...] [--songs=<song>,...]: the whole songs under neutral names in her 转换结果
+       (infer_out/<folder>/), the key in bakeoff/<folder>.json; with --songs only those (e.g. liangrenfen,aini).
 Only systems given on the command line, or all in out/ when none are.
 """
 import json
@@ -146,8 +146,9 @@ def blind(args):
     input as 0_输入.flac, every system under a neutral name in an order drawn per song; which is which only in
     bakeoff/<folder>.json, outside what the page serves."""
     import random
-    folder, names = args[0], args[1:]
-    items = [it for it in manifest()['items'] if it['kind'] == 'song']
+    folder, names = args[0], [a for a in args[1:] if not a.startswith('--songs=')]
+    only = ','.join(a.split('=', 1)[1] for a in args[1:] if a.startswith('--songs=')).split(',')
+    items = [it for it in manifest()['items'] if it['kind'] == 'song' and (only == [''] or it['src_spk'] in only)]
     sys_ = names or [d.name for d in sorted((B / 'out').iterdir()) if d.is_dir()]
     root = SPK / 'infer_out' / folder
     if root.exists():

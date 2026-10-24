@@ -6,7 +6,7 @@
 # <yml>). The final model (ft_model.pth, the weights of step STEPS, which has no checkpoint of its own) is kept beside
 # them as DiT_epoch_final_step_<STEPS>.pth.
 #   STEPS=10000 BATCH=8 SAVE=2000 bash tools/bakeoff/finetune_seedvc.sh
-#   KEEP=/root/autodl-tmp/bakeoff/ft/seedvc5k RUN=hanamaru_5k STEPS=5000 SAVE=1000 bash tools/bakeoff/finetune_seedvc.sh
+#   KEEP=/root/autodl-tmp/bakeoff/ft/seedvc5k RUN=hanamaru_5k STEPS=5000 BATCH=4 SAVE=1000 bash tools/bakeoff/finetune_seedvc.sh
 set -euo pipefail
 R=/root/autodl-tmp/bakeoff/repos/seed-vc; ENV=/root/autodl-tmp/conda_envs/bk
 DATA=/root/autodl-tmp/speakers/hanamaru_hareru/data_all/train/audio
