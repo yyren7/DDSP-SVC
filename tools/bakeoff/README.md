@@ -202,6 +202,19 @@ Rubblebucket 的原始主唱轨有鼓的串音，所有系统在这首上的音�
 - 零样本 Seed-VC 用户听下来「完全不行」，微调的变化又这么小，所以**这个架构的微调到此为止**，YingMusic 也不再微调。按原计划，下一个候选是 RIFT-SVC。
 - **YingMusic 分句**：机器分和整首转换几乎一样。这是意料之中的：「断」出在接缝处，8 秒窗口的平均分反映不出来，要靠耳朵（`yingmusic_phr`）判断。
 
+## 干净输入（2026-10-25）
+
+用户听了分离出来的输入，要求改用纯人声的干净音轨做转换，不要用从混音里分离出来的人声。测试集里，晴る、两人份的幸福、爱你三首都是分离出来的（这几首没有官方干声，见 [clean_stems.md](../clean_stems.md)），只有 April Blues 是多轨的原始主唱。所以另做了一组录音室清唱：
+
+- **中文**：[Opencpop](https://huggingface.co/datasets/Saaaxman/Opencpop)（一位专业女歌手在录音室整首录的 100 首中文流行歌，44.1 kHz，许可未核实），取了 3 首：
+  - 2001「感受停在我发端的指尖……」，235 秒；
+  - 2044「雨淋湿了天空灰得更讲究……」，254 秒；
+  - 2086「跟着我左手右手一个慢动作……」，263 秒。
+- **日语**：[GTSinger](https://huggingface.co/datasets/GTSinger/GTSinger) 的 JA-Soprano-1（日语女高音，录音室，CC BY-NC-SA 4.0），按乐句录。每首取 Control_Group（正常唱法）的乐句按顺序拼起来，中间隔 0.5 秒：「心做し」110 秒，「いつも何度でも」182 秒（截到 3 分钟）。
+- **英语**：April Blues 的原始主唱（同 `set/songs`）。
+
+这些清唱都没和伴奏对齐，只用来评转换本身。转换系统是 DDSP-SVC 4 万步、YingMusic 整首转、YingMusic 分句转（`clean.sh`，系统名带 `clean_` 前缀，测试项在 `set/manifest_clean.json`）。试听网页「转换结果」的 `clean/<歌>/` 里按名字放：`0_输入`、`1_DDSP4万步`、`2_YingMusic整首转`、`3_YingMusic分句转`。
+
 ## 重唱结果（SoulX-Singer，2026-10-24）
 
 两首中文歌，每格是「两人份的幸福 / 爱你」。转换系统的数字和上表是同一批。
