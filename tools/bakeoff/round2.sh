@@ -3,10 +3,11 @@
 # is stopped (the GPU has no room for it and a conversion at once) and every kept checkpoint converts the whole set
 # as system seedvc_ft<step> (same reference and settings as the zero-shot seedvc), then the machine scores of every
 # system in out/. Ends with "round2 done".
+# KEEP: the checkpoints of the run (finetune_seedvc.sh's KEEP); with UNTIL its STEPS, the training ends by itself.
 #   cd /root/autodl-tmp/DDSP-SVC && UNTIL=10000 nohup bash tools/bakeoff/round2.sh > /root/autodl-tmp/bakeoff/round2.log 2>&1 &
 set -u
 cd /root/autodl-tmp/DDSP-SVC
-KEEP=/root/autodl-tmp/bakeoff/ft/seedvc; UNTIL=${UNTIL:-10000}
+KEEP=${KEEP:-/root/autodl-tmp/bakeoff/ft/seedvc}; UNTIL=${UNTIL:-10000}
 export HF_HOME=/root/autodl-tmp/.cache/huggingface HF_HUB_OFFLINE=1
 last=$(printf 'step_%05d.pth' $UNTIL)
 until ls $KEEP/*_$last >/dev/null 2>&1; do sleep 60; done
