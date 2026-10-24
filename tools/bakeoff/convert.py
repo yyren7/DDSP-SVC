@@ -4,7 +4,7 @@ without moving the key (as the covers' -k 0), into out/<system>/<name>.wav, matc
 (make_set.match_level); out/<system>/info.json keeps the settings and the time it took.
 
     /root/autodl-tmp/conda_envs/bk/bin/python tools/bakeoff/convert.py <model> [--system <name>] [--steps N]
-        [--cfg X] [--ref <wav>] [--checkpoint <pt> --config <yml>] [--only line|song]
+        [--cfg X] [--ref <wav>] [--checkpoint <pt> --config <yml>] [--only line|song] [--items <names>] [--split]
 
 <model>:
   seedvc     Seed-VC's 44.1 kHz singing model (Whisper-small content, F0 conditioned, BigVGAN); --checkpoint and
@@ -34,6 +34,7 @@ import torchaudio
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from make_set import match_level  # noqa: E402
+from slicer import Slicer  # noqa: E402  (DDSP-SVC's, on the path through make_set's abtest)
 
 B = Path('/root/autodl-tmp/bakeoff')
 R = B / 'repos'
@@ -155,6 +156,36 @@ def sf_mono(path):
     return x.mean(1), sr
 
 
+def by_phrase(convert):
+    """convert of a whole input a phrase at a time. Seed-VC and YingMusic see 30 s at once, the reference
+    included, so a song goes through in windows of about 13 s (with the 16.6 s reference), each generated alone
+    and joined with 0.19 s of crossfade wherever the window ends: the user heard YingMusic 断. The input is cut
+    at its pauses instead (DDSP-SVC's slicer as main_reflow.py uses it, but at pauses of 150 ms: nearly every
+    phrase of the 5 songs then fits in one window), each phrase converted alone and put back at its time."""
+    tmp = scratch('phrase_')
+
+    def whole(path):
+        x, sr = sf_mono(path)
+        pieces, out_sr = [], None
+        for v in Slicer(sr=sr, threshold=-40., min_length=5000, min_interval=150).slice(x).values():
+            a, b = (int(t) for t in v['split_time'].split(','))
+            if v['slice'] or b <= a:  # a pause
+                continue
+            sf.write(f'{tmp}/phrase.wav', x[a:b], sr, subtype='FLOAT')
+            y, out_sr = convert(f'{tmp}/phrase.wav')
+            pieces.append((a / sr, y))
+        out = np.zeros(round(len(x) / sr * out_sr), np.float32)
+        for t, y in pieces:
+            i = round(t * out_sr)
+            y = y[:len(out) - i].copy()
+            ramp = np.linspace(0, 1, min(round(0.01 * out_sr), len(y) // 2))  # no click at the cuts
+            y[:len(ramp)] *= ramp
+            y[len(y) - len(ramp):] *= ramp[::-1]
+            out[i:i + len(y)] += y
+        return out, out_sr
+    return whole
+
+
 def main():
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument('model', choices=sorted(DEFAULTS))
@@ -166,6 +197,7 @@ def main():
     p.add_argument('--config')
     p.add_argument('--only', choices=('line', 'song'))
     p.add_argument('--items', help='comma-separated names of the manifest, e.g. song__aini: only these')
+    p.add_argument('--split', action='store_true', help='a phrase at a time, cut at the pauses (by_phrase)')
     args = p.parse_args()
     steps, cfg = args.steps or DEFAULTS[args.model][0], args.cfg or DEFAULTS[args.model][1]
     args.ref = str(Path(args.ref).resolve())
@@ -177,6 +209,8 @@ def main():
     out.mkdir(parents=True, exist_ok=True)
     t0 = time.time()
     convert = globals()[args.model](args, steps, cfg)
+    if args.split:
+        convert = by_phrase(convert)
     load_s, done, audio_s = time.time() - t0, [], 0.0
     t1 = time.time()
     for it in items:
@@ -187,7 +221,8 @@ def main():
         done.append({'name': it['name'], 'seconds': round(time.time() - t, 1)})
         print(f'{system}: {it["name"]} {len(y) / sr:.1f} s of audio in {time.time() - t:.1f} s', flush=True)
     info = {'model': args.model, 'system': system, 'steps': steps, 'cfg': cfg, 'ref': args.ref,
-            'checkpoint': args.checkpoint, 'config': args.config, 'key': 0, 'made': time.strftime('%F %T'),
+            'checkpoint': args.checkpoint, 'config': args.config, 'key': 0, 'split': args.split,
+            'made': time.strftime('%F %T'),
             'load_s': round(load_s, 1), 'convert_s': round(time.time() - t1, 1),
             'rtf': round((time.time() - t1) / max(audio_s, 1e-9), 3), 'items': done}
     (out / 'info.json').write_text(json.dumps(info, ensure_ascii=False, indent=1), encoding='utf-8')
