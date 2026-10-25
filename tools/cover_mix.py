@@ -21,7 +21,10 @@ at -1 dBFS (limit). All files at the same sample rate.
 With --harm-conv (and --harm-source, --harm-dry, --harm-wet) the backing vocals are converted too: when an off
 vocal with the chorus and one without it are both official, their difference is the backing vocals alone
 (offvocal.py), which go through dereverb and conversion like the lead. --inst is then the off vocal without the
-chorus; backing that was in neither off vocal (vocals - lead) is still added as sung unless --no-backing.
+chorus; backing that was in neither off vocal (vocals - lead) is still added as sung unless --no-backing. A
+converted voice is put in the middle, where the lead is; stacked backing is mostly spread wide (left and right
+holding different voices), so with --harm-stereo --harm-conv is the left and the right channel converted one by
+one, and stays where they were.
 
 @file reads arguments from a file, any number to a line (no spaces inside a path): the settings chosen by ear
 for a song are kept that way, as covers/<song>/mix.args, to mix it again the same (tools/README.md).
@@ -178,6 +181,11 @@ def main():
     ap.add_argument('--harm-dry', help='the backing vocals after dereverb, for the level of their reverb')
     ap.add_argument('--harm-wet', help='the backing vocals before dereverb, whose loudness --harm-conv and its '
                                        'reverb take')
+    ap.add_argument('--harm-stereo', action='store_true',
+                    help="--harm-conv holds each channel converted on its own: kept as it is, not put in the middle")
+    ap.add_argument('--harm-gain', type=float, default=0.0,
+                    help="dB on the converted backing against the original's (negative: quieter, which also hides "
+                         "where its conversion went wrong); the lead keeps its level")
     args = ap.parse_args()
     if args.harm_conv and not (args.harm_source and args.harm_dry and args.harm_wet):
         raise SystemExit('--harm-conv needs --harm-source, --harm-dry and --harm-wet')
@@ -203,8 +211,10 @@ def main():
     if args.harm_conv:
         hsource, hconv, hdry, hwet = read(('harm_source', 'harm_conv', 'harm_dry', 'harm_wet'))
         hg = restore(hsource, hwet)
-        ref, what = ref + hg * hwet, 'converted'
-        hconv, hwet, _, _ = voice(hconv, hg * hdry, hg * hwet, sr, seed=1, eq_max=args.eq_max)
+        hk = 10 ** (args.harm_gain / 20)  # also on the original backing that the balance aims at, so the lead stays
+        ref, what = ref + hk * hg * hwet, 'converted'
+        hconv, hwet, _, _ = voice(hconv, hg * hdry, hg * hwet, sr, seed=1, eq_max=args.eq_max, stereo=args.harm_stereo)
+        hconv, hwet = hk * hconv, hk * hwet
         # whatever backing the karaoke models still found next to the lead was in neither off vocal: it stays
         # as sung (nothing when original - chorus off vocal was the lead alone)
     else:
@@ -224,15 +234,15 @@ def main():
           f'mix {20 * np.log10(fixed):+.1f} dB, then the limiter at most {20 * np.log10(deepest):.1f} dB')
 
 
-def voice(conv, dry, wet_ref, sr, seed, eq_max=MATCH_MAX):
-    """(converted voice in the middle, its synthetic reverb, the reverb's loudness against the voice in dB, the
-    voice's EQ in dB): the voice EQ'd to the balance of `dry` (match, at most eq_max dB an octave), the two together as loud (BS.1770) as the
+def voice(conv, dry, wet_ref, sr, seed, eq_max=MATCH_MAX, stereo=False):
+    """(converted voice in the middle, or where its channels have it with `stereo`, its synthetic reverb, the
+    reverb's loudness against the voice in dB, the voice's EQ in dB): the voice EQ'd to the balance of `dry` (match, at most eq_max dB an octave), the two together as loud (BS.1770) as the
     voice was before dereverb (`wet_ref`), the reverb as loud against the voice, octave by octave, as the dereverb
     step's removal (wet_ref - dry) was against `dry`, but never louder than the voice. Original reverbs are mostly
     cut low and bright, a plain room would muddy the voice; of stacked backing vocals a dereverb model takes out
     much of the voices themselves, 10 dB and more, which the cap keeps from turning into reverb. In the lowest band
     the removal is rumble and bleed more than reverb, so it takes no more than the next."""
-    conv, eq = match(conv.mean(axis=1, keepdims=True).repeat(2, axis=1), dry, sr, eq_max)
+    conv, eq = match(conv if stereo else conv.mean(axis=1, keepdims=True).repeat(2, axis=1), dry, sr, eq_max)
     ratio = np.minimum(octaves(wet_ref - dry, sr) / np.maximum(octaves(dry, sr), 1e-30), 1.0)
     ratio[0] = min(ratio[0], ratio[1])
     ir = room(sr, np.maximum(ratio, 1e-6), seed)
