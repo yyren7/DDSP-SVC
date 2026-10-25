@@ -202,6 +202,14 @@ Rubblebucket 的原始主唱轨有鼓的串音，所有系统在这首上的音�
 - 零样本 Seed-VC 用户听下来「完全不行」，微调的变化又这么小，所以**这个架构的微调到此为止**，YingMusic 也不再微调。按原计划，下一个候选是 RIFT-SVC。
 - **YingMusic 分句**：机器分和整首转换几乎一样。这是意料之中的：「断」出在接缝处，8 秒窗口的平均分反映不出来，要靠耳朵（`yingmusic_phr`）判断。
 
+## 结论和清理（2026-10-26）
+
+用户听了干净输入的转换后判定：**DDSP-SVC 4 万步最好，Seed-VC（含微调）、YingMusic、SoulX-Singer（转换和重唱）都不如它。** 在试 RIFT-SVC 之前，按用户要求把这些候选的实验文件全删了，共约 34 GB：
+- 删掉的：代码和权重（`repos/`）、微调存档（`ft/`）、环境 `conda_envs/bk`、重唱（`svs/`），以及 Opencpop 压缩包和下载的原始文件（`clean/`）；
+- 还删掉了：各候选的输出（`out/` 里除 DDSP 以外的）、打分目录 `lines_ab/`、日志、盲听对照表，以及试听网页上的 `abtest_bk_*`、`bakeoff_r1`、`bakeoff_svs`、`yingmusic_phr` 和 `clean/` 里的 YingMusic 文件。
+
+留下的：测试集 `set/`（含干净输入 `set/clean/` 和 `manifest_clean.json`）、DDSP 的输出 `out/ddsp40k/`、`out/clean_ddsp40k/`、`scores_songs.jsonl`，以及试听网页 `clean/` 里的输入和 DDSP 转换。本文的结果表和 `tools/bakeoff/` 的脚本保留作记录；要重跑某个候选，就从 `setup.sh` 开始重新装。
+
 ## 干净输入（2026-10-25）
 
 用户听了分离出来的输入，要求改用纯人声的干净音轨做转换，不要用从混音里分离出来的人声。测试集里，晴る、两人份的幸福、爱你三首都是分离出来的（这几首没有官方干声，见 [clean_stems.md](../clean_stems.md)），只有 April Blues 是多轨的原始主唱。所以另做了一组录音室清唱：
