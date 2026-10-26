@@ -120,6 +120,10 @@ python tools/cover_mix.py @covers/歌/mix.args --conv 修补后.wav -o 修补后
 
 - 实例上用 [autodl/diction_fix.sh](autodl/diction_fix.sh) 的 `clips`、`cand`、`apply`，路径按 `covers/` 的约定自动填好。`apply` 会接着重混，结果放在 `infer_out/covers_final/<歌名>_咬字修补.flac`；用户听过认可后，它再替换定稿。
 - 候选：`autodl/cover_scripts/cand.sh` 已经给 6 首歌各做了 7 版，在 `covers/cand/<歌>/`：4 万步默认（就是混音里那版，`0_40k`），4 万步种子 1、2，3 万、5 万、6 万、8 万步。`cand` 新做的叫 `<序号>_<步数>k_s<种子>.wav`，同一步数、同一种子已经有了就跳过。
+- **破音的字用 RIFT-SVC 换（2026-10-26 起）**：用户定的分工是平时用 DDSP-SVC（音色更像她），听出破音的字就换成 RIFT-SVC（不容易破音，见 [bakeoff/README.md](bakeoff/README.md)）。[rift_patch.py](rift_patch.py) `cand` 把同一条 `dry.wav` 用 RIFT-SVC 2.5 万步转一遍，作为候选 `<序号>_rift25k.wav` 放进 `covers/cand/<歌>/`，响度对齐现用的那版，之后照上面的步骤出片段、挑、拼回去。要 rift 环境：
+  ```bash
+  /root/autodl-tmp/conda_envs/rift/bin/python tools/rift_patch.py cand covers/cand/歌 [covers/cand/歌2 ...]
+  ```
 - 网页上候选按文件名顺序叫“候选 1、2……”，不显示步数和种子。片段要是没包住报的那个字，就在清单里改 `time` 或 `start`、`end`，再出一次片段。
 - 同一句里报了几处，各占一行，选的要是同一个候选；范围重叠而选的候选不同，`apply` 会报错。
 - 自动模式 `diction.py auto`（Qwen3-ASR 找错句、挑候选）2026-10-23 停用，没在歌上用过，代码留着。识别器听原唱本人时就有不少错：中文 1～9%，日语 7～23%（2026-10-22，Qwen3-ASR-1.7B，`autodl/cover_scripts/asr_bench.py`）。歌词又不能喂给识别器，否则它会把唱错的听成对的。
