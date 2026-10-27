@@ -124,6 +124,10 @@ python tools/cover_mix.py @covers/歌/mix.args --conv 修补后.wav -o 修补后
   ```bash
   /root/autodl-tmp/conda_envs/rift/bin/python tools/rift_patch.py cand covers/cand/歌 [covers/cand/歌2 ...]
   ```
+  菲比、旬夏也各有一个 RIFT-SVC（2026-10-27 起训，每 5000 步一个存档，用 2 万、2.5 万、3 万步）。给她们的歌出候选时加 `--speaker`，可以一次给几个步数，各出一版：
+  ```bash
+  /root/autodl-tmp/conda_envs/rift/bin/python tools/rift_patch.py cand covers/cand/歌 --speaker pheebie --step 20000 25000 30000
+  ```
 - 网页上候选按文件名顺序叫“候选 1、2……”，不显示步数和种子。片段要是没包住报的那个字，就在清单里改 `time` 或 `start`、`end`，再出一次片段。
 - 同一句里报了几处，各占一行，选的要是同一个候选；范围重叠而选的候选不同，`apply` 会报错。
 - 自动模式 `diction.py auto`（Qwen3-ASR 找错句、挑候选）2026-10-23 停用，没在歌上用过，代码留着。识别器听原唱本人时就有不少错：中文 1～9%，日语 7～23%（2026-10-22，Qwen3-ASR-1.7B，`autodl/cover_scripts/asr_bench.py`）。歌词又不能喂给识别器，否则它会把唱错的听成对的。

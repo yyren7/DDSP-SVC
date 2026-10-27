@@ -234,6 +234,13 @@ V3.0（2025-03）的 768-12 模型，按 README 的单人微调设置训了 3 �
 
 试听网页「转换结果」的 `clean/<歌>/`：`2_RIFT2000步`、`5000步`、`10000步`、`20000步`、`25000步`、`30000步`。
 
+**菲比、旬夏**（2026-10-27）：用户要她们也有 RIFT-SVC，DDSP-SVC 破音时拿来换字（[rift_patch.py](../rift_patch.py)）。设置和花丸晴琉一样训 3 万步，只是每 5000 步存一个（`SAVE=5000`），要用的是 2 万、2.5 万、3 万步。训练集是各自 DDSP-SVC 用的 `data_all/train/audio`：菲比 2581 段；旬夏的在清理时删了，用 `build_clips.py all` 重做，2461 段、6.63 小时，12 句验证句逐字节相同。数据在 `data/finetune_<说话人>/`，存档在 `ckpts/pheebie_768-12/`、`ckpts/sakura_768-12/`。两人先后跑：
+
+```bash
+for s in pheebie sakura_shunka; do SPEAKER=$s bash tools/bakeoff/setup_rift.sh; done
+for s in pheebie sakura_shunka; do SPEAKER=$s SAVE=5000 bash tools/bakeoff/finetune_rift.sh; done
+```
+
 ## 干净输入（2026-10-25）
 
 用户听了分离出来的输入，要求改用纯人声的干净音轨做转换，不要用从混音里分离出来的人声。测试集里，晴る、两人份的幸福、爱你三首都是分离出来的（这几首没有官方干声，见 [clean_stems.md](../clean_stems.md)），只有 April Blues 是多轨的原始主唱。所以另做了一组录音室清唱：

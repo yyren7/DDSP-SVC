@@ -1,14 +1,15 @@
 #!/bin/bash
 # RIFT-SVC V3 for the bake-off (README.md, 「RIFT-SVC」): its code in /root/autodl-tmp/rift/RIFT-SVC, a venv on top
 # of the ddsp env (torch 2.9.1, as RIFT-SVC asks), its feature and vocoder modules and the 768-12 pretrained model
-# through hf-mirror.com, and hanamaru_hareru's training clips (data_all/train/audio, the set her DDSP-SVC model was
-# trained on) copied into data/finetune/ and prepared as its README says. Safe to run again: done steps are skipped.
-# Ends with "setup done".
-#   cd /root/autodl-tmp/DDSP-SVC && nohup bash tools/bakeoff/setup_rift.sh > /root/autodl-tmp/rift/setup.log 2>&1 &
+# through hf-mirror.com, and SPEAKER's training clips (data_all/train/audio, the set her DDSP-SVC model was trained
+# on) copied into data/finetune/ (hanamaru_hareru, the first) or data/finetune_<SPEAKER>/ and prepared as its README
+# says. Safe to run again: done steps are skipped. Ends with "setup done".
+#   cd /root/autodl-tmp/DDSP-SVC && SPEAKER=pheebie nohup bash tools/bakeoff/setup_rift.sh > /root/autodl-tmp/rift/setup_pheebie.log 2>&1 &
 set -e
 W=/root/autodl-tmp/rift; R=$W/RIFT-SVC; ENV=/root/autodl-tmp/conda_envs/rift
 C=/root/autodl-tmp/DDSP-SVC/tools/autodl/torch-constraints.txt
-SRC=/root/autodl-tmp/speakers/hanamaru_hareru/data_all/train/audio; D=data/finetune
+SPEAKER=${SPEAKER:-hanamaru_hareru}; SRC=/root/autodl-tmp/speakers/$SPEAKER/data_all/train/audio
+D=data/finetune; [ $SPEAKER = hanamaru_hareru ] || D=data/finetune_$SPEAKER
 export PIP_CACHE_DIR=/root/autodl-tmp/.cache/pip HF_HOME=/root/autodl-tmp/.cache/huggingface HF_ENDPOINT=https://hf-mirror.com
 mkdir -p $W && cd $W
 [ -d RIFT-SVC ] || git clone --depth 1 https://github.com/Pur1zumu/RIFT-SVC.git
@@ -46,7 +47,7 @@ EOF
 
 # a copy, as resample_normalize_audios.py rewrites the files in place (44.1 kHz, -18 LUFS)
 if [ ! -f $D/meta_info.json ]; then
-    rm -rf $D/hanamaru_hareru && mkdir -p $D/hanamaru_hareru && cp $SRC/*.wav $D/hanamaru_hareru/
+    rm -rf $D/$SPEAKER && mkdir -p $D/$SPEAKER && cp $SRC/*.wav $D/$SPEAKER/
     $ENV/bin/python scripts/resample_normalize_audios.py --src $D
     $ENV/bin/python scripts/prepare_data_meta.py --data-dir $D
 fi
