@@ -4,6 +4,7 @@ place of the vocals separated from a mix that set/songs mostly holds. The user a
 hearing the separated inputs. Nothing here is aligned to an accompaniment; it tests the conversion alone.
 
     /root/autodl-tmp/conda_envs/ddsp/bin/python tools/bakeoff/clean_set.py prep|ddsp|show
+    /root/autodl-tmp/conda_envs/ddsp/bin/python tools/bakeoff/clean_set.py ddsp <speaker> <step>
 
 prep: set/clean/<song>.wav and set/manifest_clean.json (for convert.py --manifest), from
   - Opencpop (one professional Mandarin female singer, 100 pop songs recorded whole in a studio, 44.1 kHz; the
@@ -12,7 +13,9 @@ prep: set/clean/<song>.wav and set/manifest_clean.json (for convert.py --manifes
     of the songs of GTSINGER, in order, joined by GAP s of silence, up to MAX_S
   - Moni Blue「April Blues」: the raw lead of its multitrack, as in set/songs
 ddsp: her DDSP-SVC 40k for each (main_reflow.py, key 0 as the covers), matched in loudness to the input, into
-      out/clean_ddsp40k/
+      out/clean_ddsp40k/. With a speaker and step, that speaker's exp_all/model_<step>.pt into
+      out/clean_ddsp_<speaker><step/1000>k/ and into her infer_out/clean/<song>/ as 1_DDSP<step/10000>万步.flac,
+      beside her RIFT-SVC ones (rift.py --speaker); show is for hanamaru_hareru alone, it rebuilds her folder
 show: her 转换结果 infer_out/clean/<song>/ for the review page, under their names (not blind, as the user asked):
       the input, then each system of SHOW that has it
 """
@@ -116,17 +119,29 @@ def items():
     return json.loads((B / 'set' / 'manifest_clean.json').read_text(encoding='utf-8'))['items']
 
 
-def ddsp():
-    out = B / 'out' / 'clean_ddsp40k'
+def ddsp(speaker=None, step=None):
+    model, tag, show = MODEL, 'clean_ddsp40k', None
+    if speaker:
+        spk = SPK.parent / speaker
+        model, tag = spk / 'exp_all' / f'model_{step}.pt', f'clean_ddsp_{speaker}{step // 1000}k'
+        show = spk / 'infer_out' / 'clean'
+    out = B / 'out' / tag
     out.mkdir(parents=True, exist_ok=True)
     for it in items():
         raw = out / f'{it["name"]}.raw.wav'
-        subprocess.run([sys.executable, 'main_reflow.py', '-i', it['input'], '-m', str(MODEL), '-o', str(raw),
+        subprocess.run([sys.executable, 'main_reflow.py', '-i', it['input'], '-m', str(model), '-o', str(raw),
                         '-k', '0', '-id', SPK_ID], cwd=REPO, check=True, stdin=subprocess.DEVNULL)
         y, sr = mono(raw)
-        sf.write(str(out / f'{it["name"]}.wav'), match_level(y, sr, it['input']), sr, subtype='PCM_16')
+        y = match_level(y, sr, it['input'])
+        sf.write(str(out / f'{it["name"]}.wav'), y, sr, subtype='PCM_16')
+        if show:
+            d = show / it['src_spk']
+            d.mkdir(parents=True, exist_ok=True)
+            if not (d / '0_输入.flac').exists():
+                sf.write(str(d / '0_输入.flac'), *mono(it['input']), subtype='PCM_24')
+            sf.write(str(d / f'1_DDSP{step / 10000:g}万步.flac'), y, sr, subtype='PCM_24')
         raw.unlink()
-        print(f'clean_ddsp40k: {it["name"]}', flush=True)
+        print(f'{tag}: {it["name"]}', flush=True)
 
 
 def show():
@@ -147,6 +162,9 @@ def show():
 
 
 if __name__ == '__main__':
-    if len(sys.argv) != 2 or sys.argv[1] not in ('prep', 'ddsp', 'show'):
+    if len(sys.argv) == 4 and sys.argv[1] == 'ddsp':
+        ddsp(sys.argv[2], int(sys.argv[3]))
+    elif len(sys.argv) != 2 or sys.argv[1] not in ('prep', 'ddsp', 'show'):
         sys.exit(__doc__)
-    {'prep': prep, 'ddsp': ddsp, 'show': show}[sys.argv[1]]()
+    else:
+        {'prep': prep, 'ddsp': ddsp, 'show': show}[sys.argv[1]]()
