@@ -1,0 +1,11 @@
+# lift, E dorian; bar 7 borrows Cmaj7
+1 1 Em9
+2 1 A/C#
+3 1 Gmaj7
+4 1 D
+4 9 A/C#
+5 1 Em9
+6 1 A/C#
+7 1 Cmaj7
+7 9 D
+8 1 Emadd9

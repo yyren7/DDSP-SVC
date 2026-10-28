@@ -1,0 +1,83 @@
+# VSCO 2 Community Edition 1.1.0, SFZ version (CC0): https://github.com/sgossner/VSCO-2-CE (tag 1.1.0)
+# played by sfizz 1.2.3 (VST3). Ranges are where the patches have samples; keyswitches are the patches' sw_ keys
+# (SFZ note names, C4 = MIDI 60). Dynamics are velocity layers only (no CC1 crossfade).
+library: VSCO 2 CE 1.1.0
+root: D:/audio_libs/VSCO-2-CE
+plugin: C:/Program Files/Common Files/VST3/sfizz.vst3
+sounds:
+  flute:
+    patch: Flute-KS.sfz
+    state: states/vsco2_flute.bin
+    range: [C4, C7]
+    default: vib
+    articulations:
+      sus: {keyswitch: C2}
+      vib: {keyswitch: C#2}
+      exp: {keyswitch: D2}
+      stac: {keyswitch: D#2}
+  clarinet:
+    patch: Clarinet-KS.sfz
+    state: states/vsco2_clarinet.bin
+    range: [D3, F#6]
+    default: sus
+    articulations:
+      sus: {keyswitch: C2}
+      stac: {keyswitch: C#2}
+  horn:
+    patch: FHornSus.sfz
+    state: states/vsco2_horn.bin
+    range: [A1, F5]
+    default: sus
+    articulations:
+      sus: {}
+  harp:
+    patch: Harp.sfz
+    state: states/vsco2_harp.bin
+    range: [E1, F7]
+    default: sus
+    articulations:
+      sus: {}
+  violins:
+    patch: ViolinEns-KS.sfz
+    state: states/vsco2_violins.bin
+    range: [G3, D6]
+    default: vib
+    articulations:
+      sus: {keyswitch: C2}
+      vib: {keyswitch: C2}
+      trem: {keyswitch: C#2}
+      spic: {keyswitch: D2}
+      pizz: {keyswitch: D#2}
+  violas:
+    patch: ViolaEns-KS.sfz
+    state: states/vsco2_violas.bin
+    range: [C3, D6]
+    default: vib
+    articulations:
+      sus: {keyswitch: C2}
+      vib: {keyswitch: C2}
+      trem: {keyswitch: C#2}
+      spic: {keyswitch: D2}
+      pizz: {keyswitch: D#2}
+  cellos:
+    patch: CelloEns-KS.sfz
+    state: states/vsco2_cellos.bin
+    range: [C2, F5]
+    default: vib
+    articulations:
+      sus: {keyswitch: C6}
+      vib: {keyswitch: C6}
+      trem: {keyswitch: C#6}
+      spic: {keyswitch: D6}
+      pizz: {keyswitch: D#6}
+  contrabass:
+    patch: Contrabass-KS.sfz
+    state: states/vsco2_contrabass.bin
+    range: [C1, C4]
+    default: sus
+    articulations:
+      sus: {keyswitch: C6}
+      vib: {keyswitch: C#6}
+      trem: {keyswitch: D6}
+      spic: {keyswitch: D#6}
+      pizz: {keyswitch: E6}
