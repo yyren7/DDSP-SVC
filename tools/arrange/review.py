@@ -49,6 +49,15 @@ def describe(song, n, sec):
     return song.where(sec, n.bar, n.slot)
 
 
+def changes(n0, n1):
+    out = []
+    for k, label, f in (('dur', 'length', fmt_num), ('vel', 'velocity', str), ('art', 'articulation', str)):
+        a, b = getattr(n0, k), getattr(n1, k)
+        if a != b:
+            out.append(f'{label} {f(a) if a is not None else "default"} -> {f(b) if b is not None else "default"}')
+    return out
+
+
 def compare(old, new):
     lines = []
     if old.meta.get('form') != new.meta.get('form'):
@@ -76,18 +85,15 @@ def compare(old, new):
         came = sorted(set(now) - set(was))
         for m in sorted(set(was) & set(now)):
             (n0, s0), (n1, s1) = was[m], now[m]
-            diffs = [f'{k} {getattr(n0, k)} -> {getattr(n1, k)}' for k in ('dur', 'vel', 'art')
-                     if getattr(n0, k) != getattr(n1, k)]
+            diffs = changes(n0, n1)
             if diffs:
-                lines.append(f'{part} {describe(new, n1, s1)}: {n1.pitch} ' + ', '.join(
-                    d.replace('dur ', 'length ').replace('vel ', 'velocity ') for d in diffs) + f'  [{n1.src}]')
+                lines.append(f'{part} {describe(new, n1, s1)}: {n1.pitch} ' + ', '.join(diffs) + f'  [{n1.src}]')
         while gone and came:  # pair them up as pitch changes, nearest first
             g = gone.pop(0)
             c = min(came, key=lambda c: abs(c - g))
             came.remove(c)
             (n0, s0), (n1, s1) = was[g], now[c]
-            extra = [f'{k} {getattr(n0, k)} -> {getattr(n1, k)}' for k in ('dur', 'vel', 'art')
-                     if getattr(n0, k) != getattr(n1, k)]
+            extra = changes(n0, n1)
             lines.append(f'{part} {describe(new, n1, s1)}: {n0.pitch} -> {n1.pitch}'
                          + (', ' + ', '.join(extra) if extra else '') + f'  [{n1.src}]')
         for g in gone:
@@ -122,7 +128,7 @@ def main():
             musicxml(old, fa)
             musicxml(new, fb)
             print('\nmusicdiff:')
-            r = subprocess.run([sys.executable, '-m', 'musicdiff', '-o', 'text', str(fa), str(fb)],
+            r = subprocess.run([sys.executable, '-m', 'musicdiff', str(fa), str(fb), '-o', 'text'],
                                capture_output=True, text=True)
             print(r.stdout.strip() or r.stderr.strip() or '(no notation differences)')
 
