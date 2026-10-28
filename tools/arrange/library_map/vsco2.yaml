@@ -3,11 +3,13 @@
 # (SFZ note names, C4 = MIDI 60). Dynamics are velocity layers only (no CC1 crossfade).
 library: VSCO 2 CE 1.1.0
 root: D:/audio_libs/VSCO-2-CE
-plugin: C:/Program Files/Common Files/VST3/sfizz.vst3
+# Pedalboard cannot scan the sfizz.vst3 bundle folder; the DLL inside it loads, and holds two plugins.
+plugin: C:/Program Files/Common Files/VST3/sfizz.vst3/Contents/x86_64-win/sfizz.vst3
+plugin_name: sfizz
+state_from: sfz  # render.py makes the state from root/patch: nothing to capture
 sounds:
   flute:
     patch: Flute-KS.sfz
-    state: states/vsco2_flute.bin
     range: [C4, C7]
     default: vib
     articulations:
@@ -17,7 +19,6 @@ sounds:
       stac: {keyswitch: D#2}
   clarinet:
     patch: Clarinet-KS.sfz
-    state: states/vsco2_clarinet.bin
     range: [D3, F#6]
     default: sus
     articulations:
@@ -25,21 +26,18 @@ sounds:
       stac: {keyswitch: C#2}
   horn:
     patch: FHornSus.sfz
-    state: states/vsco2_horn.bin
     range: [A1, F5]
     default: sus
     articulations:
       sus: {}
   harp:
     patch: Harp.sfz
-    state: states/vsco2_harp.bin
     range: [E1, F7]
     default: sus
     articulations:
       sus: {}
   violins:
     patch: ViolinEns-KS.sfz
-    state: states/vsco2_violins.bin
     range: [G3, D6]
     default: vib
     articulations:
@@ -50,7 +48,6 @@ sounds:
       pizz: {keyswitch: D#2}
   violas:
     patch: ViolaEns-KS.sfz
-    state: states/vsco2_violas.bin
     range: [C3, D6]
     default: vib
     articulations:
@@ -61,7 +58,6 @@ sounds:
       pizz: {keyswitch: D#2}
   cellos:
     patch: CelloEns-KS.sfz
-    state: states/vsco2_cellos.bin
     range: [C2, F5]
     default: vib
     articulations:
@@ -72,7 +68,6 @@ sounds:
       pizz: {keyswitch: D#6}
   contrabass:
     patch: Contrabass-KS.sfz
-    state: states/vsco2_contrabass.bin
     range: [C1, C4]
     default: sus
     articulations:

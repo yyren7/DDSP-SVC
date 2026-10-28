@@ -5,13 +5,20 @@ plugin once its patch is loaded by hand.
     python render.py <song> [--parts flute,harp] [--sr 48000] [--block 512] [--force]
     python render.py --capture <library>/<sound>
     python render.py --repro <song> <part>
+    python render.py --smoke <library>[/<sound>]
 
-A part is rendered by a fresh instance of the library's plugin (library_map/<library>.yaml plugin:), restored to
-the sound's saved state (state:, under library_map/), fed perform.events() offline with Pedalboard. The stem goes
-to build/<song>/stems/<part>.wav beside <part>.key, the sha256 of everything the stem depends on (the events,
-the plugin binary's size and time, the state, sample rate, block size, length): a part whose key is unchanged is
-not rendered again, so a one-note edit renders one stem. A stem whose peak is under SILENT is an error: plugins
-that fail to load their samples render silence without saying so.
+A part is rendered by a fresh instance of the library's plugin (library_map/<library>.yaml plugin:, and
+plugin_name: when the file holds several), fed perform.events() offline with Pedalboard, after its state is set:
+for a library with state_from: sfz the state is made here from the sound's patch: (an .sfz file under root:), so
+there is nothing to capture; otherwise it is the sound's saved state: file under library_map/. init_timeout: is
+how long Pedalboard feeds the plugin silence after loading it and again before each render, for plugins that load
+their samples in the background (Kontakt); it costs that long per stem, so it is 0 unless needed (sfizz loads in
+setState).
+
+The stem goes to build/<song>/stems/<part>.wav beside <part>.key, the sha256 of everything the stem depends on
+(the events, the plugin binary's size and time, the state or the .sfz file, sample rate, block size, length): a
+part whose key is unchanged is not rendered again, so a one-note edit renders one stem. A stem whose peak is under
+SILENT is an error: plugins that fail to load their samples render silence without saying so.
 
 The mix (build/<song>/<song>.wav) sums the stems with song.yaml mix: gain (dB) and pan (-1 left to 1 right,
 constant power), then one gain to a peak of PEAK.
@@ -19,30 +26,68 @@ constant power), then one gain to a peak of PEAK.
 --capture opens the plugin's editor (restored to the saved state, if there is one); load the patch, close the
 window, and the state is saved to the sound's state: file. --repro renders a part twice, each time from a fresh
 instance, and compares: equal hashes, else the level of the difference (a plugin with its own randomness, such
-as a round-robin counter, can only pass a null test).
+as a round-robin counter, can only pass a null test). --smoke plays one note in the middle of each sound's range
+in each of its articulations, SMOKE_GAP apart, into build/smoke/<library>_<sound>.wav to listen to, and prints
+each one's level: short articulations should have died away at 0.4 s, long ones not.
 """
 import argparse
 import hashlib
+import re
+import struct
 import sys
 import time
 from pathlib import Path
 
 import numpy as np
 import soundfile as sf
+import yaml
 
 import perform
-from score import BUILD, LIBRARY_MAP, ScoreError, Song
+from score import BUILD, LIBRARY_MAP, ScoreError, Song, midi_to_pitch, pitch_to_midi
 
 SILENT = 10 ** (-80 / 20)  # peak below -80 dBFS: nothing came out
 PEAK = 10 ** (-1 / 20)     # peak of the mix
 TAIL = 3.0                 # seconds rendered after the last bar, for releases and reverb
+SMOKE_GAP = 2.5            # seconds between the notes of --smoke, each 1.5 s long
+JUCE_B64 = '.ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+'
+
+
+def juce_b64decode(s):
+    """JUCE MemoryBlock::fromBase64Encoding: '<size>.' then 6 bits a character, little-endian, its own alphabet."""
+    size, chars = s.split('.', 1)
+    n = sum(JUCE_B64.index(c) << (6 * i) for i, c in enumerate(chars))
+    return n.to_bytes(int(size) + 1, 'little')[:int(size)]
+
+
+def juce_b64encode(b):
+    n = int.from_bytes(b, 'little')
+    return f'{len(b)}.' + ''.join(JUCE_B64[(n >> (6 * i)) & 63] for i in range((len(b) * 8 + 5) // 6))
+
+
+def sfizz_state(default, sfz):
+    """A fresh sfizz instance's raw_state with the .sfz file put in. Pedalboard's raw_state is JUCE's
+    copyXmlToBinary ('VC2!', the string's length, XML, NUL) of <VST3PluginState><IComponent>base64</IComponent>;
+    sfizz's component state (SfizzVstState, version 5 in sfizz 1.2.3) begins with a uint64 version and the sfz path
+    as an int32 length (counting the NUL) and the string."""
+    if default[:4] != b'VC2!':
+        raise ScoreError('sfizz state: not the JUCE XML format sfizz_state knows')
+    xml = default[8:8 + struct.unpack('<I', default[4:8])[0]].decode()
+    m = re.search(r'<IComponent>([^<]*)</IComponent>', xml)
+    comp = juce_b64decode(m.group(1))
+    version, n = struct.unpack('<Qi', comp[:12])
+    if version != 5:
+        raise ScoreError(f'sfizz state version {version}: sfizz_state knows version 5 (sfizz 1.2.3)')
+    path = Path(sfz).as_posix().encode() + b'\0'
+    comp = comp[:8] + struct.pack('<i', len(path)) + path + comp[12 + n:]
+    data = (xml[:m.start(1)] + juce_b64encode(comp) + xml[m.end(1):]).encode()
+    return b'VC2!' + struct.pack('<I', len(data)) + data + b'\0'
 
 
 def plugin_spec(song, part):
+    """The library entry and the sound entry of a part's sound."""
     lib, snd = song.parts[part]['sound'].split('/', 1)
     meta = song.library(lib)
-    sound = meta['sounds'][snd]
-    return Path(meta['plugin']), LIBRARY_MAP / sound['state'] if sound.get('state') else None, sound
+    return meta, meta['sounds'][snd]
 
 
 def binary_id(path):
@@ -52,36 +97,55 @@ def binary_id(path):
     return ';'.join(f'{f.name}:{f.stat().st_size}:{int(f.stat().st_mtime)}' for f in files if f.exists())
 
 
-def load(plugin_path, state_path):
+def state_id(meta, sound):
+    """What the state set on the plugin depends on: the .sfz file (path and text), or the saved state."""
+    if meta.get('state_from') == 'sfz':
+        sfz = Path(meta['root']) / sound['patch']
+        return sfz.as_posix().encode() + (sfz.read_bytes() if sfz.exists() else b'')
+    st = LIBRARY_MAP / sound['state'] if sound.get('state') else None
+    return st.read_bytes() if st is not None and st.exists() else b''
+
+
+def load(meta, sound, state=True):
+    """A fresh instance of the library's plugin, with the sound's state unless state is False."""
     from pedalboard import load_plugin
-    if not plugin_path.exists():
-        raise ScoreError(f'plugin not installed: {plugin_path}')
-    p = load_plugin(str(plugin_path), initialization_timeout=30.0)
-    if state_path is not None:
-        if not state_path.exists():
-            raise ScoreError(f'no saved state {state_path}: run render.py --capture first')
-        p.raw_state = state_path.read_bytes()
+    path = Path(meta['plugin'])
+    if not path.exists():
+        raise ScoreError(f'plugin not installed: {path}')
+    kw = {'plugin_name': meta['plugin_name']} if meta.get('plugin_name') else {}
+    p = load_plugin(str(path), initialization_timeout=float(meta.get('init_timeout', 0)), **kw)
+    if not state:
+        return p
+    if meta.get('state_from') == 'sfz':
+        sfz = Path(meta['root']) / sound['patch']
+        if not sfz.exists():
+            raise ScoreError(f'no such sfz file: {sfz}')
+        p.raw_state = sfizz_state(p.raw_state, sfz)
+    elif sound.get('state'):
+        st = LIBRARY_MAP / sound['state']
+        if not st.exists():
+            raise ScoreError(f'no saved state {st}: run render.py --capture first')
+        p.raw_state = st.read_bytes()
     return p
 
 
 def render_part(song, part, sr, block):
-    plugin_path, state_path, sound = plugin_spec(song, part)
-    evs = perform.events(song, part, for_sound=True)
+    meta, sound = plugin_spec(song, part)
+    evs = [(bytes(data), t) for t, data in perform.events(song, part, for_sound=True)]  # Pedalboard: (bytes, s)
     length = song.seconds(song.length_steps) + sound.get('tail', TAIL)
-    p = load(plugin_path, state_path)
+    p = load(meta, sound)
     t0 = time.perf_counter()
     audio = p(evs, duration=length, sample_rate=sr, num_channels=2, buffer_size=block, reset=True)
     return np.asarray(audio, dtype=np.float32), time.perf_counter() - t0
 
 
 def stem_key(song, part, sr, block):
-    plugin_path, state_path, sound = plugin_spec(song, part)
+    meta, sound = plugin_spec(song, part)
     h = hashlib.sha256()
     for t, data in perform.events(song, part, for_sound=True):
         h.update(f'{t:.9f}:'.encode() + bytes(data))
-    h.update(binary_id(plugin_path).encode())
-    if state_path is not None and state_path.exists():
-        h.update(state_path.read_bytes())
+    h.update(binary_id(Path(meta['plugin'])).encode())
+    h.update(state_id(meta, sound))
     h.update(f'{sr}:{block}:{song.seconds(song.length_steps) + sound.get("tail", TAIL):.6f}'.encode())
     return h.hexdigest()
 
@@ -107,6 +171,18 @@ def mix(song, stems, sr, out):
     return db(peak)
 
 
+def leave(code):
+    """sfizz hangs the process when its DLL is unloaded at exit, so on Windows the process is ended without
+    unloading anything (every file is written and closed by now)."""
+    sys.stdout.flush()
+    sys.stderr.flush()
+    if sys.platform == 'win32':
+        import ctypes
+        k = ctypes.windll.kernel32
+        k.TerminateProcess(k.GetCurrentProcess(), code)
+    sys.exit(code)
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('song', nargs='?')
@@ -117,31 +193,82 @@ def main():
     ap.add_argument('--force', action='store_true')
     ap.add_argument('--capture', metavar='LIBRARY/SOUND')
     ap.add_argument('--repro', action='store_true')
+    ap.add_argument('--smoke', metavar='LIBRARY[/SOUND]')
     a = ap.parse_args()
+    code = 0
     try:
         if a.capture:
-            return capture(a.capture)
-        song = Song(a.song)
-        if a.repro:
-            return repro(song, a.part, a.sr, a.block)
-        render(song, a)
+            capture(a.capture)
+        elif a.smoke:
+            smoke(a.smoke, a.sr, a.block)
+        elif a.repro:
+            repro(Song(a.song), a.part, a.sr, a.block)
+        else:
+            render(Song(a.song), a)
     except ScoreError as e:
         print(f'error: {e}')
-        sys.exit(1)
+        code = 1
+    except BaseException:
+        import traceback
+        traceback.print_exc()
+        code = 1
+    leave(code)
 
 
 def capture(ref):
-    import yaml
     lib, snd = ref.split('/', 1)
     meta = yaml.safe_load((LIBRARY_MAP / f'{lib}.yaml').read_text(encoding='utf-8'))
     sound = meta['sounds'][snd]
+    if meta.get('state_from') == 'sfz':
+        print(f'{lib}: the state is made from the patch ({sound["patch"]}); there is nothing to capture')
+        return
     state = LIBRARY_MAP / sound['state']
-    p = load(Path(meta['plugin']), state if state.exists() else None)
+    p = load(meta, sound, state=state.exists())
     print(f'{p.name}: load {sound.get("patch", "the patch")} in the window, then close it')
     p.show_editor()
     state.parent.mkdir(parents=True, exist_ok=True)
     state.write_bytes(p.raw_state)
     print(f'saved {len(p.raw_state)} bytes -> {state}')
+
+
+def smoke(ref, sr, block):
+    lib, _, only = ref.partition('/')
+    meta = yaml.safe_load((LIBRARY_MAP / f'{lib}.yaml').read_text(encoding='utf-8'))
+    out = BUILD / 'smoke'
+    out.mkdir(parents=True, exist_ok=True)
+    for name, sound in meta['sounds'].items():
+        if only and name != only:
+            continue
+        lo, hi = (pitch_to_midi(x) for x in sound['range'])
+        note, arts = (lo + hi) // 2, list(sound['articulations'])
+        evs = []
+        for i, art in enumerate(arts):
+            t = 0.1 + i * SMOKE_GAP
+            how = sound['articulations'][art] or {}
+            if 'keyswitch' in how:
+                ks = pitch_to_midi(how['keyswitch'])
+                evs += [(bytes([0x90, ks, 100]), t - perform.KS_LEAD),
+                        (bytes([0x80, ks, 0]), t - perform.KS_LEAD + perform.KS_LEN)]
+            if 'cc' in how:
+                evs.append((bytes([0xB0, *how['cc']]), t - perform.KS_LEAD))
+            if 'program' in how:
+                evs.append((bytes([0xC0, how['program']]), t - perform.KS_LEAD))
+            evs += [(bytes([0x90, note, 90]), t), (bytes([0x80, note, 0]), t + 1.5)]
+        p = load(meta, sound)
+        audio = np.asarray(p(evs, duration=0.1 + len(arts) * SMOKE_GAP, sample_rate=sr, num_channels=2,
+                             buffer_size=block, reset=True), dtype=np.float32)
+        sf.write(out / f'{lib}_{name}.wav', audio.T, sr, subtype='FLOAT')
+        env = np.abs(audio).max(0)
+        cells = []
+        for i, art in enumerate(arts):
+            s = env[int((0.1 + i * SMOKE_GAP) * sr):][:2 * sr]
+            if s.max() < SILENT:
+                cells.append(f'{art} SILENT')
+                continue
+            at = lambda t: db(s[int(t * sr):int((t + 0.05) * sr)].max() / s.max())
+            cells.append(f'{art} {db(s.max()):.0f} dBFS ({at(0.4):.0f} dB at 0.4 s, {at(1.6):.0f} at 1.6 s)')
+        print(f'{name} at {midi_to_pitch(note)}: ' + '; '.join(cells))
+    print(f'-> {out}')
 
 
 def repro(song, part, sr, block):

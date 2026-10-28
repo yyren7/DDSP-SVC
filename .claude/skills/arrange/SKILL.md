@@ -40,6 +40,8 @@ Run everything with `tools/arrange/.venv/Scripts/python` from `tools/arrange/` (
 
 `library_map/<library>.yaml` maps each sound to a plugin, its saved state, its range and its articulations
 (keyswitch, cc or program). Changing a part's instrument or library is a change to `song.yaml` `sound:`, not to
-the notes. A new sound needs its state captured once: `render.py --capture <library>/<sound>` opens the plugin's
-window for the user to load the patch. Commercial plugins render on this Windows PC only; AutoDL is for the
-vocal pipeline. Rendered stems must not be used to train any model (NI and Spitfire licences).
+the notes. A sound in an sfz library (`state_from: sfz`, played by sfizz) needs only its `patch:`; a sound in any
+other plugin needs its state captured once: `render.py --capture <library>/<sound>` opens the plugin's window for
+the user to load the patch. Check a new sound with `render.py --smoke <library>/<sound>` (every articulation
+sounds, short ones die away) before writing for it. Commercial plugins render on this Windows PC only; AutoDL is
+for the vocal pipeline. Rendered stems must not be used to train any model (NI and Spitfire licences).
