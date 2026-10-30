@@ -1,2 +1,5 @@
 # everything in build/ is made from songs/ by build.py and render.py
 build/
+# captured plugin states hold data from commercial libraries and the repo is public: local only, made again
+# with render.py --capture
+library_map/states/

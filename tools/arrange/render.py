@@ -23,8 +23,11 @@ SILENT is an error: plugins that fail to load their samples render silence witho
 The mix (build/<song>/<song>.wav) sums the stems with song.yaml mix: gain (dB) and pan (-1 left to 1 right,
 constant power), then one gain to a peak of PEAK.
 
---capture opens the plugin's editor (restored to the saved state, if there is one); load the patch, close the
-window, and the state is saved to the sound's state: file. --repro renders a part twice, each time from a fresh
+--capture opens the plugin's editor (restored to the saved state, if there is one) while a thread renders a note
+in the middle of the sound's range every CAPTURE_EVERY seconds, as a DAW would be playing: Spitfire's Kontakt
+patches only initialise while audio is being processed, and a patch saved uninitialised renders silence ever
+after. Load the patch (Kontakt: from its menu's Load), wait until it sounds (printed), close the window, and the
+state is saved to the sound's state: file. --repro renders a part twice, each time from a fresh
 instance, and compares: equal hashes, else the level of the difference (a plugin with its own randomness, such
 as a round-robin counter, can only pass a null test). --smoke plays one note in the middle of each sound's range
 in each of its articulations, SMOKE_GAP apart, into build/smoke/<library>_<sound>.wav to listen to, and prints
@@ -35,6 +38,7 @@ import hashlib
 import re
 import struct
 import sys
+import threading
 import time
 from pathlib import Path
 
@@ -48,6 +52,7 @@ from score import BUILD, LIBRARY_MAP, ScoreError, Song, midi_to_pitch, pitch_to_
 SILENT = 10 ** (-80 / 20)  # peak below -80 dBFS: nothing came out
 PEAK = 10 ** (-1 / 20)     # peak of the mix
 TAIL = 3.0                 # seconds rendered after the last bar, for releases and reverb
+CAPTURE_EVERY = 2.0        # seconds between the notes played while --capture's window is open
 SMOKE_GAP = 2.5            # seconds between the notes of --smoke, each 1.5 s long
 JUCE_B64 = '.ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+'
 
@@ -198,7 +203,7 @@ def main():
     code = 0
     try:
         if a.capture:
-            capture(a.capture)
+            capture(a.capture, a.sr, a.block)
         elif a.smoke:
             smoke(a.smoke, a.sr, a.block)
         elif a.repro:
@@ -215,7 +220,7 @@ def main():
     leave(code)
 
 
-def capture(ref):
+def capture(ref, sr, block):
     lib, snd = ref.split('/', 1)
     meta = yaml.safe_load((LIBRARY_MAP / f'{lib}.yaml').read_text(encoding='utf-8'))
     sound = meta['sounds'][snd]
@@ -224,8 +229,30 @@ def capture(ref):
         return
     state = LIBRARY_MAP / sound['state']
     p = load(meta, sound, state=state.exists())
-    print(f'{p.name}: load {sound.get("patch", "the patch")} in the window, then close it')
+    lo, hi = (pitch_to_midi(x) for x in sound['range'])
+    note = (lo + hi) // 2
+    stop, heard = threading.Event(), threading.Event()
+
+    def play():
+        while not stop.is_set():
+            audio = np.asarray(p([(bytes([0x90, note, 90]), 0.05), (bytes([0x80, note, 0]), 1.0)],
+                                 duration=CAPTURE_EVERY, sample_rate=sr, num_channels=2, buffer_size=block,
+                                 reset=False))
+            if not heard.is_set() and np.abs(audio).max() >= SILENT:
+                heard.set()
+                print(f'it sounds ({midi_to_pitch(note)}, {db(np.abs(audio).max()):.0f} dBFS): close the window',
+                      flush=True)
+            stop.wait(CAPTURE_EVERY * 0.9)
+
+    player = threading.Thread(target=play, daemon=True)
+    player.start()
+    print(f'{p.name}: load {sound.get("patch", "the patch")} in the window, then close it once it sounds',
+          flush=True)
     p.show_editor()
+    stop.set()
+    player.join()
+    if not heard.is_set():
+        print('warning: it never sounded while the window was open; the saved state may render silence')
     state.parent.mkdir(parents=True, exist_ok=True)
     state.write_bytes(p.raw_state)
     print(f'saved {len(p.raw_state)} bytes -> {state}')

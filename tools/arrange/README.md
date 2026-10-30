@@ -27,7 +27,7 @@
 | `review.py <曲> [版本]` | 和 git 某版本逐音对比（加 `--musicdiff` 再附谱面差异） |
 | `render.py <曲>` | 每个声部用独立的插件实例离线渲染成单轨，按哈希缓存，再按 `mix:` 混成 `build/<曲>/<曲>.wav`；`--capture` 保存插件状态，`--repro` 测两次渲染是否一致，`--smoke <音源>` 把每个音色的每种演奏法各弹一个音（`build/smoke/`），用来检查新音源 |
 
-`library_map/<音源>.yaml` 是对照表：每个音色对应的插件、状态、音域、演奏法（切换键、CC 或音色号）。sfz 音源（`state_from: sfz`，用 sfizz 播放，如 VSCO 2 CE）只写 sfz 文件路径，插件状态由 `render.py` 生成；其他插件（如 Kontakt）要先用 `--capture` 打开插件窗口，手动加载一次音色，再保存状态。音源装在仓库外的 `D:\audio_libs\`。
+`library_map/<音源>.yaml` 是对照表：每个音色对应的插件、状态、音域、演奏法（切换键、CC 或音色号）。sfz 音源（`state_from: sfz`，用 sfizz 播放，如 VSCO 2 CE）只写 sfz 文件路径，插件状态由 `render.py` 生成；其他插件（如 Kontakt）要先用 `--capture` 打开插件窗口，手动加载一次音色，再保存状态。状态存在 `library_map/states/`，里面可能有商用音源的数据，而仓库是公开的，所以不进 git，换机器要重新抓。音源装在仓库外的 `D:\audio_libs\`。
 
 试点曲 `songs/pilot/`：16 小节 8 个声部，D 多利亚调 8 小节，经 A7sus4、B7sus4 上行全音进入 E 多利亚调 8 小节。
 
@@ -41,4 +41,13 @@
 - 演奏法：`--smoke vsco2` 里每种演奏法都出声；长笛、单簧管的 stac 和小提琴、中提琴的 spic、pizz 到 0.4 秒已衰减 26–42 dB，长音只降 1–4 dB。大提琴和独奏低音提琴的短音余响较长（0.4 秒时降 10–13 dB），低音提琴的 pizz 到 0.4 秒只降 3 dB（已对照 sfz 确认 E6 是拨弦），用的时候要注意。
 - 遇到的问题（`render.py` 都已处理）：Pedalboard 扫描不了 `sfizz.vst3` 文件夹，要指向里面的 DLL，并写 `plugin_name: sfizz`；`initialization_timeout` 在加载时和每次渲染前都会空等满这段时间，sfizz 设为 0；sfizz 的 DLL 会让进程退出时卡死，所以脚本结束时直接终止进程；Pedalboard 的 MIDI 事件格式是 (字节, 秒)。
 
-还没测：Kontakt 8 Player + Spitfire SSO Discover（第 1–3、5 项的商用插件部分），等 Native Access 装好。
+## 渲染实测（2026-10-30，Kontakt 8 Player 8.14.1 + Spitfire SSO Discover）
+
+先只接了长笛（`Flute Solo - All techniques`，默认长音），对应第 1–3、5 项的商用插件部分：
+
+- 抓状态：音色加载时宿主必须在处理音频。Pedalboard 的插件窗口本身不跑音频，在里面加载 Spitfire 音色会一直显示“INSTRUMENT NOT INITIALISED”，存下来的状态只有 6 KB，以后怎么渲染都是静音（等 40 秒、预热 20 秒、按实时速度处理并处理 Windows 消息都没用）。现在 `--capture` 开窗口的同时，后台每 2 秒弹一个音；从 Kontakt 菜单的 Load 加载音色，等脚本提示出声再关窗，存下的状态约 300 KB，之后不开窗口也能直接渲染。
+- 耗时：每个新实例加载约 35 秒，渲染 10 秒音频约 0.2 秒。所以首次渲染每轨多花半分钟以上，之后靠缓存。
+- 可重复：两个新实例渲染同一段，结果不逐字节相同，但差值最大 1.5e-8（约 −156 dB），算通过相减抵消测试。
+- 准确：起音晚 0–40 毫秒，音高误差在 16 音分以内，长笛长音峰值约 −30 dBFS。
+- 采样率：用 48 kHz 时出现过 Kontakt 弹窗“采样率改了要重启 Kontakt”（是那个未初始化的状态）。初始化好的状态在 44.1 kHz 下抓、在 48 kHz 下渲染，正常出声。
+- 还没做：其他声部的音色、演奏法切换键和音域。

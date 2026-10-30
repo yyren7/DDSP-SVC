@@ -42,6 +42,7 @@ Run everything with `tools/arrange/.venv/Scripts/python` from `tools/arrange/` (
 (keyswitch, cc or program). Changing a part's instrument or library is a change to `song.yaml` `sound:`, not to
 the notes. A sound in an sfz library (`state_from: sfz`, played by sfizz) needs only its `patch:`; a sound in any
 other plugin needs its state captured once: `render.py --capture <library>/<sound>` opens the plugin's window for
-the user to load the patch. Check a new sound with `render.py --smoke <library>/<sound>` (every articulation
+the user to load the patch while it plays a note every 2 s (Spitfire patches only initialise while audio runs);
+the user closes it once it prints that it sounds. Captured states stay out of git (public repo). Check a new sound with `render.py --smoke <library>/<sound>` (every articulation
 sounds, short ones die away) before writing for it. Commercial plugins render on this Windows PC only; AutoDL is
 for the vocal pipeline. Rendered stems must not be used to train any model (NI and Spitfire licences).
