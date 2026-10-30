@@ -1,6 +1,9 @@
 # VSCO 2 Community Edition 1.1.0, SFZ version (CC0): https://github.com/sgossner/VSCO-2-CE (tag 1.1.0)
 # played by sfizz 1.2.3 (VST3). Ranges are where the patches have samples; keyswitches are the patches' sw_ keys
 # (SFZ note names, C4 = MIDI 60). Dynamics are velocity layers only (no CC1 crossfade).
+# root: is a sparse git checkout (--filter=blob:none) of the sample folders the sounds below use; a sound whose
+# folder is missing renders silence (sfizz logs "Removing the region"): git sparse-checkout add <folder>.
+# Claude-*-KS.sfz are written into root: by vsco2_ks.py, which joins the one-articulation files with keyswitches.
 library: VSCO 2 CE 1.1.0
 root: D:/audio_libs/VSCO-2-CE
 # Pedalboard cannot scan the sfizz.vst3 bundle folder; the DLL inside it loads, and holds two plugins.
@@ -25,11 +28,12 @@ sounds:
       sus: {keyswitch: C2}
       stac: {keyswitch: C#2}
   horn:
-    patch: FHornSus.sfz
+    patch: Claude-FHorn-KS.sfz  # Claude-*-KS.sfz: written by vsco2_ks.py from the one-articulation files
     range: [A1, F5]
     default: sus
     articulations:
-      sus: {}
+      sus: {keyswitch: C1}
+      stac: {keyswitch: C#1}
   harp:
     patch: Harp.sfz
     range: [E1, F7]
@@ -76,3 +80,102 @@ sounds:
       trem: {keyswitch: D6}
       spic: {keyswitch: D#6}
       pizz: {keyswitch: E6}
+  piccolo:
+    patch: Claude-Piccolo-KS.sfz
+    range: [G4, G6]
+    default: sus
+    articulations:
+      sus: {keyswitch: C1}
+      stac: {keyswitch: C#1}
+  oboe:
+    patch: Claude-Oboe-KS.sfz
+    range: [Bb3, F6]
+    default: vib
+    articulations:
+      sus: {keyswitch: C1}
+      vib: {keyswitch: C#1}
+      stac: {keyswitch: D1}
+  bassoon:
+    patch: Claude-Bassoon-KS.sfz
+    range: [Bb1, Eb5]
+    default: sus
+    articulations:
+      sus: {keyswitch: C1}
+      vib: {keyswitch: C#1}
+      stac: {keyswitch: D1}
+  trumpet:
+    patch: Claude-Trumpet-KS.sfz
+    range: [E3, C6]
+    default: sus
+    articulations:
+      sus: {keyswitch: C1}
+      vib: {keyswitch: C#1}
+      stac: {keyswitch: D1}
+  trombone:
+    patch: Claude-Trombone-KS.sfz
+    range: [Bb1, F4]
+    default: sus
+    articulations:
+      sus: {keyswitch: C1}
+      vib: {keyswitch: C#1}
+      stac: {keyswitch: D1}
+  tuba:
+    patch: Tuba-KS.sfz
+    range: [F1, D4]
+    default: sus
+    articulations:
+      sus: {keyswitch: C6}
+      stac: {keyswitch: C#6}
+  violin_solo:
+    patch: SViolin-KS.sfz
+    range: [G3, C7]
+    default: vib
+    articulations:
+      sus: {keyswitch: C2}
+      vib: {keyswitch: C2}
+      trem: {keyswitch: C#2}
+      spic: {keyswitch: D2}
+      pizz: {keyswitch: D#2}
+  timpani:
+    patch: Claude-Timpani-KS.sfz
+    range: [C2, C4]
+    default: hit
+    articulations:
+      hit: {keyswitch: C1}
+      trem: {keyswitch: C#1}  # rolls
+  glockenspiel:
+    patch: Glockenspiel.sfz
+    range: [G4, C7]
+    default: hit
+    articulations:
+      hit: {}
+  xylophone:
+    patch: Xylophone.sfz
+    range: [G3, C7]
+    default: hit
+    articulations:
+      hit: {}
+  marimba:
+    patch: Marimba.sfz
+    range: [F2, C7]
+    default: hit
+    articulations:
+      hit: {}
+  tubular_bells:
+    patch: TubularBells.sfz
+    range: [C4, G5]
+    default: hit
+    articulations:
+      hit: {}
+  piano:
+    patch: UprightPiano.sfz
+    range: [A0, C8]
+    default: sus
+    articulations:
+      sus: {}
+  organ:
+    patch: OrganQuiet.sfz
+    range: [C2, C7]
+    default: sus
+    articulations:
+      sus: {}
