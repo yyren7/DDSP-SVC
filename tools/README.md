@@ -1,3 +1,5 @@
+> 编曲管线（Claude 用代码写谱、逐轨渲染乐器）2026-10-30 起移到单独的私有仓库 [yyren7/claude-arrange](https://github.com/yyren7/claude-arrange)，本地在 `D:\claude-arrange`。
+
 # 训练语料一键预处理（UVR5）
 
 `prepare_dataset.py` 把原始歌曲处理成 DDSP-SVC 可以直接训练的干声切片。它用 [python-audio-separator](https://github.com/nomadkaraoke/python-audio-separator) 在命令行下运行 UVR5 的全部模型（含最新的 Roformer 社区模型），不需要 UVR5 图形界面。
